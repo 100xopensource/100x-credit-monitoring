@@ -1,0 +1,36 @@
+{
+  "_comment": "Per-borrower collateral map for the report's Collateral metrics box + Balance sheet review. Describes WHAT is pledged (from the credit agreement's security/collateral provisions) and WHICH monitoring-model balance-sheet row each pledged category maps to, so the report tracks collateral month over month and computes coverage vs funded debt. Produced by monitor-setup (sourced from covenant-setup / the credit agreement); the monthly report reads it from paths.collateral_map_path. Copy to collateral-map.json and fill in. Liabilities are NEVER collateral. Row labels match the model Balance Sheet sheet (column A, case-insensitive). Example values use a fictional borrower.",
+
+  "borrower": "Example Borrower, Inc.",
+  "lien_type": "blanket",
+  "_lien_type_comment": "one of: blanket (lien on substantially all assets — track the pledged asset lines + total, coverage vs funded debt); borrowing_base (a defined BB — fill the borrowing_base block); specific_assets (only the listed lines are pledged).",
+  "security_summary": "Senior secured; blanket lien on substantially all assets; controlled deposit accounts. Source: executed credit agreement.",
+
+  "funded_debt_source": {
+    "_comment": "Denominator for coverage ratios. Prefer the covenant-spec Indebtedness definition; else name the model BS debt rows to sum (value shapes as in budget-map: int-less here, use exact row labels).",
+    "covenant_spec_ref": "covenant-spec.json#/definitions/Indebtedness",
+    "model_rows": ["Long-Term Debt (Current)", "Long-Term Debt (LT)", "Capital Lease"]
+  },
+
+  "pledged_components": [
+    {"label": "Cash (controlled accts)", "model_line": "Cash", "tier": "liquid"},
+    {"label": "Accounts receivable (net)", "model_line": "AR (net)", "tier": "liquid"},
+    {"label": "Intangible assets (IP)", "model_line": "Intangible Assets (net)", "tier": "tangible_ip"},
+    {"label": "PP&E (net)", "model_line": "PPE (net)", "tier": "tangible_ip"},
+    {"label": "Goodwill", "model_line": "Goodwill", "tier": "goodwill"}
+  ],
+  "_pledged_components_comment": "Ordered pledged asset lines to track monthly. model_line = exact model BS row label, or {\"add\":[...],\"subtract\":[...]} to combine rows. tier drives the coverage cuts below: 'liquid' (cash + AR), 'tangible_ip', 'goodwill'. EXCLUDE any asset line that is not pledged. Include inventory ONLY if the borrower has it. The memo's Collateral box shows each component as level / MoM / YoY / vs Budget, with moves as dollar deltas plus % alongside; the vs-Budget column joins ON THIS 'label' to budget-map.json balance_sheet_rows (keep labels stable — renaming a component breaks its budget join).",
+
+  "coverage_cuts": {
+    "_comment": "Named coverage ratios shown in the box = sum(components whose tier is in the list) / funded debt. Define the cuts relevant to the lien; the example progressively strips goodwill then non-liquid assets to show hard-asset coverage.",
+    "All pledged assets": ["liquid", "tangible_ip", "goodwill"],
+    "Ex-goodwill assets": ["liquid", "tangible_ip"],
+    "Liquid (cash + A/R)": ["liquid"]
+  },
+
+  "borrowing_base": {
+    "_comment": "OPTIONAL — only when lien_type=borrowing_base. Advance rates against eligible collateral so the report shows availability vs drawn. Omit entirely for blanket liens.",
+    "advance_rates": {"eligible_ar": 0.85, "eligible_inventory": 0.50},
+    "eligibility_notes": ""
+  }
+}

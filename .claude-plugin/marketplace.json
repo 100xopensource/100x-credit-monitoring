@@ -1,0 +1,24 @@
+{
+  "name": "100xopensource",
+  "description": "Credit monitoring for private-credit professionals working in Claude Cowork.",
+  "owner": {
+    "name": "100x",
+    "url": "https://github.com/100xopensource"
+  },
+  "plugins": [
+    {
+      "name": "credit-monitoring",
+      "displayName": "Credit Monitoring",
+      "source": "./plugins/credit-monitoring",
+      "description": "Turn borrower reporting and loan documents into a structured financial workbook and a review-ready monitoring memo.",
+      "category": "finance",
+      "keywords": [
+        "claude-cowork",
+        "credit-monitoring",
+        "private-credit",
+        "covenants",
+        "financial-analysis"
+      ]
+    }
+  ]
+}

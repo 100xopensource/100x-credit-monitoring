@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security report
+    url: https://github.com/100xopensource/100x-credit-monitoring/security/advisories/new
+    about: Report suspected vulnerabilities or confidential-data exposure privately.
+  - name: Support guide
+    url: https://github.com/100xopensource/100x-credit-monitoring/blob/main/SUPPORT.md
+    about: Choose the right public or private support channel.

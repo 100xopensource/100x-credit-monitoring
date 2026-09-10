@@ -1,0 +1,120 @@
+{
+  "_README": "BLANK debt-service-spec contract for the credit portfolio monitor. One file per borrower, produced by the covenant-setup stage from the executed credit agreement. It captures the facility's CONTRACTUAL debt service — fundings, rate grids, PIK mechanics, amortization, day count, recurring fees — plus the two pinned observation sets the schedule generator needs (index-rate history and grid-state history). The generator (skills/covenant-setup/references/debt_service.py) turns THIS file into the per-month debt-service schedule (debt-service-schedule.json) that build-monitoring-model reads to populate the covenant-support rows; covenant Fixed Charges then bind to those rows instead of ledger interest expense. Borrower-agnostic: everything deal-specific lives here, nothing in the engine. All rates are DECIMALS (5.25% is 0.0525 — the validator refuses a rate that looks like a percent written as a number). All amounts are the agreement's own dollars. Every term carries its 'agreement_ref'. Gate with validate_debt_service_spec.py before generating. The template contains no borrower-specific worked example.",
+
+  "borrower": "<Legal name of borrower>",
+  "agreement": "<Short description of the credit agreement: title, date, parties>",
+  "as_of_agreement_date": "<YYYY-MM-DD of the agreement / closing date>",
+  "amendments_reflected": [],
+
+  "_contract": {
+    "grids": "Every grid (margin_grid, rate_grid, annual_pct_of_base_grid) is a list of steps evaluated IN ORDER: the first step whose 'above' is null, or whose 'above' the grid metric's observed value strictly exceeds, applies. 'above' values must be strictly descending and the LAST step must have 'above': null (the catch-all) — that is what makes selection deterministic. 'when' is the agreement's own wording for the band. A facility with one flat rate is a one-step grid: [{ \"above\": null, \"rate\": 0.12, \"when\": \"all periods\" }].",
+    "grid_metric": "What the grids key on (e.g. the Senior Leverage Ratio), named once. Required whenever any grid has more than one step, because the engine then needs grid_state observations of this metric to pick steps.",
+    "observations": "The two PINNED input sets, each entry with its source. index_rates: the index's actual published history ('date' = when the printed rate took effect); the engine uses the latest observation on or before each accrual month's start, applies the floor, and HOLDS THE RATE FLAT beyond the last observation (disclosed in the output as an assumption). grid_state: the grid metric's value at each adjustment date, read from the borrower's certificates / the covenant module's archived results — steps follow what was actually reported, never projected backward. Both lists need an entry dated on or before the first funding (the closing state). Append new observations as certificates arrive, then re-run the generator; the spec's contractual blocks change only on an amendment.",
+    "day_count": "convention: 'actual/360' or 'actual/365' (what the engine supports). count_both_endpoints: true when the agreement counts BOTH the first and the last day of each period (e.g. 'including the first day and the last day') — a full calendar month then counts its calendar days, and only stub periods (funding month, maturity month) differ from the exclusive read. Record any stub ambiguity in 'ambiguities' as an analyst-facing question; it goes to sign-off.",
+    "engine_v1_limits": "The generator models: monthly accrual periods; payments on the 1st of the month (payment_day must be 1); PIK capitalizing on the first calendar day of each month (pik_interest.capitalizes must be 'monthly_first'); amortization as an annual grid percentage of the base divided by payments_per_year (must be 12), with the balloon at maturity. The validator refuses anything else LOUDLY — a convention the engine cannot model must fail at setup, not generate a schedule that is silently wrong.",
+    "amortization_base": "The engine computes the base per payment date as the aggregate original principal of all fundings dated strictly BEFORE that payment date (a DDTL draw enlarges the base from the next payment on). Record the agreement's own base definition verbatim so that computation can be checked against the document.",
+    "fixed_charges_attribution": "'accrued': a payment due on the next payment date counts in the month it services (a 7/1 installment belongs to June — the read that matches an agreement whose Fixed Charges are amounts 'paid or scheduled to be paid'); 'paid': counted in its payment-date month. Life-of-loan totals are identical either way; the covenant-support row follows this declaration.",
+    "fees": "Recurring and exit economics, each with fixed_charges_treatment 'included' or 'excluded' — a monitoring fee is usually a fee, NOT a Fixed Charge, but it belongs in payoff / debt-service cash-flow views, so it is captured here either way. Exactly one of 'rate' (applied to the aggregate original principal funded on or before the date) or 'amount' (a flat figure per occurrence). 'when': 'close_and_payment_dates', 'payment_dates', or 'maturity'.",
+    "covenant_support_rows": "The model row labels build-monitoring-model writes from the generated schedule — they must MATCH the labels the covenant-spec's Fixed Charges / interest-coverage definitions bind, or the covenant engine reads rows nobody populated. cash_interest carries the facility's accrued cash interest per month; scheduled_principal carries the facility's scheduled amortization per month on the declared attribution. Non-facility scheduled debt (vehicle loans, SBA) is ADDED to the scheduled_principal row by the model build from the borrower's own reporting, where disclosed."
+  },
+
+  "facility": {
+    "name": "<short facility name, e.g. 'senior secured term loan'>",
+    "maturity_date": "<YYYY-MM-DD>",
+    "agreement_ref": "<Section reference>"
+  },
+
+  "tranches": [
+    {
+      "id": "<machine id, e.g. initial_term_loan>",
+      "fundings": [
+        { "date": "<YYYY-MM-DD>", "amount": 0, "agreement_ref": "<Section reference>" }
+      ],
+      "undrawn_commitment": {
+        "_when": "Only for a tranche with undrawn capacity (a DDTL). Delete this block if fully funded. When a draw actually funds, append it to 'fundings' with its date — the amortization base grows from the next payment date.",
+        "amount": 0,
+        "availability": "<the availability window and draw conditions, verbatim enough to act on>",
+        "agreement_ref": "<Section reference>"
+      }
+    }
+  ],
+
+  "amortization_base": {
+    "definition_verbatim": "<the agreement's base definition, e.g. 'percentage of the aggregate original principal amount of all Loans made prior to such date'>",
+    "agreement_ref": "<Section reference>"
+  },
+
+  "cash_interest": {
+    "index": "<e.g. 'WSJ Prime'; null for a fixed-rate facility>",
+    "floor": 0,
+    "margin_grid": [
+      { "above": null, "rate": 0, "when": "<the agreement's wording for this band>" }
+    ],
+    "adjustment": "<cadence, e.g. 'quarterly on compliance-certificate delivery'>",
+    "first_payment_date": "<YYYY-MM-DD>",
+    "payment_day": 1,
+    "agreement_ref": "<Section reference>"
+  },
+
+  "pik_interest": {
+    "_when": "Only when the facility carries PIK. Delete this block if it does not.",
+    "rate_grid": [
+      { "above": null, "rate": 0, "when": "<band wording>" }
+    ],
+    "capitalizes": "monthly_first",
+    "mechanics_verbatim": "<e.g. 'accrued PIK is added to principal on the first calendar day of each month'>",
+    "cash_pay_election": null,
+    "agreement_ref": "<Section reference>"
+  },
+
+  "amortization": {
+    "_when": "Only when the facility amortizes before maturity. Delete this block for a bullet loan (the balloon is then the whole balance).",
+    "start_date": "<YYYY-MM-DD of the first principal installment>",
+    "annual_pct_of_base_grid": [
+      { "above": null, "rate": 0, "when": "<band wording>" }
+    ],
+    "payments_per_year": 12,
+    "balloon_at_maturity": true,
+    "fixed_charges_attribution": "accrued",
+    "agreement_ref": "<Section reference>"
+  },
+
+  "day_count": {
+    "convention": "actual/360",
+    "count_both_endpoints": true,
+    "verbatim": "<the agreement's day-count wording>",
+    "agreement_ref": "<Section reference>",
+    "ambiguities": []
+  },
+
+  "grid_metric": {
+    "_when": "Required when any grid has more than one step.",
+    "name": "<e.g. 'Senior Leverage Ratio'>",
+    "cert_ref": "<where the borrower reports it on the Compliance Certificate>",
+    "agreement_ref": "<Section reference>"
+  },
+
+  "fees": [
+    {
+      "name": "<e.g. 'collateral monitoring fee'>",
+      "rate": 0,
+      "when": "close_and_payment_dates",
+      "fixed_charges_treatment": "excluded",
+      "agreement_ref": "<Section reference>"
+    }
+  ],
+
+  "observations": {
+    "index_rates": [
+      { "date": "<YYYY-MM-DD the printed rate took effect>", "rate": 0, "source": "<where the rate was read, e.g. 'WSJ Prime, wsj.com, read 2026-08-11'>" }
+    ],
+    "grid_state": [
+      { "effective": "<YYYY-MM-DD>", "value": 0, "source": "<e.g. 'closing pro-forma per UW memo' or 'March 2026 compliance certificate item 2(c)'>" }
+    ]
+  },
+
+  "covenant_support_rows": {
+    "cash_interest": "<model row label the covenant-spec binds, e.g. 'Cash Interest Expense'>",
+    "scheduled_principal": "<model row label, e.g. 'Scheduled Debt Principal Payments'>"
+  }
+}

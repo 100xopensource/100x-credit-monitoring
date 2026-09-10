@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">Synthetic monitoring memo and portfolio dashboard</title>
+  <desc id="desc">A fictional Nemeris Field Systems memo beside a portfolio dashboard for three synthetic borrowers.</desc>
+  <defs>
+    <filter id="shadow"><feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#201458" flood-opacity=".2"/></filter>
+    <linearGradient id="band" x1="0" y1="0" x2="0.5" y2="0.87">
+      <stop offset="0" stop-color="#100830"/>
+      <stop offset="0.55" stop-color="#170B41"/>
+      <stop offset="1" stop-color="#231363"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="620" rx="30" fill="url(#band)"/>
+  <text x="60" y="66" fill="#B9AFCE" font-family="Arial,sans-serif" font-size="18" font-weight="700" letter-spacing="3">CREDIT MONITORING</text>
+  <text x="60" y="112" fill="#FAF6F5" font-family="Arial,sans-serif" font-size="38" font-weight="700">Evidence to review-ready monitoring</text>
+
+  <g filter="url(#shadow)">
+    <rect x="60" y="190" width="490" height="368" rx="12" fill="#ffffff" stroke="#E6E5ED"/>
+    <rect x="60" y="190" width="490" height="66" rx="12" fill="#F4F3F8"/>
+    <rect x="60" y="244" width="490" height="12" fill="#F4F3F8"/>
+    <rect x="88" y="213" width="72" height="6" rx="3" fill="#7B5CF5"/>
+    <text x="88" y="241" font-family="Arial,sans-serif" font-size="13" font-weight="700" letter-spacing="1.5" fill="#3A3A3A">MONITORING MEMO</text>
+    <text x="88" y="296" font-family="Arial,sans-serif" font-size="25" font-weight="700" fill="#222222">Nemeris Field Systems</text>
+    <text x="88" y="323" font-family="Arial,sans-serif" font-size="14" fill="#5C5C5C">JUNE 2026 · SYNTHETIC</text>
+    <line x1="88" y1="342" x2="520" y2="342" stroke="#E6E5ED"/>
+    <text x="88" y="377" font-family="Arial,sans-serif" font-size="13" font-weight="700" letter-spacing="1.2" fill="#3A3A3A">EXECUTIVE SUMMARY</text>
+    <rect x="88" y="394" width="410" height="8" rx="4" fill="#D7D5E2"/>
+    <rect x="88" y="414" width="356" height="8" rx="4" fill="#E6E5ED"/>
+    <text x="88" y="458" font-family="Arial,sans-serif" font-size="13" font-weight="700" letter-spacing="1.2" fill="#3A3A3A">LIQUIDITY &amp; COVENANTS</text>
+    <rect x="88" y="475" width="380" height="8" rx="4" fill="#D7D5E2"/>
+    <rect x="88" y="495" width="425" height="8" rx="4" fill="#E6E5ED"/>
+    <rect x="88" y="520" width="146" height="24" rx="4" fill="#EDE9FB"/>
+    <text x="104" y="537" font-family="Arial,sans-serif" font-size="13" font-weight="700" fill="#5027F1">EVIDENCE-LINKED</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="580" y="190" width="560" height="368" rx="12" fill="#ffffff" stroke="#E6E5ED"/>
+    <rect x="580" y="190" width="560" height="66" rx="12" fill="#F4F3F8"/>
+    <rect x="580" y="244" width="560" height="12" fill="#F4F3F8"/>
+    <text x="610" y="224" font-family="Arial,sans-serif" font-size="24" font-weight="700" fill="#222222">Portfolio overview</text>
+    <text x="610" y="246" font-family="Arial,sans-serif" font-size="13" fill="#5C5C5C">3 selected reviews · synthetic examples</text>
+    <g transform="translate(610 278)">
+      <rect width="500" height="66" rx="8" fill="#F4F3F8" stroke="#E6E5ED"/>
+      <rect width="5" height="66" rx="3" fill="#8a5d09"/>
+      <text x="24" y="28" font-family="Arial,sans-serif" font-size="15" font-weight="700" fill="#222222">Nemeris Field Systems</text>
+      <text x="24" y="49" font-family="Arial,sans-serif" font-size="13" fill="#5C5C5C">June 2026 · current</text>
+      <text x="422" y="38" font-family="Arial,sans-serif" font-size="13" font-weight="700" fill="#8a5d09">WATCH</text>
+    </g>
+    <g transform="translate(610 358)">
+      <rect width="500" height="66" rx="8" fill="#F4F3F8" stroke="#E6E5ED"/>
+      <rect width="5" height="66" rx="3" fill="#3A3A3A"/>
+      <text x="24" y="28" font-family="Arial,sans-serif" font-size="15" font-weight="700" fill="#222222">Selvara Industrial Services</text>
+      <text x="24" y="49" font-family="Arial,sans-serif" font-size="13" fill="#5C5C5C">June 2026 · current</text>
+      <text x="418" y="38" font-family="Arial,sans-serif" font-size="13" font-weight="700" fill="#3A3A3A">STABLE</text>
+    </g>
+    <g transform="translate(610 438)">
+      <rect width="500" height="66" rx="8" fill="#F4F3F8" stroke="#E6E5ED"/>
+      <rect width="5" height="66" rx="3" fill="#8a5d09"/>
+      <text x="24" y="28" font-family="Arial,sans-serif" font-size="15" font-weight="700" fill="#222222">Veyrona Decision Systems</text>
+      <text x="24" y="49" font-family="Arial,sans-serif" font-size="13" fill="#5C5C5C">May 2026 · current</text>
+      <text x="414" y="38" font-family="Arial,sans-serif" font-size="13" font-weight="700" fill="#8a5d09">REVIEW</text>
+    </g>
+    <text x="610" y="536" font-family="Arial,sans-serif" font-size="13" fill="#3A3A3A">Derived from selected completed runs · analyst remains responsible</text>
+  </g>
+</svg>

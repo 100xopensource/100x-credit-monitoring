@@ -1,0 +1,13 @@
+{
+  "_comment": "Portable borrower registry template. Runtime uses credit-monitoring-registry.json at CREDIT_MONITOR_STORE_ROOT; config_file paths are relative to that root.",
+  "borrowers": [
+    {
+      "borrower_key": "example-borrower",
+      "name": "Example Borrower",
+      "borrower_name": "Example Borrower, Inc.",
+      "aliases": ["Example"],
+      "config_file": "borrowers/example-borrower/.record/current/config/borrower-config.json",
+      "onboarded": "2026-05-01"
+    }
+  ]
+}

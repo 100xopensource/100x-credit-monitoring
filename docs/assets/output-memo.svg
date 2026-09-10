@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="320" viewBox="0 0 720 320" role="img" aria-labelledby="title desc">
+  <title id="title">Synthetic monitoring memo output</title>
+  <desc id="desc">A fictional June monitoring memo for Nemeris Field Systems with Performance, Liquidity, Covenants, Risks and gaps, and EVIDENCE-LINKED sections.</desc>
+  <rect width="720" height="320" rx="20" fill="#F4F3F8"/>
+  <rect x="28" y="24" width="664" height="272" rx="12" fill="#ffffff" stroke="#E6E5ED"/>
+  <rect x="28" y="24" width="664" height="70" rx="12" fill="#170B41"/>
+  <text x="52" y="50" font-family="Arial,sans-serif" font-size="13" font-weight="700" letter-spacing="1.8" fill="#B9AFCE">PORTFOLIO MONITORING</text>
+  <text x="52" y="73" font-family="Arial,sans-serif" font-size="20" font-weight="700" fill="#FAF6F5">Nemeris Field Systems · June 2026</text>
+  <g font-family="Arial,sans-serif">
+    <text x="52" y="126" font-size="13" font-weight="700" letter-spacing="1.2" fill="#3A3A3A">OVERVIEW</text>
+    <line x1="52" y1="137" x2="668" y2="137" stroke="#E6E5ED"/>
+    <g transform="translate(52 151)"><circle cx="8" cy="8" r="6" fill="#5C5C5C"/><text x="26" y="13" font-size="14" font-weight="700" fill="#222222">Performance</text><rect x="154" y="4" width="430" height="8" rx="4" fill="#D7D5E2"/></g>
+    <g transform="translate(52 184)"><circle cx="8" cy="8" r="6" fill="#5C5C5C"/><text x="26" y="13" font-size="14" font-weight="700" fill="#222222">Liquidity</text><rect x="154" y="4" width="366" height="8" rx="4" fill="#E6E5ED"/></g>
+    <g transform="translate(52 217)"><circle cx="8" cy="8" r="6" fill="#1f7a4d"/><text x="26" y="13" font-size="14" font-weight="700" fill="#222222">Covenants</text><rect x="154" y="4" width="458" height="8" rx="4" fill="#D7D5E2"/></g>
+    <g transform="translate(52 250)"><circle cx="8" cy="8" r="6" fill="#8a5d09"/><text x="26" y="13" font-size="14" font-weight="700" fill="#222222">Risks &amp; gaps</text><rect x="154" y="4" width="330" height="8" rx="4" fill="#E6E5ED"/></g>
+  </g>
+  <rect x="500" y="267" width="168" height="22" rx="4" fill="#EDE9FB"/>
+  <text x="516" y="283" font-family="Arial,sans-serif" font-size="13" font-weight="700" fill="#5027F1">EVIDENCE-LINKED</text>
+</svg>

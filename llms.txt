@@ -1,0 +1,21 @@
+# Credit Monitoring Plugin
+
+> AI-assisted private-credit monitoring for Claude Cowork. Analysts remain responsible for review and credit decisions.
+
+## Canonical documents
+
+- README.md: product overview, support, installation, workflow, and responsibility boundary
+- docs/GETTING_STARTED.md: installation, folders, first run, and dashboard creation
+- docs/HOW_IT_WORKS.md: runtime architecture, storage, and responsibilities
+- docs/SECURITY_AND_PRIVACY.md: local-file and Claude-processing boundaries
+- docs/LIMITATIONS.md: unsupported capabilities and professional-use limitations
+- SECURITY.md: private vulnerability reporting
+- CONTRIBUTING.md: contribution expectations
+
+## Output taxonomy
+
+A borrower run produces two person-facing deliverables: a financial workbook and a monitoring memo. The optional portfolio dashboard is a derived aggregate view of selected completed runs, not a third borrower-run deliverable.
+
+## Support
+
+Claude Cowork is supported in v1. Other agent harnesses are not supported or promised. Same-link hosted dashboard updates and migration of pre-v1 monitoring runs are unsupported.

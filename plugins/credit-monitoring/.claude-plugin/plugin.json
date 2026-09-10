@@ -1,0 +1,14 @@
+{
+  "name": "credit-monitoring",
+  "displayName": "Credit Monitoring",
+  "version": "1.0.0",
+  "description": "Turn borrower reporting and loan documents into a structured financial workbook and a review-ready monitoring memo, in Claude Cowork.",
+  "author": {
+    "name": "100x",
+    "url": "https://github.com/100xopensource/100x-credit-monitoring"
+  },
+  "homepage": "https://github.com/100xopensource/100x-credit-monitoring",
+  "repository": "https://github.com/100xopensource/100x-credit-monitoring",
+  "license": "Apache-2.0",
+  "keywords": ["claude-cowork", "credit-monitoring", "private-credit", "covenants", "financial-analysis"]
+}

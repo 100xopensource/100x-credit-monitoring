@@ -1,0 +1,190 @@
+{
+  "_doc": "Per-borrower deal context for credit-monitoring. Authored once at onboarding by monitor-setup and read every month by monthly-monitor to PRIORITIZE and INTERPRET the memo. INTERPRETIVE LAYER ONLY — it changes emphasis, ordering and narrative; it NEVER alters a computed figure. Objective results live in the model + covenant-spec and always govern. Copy to deal-context.json and fill (one per borrower).",
+  "borrower_name": "",
+  "fund": "",
+  "last_reviewed": {
+    "date": "YYYY-MM-DD",
+    "trigger": "onboarding | monthly | IC | ad-hoc"
+  },
+  "static": {
+    "_note": "Auto-drafted from the borrower's OWN documents; changes only on amendment/restructure.",
+    "vertical": "<fund strategy bucket / vertical>",
+    "archetype": "<consumer-inventory | services-project | asset-heavy-industrial | unclassified — controlled vocabulary + framing blocks in monthly-monitor references/archetypes.md; proposed by monitor-setup from the IC/UW memo, analyst confirm-or-override; selects liquidity framing / KPI emphasis / collateral read at synthesis; NEVER alters a computed figure>",
+    "archetype_provenance": "<analyst-confirmed YYYY-MM-DD | inferred — unconfirmed>",
+    "business_one_liner": "<what the company does>",
+    "sponsor_status": "non-sponsored | sponsor-backed (<name>)",
+    "deal_team": [],
+    "deal_team_provenance": "<analyst-confirmed YYYY-MM-DD — leave blank until the analyst confirms the names>",
+    "_deal_team_note": "Deal team members shown in the memo header, in display order (e.g. ['J. Doe', 'R. Roe']). Proposed at onboarding by monitor-setup, which scores each candidate name against the other borrowers' deal records (references/deal_team.py) and has the analyst confirm — every person named in a deal folder is the borrower's own. The memo omits the header line when the list is empty, when this stamp says the analyst did not confirm the names, and for any entry carrying an officer title (CFO, Controller, VP …).",
+    "business_profile": {
+      "_note": "The deeper 'what the company does and what drives its numbers' — auto-drafted from our IC / UW memo (resolved from borrower-config paths.ic_uw_memo_path; the executed/final memo sits in the same folder root as the credit agreement) at onboarding; changes only on a material business change (acquisition, divestiture, new segment, pivot). READ at synthesis as the DIAGNOSTIC LENS on the financials (interpret a revenue dip against seasonality, judge whether an AR concentration is structural, tie a margin move to an input cost). It is NOT a memo section — do not restate what the business does every month. Cite the source for each claim and stamp its source_tier (internal-underwriting = from our IC/UW memo's own analysis; management-prepared = repeats borrower/CIM claims not independently verified; corroborated = confirmed against audited financials, a field exam or an appraisal); leave silent fields as flagged drafts rather than inventing them.",
+      "description": "<2-4 sentences: what the company makes or does, the problem it solves, and how it delivers — deeper than business_one_liner>",
+      "revenue_model": {
+        "how_they_make_money": "<product sales | subscription | usage-based | project | recurring service | licensing | ...>",
+        "recurring_vs_transactional": "<mix; approx % recurring if known>",
+        "pricing_and_contracts": "<pricing basis, typical contract length, renewal terms, backlog / booked-revenue dynamics>",
+        "channels": [
+          {
+            "channel": "<D2C | B2B / wholesale | retail | distributor | marketplace | OEM | ...>",
+            "mix": "<approx % of revenue>",
+            "economics": "<margin + working-capital signature — e.g. D2C card-settled, higher gross, marketing-heavy; B2B on terms, carries AR, lower gross>"
+          }
+        ],
+        "source": "",
+        "source_tier": "internal-underwriting | management-prepared | corroborated"
+      },
+      "end_markets": [
+        {
+          "market": "<industry / vertical served>",
+          "exposure": "<approx % of revenue or qualitative>",
+          "demand_drivers": "<what drives demand in this market>"
+        }
+      ],
+      "customers": {
+        "profile": "<who buys — enterprise | SMB | consumer | government | channel / distributor>",
+        "concentration": "<top customer % and top-5/10 % of revenue, if known>",
+        "stickiness": "<contracted vs at-will; switching costs; churn / retention>",
+        "source": "",
+        "source_tier": "internal-underwriting | management-prepared | corroborated"
+      },
+      "suppliers_and_inputs": {
+        "key_inputs": "<primary COGS inputs — raw materials, labor, freight, third-party services>",
+        "concentration": "<single-source or concentrated suppliers, if any>",
+        "cost_drivers": "<what moves COGS — commodity prices, wages, FX, freight>",
+        "source": "",
+        "source_tier": "internal-underwriting | management-prepared | corroborated"
+      },
+      "geography_footprint": "<HQ + where it operates and sells; key facilities / plants; domestic vs international mix>",
+      "seasonality_cyclicality": "<intra-year revenue and working-capital seasonality, and sensitivity to the economic cycle — the pattern to EXPECT month to month>",
+      "competitive_position": "<market position and share, key competitors, differentiation / moat, barriers to entry>",
+      "ownership": {
+        "structure": "<founder-owned | family | management | PE-backed | ESOP; sponsor name if any>",
+        "key_holders": "<major equity holders>",
+        "source": "",
+        "source_tier": "internal-underwriting | management-prepared | corroborated"
+      },
+      "management": [
+        {
+          "name": "",
+          "role": "",
+          "note": "<tenure, background, key-person dependency>"
+        }
+      ],
+      "headcount": "<total employees; FT vs contract, or trend, if known>",
+      "history": "<founded year and key milestones — acquisitions, pivots, prior financings — relevant to the credit>",
+      "key_operating_kpis": [
+        {
+          "kpi": "<operational driver of the P&L — units shipped, utilization, same-store sales, ARR, bookings, occupancy, billable headcount>",
+          "drives": "<the line item it moves>",
+          "reported_in_package": "yes | no"
+        }
+      ],
+      "working_capital_profile": "<cash-conversion characteristics — how it bills and collects (DSO), pays suppliers (DPO), carries inventory (DIO); why AR / AP / inventory behave as they do — used to read the AP/AR aging module>"
+    },
+    "facility": {
+      "instrument": "<e.g. senior secured term loan / revolver / delayed-draw term loan>",
+      "commitment_usd": 0,
+      "funded_usd": 0,
+      "draw_structure": "<single advance | multi-draw | revolver>",
+      "close_date": "YYYY-MM",
+      "maturity_date": "YYYY-MM-DD",
+      "interest_rate": "<reference index + margin; cash/PIK split>",
+      "oid": "<original issue discount, if any>",
+      "fees": {
+        "<fee name>": "<terms>"
+      },
+      "equity_kicker": "<warrant / penny-warrant coverage, or none>",
+      "security": "<lien position, guarantees, controlled accounts>",
+      "source": "<document(s) each figure was drawn from>"
+    },
+    "credit_thesis": [
+      {
+        "pillar": "<the bet — why we lent>",
+        "monitored_by": "<which monthly metric tests this pillar>",
+        "status": "intact | pressured | broken"
+      }
+    ],
+    "key_risks_at_uw": [
+      {
+        "risk": "<risk named at underwriting>",
+        "early_warning_signal": "<what in the monthly package would flag it>"
+      }
+    ]
+  },
+  "our_view": {
+    "_note": "Subjective — analyst-owned; updated as the read changes. The monitor never sets these automatically; it may surface the period's objective evidence beneath them to speed the call.",
+    "watchlist": "on | off",
+    "trajectory": "improving | stable | deteriorating",
+    "thesis_status": "<1-3 sentences on where the thesis stands now>",
+    "what_would_change_our_mind": ""
+  },
+  "carry_forward": {
+    "_note": "Continuity between memos. Seeded from the prior memo's flags; reconciled (resolved vs still open) and re-seeded each cycle by monthly-monitor. Not typed by hand monthly. analyst_focus holds what the analyst asked the last run to look at and the one-line answer that memo gave — monthly-monitor reads it back to the analyst at the start of the next run, then replaces it with that run's items at write-back.",
+    "open_requests_to_borrower": [
+      {
+        "item": "",
+        "since": "YYYY-MM",
+        "status": "open | received",
+        "category": "covenant | missing-deliverable | other",
+        "amount_usd": null
+      }
+    ],
+    "unresolved_flags": [
+      {
+        "flag": "",
+        "owner": "",
+        "due": "",
+        "category": "covenant | missing-deliverable | other",
+        "amount_usd": null
+      }
+    ],
+    "analyst_focus": [
+      {
+        "item": "",
+        "asked_period": "YYYY-MM",
+        "finding": ""
+      }
+    ],
+    "last_period_headline": "",
+    "_sort_comment": "category + amount_usd drive the memo's Flags & follow-ups three-tier, dollar-descending ordering (report-structure). amount_usd = the largest dollar figure the item turns on; null when unvalued."
+  },
+  "provenance": {
+    "_note": "Which fields the monitor may auto-draft vs. which require analyst sign-off.",
+    "auto_draftable": [
+      "static.facility",
+      "static.business_one_liner",
+      "static.business_profile",
+      "static.credit_thesis",
+      "static.key_risks_at_uw",
+      "carry_forward"
+    ],
+    "analyst_required": [
+      "our_view.*",
+      "credit_thesis[].status",
+      "ebitda_addbacks.entries[].treatment"
+    ]
+  },
+  "ebitda_addbacks": {
+    "_note": "The EBITDA add-back register. ANALYST-OWNED, which is why it lives here and not in covenant-spec.json: the spec records what the agreement PERMITS and is re-derived on every amendment; this records what you ELECTED and survives one. The covenant engine takes the intersection - a line is added back only if the agreement permits it AND you elected it - and on an amendment you keep these elections and are told which ones the new agreement no longer permits. Built ONCE at setup by monitor-setup, which sweeps the agreement's limbs, the reference financials, the IC/UW memo's add-back analysis, the borrower's own certificate schedule, the plan, and the chart of accounts for candidates (miscellaneous, restructuring, impairment, write-off, severance, transaction costs, settlement). Thereafter the monthly run READS it and does not re-ask - it only comes back to you on drift (see review_after_months), on a new candidate above materiality, or when the election changes the covenant verdict.",
+    "entries": [
+      {
+        "line": "<the borrower's own row label, e.g. '72040 - Miscellaneous Expenses'>",
+        "limb": "<which limb of the agreement's EBITDA definition it would fall under, quoted - e.g. '(ii) non-cash charges and extraordinary charges'>",
+        "permitted_by_agreement": "yes | no | arguable  -- the reading of the spec's definition, not your election",
+        "treatment": "include | exclude | cap | ask_each_month",
+        "cap_usd": null,
+        "reason": "<one line: why this treatment. The thing future-you needs and the file cannot infer.>",
+        "source": "<the document that supports it - reference financials, IC/UW memo, borrower schedule, GL detail>",
+        "credit_view": "same | discount  -- 'discount' means it is permitted for the covenant test but you do not believe it for the credit read (a write-down that recurs every year). Drives the credit-EBITDA column; never changes the covenant test.",
+        "decided_by": "",
+        "decided_on": "YYYY-MM-DD",
+        "review_after_months": 6,
+        "_review_note": "Drift check. A cost approved as one-time that is still posting after this many months, or whose cumulative total passes what was approved, comes back to you as a question - 'this has run six months, still one-time?' - not as a re-interview."
+      }
+    ],
+    "credit_ebitda": {
+      "_note": "Two EBITDAs, both labelled, because the covenant question and the credit question come apart. COVENANT EBITDA is what the agreement permits and is what the test runs on. CREDIT EBITDA additionally strips every entry marked credit_view 'discount', and is what leverage, coverage and trend commentary should read. Reporting one number forces a choice that does not need making.",
+      "report_both_in_memo": true
+    }
+  }
+}

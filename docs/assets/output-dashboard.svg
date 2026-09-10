@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="340" viewBox="0 0 960 340" role="img" aria-labelledby="title desc">
+  <title id="title">Synthetic portfolio dashboard output</title>
+  <desc id="desc">A fictional dashboard with three current reviews and two WATCH or REVIEW statuses: Nemeris is WATCH, Selvara is STABLE, and Veyrona is REVIEW.</desc>
+  <rect width="960" height="340" rx="20" fill="#F4F3F8"/>
+  <rect x="24" y="22" width="912" height="296" rx="12" fill="#ffffff" stroke="#E6E5ED"/>
+  <rect x="24" y="22" width="912" height="76" rx="12" fill="#170B41"/>
+  <text x="50" y="52" font-family="Arial,sans-serif" font-size="22" font-weight="700" fill="#FAF6F5">Portfolio Monitor</text>
+  <text x="50" y="75" font-family="Arial,sans-serif" font-size="13" fill="#B9AFCE">3 SELECTED REVIEWS · SYNTHETIC</text>
+  <g font-family="Arial,sans-serif">
+    <g transform="translate(50 122)"><rect width="190" height="66" rx="8" fill="#F4F3F8" stroke="#E6E5ED"/><text x="16" y="26" font-size="13" font-weight="700" fill="#3A3A3A">TOTAL BORROWERS</text><text x="16" y="53" font-size="25" font-weight="700" fill="#222222">3</text></g>
+    <g transform="translate(254 122)"><rect width="190" height="66" rx="8" fill="#F4F3F8" stroke="#E6E5ED"/><text x="16" y="26" font-size="13" font-weight="700" fill="#3A3A3A">CURRENT REVIEWS</text><text x="16" y="53" font-size="25" font-weight="700" fill="#222222">3</text></g>
+    <g transform="translate(458 122)"><rect width="190" height="66" rx="8" fill="#f8efdc" stroke="#E6E5ED"/><text x="16" y="26" font-size="13" font-weight="700" fill="#3A3A3A">WATCH / REVIEW</text><text x="16" y="53" font-size="25" font-weight="700" fill="#8a5d09">2</text></g>
+    <g transform="translate(662 122)"><rect width="248" height="66" rx="8" fill="#EDE9FB" stroke="#E6E5ED"/><text x="16" y="26" font-size="13" font-weight="700" fill="#5027F1">ANALYST CONTROL</text><text x="16" y="50" font-size="14" fill="#222222">Private until you share</text></g>
+    <text x="50" y="226" font-size="14" font-weight="700" fill="#222222">Nemeris Field Systems</text><text x="390" y="226" font-size="13" fill="#5C5C5C">June 2026</text><text x="824" y="226" font-size="13" font-weight="700" fill="#8a5d09">WATCH</text>
+    <line x1="50" y1="238" x2="910" y2="238" stroke="#E6E5ED"/>
+    <text x="50" y="263" font-size="14" font-weight="700" fill="#222222">Selvara Industrial Services</text><text x="390" y="263" font-size="13" fill="#5C5C5C">June 2026</text><text x="820" y="263" font-size="13" font-weight="700" fill="#3A3A3A">STABLE</text>
+    <line x1="50" y1="275" x2="910" y2="275" stroke="#E6E5ED"/>
+    <text x="50" y="300" font-size="14" font-weight="700" fill="#222222">Veyrona Decision Systems</text><text x="390" y="300" font-size="13" fill="#5C5C5C">May 2026</text><text x="818" y="300" font-size="13" font-weight="700" fill="#8a5d09">REVIEW</text>
+  </g>
+</svg>

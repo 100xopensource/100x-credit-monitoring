@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<!-- MEMO TEMPLATE — credit monitoring monthly monitoring report, five fixed tabs. The FORMAT lives here;
+     the FIGURES live in memo-payload.json and the JUDGMENT in prose.json. render_memo.py
+     fills the tokens listed in the manifest below; validate_memo.py refuses a memo that
+     disagrees with its payload. Structure spec: references/report-structure.md. Worked
+     example, for a reviewer to read rather than for an agent to copy:
+     Change this file and re-render; never hand-edit a
+     rendered memo. -->
+<!-- TEMPLATE TOKEN MANIFEST — the one list the renderer, the gate and prose.json
+     all read. A token is written with its name in double braces. Three kinds:
+
+       payload   filled from memo-payload.json by render_memo.py
+       prose     filled from prose.json — the agent's judgment, and nothing else
+       asset     filled by inline_assets.py after the render
+
+     Adding a section to the memo is an entry here plus a payload key; that is what keeps a
+     format revision inside this file.
+
+     name                          kind     what it holds
+     -- header, above the tab bar ------------------------------------------------------
+     TITLE                         payload  <Borrower> — Monitoring Report — <Month YYYY>
+     H1_BORROWER                   payload  borrower legal name + " — Monthly Monitoring Report"
+     SUB_LINE                      payload  period, fund, prepared date; version rides in an HTML comment
+     DEAL_TEAM                     payload  the whole deal-team line element, or "" when the list is empty
+     PILLS                         payload  the house view at a glance, from our_view: the watchlist/trajectory pill; "" when the deal context carries neither
+     -- Overview tab ------------------------------------------------------------------
+     COVENANT_STRIP                payload  one chip per covenant (group chip + indented legs), prior breaches
+     SNAP_PERFORMANCE_TEASER       payload  YTD net revenue vs prior year
+     PERF_DATA                     payload  performance_views as the #perf-data JSON island
+     SNAP_COLLATERAL_TEASER        payload  the senior hard-asset coverage ratio
+     SNAP_COLLATERAL               payload  coverage chips + the pledged-component table
+     COLLATERAL_READ               prose    why nominal coverage over/understates recovery; what the credit is underwritten on; what is excluded
+     SUMMARY_UPDATE_LABEL          payload  "Monthly update", or "Quarterly update" when the period closes a calendar quarter
+     SUMMARY_UPDATE                prose    revenue + EBITDA vs Budget and prior year (period, then cumulative), then the driver — 2–5 sentences
+     SUMMARY_LIQUIDITY             prose    period-end cash vs the floor, where the cash came from, runway when burning, expected direction
+     SUMMARY_COLLATERAL            prose    pledged components + total, coverage vs funded debt, vs prior year/plan where on file
+     SUMMARY_COVENANTS             prose    one sentence when all pass with room; the certified-vs-model gap and the nearest tight test when not
+     SUMMARY_OUTLOOK               prose    forward indicators on file, the governing question for the credit, the open asks
+     TREND_RANGE                   payload  the heading suffix, e.g. (Dec 2024 – Jun 2026)
+     TREND_DATA                    payload  the #trend-data island: months, series, notes, basis_break_index, quarters
+     TREND_CAPTION                 payload  the caption's source line, srclink to the model
+     -- Deal summary tab --------------------------------------------------------------
+     DEAL_COMPANY_PROFILE          prose    one paragraph on what the company does and what drives its numbers, citing the underwriting memo once
+     DEAL_COMPANY_FACTS            payload  the two table.facttable bodies; absent value → "not on file in the deal file" (muted)
+     DEAL_TERMS                    payload  the two Key-terms tables + the financial-covenants summary row that deep-links to Covenants
+     DEAL_TRANSACTION              prose    one paragraph, fixed house order: facility/structure → lenders/agent → use of proceeds → pro-forma leverage at close with its EBITDA basis → security
+     DEAL_TRANSACTION_GAPS         payload  the amber notice naming the elements no source carries, or ""
+     DEAL_TRANSACTION_SOURCES      payload  the sources line
+     DEAL_SECURITY_ASOF            payload  the as-of suffix, e.g. · as of 6/30/2026
+     DEAL_SECURITY_TABLE           payload  the eight fixed columns and the holder + total rows
+     DEAL_SECURITY_SOURCING        prose    which document each holder row restates, why the split is undetermined, why cost is par, what stays an open request, where marks live
+     DEAL_CAPSTRUCTURE             payload  the capital-structure table; each "Pricing / notes" cell from keyed prose CAPSTRUCTURE_NOTES
+     DEAL_LEVERAGE_CONTEXT         prose    one closing coverage/leverage line, deep-linking Covenants
+     -- Covenants tab -----------------------------------------------------------------
+     COVENANT_STRIP_REPEAT         payload  byte-identical to COVENANT_STRIP
+     COVENANT_PREAMBLE             payload  agreement/amendment srclinks, the OR-logic sentence, the certificate signer and date
+     COVENANT_GRID                 payload  Covenant · Test · Certified · Model · Δ/note · Result; financial covenants only; breaches and at-risk first; Δ cell from keyed prose COVENANT_DELTAS
+     COVENANT_OVERALL              prose    the governing verdict sentence for the period, naming the OR mechanics
+     STRESS_FACTS                  payload  the traced facts a stress read rests on: the schedule's next steps, current headroom, the breakeven arithmetic
+     FORWARD_STRESS                prose    the forward read: which leg compliance depends on, the breakeven, what size of move breaks it
+     COVENANT_HISTORY              payload  the collapsed matrix: row per financial covenant × column per test date, pass/at-risk/breach chips, n/e where not evaluable, per-covenant tally line
+     COVENANT_FAROUT               payload  the "not tested within the next 12 months" table, or the fallback sentence when there are none
+     -- Financial performance tab -----------------------------------------------------
+     IS_BASIS                      payload  displayed window, analysis basis, unit, source
+     IS_TABLE                      payload  the income statement table (trailing 5 + YTD)
+     IS_OBSERVATIONS               prose    4–6 <li> reading the YTD path
+     REVENUE_QUALITY               payload  the ARR/retention block, or "" when the module did not run
+     REVENUE_QUALITY_NOTES         prose    2–3 bullets on retention, growth composition, what the YTD path confirms — "" renders nothing
+     CF_BASIS                      payload  as IS_BASIS, plus the derived-indirect statement
+     CF_TABLE                      payload  the cash flow table
+     CF_OBSERVATIONS               prose    3–5 <li>
+     BS_BASIS                      payload  as IS_BASIS, period-end, no YTD
+     BS_TABLE                      payload  the balance sheet table (no YTD column)
+     BS_OBSERVATIONS               prose    4–6 <li>
+     LIQUIDITY                     payload  the liquidity/runway traced figures
+     LIQUIDITY_READ                prose    4–5 <li>: headroom vs floor and the year's trough, the real burn, what holds the balance, months-to-floor with the ask, the structural cushion
+     AGING                         payload  the A/R and A/P aging block, or "" when the module did not run
+     AGING_READ                    prose    what the aging says about collection vs billing — "" renders nothing
+     COLLATERAL_COVERAGE_CLOSING   prose    one line tying pledged assets, the coverage cuts and the funded-debt basis (model vs certified)
+     -- Files & audit tab -------------------------------------------------------------
+     FILES_REGISTRY                payload  the grouped document table; each "What it is" sentence from keyed prose DOCUMENT_NOTES
+     DATA_QUALITY                  payload  the mechanical notes the run itself knows: the four degradation cases, budget absence, restatements, suppressed ratios
+     DATA_QUALITY_NOTES            prose    the judgment notes: capitalization policy, unreconciled deltas, extraction limits
+     OPEN_QUESTIONS                prose    the open questions from the deal notes, each naming who holds the answer — "" renders nothing
+     FLAGS                         prose    numbered open items: bold title, this period's figures, the specific ask
+     FOOTER_SOURCES                payload  the per-deal clause inside the footer sources sentence
+
+     Three prose keys carry no token of their own — the renderer hands them to the producer
+     that builds the table, keyed by the row's payload id: COVENANT_DELTAS (the Δ/note cell
+     in COVENANT_GRID), CAPSTRUCTURE_NOTES (the "Pricing / notes" cell in
+     DEAL_CAPSTRUCTURE), DOCUMENT_NOTES (the "What it is" cell in FILES_REGISTRY).
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITLE}}</title>
+<style>
+  :root{
+    /* Portfolio Monitor palette -- canonical source: docs/theme/tokens.css.
+       Near-white reading surface, indigo identity, dark chrome band. The
+       status trio is the original one and is 102 degrees or more off the
+       accent, so a covenant breach cannot read as a brand affordance. */
+    --paper:#FFFFFF; --wash:#F4F3F8; --panel:#FFFFFF; --card:#FFFFFF; --bg:#F6F6F6;
+    --ink:#222222; --ink-2:#3A3A3A; --muted:#5C5C5C; --faint:#8A8A8A;
+    --line:rgba(32,20,95,.11); --line-2:rgba(32,20,95,.18); --hair:rgba(32,20,95,.11);
+    --accent:#7B5CF5; --accent-ink:#5027F1;
+    --accent-soft:#EDE9FB; --accent-bright:#9A82F7;
+    --navy:#170B41; --dark-1:#100830; --dark-2:#170B41; --dark-3:#231363;
+    --dark-ink:#FAF6F5; --dark-ink-2:#CDC6DE;
+    --dark-ink-3:#B9AFCE; --dark-ink-4:#A49BBE;
+    --spot:#F4F3F8; --sel:#DAD2F9;
+    --green:#1f7a4d; --greenbg:#e9f3ed; --amber:#8a5d09; --amberbg:#f8efdc;
+    --red:#b23a2c; --redbg:#f8e9e6;
+    --shadow:0 1px 2px rgba(32,20,95,.06),0 1px 1px rgba(32,20,95,.04);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;
+    font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    color:var(--ink);background:var(--paper);line-height:1.55;font-size:15px;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 22px 64px}
+  b{font-weight:700}
+
+  /* ---------- HEADER ---------- */
+  /* Compact indigo masthead: the dark brand band, wave at its foot, so the report reads
+     green at thumbnail scale, kept to the same tight padding as the white
+     pass -- no hero height, no decorative graphic. The tab bar directly below
+     carries its own pale-green fill and dark-green labels rather than this
+     block's navy, so the two never read as one oversized coloured band
+     (report-structure.md -> Header). */
+  header.top{position:relative;overflow:hidden;background:linear-gradient(150deg,var(--dark-1) 0%,var(--navy) 55%,var(--dark-3) 100%);color:var(--dark-ink);
+    margin:0 -22px 0;padding:20px 30px 40px 30px;border-radius:0}
+  header.top .wavebg{position:absolute;left:0;right:0;bottom:-2px;height:76px;opacity:.9;pointer-events:none}
+  header.top .wavebg svg{display:block;width:100%;height:100%}
+  .brand{position:relative;display:flex;align-items:flex-start;gap:18px}
+  .brandtext{min-width:0;padding-top:0}
+  header.top .eyebrow{font-size:11px;font-weight:700;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--dark-ink-4);margin:0 0 8px}
+  header.top h1{margin:0 0 6px;font-size:21px;line-height:1.28;
+    font-weight:700;letter-spacing:-.01em;color:var(--dark-ink);max-width:56ch}
+  header.top .sub{opacity:1;color:var(--dark-ink-2);font-size:13px;letter-spacing:.01em;font-weight:400}
+  header.top .sub b{font-weight:700;color:var(--dark-ink)}
+  .pills{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px}
+  .pill{display:inline-block;padding:4px 12px;border-radius:3px;font-size:11px;font-weight:700;
+    letter-spacing:.04em;text-transform:uppercase}
+  .pill.view{background:var(--accent-soft);color:var(--accent-ink);border:1px solid var(--line-2)}
+  .pill.watch{background:var(--amber);color:#fff}
+
+  /* ---------- SECTION HEADS ---------- */
+  h2{font-size:13px;margin:40px 0 14px;padding:0;color:var(--ink);border:0;
+    font-weight:700;letter-spacing:.15em;text-transform:uppercase;scroll-margin-top:16px;
+    display:flex;align-items:center;gap:12px}
+  h2::before{content:"";width:22px;height:2px;background:var(--accent);flex:0 0 auto;border-radius:2px}
+  h2 .small.muted{color:var(--faint);letter-spacing:.02em;text-transform:none;font-weight:400}
+  h3{font-size:12.5px;margin:0 0 12px;color:var(--ink-2);text-transform:uppercase;
+    letter-spacing:.11em;font-weight:700}
+
+  /* ---------- CARDS ---------- */
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:6px;
+    padding:20px 22px;margin-bottom:16px;box-shadow:var(--shadow)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  .summary p.sumblock{margin:0 0 12px}
+  .summary p.sumblock:last-child{margin-bottom:0}
+
+  /* ---------- TABLES ---------- */
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin:2px 0}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  thead th{border-bottom:1.5px solid var(--line-2)}
+  th{background:transparent;color:var(--ink-2);font-weight:700;font-size:11.5px;
+    text-transform:uppercase;letter-spacing:.08em}
+  tbody tr:last-child td{border-bottom:none}
+  td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  td.spot,th.spot{background:var(--spot)} td.spot{font-weight:700;color:var(--navy)}
+  th.spot{color:var(--accent-ink)}
+  tr.sub td{color:var(--muted);font-size:12.5px;background:#FBFAFC;border-bottom:1px solid var(--line)}
+  tr.sub td:first-child{padding-left:24px;font-style:italic}
+
+  /* status text + tags */
+  .tag{display:inline-block;padding:2px 9px;border-radius:3px;font-size:11.5px;font-weight:700;
+    letter-spacing:.03em;text-transform:uppercase}
+  .tag.pass{background:var(--greenbg);color:var(--green)}
+  .tag.atrisk{background:var(--amberbg);color:var(--amber)}
+  .tag.breach{background:var(--redbg);color:var(--red)}
+  .g{color:var(--green)} .a{color:var(--amber)} .rd{color:var(--red)}
+  .up{color:var(--green);font-weight:700} .down{color:var(--red);font-weight:700} .neu{color:var(--faint);font-weight:600}
+  .expo table td{padding:7px 11px;border-bottom:1px solid var(--line)}
+  .expo table tr:last-child td{border-bottom:none}
+  .expo table td.muted{width:42%;color:var(--muted)}
+
+  /* ---------- COVENANT CHIPS ---------- */
+  .cov-chips{display:flex;flex-wrap:wrap;gap:10px}
+  a.covchip{display:inline-flex;align-items:center;gap:9px;text-decoration:none;color:var(--ink);
+     border:1px solid var(--line);border-radius:5px;padding:11px 15px;font-size:13px;background:#fff;
+     transition:transform .12s,box-shadow .12s,border-color .12s}
+  a.covchip:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(32,20,95,.10);border-color:var(--line-2)}
+  a.covchip .cdot{width:8px;height:8px;border-radius:50%;flex:0 0 auto}
+  a.covchip b{font-weight:800;letter-spacing:.01em}
+  a.covchip.pass .cdot{background:var(--green)} a.covchip.pass b{color:var(--green)}
+  a.covchip.atrisk .cdot{background:var(--amber)} a.covchip.atrisk b{color:var(--amber)}
+  a.covchip.breach .cdot{background:var(--red)} a.covchip.breach b{color:var(--red)}
+  a.covchip.overall{border-width:1.5px} a.covchip.overall.pass{border-color:var(--green)} a.covchip.overall.atrisk{border-color:var(--amber)} a.covchip.overall.breach{border-color:var(--red)} /* the overall chip carries weight, never a colour of its own: a fixed green here beat .breach on equal specificity and painted a failed either/or group green under its own "Breach" label */
+
+  a.jumpname{color:var(--ink);text-decoration:none;border-bottom:1px solid #E9E8EF;font-weight:600;
+    transition:color .1s,border-color .1s}
+  a.jumpname:hover{color:var(--accent-ink);border-bottom-color:var(--accent-ink)}
+  a.jumpname .arw{font-size:10px;opacity:.5;margin-left:3px}
+
+  .foot{font-size:12.5px;color:var(--muted);margin-top:10px;line-height:1.55}
+  .qbadge{display:inline-block;background:var(--accent-soft);color:var(--accent-ink);border:1px solid #E2E0EA;
+     border-radius:4px;padding:3px 10px;font-size:11.5px;font-weight:700;letter-spacing:.04em;
+     text-transform:uppercase;margin-left:6px}
+
+  /* ---------- TRACE INTERACTION — carriers invisible, container is the control ---------- */
+  span.trc,span.srclink,span.srcmiss{color:inherit;font-weight:inherit}
+  td.tcell,th.tcell{cursor:pointer}
+  td.tcell:hover,th.tcell:hover{background:var(--accent-soft)}
+  .cc.tcell{cursor:pointer}
+  .cc.tcell:hover{background:var(--accent-soft)}
+  span.pmark{border-bottom:1px dashed #BCB8CF;cursor:pointer}
+  span.pmark:hover{background:var(--spot)}
+  table.traced td{cursor:pointer}
+  table.traced tbody td:hover{background:var(--accent-soft)}
+  /* selected: the container whose trace box is open stays highlighted */
+  td.trc-sel,th.trc-sel{background:var(--sel);box-shadow:inset 0 0 0 1.5px var(--accent)}
+  .cc.trc-sel{background:var(--sel);box-shadow:inset 0 0 0 1.5px var(--accent)}
+  span.pmark.trc-sel{background:var(--sel);border-radius:3px}
+
+  /* trace box (click-to-open) */
+  #trcpop{position:absolute;z-index:6;background:var(--navy);color:#fff;border-radius:8px;padding:11px 13px;
+    font-size:11.5px;line-height:1.5;box-shadow:0 10px 28px rgba(32,20,95,.34);max-width:360px;display:none}
+  #trcpop .tlbl{font-weight:700;letter-spacing:.02em;border-bottom:1px solid rgba(255,255,255,.16);padding-bottom:4px;margin-bottom:6px}
+  #trcpop .tcalc{margin-bottom:6px;opacity:.9}
+  #trcpop table.tsteps{width:100%;border-collapse:collapse;margin:2px 0 7px;font-size:11.5px}
+  #trcpop table.tsteps td{padding:2px 0;border:0;color:var(--dark-ink-2);text-align:left;vertical-align:baseline}
+  #trcpop table.tsteps td.v{text-align:right;font-variant-numeric:tabular-nums;padding-left:16px;white-space:nowrap}
+  #trcpop table.tsteps tr.res td{border-top:1px solid rgba(255,255,255,.28);font-weight:700;color:#fff;padding-top:4px}
+  #trcpop a.thop{display:block;color:var(--dark-ink-4);text-decoration:none;margin-top:3px}
+  #trcpop a.thop:hover{text-decoration:underline}
+  #trcpop span.thop{display:block;color:var(--dark-ink-3);margin-top:3px}
+
+  /* ---------- STAT BLOCKS ---------- */
+  .covcov{display:flex;flex-wrap:wrap;gap:12px;margin:4px 0 14px}
+  .covcov .cc{border:1px solid var(--line);border-top:2px solid var(--accent);border-radius:5px;
+    padding:14px 18px;background:#FBFAFC;min-width:132px}
+  .covcov .cc .v{font-size:22px;font-weight:800;color:var(--navy);font-variant-numeric:tabular-nums;
+    letter-spacing:-.01em;line-height:1}
+  .covcov .cc .k{font-size:11.5px;color:var(--muted);margin-top:6px;text-transform:uppercase;letter-spacing:.06em}
+  .covcov .cc.warn{border-top-color:var(--amber)} .covcov .cc.warn .v{color:var(--amber)}
+  .covcov .cc.bad{border-top-color:var(--red)} .covcov .cc.bad .v{color:var(--red)}
+
+  ul{margin:8px 0 6px 2px;padding-left:18px} li{margin:6px 0}
+  ol{margin:8px 0 6px 2px;padding-left:20px}
+  .muted{color:var(--muted)} .small{font-size:12px}
+  .tblwrap{overflow-x:auto}
+
+  /* executive summary — quiet left accent, not a loud yellow band */
+  .summary{background:#fff;border-left:3px solid var(--accent)}
+  .lens{display:grid;grid-template-columns:1fr 1fr;gap:2px 26px;margin:12px 0 2px;font-size:13.5px}
+  .lens .row{padding:8px 0;border-top:1px solid var(--line)}
+  .lens .row b .rr{font-weight:800;letter-spacing:.01em}
+
+  /* three-statement flow tie-note */
+  .flow{background:var(--wash);border-left:3px solid var(--line-2);padding:9px 13px;border-radius:0 6px 6px 0;
+    font-size:13px;margin:12px 0 6px;color:var(--ink-2)}
+  .flow:empty{display:none}
+  .flow b{color:var(--navy)}
+  .flow a{color:var(--accent-ink);text-decoration:none;border-bottom:1px dotted var(--accent)}
+
+  /* ---------- CHART ---------- */
+  .chart-toggle{display:inline-flex;border:1px solid var(--line-2);border-radius:5px;overflow:hidden;margin-bottom:8px}
+  .chart-toggle button{border:0;background:#fff;color:var(--muted);font-size:12px;font-weight:700;
+    letter-spacing:.03em;padding:8px 16px;cursor:pointer;font-family:inherit;transition:background .1s,color .1s}
+  .chart-toggle button:not(.active):hover{background:var(--wash);color:var(--ink)}
+  .chart-toggle button.active{background:var(--navy);color:#fff}
+  .chartwrap{position:relative}
+  .chart-legend{display:flex;flex-wrap:wrap;gap:16px;margin:10px 0 2px;font-size:12px;color:var(--muted)}
+  .chart-legend span{display:inline-flex;align-items:center;gap:7px}
+  .chart-legend i{width:12px;height:12px;border-radius:2px;display:inline-block}
+  .chart-legend i.ln{height:3px;width:18px;border-radius:2px}
+  .chart-legend i.dash{height:0;width:18px;border-top:3px dashed currentColor;background:none}
+  .axis-note{font-size:11.5px;color:var(--faint);margin-top:6px}
+  #tt{position:absolute;pointer-events:none;background:var(--navy);color:#fff;border-radius:6px;padding:9px 11px;
+      font-size:11.5px;line-height:1.5;box-shadow:0 8px 24px rgba(32,20,95,.34);opacity:0;transition:opacity .08s;z-index:5;min-width:158px}
+  #tt .ttm{font-weight:700;margin-bottom:5px;border-bottom:1px solid rgba(255,255,255,.2);padding-bottom:4px;letter-spacing:.02em}
+  #tt .ttr{display:flex;justify-content:space-between;gap:16px}
+  #tt .ttr .sw{display:inline-flex;align-items:center;gap:6px}
+  #tt .ttr .sw i{width:9px;height:9px;border-radius:2px;display:inline-block}
+
+  footer{margin-top:32px;font-size:11.5px;color:var(--muted);border-top:1px solid var(--line-2);
+    padding-top:16px;line-height:1.6}
+
+  @media(max-width:720px){
+    .wrap{padding:0 16px 48px}
+    header.top{margin:0 -16px 0;padding:16px 20px 34px 18px}
+    header.top h1{font-size:20px}
+    .brand{gap:16px}
+    .grid2,.lens{grid-template-columns:1fr}
+  }
+
+  /* --- supporting components --- */
+  /* Covenant status strip — always visible, directly under the header; never collapsible.
+     ONE chip size for every covenant of the agreement: the governing verdict of an either/or
+     group and a covenant tested on its own are peers, so both wear `overall lead` — same size,
+     same status-coloured border. Only the legs INSIDE a group render smaller, indented under the
+     group they belong to; size here means "part of the one above", never "less important". */
+  .cov-strip{margin-bottom:22px}
+  .cov-strip h3{margin:0 0 10px}
+  .cov-overall-row{margin-bottom:10px}
+  a.covchip.lead{padding:12px 18px;font-size:14.5px;gap:10px}
+  a.covchip.lead .cdot{width:12px;height:12px}
+  a.covchip.lead b{font-size:14.5px}
+  .cov-legs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px 20px;padding-left:14px;border-left:2px solid var(--line)}
+  .cov-legs a.covchip{font-size:12px;padding:7px 11px}
+  .cov-rest{display:flex;flex-wrap:wrap;gap:10px}
+  /* Snapshot collapsible boxes — persistent header bar (title + one teaser figure + chevron),
+     body hidden until click. Native <details>/<summary>; print force-expands every box. */
+  details.snapbox{padding:0;overflow:hidden}
+  details.snapbox>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:12px;padding:16px 18px;user-select:none}
+  details.snapbox>summary::-webkit-details-marker{display:none}
+  details.snapbox>summary h3{margin:0;flex:0 0 auto}
+  details.snapbox>summary .sbx-teaser{flex:1;color:var(--muted);font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  details.snapbox>summary .chev{font-size:18px;color:var(--muted);font-weight:700;margin-left:auto;transition:transform .15s ease;line-height:1}
+  details.snapbox[open]>summary{border-bottom:1px solid var(--line)}
+  details.snapbox[open]>summary .chev{transform:rotate(90deg)}
+  details.snapbox>.sbx-body{padding:16px 18px}
+  .snapbox .sbx-body > h3{display:none}
+  @media print{
+    details.snapbox:not([open])>.sbx-body{display:block !important;content-visibility:visible !important}
+    details.snapbox>summary .chev{display:none}
+    details.snapbox>summary{cursor:default}
+  }
+
+  /* Performance box — segmented time-basis control (report-structure.md → Performance) */
+  .perfbar{display:flex;gap:0;margin:2px 0 10px;border:1px solid var(--hair);border-radius:5px;overflow:hidden;width:fit-content}
+  .perfbar button{appearance:none;border:0;background:#fff;color:var(--muted);font:inherit;font-size:11.5px;
+    letter-spacing:.04em;text-transform:uppercase;padding:6px 13px;cursor:pointer;border-right:1px solid var(--hair)}
+  .perfbar button:last-child{border-right:0}
+  .perfbar button:hover{background:var(--accent-soft);color:var(--navy)}
+  .perfbar button[aria-selected="true"]{background:var(--navy);color:#fff}
+  .perfbasis{margin-top:7px;font-size:11px}
+  #perf-table th.pbasis{color:var(--amber)}
+  /* No column shading in the Performance table: shading implied a primary basis, and choosing the
+     basis is the judgment the toggle hands back to the reader. */
+  #perf-table td.spot,#perf-table th.spot{background:transparent;font-weight:inherit;color:inherit}
+  #perf-table .lvl{font-variant-numeric:tabular-nums}
+  #perf-table .cmp{display:block;font-size:10.5px;color:var(--muted);letter-spacing:.02em}
+
+  /* ---------- TABS (report-structure.md -> Tabs) ---------- */
+  /* Slim sticky strip: pale-green ground, dark-green labels, and a strong
+     dark underline on the active tab -- dense at desktop, still readable. */
+  .tabbar{position:sticky;top:0;z-index:7;display:flex;gap:0;background:var(--wash);
+    margin:0 -22px 26px;padding:0 22px;border-bottom:1px solid var(--line-2);
+    box-shadow:0 1px 2px rgba(32,20,95,.06)}
+  .tabbar button{appearance:none;border:0;background:transparent;color:var(--accent-ink);font:inherit;
+    font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+    padding:12px 14px 10px;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap}
+  .tabbar button:hover{color:var(--navy)}
+  .tabbar button.active{color:var(--navy);border-bottom-color:var(--navy);border-bottom-width:4px}
+  .tabbar button:focus-visible{outline:2px solid var(--navy);outline-offset:-3px}
+  .tabpane{display:none}
+  .tabpane.active{display:block;animation:tabin .18s ease}
+  @keyframes tabin{from{opacity:.4}to{opacity:1}}
+  .tabpane > h2:first-child{margin-top:6px}
+  @media print{.tabpane{display:block !important}.tabbar{display:none}}
+
+  /* ---------- WIDE LAYOUT (report-structure.md -> Layout) ---------- */
+  .wrap{max-width:1760px}
+  .hrow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 28px;align-items:start}
+  .hrow.w60{grid-template-columns:1.22fr 1fr}
+  .hrow .grid2{grid-template-columns:1fr} /* a half-width cell stacks its internal pair */
+  #trendwrap .card{max-width:1560px}
+  @media(max-width:1279px){.hrow,.hrow.w60{grid-template-columns:1fr}}
+  @media(max-width:720px){.tabbar{overflow-x:auto;margin:0 -16px 22px;padding:0 16px}}
+
+  /* Deal Summary / Files & audit tables */
+  .kt table td{padding:8px 11px;border-bottom:1px solid var(--line)}
+  .kt table tr:last-child td{border-bottom:none}
+  .kt table td.muted{width:34%;color:var(--muted)}
+  .facttable td.muted{width:34%;color:var(--muted)}
+  a.doclink{color:var(--accent-ink);text-decoration:none;border-bottom:1px solid #E9E8EF;font-weight:600}
+  a.doclink:hover{border-bottom-color:var(--accent-ink)}
+  .notice{background:var(--amberbg);border-left:3px solid var(--amber);padding:9px 13px;
+    border-radius:0 6px 6px 0;font-size:13px;margin:12px 0 4px;color:var(--ink-2)}
+  .notice b{color:var(--amber)}
+  /* Covenant Δ/note cell: a material analyst note gets its own amber box, visible
+     on load, inside the table cell it already lives in -- no click to see it. */
+  .notice.covnote{margin:0;padding:7px 10px;font-size:12.5px}
+  /* Bold amber-on-amberbg text measures 3.62:1 (below WCAG AA 4.5:1 for this
+     text size); the covnote label alone needs a darker override, other
+     .notice uses (e.g. the data-quality "Not on file" callout) keep --amber. */
+  .notice.covnote b{color:var(--ink)}
+  /* A methodology or provenance read is routine, not a warning: same quiet
+     neutral panel as .flow, no amber. */
+  .flow.readnote{margin:14px 0 6px}
+  td.grp{background:var(--spot);font-weight:700;color:var(--navy);text-transform:uppercase;
+    font-size:11px;letter-spacing:.08em}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="wavebg" aria-hidden="true"><svg viewBox="0 0 1440 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="wv" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#492EB8"/><stop offset="0.55" stop-color="#2B1485"/><stop offset="1" stop-color="#1E0C64"/></linearGradient></defs><path d="M0,64 C240,112 480,12 720,54 C960,96 1200,30 1440,70 L1440,120 L0,120 Z" fill="url(#wv)" opacity="0.5"/><path d="M0,88 C260,42 520,122 780,82 C1040,46 1240,98 1440,76 L1440,120 L0,120 Z" fill="url(#wv)" opacity="0.92"/></svg></div>
+  <div class="brand">
+    <div class="brandtext">
+      <div class="eyebrow">Portfolio Monitoring</div>
+      <h1>{{H1_BORROWER}}</h1>
+      <div class="sub">{{SUB_LINE}}</div>
+      {{DEAL_TEAM}}
+      <div class="pills">{{PILLS}}</div>
+    </div>
+  </div>
+</header>
+
+<!-- TAB BAR — fixed five tabs in this order; sticky; the Overview tab is the default.
+     Tab ids are fixed (tab-overview / tab-deal / tab-covenants / tab-financials /
+     tab-files) so hash links (#tab=covenants) are stable across borrowers. -->
+<nav class="tabbar" aria-label="Report sections">
+  <button data-tab="overview" class="active">Overview</button>
+  <button data-tab="deal">Deal summary</button>
+  <button data-tab="covenants">Covenants</button>
+  <button data-tab="financials">Financial performance</button>
+  <button data-tab="files">Files &amp; audit</button>
+</nav>
+
+<!-- ============================ TAB: OVERVIEW ============================
+     The monthly monitoring view: covenant strip first (never hidden), the two metric
+     boxes side by side (open), the SHORT executive summary, then the trend chart. -->
+<div class="tabpane active" id="tab-overview">
+<h2 id="sec-covstrip" style="margin-top:6px">Covenant compliance</h2>
+<!-- COVENANT STATUS STRIP — always visible, directly under the header banner; never
+     collapsible (Style, report-structure.md). The renderer orders it: the OVERALL verdict
+     leads and renders larger, an either/or group's legs nest smaller and indented beneath
+     it, remaining chips follow, and a covenant whose next scheduled test falls more than 12
+     months out is left to the Covenant detail & stress section's closing block. -->
+{{COVENANT_STRIP}}
+
+<h2 id="sec-snapshot">Performance &amp; collateral metrics</h2>
+<div class="hrow">
+<div>
+<!-- PERFORMANCE (% change only) -->
+<details class="card snapbox" id="box-performance" open>
+  <summary>
+    <h3>Performance</h3>
+    <span class="sbx-teaser">{{SNAP_PERFORMANCE_TEASER}}</span>
+    <span class="chev" aria-hidden="true">&#9656;</span>
+  </summary>
+  <div class="sbx-body">
+  <!-- FOUR TOGGLED VIEWS. Every figure is PRE-COMPUTED by references/performance_views.py
+       and embedded in #perf-data; the box renderer only composes cells and re-binds traces.
+       The browser performs no arithmetic: a number computed here would be neither gated by
+       the validator nor traceable to a model cell. -->
+  <div class="perfbar" role="tablist" aria-label="Performance time basis"></div>
+  <div class="tblwrap"><table class="traced" id="perf-table"><thead></thead><tbody></tbody></table></div>
+  <div class="perfbasis small muted"></div>
+  </div>
+</details>
+</div>
+<div>
+<!-- COLLATERAL METRICS -->
+<details class="card snapbox" id="box-collateral" open>
+  <summary>
+    <h3>Collateral metrics</h3>
+    <span class="sbx-teaser">{{SNAP_COLLATERAL_TEASER}}</span>
+    <span class="chev" aria-hidden="true">&#9656;</span>
+  </summary>
+  <div class="sbx-body">
+  <h3>Collateral metrics
+    <span class="small muted" style="font-weight:400;text-transform:none;letter-spacing:0">&middot; pledged assets tracked via the financials &middot; click a line for detail</span>
+  </h3>
+{{SNAP_COLLATERAL}}
+  <div class="foot">{{COLLATERAL_READ}}</div>
+  </div>
+</details>
+</div>
+</div>
+
+<!-- EXECUTIVE SUMMARY — the analyst's one-pager for the deal team (report-structure.md ->
+     Executive summary). Five labeled prose blocks in a fixed order: the period update
+     (monthly, or quarterly when the period closes a calendar quarter — the renderer sets
+     the label), then Liquidity, Collateral, Covenants, Outlook. Prose, not bullets; each
+     label deep-links to the section holding its detail; anything longer than a few
+     sentences belongs in that detail section. -->
+<h2 id="sec-summary">Executive summary <span class="small muted" style="font-weight:400">&middot; the full analysis lives in the other tabs</span></h2>
+<div class="card summary">
+  <p class="sumblock"><b><a class="jumpname" href="#sec-is">{{SUMMARY_UPDATE_LABEL}}</a>:</b> {{SUMMARY_UPDATE}}</p>
+  <p class="sumblock"><b><a class="jumpname" href="#sec-bs">Liquidity</a>:</b> {{SUMMARY_LIQUIDITY}}</p>
+  <p class="sumblock"><b><a class="jumpname" href="#sec-snapshot">Collateral</a>:</b> {{SUMMARY_COLLATERAL}}</p>
+  <p class="sumblock"><b><a class="jumpname" href="#sec-covenant">Covenants</a>:</b> {{SUMMARY_COVENANTS}}</p>
+  <p class="sumblock"><b><a class="jumpname" href="#sec-stress">Outlook</a>:</b> {{SUMMARY_OUTLOOK}}</p>
+</div>
+
+<div id="trendwrap">
+<!-- 18-MONTH TREND -->
+<h2 id="sec-trend">18-month trend <span class="small muted" style="font-weight:400">{{TREND_RANGE}}</span></h2>
+<div class="card">
+  <div class="chart-toggle" id="toggle">
+    <!-- The kept drawing code binds `#toggle .tgl` and reads `data-m`, so these two
+         attributes are what make the toggle live. Renaming either leaves the buttons on the
+         page with nothing listening and the chart stuck on the absolute view. -->
+    <button class="tgl active" data-m="abs">Absolute ($)</button>
+    <button class="tgl" data-m="pct">Margins (%)</button>
+  </div>
+  <div class="chartwrap">
+    <svg id="chart" width="100%" viewBox="0 0 940 320" role="img" aria-label="18-month performance trend"></svg>
+    <div id="tt"></div>
+  </div>
+  <div class="chart-legend" id="legend"></div>
+  <!-- The drawing code writes the axis caption here on every repaint. Without this element
+       that write throws and takes the rest of the repaint with it. -->
+  <div class="axis-note" id="axisnote"></div>
+  <p class="small muted" style="margin:8px 0 0">{{TREND_CAPTION}}</p>
+</div>
+<!-- The chart's DATA, written by render_memo.py from the payload: months, the four dollar
+     series, the three margin series, the axis captions, the basis-break index and the
+     complete quarters with their totals. The drawing code below reads it from here and
+     declares no series and computes no total of its own. -->
+<script type="application/json" id="trend-data">{{TREND_DATA}}</script>
+</div>
+</div>
+
+<!-- ========================== TAB: DEAL SUMMARY ==========================
+     The static deal record, from deal-context + the executed documents. Company and
+     Key terms side by side; Transaction summary beside Security summary; Capital
+     structure full width. Changes on amendment or restructure, not month to month. -->
+<div class="tabpane" id="tab-deal">
+<div class="hrow">
+<div>
+
+<!-- COMPANY — one paragraph on the business, then two compact fact tables (ownership /
+     business model / management left; scale / customers / end markets right). A field the
+     deal file does not carry renders as not on file — never invented. -->
+<h2 id="sec-company">Company</h2>
+<div class="card">
+  <p style="margin:0 0 10px">{{DEAL_COMPANY_PROFILE}}</p>
+  <div class="grid2">
+{{DEAL_COMPANY_FACTS}}
+  </div>
+</div>
+
+</div>
+<div>
+
+<!-- KEY TERMS — the deal's economics in one two-column card, each row citing the executed
+     document that sets it. Financial covenants get ONE summary row that deep-links to the
+     Covenants tab; thresholds live there, not here. -->
+<h2 id="sec-terms">Key terms</h2>
+<div class="card kt">
+  <div class="grid2">
+{{DEAL_TERMS}}
+  </div>
+</div>
+
+</div>
+</div>
+<div class="hrow">
+<div>
+
+<!-- TRANSACTION SUMMARY — one paragraph in the fixed house order: facility and structure ->
+     lenders and agent -> use of proceeds -> pro forma leverage at close with its EBITDA
+     basis -> security. An element no source carries is named in the amber notice. -->
+<h2 id="sec-transaction">Transaction summary</h2>
+<div class="card">
+  <p style="margin:0">{{DEAL_TRANSACTION}}</p>
+{{DEAL_TRANSACTION_GAPS}}
+  <div class="foot">{{DEAL_TRANSACTION_SOURCES}}</div>
+</div>
+
+</div>
+<div>
+
+<!-- SECURITY SUMMARY — who holds the loan, at what basis, as of period end. The
+     lender-of-record rows restate the EXECUTED LOAN DOCUMENTS; any split across lender
+     vehicles stays UNDETERMINED unless a document states it. Cost at close is par
+     net of any OID. Fair value, enterprise value and any unevidenced split render as not on
+     file inside the amber sourcing notice — never estimated. -->
+<h2 id="sec-security">Security summary <span class="small muted" style="font-weight:400">{{DEAL_SECURITY_ASOF}}</span></h2>
+<div class="card">
+  <div class="tblwrap">
+{{DEAL_SECURITY_TABLE}}
+  </div>
+  <div class="notice"><b>Sourcing:</b> {{DEAL_SECURITY_SOURCING}}</div>
+</div>
+
+</div>
+</div>
+
+<!-- CAPITAL STRUCTURE — deduced, never certified: our instrument(s) from the executed
+     documents, every other lender from the borrower's debt schedule with its ranking (a
+     surviving prior lien is NAMED), then an explicit UNATTRIBUTED RESIDUAL row bridging to
+     the model's funded-debt line — a balance the package does not explain is a finding,
+     stated. Debt-like items that are not funded debt sit below the total as memo rows.
+     Equity is book value with its caveat named. -->
+<h2 id="sec-capstructure">Capital structure <span class="small muted" style="font-weight:400">&middot; deduced from the period-end balance sheet and the executed documents</span></h2>
+<div class="card">
+  <div class="tblwrap">
+{{DEAL_CAPSTRUCTURE}}
+  </div>
+  <div class="foot">{{DEAL_LEVERAGE_CONTEXT}}</div>
+</div>
+
+</div>
+
+<!-- =========================== TAB: COVENANTS =========================== -->
+<div class="tabpane" id="tab-covenants">
+<h2 style="margin-top:6px">Covenant compliance</h2>
+<!-- COVENANT STATUS STRIP — repeated at the top of this tab, byte-identical to the Overview
+     strip and in the same surrounding markup. -->
+{{COVENANT_STRIP_REPEAT}}
+<!-- COVENANTS — FINANCIAL COVENANTS ONLY. The grid seats the covenants that carry a
+     primitive in the spec; a reference-only obligation (reporting, affirmative, negative)
+     gets no grid seat, no chip and no list, and appears in Flags & follow-ups when broken.
+     Breaches and at-risk tests lead. Covenants whose next scheduled test is more than 12
+     months out render only in the closing block. -->
+<h2 id="sec-covenant">Covenant detail &amp; stress</h2>
+<div class="card">
+  <div class="flow" style="margin-top:0">{{COVENANT_PREAMBLE}}</div>
+  <div class="tblwrap">
+{{COVENANT_GRID}}
+  </div>
+  <p class="small">{{COVENANT_OVERALL}}</p>
+
+  <h3 style="margin-top:14px">Not tested within the next 12 months</h3>
+{{COVENANT_FAROUT}}
+</div>
+
+<!-- COVENANT HISTORY — its own collapsed block: a row per financial covenant, a column per
+     test date, each cell tracing to that test's required and actual. History, not news, so
+     it stays collapsed and nothing in it seats the strip. -->
+{{COVENANT_HISTORY}}
+
+<!-- FORWARD STRESS — scenarios are DERIVED from the confirmed menu, never invented, and
+     every row traces its arithmetic. -->
+<h2 id="sec-stress">Forward stress</h2>
+<div class="card">
+{{STRESS_FACTS}}
+  <div class="foot">{{FORWARD_STRESS}}</div>
+</div>
+</div>
+
+<!-- ===================== TAB: FINANCIAL PERFORMANCE =====================
+     Income statement + cash flow reviews stacked left; balance sheet review right. -->
+<div class="tabpane" id="tab-financials">
+<div class="hrow">
+<div>
+<!-- INCOME STATEMENT REVIEW -->
+<h2 id="sec-is">Income statement review{{IS_RQ_SUFFIX}}</h2>
+<div class="card">
+  <p class="small muted" style="margin:0 0 6px">{{IS_BASIS}}</p>
+  <div class="tblwrap">
+{{IS_TABLE}}
+  </div>
+  <h3 style="margin-top:12px">Key observations <span class="small muted" style="font-weight:400;text-transform:none;letter-spacing:0">— year-to-date</span></h3>
+  <ul class="small">
+{{IS_OBSERVATIONS}}
+  </ul>
+{{REVENUE_QUALITY}}
+{{REVENUE_QUALITY_NOTES}}
+</div>
+
+<!-- CASH FLOW REVIEW -->
+<h2 id="sec-cf">Cash flow review</h2>
+<div class="card">
+  <p class="small muted" style="margin:0 0 6px">{{CF_BASIS}}</p>
+  <div class="tblwrap">
+{{CF_TABLE}}
+  </div>
+  <h3 style="margin-top:12px">Key observations <span class="small muted" style="font-weight:400;text-transform:none;letter-spacing:0">— year-to-date</span></h3>
+  <ul class="small">
+{{CF_OBSERVATIONS}}
+  </ul>
+</div>
+</div>
+<div>
+<!-- BALANCE SHEET REVIEW -->
+<h2 id="sec-bs">Balance sheet review <span class="small muted" style="font-weight:400">· incl. liquidity &amp; runway, aging and collateral</span></h2>
+<div class="card">
+  <p class="small muted" style="margin:0 0 6px">{{BS_BASIS}}</p>
+  <div class="tblwrap">
+{{BS_TABLE}}
+  </div>
+  <h3 style="margin-top:12px">Key observations <span class="small muted" style="font-weight:400;text-transform:none;letter-spacing:0">— year-to-date</span></h3>
+  <ul class="small">
+{{BS_OBSERVATIONS}}
+  </ul>
+  <h3 style="margin-top:12px">Liquidity &amp; runway</h3>
+{{LIQUIDITY}}
+  <ul class="small" style="margin-top:4px">
+{{LIQUIDITY_READ}}
+  </ul>
+{{AGING}}
+{{AGING_READ}}
+  <p class="small muted" style="margin-bottom:0">{{COLLATERAL_COVERAGE_CLOSING}}</p>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ========================== TAB: FILES & AUDIT ========================= -->
+<div class="tabpane" id="tab-files">
+<div class="hrow w60">
+<div>
+
+<!-- SOURCE DOCUMENTS — the audit registry: every ORIGINAL resource the report rests on,
+     grouped (loan documentation / underwriting & diligence / monthly reporting / budget &
+     forecast / working analysis artifacts), each row linking the store URL the memo's
+     traces already cite. A document the report relies on but cannot link is still listed,
+     with its location described in words. The registry lists sources; it repeats no
+     figures. -->
+<h2 id="sec-files">Source documents <span class="small muted" style="font-weight:400">&middot; every original resource this report rests on</span></h2>
+<div class="card kt">
+  <div class="tblwrap">
+{{FILES_REGISTRY}}
+  </div>
+  <div class="foot">Prepared for analyst review only; no credit recommendation is made.</div>
+</div>
+
+</div>
+<div>
+<!-- DATA QUALITY — the run's own mechanical notes first, then the analyst's judgment notes,
+     in one list. Each note names the figures it affects and what to trust, in plain words
+     the credit reader can act on. -->
+<h2 id="sec-data">Data quality &amp; basis notes</h2>
+<div class="card">
+  <ul class="small" style="margin-top:0">
+{{DATA_QUALITY}}
+{{DATA_QUALITY_NOTES}}
+  </ul>
+{{OPEN_QUESTIONS}}
+</div>
+
+<!-- FLAGS -->
+<h2 id="sec-flags">Flags &amp; follow-ups</h2>
+<p class="small muted" style="margin:0 0 10px">Ordered in three tiers — covenant-touching items first, then missing required deliverables, then everything else; within each tier, dollar-valued items sort largest first, unvalued items follow.</p>
+
+<div class="card">
+  <ol>
+{{FLAGS}}
+  </ol>
+</div>
+</div>
+</div>
+</div>
+
+<footer>
+  Sources: internal deal files — {{FOOTER_SOURCES}}. Objective figures trace to the monthly financials model and to the archived analysis outputs kept beside it. Interpretive views (watchlist / trajectory) are provisional and require analyst sign-off. This report was generated for analyst review only and has not been sent or shared anywhere.
+</footer>
+</div>
+<script>
+const TREND=(function(){
+  /* The chart's series come from the payload, never from this file. render_memo.py writes
+     #trend-data; a missing or empty island leaves every series empty and the chart blank,
+     which validate_memo.py refuses -- an empty chart is loud, a wrong one is not. */
+  var el=document.getElementById("trend-data"); if(!el) return {months:[],series:{}};
+  try{ return JSON.parse(el.textContent)||{months:[],series:{}}; }
+  catch(e){ return {months:[],series:{}}; }
+})();
+const S=TREND.series||{};
+const M=TREND.months||[];
+const pick=k=>{const v=((S[k]||{}).values)||[]; return M.map((_,i)=>v[i]==null?null:v[i]);};
+const REV =pick("net_revenue");
+const GP  =pick("gross_profit");
+const OPEX=pick("opex");
+const EB  =pick("ebitda");
+/* The margins are payload series too. Computing them here would put arithmetic in the
+   browser, where nothing gates it and nothing traces it to a model cell. */
+const GPM =pick("gross_margin");
+const EBM =pick("ebitda_margin");
+const OPXM=pick("opex_pct_of_revenue");
+
+/* `key` names the payload series each item draws. The quarter boxes read their
+   figures out of the island by that key, so an item and its quarter total can
+   never come from two different series. */
+const VIEWS={
+  abs:{unit:'$',
+    bars:{name:'Net revenue', key:'net_revenue', color:'#E0DEE9', data:REV},
+    lines:[{name:'Gross profit', key:'gross_profit', color:'#222222', data:GP},
+           {name:'EBITDA', key:'ebitda', color:'#1f7a4d', data:EB},
+           {name:'Operating expense', key:'opex', color:'#8a5d09', data:OPEX}],
+    note:(TREND.notes&&TREND.notes.abs)||''},
+  pct:{unit:'%',
+    ctxBars:{name:'Net revenue (context)', key:'net_revenue', color:'#E0DEE9', data:REV},
+    lines:[{name:'Gross profit margin', key:'gross_margin', color:'#1f7a4d', data:GPM, dash:true},
+           {name:'EBITDA margin', key:'ebitda_margin', color:'#155C39', data:EBM, dash:true},
+           {name:'Opex % of revenue', key:'opex_pct_of_revenue', color:'#6E6E72', data:OPXM, dash:true}],
+    note:(TREND.notes&&TREND.notes.pct)||''}
+};
+
+const NS="http://www.w3.org/2000/svg";
+const W=940,padL=58,padR=22,padB=42;
+const n=M.length, iw=W-padL-padR;
+/* THE QUARTER BAND. Each complete calendar quarter gets one box, over the month
+   that closes it, holding the quarter's own totals. The totals are computed in
+   memo_payload.py and gated before they reach the page; this code positions them
+   and formats them, and adds nothing up.
+   The band is reserved ABOVE the plot rather than drawn inside it: a box over the
+   lines hides the months it is summarising. The chart therefore grows taller by
+   the band instead of the plot shrinking, so the drawn area is the same height
+   with the boxes as without them. */
+const Q=(TREND.quarters||[]).filter(q=>q&&q.values&&typeof q.end_index==='number');
+const QP=(iw/Math.max(n,1))*3;                  /* space between one box and the next */
+const QCOLS=QP>=124?2:1;                        /* two value columns when they fit */
+const QBW=Math.min(150,Math.max(64,QP-8)), QBH=QCOLS===2?44:71, QY=6;
+const QH=Q.length?QBH+12:0;
+const padT=16+QH, H=320+QH, ih=H-padT-padB;
+const svg=document.getElementById("chart"), tt=document.getElementById("tt");
+svg.setAttribute("viewBox","0 0 "+W+" "+H);
+const BB=(TREND.basis_break_index==null?-1:TREND.basis_break_index); let mode='abs';
+function el(t,a){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e;}
+const x=i=>padL+(i+0.5)*(iw/n);
+function niceDom(min,max){
+  min=Math.min(0,min); max=Math.max(0,max);
+  if(min===0&&max===0) max=1;
+  const span=max-min||1, pad=span*0.08; max+=pad; if(min<0)min-=pad;
+  const step=Math.pow(10,Math.floor(Math.log10(span)))/2||1;
+  return [Math.floor(min/step)*step, Math.ceil(max/step)*step];
+}
+
+function render(){
+  const v=VIEWS[mode];
+  while(svg.firstChild) svg.removeChild(svg.firstChild);
+  const has=q=>q!==null&&q!==undefined&&!Number.isNaN(q); /* a month with no figure is a gap, not a zero */ let vals=[]; v.lines.forEach(l=>vals.push(...l.data.filter(has)));
+  if(mode==='abs') vals.push(...v.bars.data.filter(has));
+  const [mn,mx]=niceDom(Math.min(...vals),Math.max(...vals));
+  const y=val=>padT+ih-((val-mn)/(mx-mn))*ih;
+
+  for(let gth=0;gth<=4;gth++){
+    const f=gth/4, yy=padT+ih-f*ih, lv=mn+f*(mx-mn);
+    svg.appendChild(el("line",{x1:padL,y1:yy,x2:W-padR,y2:yy,stroke:"#F2F1F6"}));
+    const t=el("text",{x:padL-7,y:yy+4,"text-anchor":"end","font-size":10,fill:"#6E6E72"});
+    t.textContent = mode==='abs' ? (lv/1e6).toFixed(1)+'M' : (lv*100).toFixed(0)+'%';
+    svg.appendChild(t);
+  }
+  if(mn<0){const yz=y(0); svg.appendChild(el("line",{x1:padL,y1:yz,x2:W-padR,y2:yz,stroke:"#DBD9E5","stroke-width":1}));}
+
+  /* One rule per quarter-end column, tying each box to the month it summarises.
+     It is drawn in TWO parts, because the two stretches do different work: the
+     stub crossing the empty gap between the box and the plot is solid and carries
+     the link, while the part crossing the data is dashed and lighter so it reads
+     behind the bars and lines rather than among them. Both sit under the series
+     for the same reason. */
+  Q.forEach(q=>{ if(q.end_index<0||q.end_index>=n) return;
+    const qx=x(q.end_index);
+    svg.appendChild(el("line",{x1:qx,y1:QY+QBH,x2:qx,y2:padT,
+      stroke:"#A19CBC","stroke-width":1.2,opacity:.95}));
+    svg.appendChild(el("line",{x1:qx,y1:padT,x2:qx,y2:padT+ih,
+      stroke:"#A19CBC","stroke-dasharray":"4 3","stroke-width":1,opacity:.7}));});
+
+  const bw=(iw/n)*0.62;
+  if(mode==='abs'){
+    const z=y(0);
+    for(let i=0;i<n;i++){if(!has(v.bars.data[i]))continue; const yv=y(v.bars.data[i]);
+      svg.appendChild(el("rect",{x:x(i)-bw/2,y:Math.min(yv,z),width:bw,height:Math.abs(z-yv),fill:v.bars.color,rx:1,opacity:.85}));}
+  } else {
+    const rmax=Math.max(...v.ctxBars.data);
+    for(let i=0;i<n;i++){if(!has(v.ctxBars.data[i]))continue; const h=(v.ctxBars.data[i]/rmax)*ih*0.8;
+      svg.appendChild(el("rect",{x:x(i)-bw/2,y:padT+ih-h,width:bw,height:h,fill:v.ctxBars.color,rx:1,opacity:.13}));}
+  }
+
+  if(BB>=0&&BB<n){
+    const bb=x(BB)-(iw/n)/2;
+    svg.appendChild(el("line",{x1:bb,y1:padT,x2:bb,y2:padT+ih,stroke:"#b23a2c","stroke-dasharray":"5 4","stroke-width":1.2,opacity:.55}));
+  }
+
+  for(let i=0;i<n;i++){ if(i%2===0||i>=n-3){
+    const t=el("text",{x:x(i),y:H-padB+16,"text-anchor":"middle","font-size":9,fill:"#6E6E72"});
+    t.textContent=M[i]; svg.appendChild(t);}}
+
+  v.lines.forEach(s=>{
+    let d="",pen=false; for(let i=0;i<n;i++){if(!has(s.data[i])){pen=false;continue;} d+=(pen?"L":"M")+x(i)+" "+y(s.data[i]); pen=true;}
+    const a={d,fill:"none",stroke:s.color,"stroke-width":2.2,"stroke-linejoin":"round","stroke-linecap":"round"};
+    if(s.dash)a["stroke-dasharray"]="5 3";
+    svg.appendChild(el("path",a));
+    for(let i=0;i<n;i++)if(has(s.data[i]))svg.appendChild(el("circle",{cx:x(i),cy:y(s.data[i]),r:2.2,fill:s.color}));
+  });
+
+  /* THE QUARTER BOXES. One per complete quarter, over the month that closes it,
+     carrying the same four series the view draws, in the same order as the legend
+     and the tooltip. A quarter the payload could not total for a series shows a
+     dash for that series rather than a figure standing in for it. */
+  if(Q.length){
+    const items=[mode==='abs'?v.bars:v.ctxBars].concat(v.lines);
+    const colw=(QBW-14)/QCOLS;
+    Q.forEach(q=>{
+      const i=q.end_index; if(i<0||i>=n) return;
+      const bx=Math.max(padL-8,Math.min(W-padR-QBW+8,x(i)-QBW/2));
+      svg.appendChild(el("rect",{x:bx,y:QY,width:QBW,height:QBH,rx:3,
+        fill:"#F4F3F8",stroke:"#D7D5E2"}));
+      const lab=el("text",{x:bx+7,y:QY+13,"font-size":9,"font-weight":700,fill:"#222222"});
+      /* The dagger says the three months are not on one reporting basis; the
+         axis caption below the chart says what it means. */
+      lab.textContent=(q.short||q.label||"")+(q.spans_basis_break?" †":"");
+      svg.appendChild(lab);
+      items.forEach((it,k)=>{
+        const val=(q.values||{})[it.key];
+        const cx=bx+7+(k%QCOLS)*colw, cy=QY+27+Math.floor(k/QCOLS)*13;
+        svg.appendChild(el("rect",{x:cx,y:cy-6,width:6,height:6,rx:1,fill:it.color}));
+        const t=el("text",{x:cx+9,y:cy,"font-size":8.5,fill:"#5C5C5C"});
+        /* A loss reads -$0.68M, never $-0.68M: the sign belongs in front of the
+           amount, and a quarter of negative EBITDA is exactly what a reader scans
+           this band for. */
+        t.textContent = !has(val) ? "—"
+          : (it.key==='net_revenue'||mode==='abs')
+            ? (val<0?'-':'')+'$'+Math.abs(val/1e6).toFixed(2)+'M'
+          : (val*100).toFixed(1)+'%';
+        svg.appendChild(t);
+      });
+    });
+  }
+
+  const guide=el("line",{x1:0,y1:padT,x2:0,y2:padT+ih,stroke:"#222222","stroke-width":1,opacity:0});
+  svg.appendChild(guide);
+  const cap=el("rect",{x:padL,y:padT,width:iw,height:ih,fill:"transparent"}); svg.appendChild(cap);
+  cap.addEventListener("mousemove",e=>{
+    const r=svg.getBoundingClientRect(), sx=(e.clientX-r.left)*(W/r.width);
+    let i=Math.round((sx-padL)/(iw/n)-0.5); i=Math.max(0,Math.min(n-1,i));
+    const gx=x(i); guide.setAttribute("x1",gx); guide.setAttribute("x2",gx); guide.setAttribute("opacity",.25);
+    let rows="";
+    const revItem = mode==='abs'? v.bars : v.ctxBars;
+    rows+=`<div class="ttr"><span class="sw"><i style="background:${revItem.color}"></i>Net revenue</span><span>${has(REV[i])?'$'+(REV[i]/1e6).toFixed(2)+'M':'not reported'}</span></div>`;
+    v.lines.forEach(s=>{const val= !has(s.data[i]) ? 'not reported' : mode==='abs' ? '$'+(s.data[i]/1e6).toFixed(2)+'M' : (s.data[i]*100).toFixed(1)+'%';
+      rows+=`<div class="ttr"><span class="sw"><i style="background:${s.color}"></i>${s.name}</span><span>${val}</span></div>`;});
+    tt.innerHTML=`<div class="ttm">${M[i]}</div>${rows}`; tt.style.opacity=1;
+    let lx=(gx/W)*r.width+14; if(lx>r.width-172) lx=(gx/W)*r.width-158;
+    tt.style.left=lx+"px"; tt.style.top=(padT+8)*(r.height/H)+"px";
+  });
+  cap.addEventListener("mouseleave",()=>{tt.style.opacity=0;guide.setAttribute("opacity",0);});
+
+  const leg=document.getElementById("legend"); leg.innerHTML="";
+  const revItem = mode==='abs'? v.bars : v.ctxBars;
+  leg.insertAdjacentHTML("beforeend",`<span><i style="background:${revItem.color}"></i>${revItem.name}</span>`);
+  v.lines.forEach(s=>leg.insertAdjacentHTML("beforeend",
+    `<span style="color:${s.color}"><i class="${s.dash?'dash':'ln'}" style="${s.dash?'':'background:'+s.color}"></i><span style="color:var(--muted)">${s.name}</span></span>`));
+  document.getElementById("axisnote").textContent=v.note;
+}
+
+document.querySelectorAll("#toggle .tgl").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("#toggle .tgl").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active"); mode=b.dataset.m; render();
+}));
+render();
+</script>
+<script>
+// Figure trace box. ONE interaction: click a traceable CONTAINER, the box opens;
+// nothing bare-navigates and nothing looks like a hyperlink. Trace data lives in invisible
+// spans; the container is the control:
+//  - span.trc: computed figure — data-calc (context), data-steps (labeled value lines,
+//    result last), data-hops (JSON [{t, h}]; h:null renders plain text when the store link
+//    is unresolved, per the degradation contract).
+//  - span.srclink / span.srcmiss: DIRECT-source figure — the box is titled "Source" and shows
+//    the citation only (the title attribute carries the file + where in it) with the file link
+//    inside (srcmiss: named, no link). No boilerplate.
+//  - table.traced: ANY cell — <tr data-method> says HOW the line is computed (row data-steps
+//    shown on the spot column; a cell's own data-steps wins); the column header's span.trc
+//    says WHICH file supplied the column. No data-method = transcribed as-reported.
+// Init classifies each span's context: td/th → .tcell on the cell; .cc chip → .tcell on the
+// chip; prose → .pmark on the span (the only text-level marker). The open container keeps a
+// .trc-sel highlight while its box is shown; Esc or click-away closes.
+(function(){
+  var pop=document.createElement('div');pop.id='trcpop';document.body.appendChild(pop);
+  var sel=null;
+  // Classification is a named function and exposed, because the Performance box repaints its own
+  // thead/tbody when the reader switches time basis: those fresh spans need classifying too, or a
+  // toggled view's column headers stop answering. Cell clicks are delegated on document, so only
+  // the span→container classification needs re-running.
+  function classify(root){
+    (root||document).querySelectorAll('span.trc,span.srclink,span.srcmiss').forEach(function(s){
+      var chip=s.closest('.cc');
+      if(chip){chip.classList.add('tcell');return}
+      var cell=s.closest('td,th');
+      if(cell){if(!cell.closest('table.traced')||cell.tagName==='TH')cell.classList.add('tcell');return}
+      s.classList.add('pmark');
+    });
+  }
+  window.traceInit=classify;
+  classify(document);
+  function hide(){pop.style.display='none';if(sel){sel.classList.remove('trc-sel');sel=null}}
+  function parse(s){try{return JSON.parse(s||'[]')}catch(_){return []}}
+  function fileName(href){try{return decodeURIComponent(href.split('/').pop())}catch(_){return href}}
+  function render(anchor,calc,steps,hops,label){
+    hide();
+    pop.textContent='';
+    var t=document.createElement('div');t.className='tlbl';t.textContent=label||'How this figure was arrived at';pop.appendChild(t);
+    (Array.isArray(calc)?calc:[calc]).forEach(function(cl){if(!cl)return;var c=document.createElement('div');c.className='tcalc';c.textContent=cl;pop.appendChild(c)});
+    if(steps.length){
+      var tb=document.createElement('table');tb.className='tsteps';
+      steps.forEach(function(s,i){
+        var tr=document.createElement('tr');if(i===steps.length-1&&s.res)tr.className='res';
+        var l=document.createElement('td');l.textContent=s.l;tr.appendChild(l);
+        var v=document.createElement('td');v.className='v';v.textContent=s.v;tr.appendChild(v);
+        tb.appendChild(tr);
+      });
+      pop.appendChild(tb);
+    }
+    hops.forEach(function(h){
+      var a=document.createElement(h.h?'a':'span');a.className='thop';
+      if(h.h){a.target='_blank';a.rel='noopener';a.href=h.h;a.textContent=h.t+' \u2197'}
+      else{a.textContent=h.t}
+      pop.appendChild(a);
+    });
+    sel=anchor;sel.classList.add('trc-sel');
+    pop.style.display='block';
+    var r=anchor.getBoundingClientRect(),
+        left=Math.max(8,Math.min(window.scrollX+r.left,window.scrollX+document.documentElement.clientWidth-pop.offsetWidth-8));
+    pop.style.left=left+'px';pop.style.top=(window.scrollY+r.bottom+6)+'px';
+  }
+  function open(s,anchor){
+    if(s.classList.contains('srclink')||s.classList.contains('srcmiss')){
+      var hops=s.dataset.href?[{t:'Open: '+fileName(s.dataset.href),h:s.dataset.href}]:[];
+      render(anchor,[s.getAttribute('title')||''],[],hops,'Source');
+    }else{
+      render(anchor,s.dataset.calc,parse(s.dataset.steps),parse(s.dataset.hops));
+    }
+  }
+  document.addEventListener('click',function(e){
+    if(pop.contains(e.target)){if(e.target.closest('a'))hide();return}  // box hops navigate; box body stays open
+    if(e.target.closest('a')){hide();return}  // jump chips & links navigate
+    var m=e.target.closest('span.pmark');
+    if(m){open(m,m);return}
+    var box=e.target.closest('td.tcell,th.tcell,.cc.tcell');
+    if(box){
+      var s=box.querySelector('span.trc,span.srclink,span.srcmiss');
+      if(s){open(s,box);return}
+    }
+    var cell=e.target.closest('table.traced td');
+    if(!cell){hide();return}
+    var tr=cell.parentElement,table=cell.closest('table');
+    /* A traced table with NO heading row: the forward-stress table is label and
+       figure, nothing above them. Its figures carry their own arithmetic, so the
+       figure answers for itself. Reading a heading row that is not there threw
+       here, and every figure in that table then answered nothing. */
+    if(!(table.tHead&&table.tHead.rows[0])){
+      var lone=cell.querySelector('span.trc,span.srclink,span.srcmiss');
+      if(lone){open(lone,cell);return}
+      hide();return;
+    }
+    var head=table.tHead.rows[0].cells;
+    var ci=cell.cellIndex;
+    if(ci===0){for(var i=1;i<head.length;i++)if(head[i].className.indexOf('spot')>=0)ci=i}
+    var hs=head[ci]?head[ci].querySelector('span.trc'):null;
+    var method=tr.dataset.method||'As reported \u2014 from the package below; no calculation.';
+    var isSpot=head[ci]&&head[ci].className.indexOf('spot')>=0;
+    var own=parse(cell.dataset.steps);
+    var steps=own.length?own:(isSpot?parse(tr.dataset.steps):[]);
+    render(cell,[tr.cells[0].textContent.trim()+' \u00b7 '+(head[ci]?head[ci].textContent.trim():''),method,hs?hs.dataset.calc:null],
+           steps,hs?parse(hs.dataset.hops):[]);
+  });
+  window.addEventListener('keydown',function(e){if(e.key==='Escape')hide()});
+})();
+</script>
+
+<script type="application/json" id="perf-data">{{PERF_DATA}}</script>
+<script>
+/* Performance box renderer. Reads the pre-computed payload, paints the active view, and re-binds
+   figure traces so a view opened later answers exactly like the default one.
+   Cell trace stores follow report-structure: method per ROW, window per COLUMN, operands per CELL. */
+(function(){
+  var el=document.getElementById('perf-data'); if(!el) return;
+  var data; try{ data=JSON.parse(el.textContent); }catch(e){ return; }
+  if(!data.views || !data.views.length) return;
+  var bar=document.querySelector('.perfbar'), tbl=document.getElementById('perf-table');
+  var basisEl=document.querySelector('.perfbasis'); if(!bar||!tbl) return;
+
+  function usd(v){ if(v==null) return '—';
+    var n=Math.round(v), s=Math.abs(n).toLocaleString('en-US');
+    return n<0 ? '('+s+')' : s; }
+  function pct(v,d){ return v==null ? '—' : (v>=0?'+':'')+(v*100).toFixed(d==null?1:d)+'%'; }
+  function bps(v){ return v==null ? '—' : (v>=0?'+':'')+Math.round(v).toLocaleString('en-US'); } function share(v,d){ return v==null ? '—' : (v*100).toFixed(d==null?1:d)+'%'; }
+  function esc(x){ return String(x==null?'':x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
+
+  /* favourable/unfavourable: opex growth is neutral (it grows with revenue) */
+  function tone(rowId,v){
+    if(v==null) return 'neu';
+    if(rowId==='opex'||rowId==='opex_pct') return 'neu';
+    return v>=0 ? 'up' : 'down';
+  }
+
+  function cellText(view,row,cell){
+    /* In a LEVEL view the level always shows; a suppressed comparison is a sub-line, never a
+       replacement for the figure itself. In a CHANGE view the change IS the figure, so a suppressed
+       comparison replaces it. */
+    if(view.kind==='change'){
+      if(cell.flip)       return 'sign change';
+      if(cell.small_base) return (cell.delta==null?'—':(cell.delta>=0?'+':'−')+usd(Math.abs(cell.delta)));
+      return row.unit==='bps' ? bps(cell.v) : pct(cell.v);
+    }
+    return row.unit==='pct' ? share(cell.v,1) : usd(cell.v); /* a level margin is a share, not a change: +38.3% reads as a move that never happened */
+  }
+  function cellSub(view,row,cell){
+    if(view.kind!=='level') return '';
+    if(cell.flip)       return 'sign change';
+    if(cell.small_base) return 'off a near-zero base';
+    if(cell.cmp==null)  return '';
+    return row.unit==='pct' ? bps(cell.cmp)+' bps' : pct(cell.cmp);
+  }
+  /* operand lines for the trace box — the same shape data-steps uses elsewhere */
+  function steps(view,row,col,cell){
+    var out=[];
+    if(view.kind==='change'){
+      out.push({l:row.label+', '+(col.months.length>1?col.months[0]+' to '+col.months[col.months.length-1]:col.months[0]),
+                v:row.unit==='bps'?pct(cell.a,1):usd(cell.a)});
+      out.push({l:'compared with '+(col.id==='budget'?'the plan for the month'
+                :(col.base_months&&col.base_months.length>1?col.base_months[0]+' to '+col.base_months[col.base_months.length-1]:(col.base_months||['—'])[0])),
+                v:row.unit==='bps'?pct(cell.b,1):usd(cell.b)});
+      out.push({l:cell.flip?'Change (crosses zero — a percentage would say nothing)'
+                :(cell.small_base?'Move (the base is under 1% of revenue, so a percentage would be noise)'
+                :(row.unit==='bps'?'Change (basis points)':'Change')),
+                v:cellText(view,row,cell), res:true});
+    }else{
+      out.push({l:row.label+', '+col.window, v:cellText(view,row,cell)});
+      if(col.factor && col.factor!==1) out.push({l:'Scaled to a twelve-month rate', v:'x '+(Math.round(col.factor*100)/100)});
+      if(cell.b!=null) out.push({l:'Comparable window', v:row.unit==='pct'?pct(cell.b,1):usd(cell.b)});
+      var sub=cellSub(view,row,cell); if(sub) out.push({l:'Change', v:sub, res:true});
+    }
+    return out;
+  }
+
+  function paint(vid){
+    var view=null,i; for(i=0;i<data.views.length;i++) if(data.views[i].id===vid) view=data.views[i];
+    if(!view) return;
+    var h='<tr><th>Metric</th>',c,r,cell;
+    for(i=0;i<view.columns.length;i++){ c=view.columns[i];
+      h+='<th class="n'+(c.basis?' pbasis':'')+'"><span class="trc" data-calc="'+esc(c.window+(c.basis?' — '+c.basis:''))+'"'
+        +' data-hops=\'[{"t":"Model — monthly financials, income statement","h":null}]\'>'+esc(c.label)+(c.basis?'*':'')+'</span></th>';
+    }
+    tbl.tHead.innerHTML=h+'</tr>';
+    var b='';
+    for(var ri=0;ri<view.rows.length;ri++){ r=view.rows[ri];
+      var sub=(r.id.indexOf('margin')>-1||r.id==='opex_pct');
+      b+='<tr'+(sub?' class="sub"':'')+' data-method="'+esc(r.method)+'">'
+        +'<td>'+(sub?esc(r.label):'<a class="jumpname" href="#sec-is">'+esc(r.label)+' <span class="arw">&#8599;</span></a>')+'</td>';
+      for(i=0;i<view.columns.length;i++){ c=view.columns[i]; cell=r.cells[i]||{};
+        var t=cellText(view,r,cell), sb=cellSub(view,r,cell);
+        var kls=view.kind==='change'?tone(r.id,cell.v):(cell.cmp!=null?tone(r.id,cell.cmp):'neu');
+        b+='<td class="n '+kls+'" data-steps=\''+esc(JSON.stringify(steps(view,r,c,cell)))+'\'>'
+          +'<span class="lvl">'+t+'</span>'+(sb?'<span class="cmp">'+sb+'</span>':'')+'</td>';
+      }
+      b+='</tr>';
+    }
+    tbl.tBodies[0].innerHTML=b;
+    if(basisEl){
+      var tagged=view.columns.filter(function(x){return x.basis;}).map(function(x){return x.label;});
+      basisEl.textContent = tagged.length ? ('* '+tagged.join(', ')+' — '+data.basis_note) : '';
+    }
+    Array.prototype.forEach.call(bar.children,function(btn){
+      btn.setAttribute('aria-selected', btn.dataset.view===vid ? 'true':'false'); });
+    if(window.traceInit) window.traceInit(tbl);   /* re-bind traces for the freshly painted cells */
+  }
+
+  data.views.forEach(function(v){
+    var btn=document.createElement('button');
+    btn.type='button'; btn.dataset.view=v.id; btn.textContent=v.label;
+    btn.setAttribute('role','tab'); btn.onclick=function(){ paint(v.id); };
+    bar.appendChild(btn);
+  });
+  paint(data.default_view||data.views[0].id);
+  /* print shows the default view only; the others are a screen affordance */
+})();
+</script>
+<script>
+/* TAB SWITCHER (report-structure.md -> Tabs). Anchors keep working across tabs: a click
+   on any in-page link first activates the tab that CONTAINS the target, then the browser
+   performs the normal jump. Print shows all tabs (CSS); no state is stored. */
+function showTab(id){
+  document.querySelectorAll('.tabpane').forEach(function(p){p.classList.toggle('active', p.id==='tab-'+id);});
+  document.querySelectorAll('.tabbar button').forEach(function(b){b.classList.toggle('active', b.dataset.tab===id);});
+  try{history.replaceState(null,'','#tab='+id);}catch(e){}
+}
+document.querySelectorAll('.tabbar button').forEach(function(b){
+  b.addEventListener('click', function(){ showTab(b.dataset.tab); window.scrollTo(0,0); });
+});
+document.addEventListener('click', function(e){
+  var a = e.target.closest('a[href^="#"]'); if(!a) return;
+  var id = a.getAttribute('href').slice(1); if(!id || id.indexOf('tab=')===0) return;
+  var t = document.getElementById(id); if(!t) return;
+  var pane = t.closest('.tabpane');
+  if(pane && !pane.classList.contains('active')) showTab(pane.id.replace('tab-',''));
+});
+(function(){
+  var h=(location.hash||''), m=h.match(/tab=([a-z]+)/), el=(!m&&h.length>1)?document.getElementById(h.slice(1)):null, pane=el&&el.closest('.tabpane');
+  showTab(m&&document.getElementById('tab-'+m[1])?m[1]:pane?pane.id.replace('tab-',''):'overview'); if(pane){history.replaceState(null,'',h);el.scrollIntoView();} /* a link to a section opens the tab holding it and keeps its target */
+})();
+</script>
+
+</body>
+</html>

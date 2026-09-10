@@ -1,0 +1,186 @@
+{
+  "_comment": "Per-borrower config. Copy to borrower-config.json (one per borrower) and fill in. Paths are the contract between stages — every skill reads from here. EVERY path is written \"<shared folder>:<path inside it>\", e.g. \"store:Example Borrower/.record/current/_model/covenant-spec.json\" or \"source:Example Borrower/6_Loan Monitoring/1_Reporting\". Only the process-bound roots `source` and `store` are supported. A full path starting with a drive letter, a home directory or /sessions names one computer and is not portable. monitor-setup writes this form and refuses a config that does not use it (skills/monitor-setup/references/config_paths.py). INPUTS (reporting_packages_folder, optional compliance_certificate_folder, credit_agreement_path, ic_uw_memo_path, budget_path) are READ-ONLY and live in the deal folder; the monitor never writes there. All OUTPUTS + control files (this borrower-config.json, model_output_path, monitor_output_folder, covenant_spec_path, deal_context_path, budget_map_path) live under a SEPARATE, analyst-CONNECTED output folder — NEVER the deal/reporting folder. monitor-setup must ASK the analyst to select and connect that output folder; it is never defaulted or guessed.",
+  "borrower_name": "Example Borrower, Inc.",
+  "fund": "",
+  "timezone": "America/New_York",
+  "paths": {
+    "_reporting_packages_folder_comment": "Open the deal folder and use its real names rather than copying the example. Folder layouts vary by borrower, and reporting months may sit directly under the monitoring folder.",
+    "reporting_packages_folder": "source:<borrower folder>/6_Loan Monitoring/1_Reporting",
+    "_compliance_certificate_folder_comment": "OPTIONAL. Set this when compliance certificates live outside reporting_packages_folder. Covenant compliance searches this folder recursively first, then falls back to reporting_packages_folder when no period certificate is found or readable there.",
+    "compliance_certificate_folder": "",
+    "model_output_path": "store:borrowers/<borrower key>/_model/<borrower> Monthly IS-BS-CF.xlsx",
+    "monitor_output_folder": "store:borrowers/<borrower key>/.record/current",
+    "credit_agreement_path": "source:<borrower folder>/4_Loan Documentation/.../Credit Agreement.pdf",
+    "ic_uw_memo_path": "source:<borrower folder>/4_Loan Documentation/.../IC Memo.pdf",
+    "_ic_uw_memo_path_comment": "Onboarding-only input. monitor-setup reads it to auto-draft business_profile + credit_thesis + key_risks_at_uw into deal-context.json, then never reopens it (monthly-monitor reads deal-context, not the memo). If blank, monitor-setup checks the credit_agreement_path folder root; if still not found, those fields are left as flagged drafts (never sourced from the borrower CIM/marketing deck).",
+    "covenant_spec_path": "store:borrowers/<borrower key>/.record/current/config/covenant-spec.json",
+    "debt_service_spec_path": "store:borrowers/<borrower key>/.record/current/config/debt-service-spec.json",
+    "debt_service_schedule_path": "store:borrowers/<borrower key>/.record/current/config/debt-service-schedule.json",
+    "_debt_service_comment": "The facility's contractual debt service. covenant-setup extracts the spec (fundings, rate grids, PIK, amortization, day count, fees, pinned observations — see config/debt-service-spec.template.json) and generates the schedule from it; build-monitoring-model populates the covenant-support rows (cash interest, scheduled principal) FROM the schedule, and covenant Fixed Charges bind to those rows. A borrower without these built keeps today's behavior, and every coverage covenant is flagged 'fixed charges on ledger proxy — debt-service schedule not yet built'.",
+    "deal_context_path": "store:borrowers/<borrower key>/.record/current/config/deal-context.json",
+    "budget_path": "source:<borrower folder>/6_Loan Monitoring/Budget/.../<approved budget>.xlsx",
+    "budget_version_note": "Which model file/tab IS the approved budget (pin it).",
+    "budget_map_path": "store:borrowers/<borrower key>/.record/current/config/budget-map.json",
+    "_budget_map_path_comment": "The budget-map.json produced for THIS borrower (data-driven extraction map for budget-vs-actual: file, sheet, period->column, metric->row, opex groups). Written by monitor-setup; budget-vs-actual reads it from here. See config/budget-map.template.json.",
+    "collateral_map_path": "store:borrowers/<borrower key>/.record/current/config/collateral-map.json",
+    "_collateral_map_path_comment": "The collateral-map.json for THIS borrower (lien type, pledged asset rows -> model BS lines, coverage cuts, funded-debt denominator). Written by monitor-setup from the credit agreement security provisions; the monthly report Collateral metrics box + Balance sheet review read it. See config/collateral-map.template.json."
+  },
+  "modules": [
+    "covenant-compliance",
+    "budget-vs-actual",
+    "ap-ar-aging",
+    "three-statement-analysis",
+    "revenue-quality"
+  ],
+  "_modules_comment": "Analysis modules to run for THIS borrower. Opt-in and input-gated: a listed module runs only if its inputs exist; otherwise monthly-monitor omits and FLAGS that section (never fails). Drop ap-ar-aging for deals without aging; drop revenue-quality for non-recurring-revenue borrowers; add others (e.g. borrowing-base) as built.",
+  "module_inputs": {
+    "_covenant_compliance_comment": "The covenant subagent finds the period's compliance certificate under paths.compliance_certificate_folder when configured, otherwise under paths.reporting_packages_folder. It TRANSCRIBES the stated actuals off it (guided by each covenant's cert_ref in covenant-spec.json) into _monitor/certified-values-<YYYY-MM>.json and passes that to the engine via --certified; the engine reports certified and model columns side by side, each with status + headroom. Certificate missing that month -> engine runs without it and the memo flags 'certificate not delivered'. Folder and file names vary by deal, so read recursively rather than matching one naming pattern.",
+    "revenue-quality": {
+      "basis_break_note": ""
+    },
+    "_comment": "Per-module settings. The monthly input FILES are not configured here: for each run the agent opens the borrower's reporting folder for the period, sees which file is which, and passes the paths to the engine (revenue-quality takes --retention-file / --deferred-revenue-file / --certificate-file; ap-ar-aging takes --ar-latest / --ap-latest). revenue-quality: SaaS/recurring-revenue borrowers only; set basis_break_note when an acquisition changes the reporting basis so retention math separates acquired ARR from organic."
+  },
+  "model": {
+    "entity": "consolidated",
+    "scale": "<1 for whole dollars, 1000 for a model in thousands — read it off the workbook>",
+    "currency": "USD",
+    "unit_verbatim": "",
+    "_unit_comment": "REQUIRED. What one figure in this borrower's monitoring model stands for. scale is dollars per model unit: 1 for a model in whole dollars, 1000 for a model that reports in thousands. currency is the ledger's currency. unit_verbatim is what the workbook itself says (\"$ in thousands\", \"USD 000s\") — optional, and worth pasting because it is the evidence for the scale. Set these when the model is first built, off the workbook's own header. scale ships as a placeholder, not as 1, because an unchecked default is indistinguishable from a verified value. Every module refuses to run until it is a number. Every module reads them to tell a figure stated in DOLLARS — a covenant threshold off the agreement, a certified value off the certificate, a materiality floor, the cash floor below — from a figure in the model's own unit. Nothing is inferred from the size of the numbers: a module whose borrower has not declared this skips with a plain reason rather than comparing a $1,000,000 floor against model cash of 2,200 and publishing a breach. If the model's scale changes, every archived run for this borrower is on the old unit — re-run them.",
+    "as_of": "auto: latest month present in reporting_packages_folder"
+  },
+  "model_lines": {
+    "_comment": "Maps canonical metric keys to THIS borrower's row labels in the monitoring model (build-monitoring-model output; column A of the statement sheets, matched case-insensitively). budget-vs-actual, ap-ar-aging AND three-statement-analysis read these — no chart-of-accounts label is hardcoded in the modules. Fill with the borrower's actual model row labels. The example values below are Example Borrower's QuickBooks labels.",
+    "revenue": "Total - Income",
+    "gross_profit": "Gross Profit",
+    "operating_cogs": "Total - 5000 - Cost of Goods Sold",
+    "ebitda_bridge": "Provisional EBITDA (=sum above)",
+    "net_income": "Net Income",
+    "interest_expense": "7101 - Interest Expense",
+    "taxes": "Total - 7150 - Taxes",
+    "depreciation_amortization": "Total - 6900 - Depreciation and Amortization Expense",
+    "financing_cost": "7102 - Financing Cost",
+    "accounts_receivable": "1101 - Accounts Receivable",
+    "accounts_payable": "2001 - Accounts Payable",
+    "pre_financing_subtotal": "",
+    "_pre_financing_subtotal_comment": "OPTIONAL, v3 (three-statement-analysis MoM Net Income bridge). The model's OWN P&L subtotal between operating expenses and any below-the-line items (interest/tax/D&A/non-operating) — e.g. an 'EBITDA (as-reported)' row, or a QuickBooks-style 'Net Ordinary Income' row. NO label is hardcoded by the engine. If left blank, the engine DERIVES it as gross_profit − sum(opex_groups) — always available once those resolve, but pin the actual model row here when one exists so the bridge reads off the model's own reported subtotal rather than re-deriving it. The bridge's tie invariant (components must sum to the NI delta within $1) is enforced in code; if it doesn't tie, mom_bridge.status is 'unresolved' and the bridge is withheld as fact rather than emitted wrong.",
+    "revenue_components": [],
+    "_revenue_components_comment": "OPTIONAL, v3 (revenue-mix trending). Explicit list of revenue LEAF row labels that roll up to the revenue total (e.g. [\"Recurring Revenue\", \"Non-Recurring Revenue\"]). If omitted, the engine auto-detects leaves as the IS rows between the row literally labeled 'Revenue' and the row matching model_lines.revenue (the total) — works for most models but pin explicitly if a model's revenue section is laid out unusually. A single-revenue-line model naturally yields an empty revenue_mix (mix reporting falls back to the total only).",
+    "total_debt": "",
+    "_total_debt_comment": "OPTIONAL but load-bearing, v3 (leverage/coverage ratios). Per the v3 spec, total_debt is NEVER defaulted from a generic 'long term liabilities'-style regex — it must be an EXPLICIT model_lines.total_debt or analysis_lines.total_debt row label pointing at a single row that already represents total funded debt. If the model splits debt across multiple rows (e.g. current LTD + long-term LTD + capital lease) with no single rolled-up total-debt row, leave this blank and the engine AUTO-AGGREGATES funded debt from debt-tagged BS leaves (ex-capital-leases; components disclosed in the funded_debt output), reporting Debt/Gross-Profit (always) + Debt/EBITDA (when EBITDA>0). Pin an explicit row only to override."
+  },
+  "_model_lines_required_comment": "budget-vs-actual needs: revenue, gross_profit, ebitda_bridge (financing_cost optional). ap-ar-aging needs: accounts_receivable, accounts_payable, revenue, operating_cogs. three-statement-analysis needs: revenue, gross_profit, ebitda_bridge, net_income for core metrics; interest_expense for coverage; pre_financing_subtotal/revenue_components/total_debt are v3 OPTIONAL (see per-key comments above — total_debt in particular is never guessed). A module errors clearly if a key it needs is missing; three-statement-analysis specifically discloses every unresolved/unconfigured key in lines_not_found and every consequently-suppressed ratio in ratios_suppressed.",
+  "opex_groups": {
+    "_comment": "Display name -> model IS row label, for the budget-vs-actual opex breakdown. Keys MUST match the budget-map opex_groups keys (the two are compared like-for-like). Example values are Example Borrower's.",
+    "Employee Compensation": "Total - 6100 - Employee Compensation",
+    "Professional Services": "Total - 6500 - Professional Services",
+    "Sales & Marketing": "Total - 6400 - Sales & Marketing Expenses",
+    "Research & Development": "Total - 6600 - Research & Development",
+    "Facility Costs": "Total - 6200 - Facility Costs",
+    "Fulfillment": "Total - 6300 - Fulfillment Costs",
+    "General & Administrative (ex-fulfillment)": "Total - 6800 - General & Administrative Expenses",
+    "Travel & Entertainment": "Total - 6700 - Travel & Entertainment Expenses",
+    "Depreciation & Amortization": "Total - 6900 - Depreciation and Amortization Expense"
+  },
+  "comparability_items": [
+    {
+      "_comment": "OPTIONAL. One-time items that distort as-reported gross profit / EBITDA and should ALSO be shown ex-item. Leave the list EMPTY ([]) for the general case. Each item's model_line value is added to (operation 'add', default) or subtracted from ('subtract') the reported metric to strip its effect — 'add' handles a contra amount (e.g. a refund sitting as a negative in COGS). The Example Borrower example below strips a one-time customs-duty refund.",
+      "name": "Custom Duty Refund",
+      "model_line": "5006 - Custom Duty Refund",
+      "applies_to": [
+        "gross_profit",
+        "ebitda"
+      ],
+      "operation": "add",
+      "note": "One-time customs-duty refund credited to COGS; inflates as-reported gross profit and EBITDA."
+    }
+  ],
+  "ebitda": {
+    "_comment": "budget EBITDA mirrors the model's EBITDA bridge formula. addback_financing_cost adds the budget's financing_cost line back into budget EBITDA when present (set true only if the credit agreement's EBITDA definition adds financing cost back, as Example Borrower's does). Actual EBITDA always comes from model_lines.ebitda_bridge and is never recomputed here.",
+    "addback_financing_cost": true
+  },
+  "aging": {
+    "_comment": "ap-ar-aging parsing settings. All optional (defaults shown). The aging FILES are not configured here — the agent passes them per run via --ar-latest / --ap-latest. file_format: leave 'auto' and the format is read off the file's own bytes, which is what makes a NetSuite export that ships SpreadsheetML XML as .xls still read; pin to 'spreadsheetml' or 'xlsx' only if a borrower's file defeats that.",
+    "file_format": "auto",
+    "dpo_basis": "operating_cogs",
+    "amount_scale": 1,
+    "_amount_scale_comment": "Divisor that brings the aging exports onto the model's reporting unit: 1000 when the exports are in raw dollars and the model is in thousands, 1 (or omit) when they already agree. Applied to every parsed amount BEFORE any tie-out, ratio or concentration, so DSO/DPO and the balance-sheet tie-out sit on one unit.",
+    "tie_tolerance": 1.0,
+    "top_n": 5
+  },
+  "analysis_notes": [
+    "OPTIONAL free-text notes appended verbatim to the budget-vs-actual comparability notes — e.g. a chart-of-accounts reconciliation. Example Borrower example: the actuals model uses the borrower's QuickBooks (QBO) chart of accounts while the 2026 budget P&L follows a NetSuite (NS) chart; the budget-map reconciles the two COA structures (folding fulfillment-type costs out of budget G&A to match the actuals' separate Fulfillment group, and adding budget D&A into Total Opex)."
+  ],
+  "analysis": {
+    "_comment": "OPTIONAL (three-statement-analysis, v4). All keys optional; defaults shown are used if omitted. Objective tuning ONLY — interpretive deal narrative stays in deal-context, never here.",
+    "basis_breaks": [],
+    "_basis_breaks_comment": "OPTIONAL, v3. Entity/consolidation changes (e.g. an acquisition) that make months before vs. after NOT like-for-like. Each entry: {\"effective\": \"Mon YYYY\" (the FIRST month on the new basis), \"reason\": \"free text, e.g. which acquisition and what changed\"} — the pinned schema, matching the covenant vocabulary (legacy keys \"month\"/\"note\" are still accepted). An entry with no recognizable month is flagged in the report, never silently dropped. Analyst-pinned at setup; mirror the narrative in deal-context. When set, standout baselines, drift, direction, trailing averages and TTM aggregates are confined to the CURRENT (latest) same-basis segment; below a minimum same-basis history they are suppressed with a disclosed reason rather than computed against a mixed-basis baseline. YoY across a break is still emitted but tagged crosses_basis_break: true, never as a clean like-for-like read. Leave empty ([]) for a borrower with no basis break — the whole series is then treated as one segment (v2-equivalent behavior). Example: [{\"effective\": \"Apr 2026\", \"reason\": \"Acquisition of X — Combined basis from this month forward\"}]",
+    "business_model": "",
+    "_business_model_comment": "OPTIONAL, v3. One of recurring_revenue | product_inventory | services | mixed. Selects the ratio suite: recurring_revenue (e.g. SaaS) suppresses DIO/CCC (inventory metrics) with a disclosed reason rather than mapping a non-inventory line to DIO as a plumbing workaround. Leave blank to let the engine sniff a value from deal-context's business_one_liner (falls back to 'unspecified', which does not suppress the inventory suite by itself — an absent inventory line still suppresses it either way).",
+    "cash_floor": null,
+    "_cash_floor_comment": "OPTIONAL, v3 (liquidity/runway). Minimum cash figure used to compute months-to-floor at 1m/3m burn, WRITTEN ON THE MODEL'S OWN UNIT: on a model in thousands (model.scale 1000) a $1.5m floor is 1500. Set analysis.threshold_unit to \"dollars\" to write it as the agreement does instead, and the engine converts. Leave null to resolve it from covenant-spec.json's minimum-cash covenant (primitive min_level, name/metric ref containing 'cash') instead of duplicating the figure here; if neither resolves, liquidity reports burn only (floor_source: 'none').",
+    "fiscal_year_start_month": 1,
+    "trend_window": 3,
+    "line_read": {
+      "materiality_floor": null,
+      "run_min_months": 3,
+      "frozen_min_months": 3,
+      "big_move_pct": 0.25,
+      "share_shift_ppt": 5.0
+    },
+    "_line_read_comment": "v4. The line read trends EVERY IS/BS leaf monthly; flags (frozen / monotonic_run / sign_flip / new / vanished / resumed_after_gap / big_move / share_shift / related_party) are deterministic rules gated ONLY by materiality_floor. DECIDE THE FLOOR PER BORROWER AT SETUP: leave null (recommended) to let the engine derive it each run as max($10,000, 5bps of trailing-12 same-basis annualized revenue) — scale-aware, deterministic, and disclosed in line_read.params.floor_basis; or pin a figure on the MODEL's own unit when the analyst wants a different bar (on a model in thousands, 25 means $25,000). Precedence: line_read.materiality_floor > outlier_min_abs (legacy key, still honored) > scale-aware default. There is NO statistical screening (no z-scores) in v4 — outlier_sensitivity is ignored.",
+    "drift": {
+      "min_months": 6,
+      "min_same_sign_share": 0.7,
+      "min_total_pct": 0.15
+    },
+    "_drift_comment": "OPTIONAL, v3. Sustained multi-month per-line moves (a services/R&D line bleeding out or being cut quarter after quarter) that spike detection can't see — evaluated on the LONGEST usable same-basis segment (not necessarily the current/latest one). min_months: need at least this many same-basis months to run drift at all (else suppressed with a reason). min_same_sign_share: fraction of the window's back half that must sit consistently below (declining) / above (growing) the front-half average. min_total_pct: minimum cumulative % change (of the segment's starting value) to flag, on top of the materiality floor as an absolute-dollar gate. Defaults shown are the spec's defaults.",
+    "trend": {
+      "window": 4,
+      "trend_min_months": 3,
+      "trend_max_months": 5,
+      "run_end_tolerance": 2,
+      "k_vol": 1.5,
+      "ratio_rel": 0.2,
+      "wc_driver_pct": 0.1,
+      "wc_rev_pct": 0.1,
+      "reclass_net_frac": 0.2,
+      "reclass_min_pct": 0.25
+    },
+    "_trend_comment": "OPTIONAL (v4.2). Scale/volatility-aware signals ADDITIVE to the line read (never replace the deterministic flags): ratio_trends (DIO/DSO/DPO/CCC/margins trended monthly), working_capital_divergence (a WC asset building while revenue/COGS falls), reclassifications (offsetting sibling moves netting ~flat and large vs balances, e.g. debt short<->long), emerging_trends (3-5mo developing/interrupted per-leaf moves). Gates are scale-aware: max(materiality floor, k_vol x the series own median abs MoM delta); the % values are fallbacks; every gate is disclosed in output.trend_signal_params. All keys optional; defaults shown.",
+    "seasonality": {
+      "_comment": "OPTIONAL. Months (1-12) that are seasonally low / peak. low_months suppress the 'revenue below trailing' flag so a known low season is not miscalled a decline.",
+      "low_months": [],
+      "peak_months": []
+    },
+    "thresholds": {
+      "gross_margin_floor": 0.2,
+      "one_time_reliance_ppt": 0.05,
+      "dpo_days_high": 60,
+      "dio_days_high": 120,
+      "current_ratio_low": 1.0,
+      "revenue_drop_vs_trailing": 0.2,
+      "liquidity_months_to_floor": 3.0
+    },
+    "_thresholds_comment": "liquidity_months_to_floor (v3): below this many months-to-floor at 1m burn, the engine emits a liquidity headline and a liquidity_thin exception (severity elevated)."
+  },
+  "analysis_lines": {
+    "_comment": "OPTIONAL (three-statement-analysis). Override the balance-sheet / cash-flow row labels the module reads; if omitted it resolves from default candidate labels/regexes and flags any it cannot find in lines_not_found. Example values are Example Borrower's. v3 note: if this borrower's model has no inventory line (e.g. a SaaS business) or no current/non-current split on the Balance Sheet, simply OMIT those keys here rather than mapping them to an unrelated row as a plumbing workaround — the v3 engine suppresses the dependent ratios (DIO/CCC, current_ratio/working_capital) with a disclosed reason in ratios_suppressed[] instead. total_debt may also be set here (equivalent to model_lines.total_debt) — see model_lines._total_debt_comment for why it is never auto-defaulted.",
+    "cash": "Total - 1000 - Cash",
+    "accounts_receivable": "Total Accounts Receivable",
+    "inventory": "Total - 1300 - Inventory",
+    "total_current_assets": "Total Current Assets",
+    "total_assets": "Total ASSETS",
+    "accounts_payable": "Total Accounts Payable",
+    "total_current_liabilities": "Total Current Liabilities",
+    "total_debt": "Total Long Term Liabilities",
+    "total_equity": "Total Equity",
+    "operating_cf": "Total Operating Activities",
+    "investing_cf": "Investing Activities (derived)",
+    "financing_cf": "Financing Activities (derived)",
+    "net_change_cash": "Net Change in Cash for Period"
+  },
+  "shared_definitions": {
+    "_comment": "Compute ONCE; every module reads the same. Source the definition from the credit agreement via covenant-setup.",
+    "ebitda_definition_ref": "covenant-spec.json#/definitions/EBITDA"
+  }
+}

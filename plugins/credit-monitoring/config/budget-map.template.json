@@ -1,0 +1,46 @@
+{
+  "_comment": "Data-driven extraction map for budget-vs-actual. Describes WHERE each budget metric lives in the borrower's approved budget workbook, so the engine stays borrower-agnostic. Produced by monitor-setup; budget-vs-actual reads it from paths.budget_map_path. Row and column indices are 1-based (openpyxl). Copy to budget-map.json and fill in with the real rows/columns for the pinned budget.",
+
+  "borrower": "Example Borrower, Inc.",
+  "file": "<approved budget workbook .xlsx — same as borrower-config paths.budget_path>",
+  "file_mount": "<OPTIONAL: an already-resolved path to the same workbook; if set, used instead of 'file'>",
+  "sheet": "<the budget P&L sheet/tab name that IS the approved budget>",
+
+  "period_columns": {
+    "_comment": "ISO month-end -> 1-based column index of that month's budget figures. List every month the budget covers that the monitor may report on.",
+    "2026-01-31": 3,
+    "2026-02-28": 4,
+    "2026-03-31": 5,
+    "2026-04-30": 6,
+    "2026-05-31": 7
+  },
+
+  "metric_rows": {
+    "_comment": "Canonical metric -> budget row(s). A value is an int (single row), a list of ints (summed), or {\"add\":[...],\"subtract\":[...]}. REQUIRED for EBITDA: net_income, interest_expense, taxes, depreciation_amortization. OPTIONAL: financing_cost, interest_income — INCLUDE these keys ONLY if the budget actually has them (a present key is assumed to have a valid row). Replace the example row numbers with the real ones.",
+    "revenue": 10,
+    "gross_profit": 25,
+    "net_income": 80,
+    "interest_expense": 70,
+    "taxes": 78,
+    "depreciation_amortization": 60
+  },
+
+  "balance_sheet_rows": {
+    "_comment": "OPTIONAL. Budget BALANCE-SHEET rows for the memo's Collateral 'vs Budget' column. Keys MUST match collateral-map.json pledged_components labels exactly; values are budget-workbook row(s) on the SAME sheet/period_columns as above (same value shapes as metric_rows: int, list to sum, or {add,subtract}). Include ONLY components the budget actually plans (a missing key renders '—' for that component). Omit this whole block when the pinned budget carries no balance-sheet section — the memo then input-gates the column with one appendix-F note.",
+    "Cash": 55,
+    "Inventory": 61
+  },
+
+  "opex_groups": {
+    "_comment": "Display name -> budget row(s), same value shapes as metric_rows. Keys MUST match borrower-config.opex_groups keys so actual and budget opex are compared like-for-like. The {add,subtract} shape lets you reconcile a different chart of accounts (e.g. carve fulfillment-type costs out of a budget G&A row).",
+    "Employee Compensation": 30,
+    "Professional Services": 34,
+    "Sales & Marketing": 33,
+    "Research & Development": 35,
+    "Facility Costs": 31,
+    "Fulfillment": {"add": [40, 41, 42], "subtract": []},
+    "General & Administrative (ex-fulfillment)": {"add": [36], "subtract": [40, 41, 42]},
+    "Travel & Entertainment": 37,
+    "Depreciation & Amortization": 60
+  }
+}

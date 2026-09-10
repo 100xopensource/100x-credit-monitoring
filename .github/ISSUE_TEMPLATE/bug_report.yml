@@ -1,0 +1,59 @@
+name: Bug report
+description: Report reproducible unexpected behavior in Credit Monitoring
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not include borrower documents, client identifiers, credentials, or confidential financial information. Use synthetic examples only. Report security issues privately through the repository Security page.
+  - type: input
+    id: version
+    attributes:
+      label: Plugin version
+      placeholder: v1.0.0
+    validations:
+      required: true
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      options:
+        - Claude Cowork on macOS
+        - Claude Cowork on Windows
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps
+      description: Use synthetic files or a minimal synthetic description.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Sanitized diagnostics
+      description: Remove paths, names, financial data, tokens, and other sensitive information.
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmation
+      options:
+        - label: I removed confidential information and used only synthetic examples.
+          required: true
+        - label: I checked the latest release and existing issues.
+          required: true

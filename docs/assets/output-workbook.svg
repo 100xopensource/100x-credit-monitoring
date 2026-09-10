@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="320" viewBox="0 0 720 320" role="img" aria-labelledby="title desc">
+  <title id="title">Synthetic financial workbook output</title>
+  <desc id="desc">A fictional workbook showing April through June 2026 revenue of $8.4m to $8.7m, EBITDA of $1.6m to $1.8m, liquidity of $4.6m to $5.2m, and Financials, Covenants, and Sources tabs.</desc>
+  <rect width="720" height="320" rx="20" fill="#F4F3F8"/>
+  <rect x="28" y="24" width="664" height="272" rx="12" fill="#ffffff" stroke="#E6E5ED"/>
+  <rect x="28" y="24" width="664" height="58" rx="12" fill="#170B41"/>
+  <text x="52" y="54" fill="#FAF6F5" font-family="Arial,sans-serif" font-size="17" font-weight="700">FINANCIAL WORKBOOK · SYNTHETIC</text>
+  <g font-family="Arial,sans-serif">
+    <text x="52" y="113" font-size="13" font-weight="700" fill="#3A3A3A">MONTH</text>
+    <text x="238" y="113" font-size="13" font-weight="700" fill="#3A3A3A">REVENUE</text>
+    <text x="392" y="113" font-size="13" font-weight="700" fill="#3A3A3A">EBITDA</text>
+    <text x="536" y="113" font-size="13" font-weight="700" fill="#3A3A3A">LIQUIDITY</text>
+    <line x1="52" y1="124" x2="668" y2="124" stroke="#E6E5ED"/>
+    <g fill="#222222" font-size="15">
+      <text x="52" y="151">Apr 2026</text><text x="238" y="151">$8.4m</text><text x="392" y="151">$1.7m</text><text x="536" y="151">$5.2m</text>
+      <text x="52" y="187">May 2026</text><text x="238" y="187">$8.7m</text><text x="392" y="187">$1.8m</text><text x="536" y="187">$5.0m</text>
+      <text x="52" y="223">Jun 2026</text><text x="238" y="223">$8.5m</text><text x="392" y="223">$1.6m</text><text x="536" y="223">$4.6m</text>
+    </g>
+    <line x1="52" y1="162" x2="668" y2="162" stroke="#E6E5ED"/>
+    <line x1="52" y1="198" x2="668" y2="198" stroke="#E6E5ED"/>
+    <line x1="52" y1="234" x2="668" y2="234" stroke="#E6E5ED"/>
+  </g>
+  <g font-family="Arial,sans-serif" font-size="13" font-weight="700">
+    <rect x="52" y="252" width="104" height="26" rx="4" fill="#EDE9FB"/><text x="69" y="270" fill="#5027F1">Financials</text>
+    <rect x="164" y="252" width="104" height="26" rx="4" fill="#ffffff" stroke="#E6E5ED"/><text x="178" y="270" fill="#5C5C5C">Covenants</text>
+    <rect x="276" y="252" width="104" height="26" rx="4" fill="#ffffff" stroke="#E6E5ED"/><text x="299" y="270" fill="#5C5C5C">Sources</text>
+  </g>
+</svg>

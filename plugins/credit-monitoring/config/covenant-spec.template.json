@@ -1,0 +1,317 @@
+{
+  "_README": "BLANK covenant-spec contract for the credit portfolio monitor. One file per borrower, produced by the covenant-setup stage from the credit agreement. The monthly covenant_compliance module reads THIS file (not the agreement) to compute compliance. Borrower-agnostic. Fill in 'borrower', 'definitions', and 'covenants'. Delete the '_examples' block in production, or keep it for reference. All figures must be sourced from the agreement (use 'agreement_ref').",
+  "borrower": "<Legal name of borrower>",
+  "agreement": "<Short description of the credit agreement: title, date, parties>",
+  "as_of_agreement_date": "<YYYY-MM-DD of the agreement / closing date>",
+  "amendments_reflected": [],
+  "threshold_unit": "dollars",
+  "_threshold_unit_comment": "What every threshold below is written in. Write the agreement's own figures and leave this as 'dollars'; the engine puts them on the borrower's model unit before comparing. See _contract.threshold_unit.",
+  "_contract": {
+    "primitives": {
+      "min_level": "actual >= threshold. ONE quantity. Inputs: { metric }. e.g. minimum liquidity / revenue / EBITDA.",
+      "max_ratio": "numerator / denominator <= threshold. Inputs: { numerator, denominator }. e.g. leverage = Total Debt / EBITDA.",
+      "min_coverage": "numerator / denominator >= threshold. Inputs: { numerator, denominator }. e.g. FCCR / DSCR."
+    },
+    "input_forms": {
+      "by_ref": "{ \"ref\": \"<name of an entry in the top-level definitions block>\" }",
+      "by_lines": "{ \"lines\": [\"<model row label>\", ...], \"op\": \"sum\", \"basis\": \"flow|spot\" }  -- sums the named model rows; basis says whether that sum is a period amount (flow) or a point-in-time balance (spot)"
+    },
+    "basis": "REQUIRED on every definition (ebitda_bridge implies flow and may omit it). 'flow' = a period amount (revenue, EBITDA, interest expense) that AGGREGATES over the covenant's trailing window. 'spot' = a point-in-time balance (cash, debt) that is ALWAYS read at the test month, whatever the window says. Never inferred from the compute shape: without an explicit basis a TTM coverage ratio would divide twelve months of EBITDA by ONE month of interest (false pass), and a TTM minimum-revenue test would compare one month's revenue to an annual threshold (false breach). validate_spec.py rejects a definition without it.",
+    "windows": {
+      "spot": "the test month's column value",
+      "ttm": "trailing twelve months: FLOW metrics sum the trailing 12 monthly columns; SPOT metrics still read the test month",
+      "t3m": "trailing three months (same flow/spot rule)",
+      "custom_months: N": "{ \"custom_months\": N } INSIDE 'window' -- trailing N months (same flow/spot rule)"
+    },
+    "threshold_unit": "What the thresholds in this spec are WRITTEN in. May be set once at the top level of the spec and overridden on a covenant. 'dollars' = as the agreement states them ($3,000,000), and the engine puts them on the borrower's model unit before comparing (borrower-config model.scale) -- write this, and quote the agreement's own figures, so the spec can be checked against the document without arithmetic. 'model_units' = already converted onto this model's scale (3000 against a model in thousands). 'unitless' = a ratio, a percentage, a number of days. THE DEFAULT IS model_units, because that is what every spec written before this field means, so an existing deal keeps reading exactly as it did. A ratio primitive is unitless whatever is declared -- 3.13x is 3.13x on any scale. Getting this wrong is not subtle in one direction and silent in the other: a $1,000,000 floor read as 1,000,000 against a model in thousands reports a breach the borrower does not have.",
+    "threshold": "Either a scalar number, OR a 'threshold_schedule': [ { \"effective\": \"YYYY-MM-DD\", \"value\": <num> } ]. For a schedule, the applicable threshold for a test date is the value of the LATEST entry whose 'effective' <= test date. Comparator is implied by the primitive (>= for min_level/min_coverage, <= for max_ratio).",
+    "at_risk_band": "Optional fraction; default 0.10. Flag 'at_risk' when the actual is within this fraction of the threshold (on the passing side) but not breached.",
+    "either_or_groups": "Optional, and easy to miss. An agreement that lets the borrower satisfy ONE OF TWO tests -- 'EBITDA of at least X, OR Liquidity of at least Y' -- states ONE covenant with two legs, not two covenants. Declare it in the top-level 'either_or_groups' block: { \"<group_id>\": { \"name\": ..., \"rule\": \"any_pass\", \"rule_plain\": \"<the choice in one sentence>\", \"agreement_ref\": ..., \"members\": [\"<covenant id>\", \"<covenant id>\"] } }, and tag each leg covenant with \"either_or_group\": \"<group_id>\". Each leg stays an ordinary covenant entry with its own threshold and its own row; the GROUP is what carries the verdict. Undeclared, both legs validate as ordinary covenants and every month either leg misses its own level is reported as a breach on a credit that is compliant -- which is why this is worth a deliberate look in the covenant section, not just in the definitions. 'any_pass' is the only rule the engine knows: the group is compliant when at least one leg is, and it passes carrying a flag when the only satisfied leg is inside its at-risk band. Two legs minimum -- a one-leg group is a mislabelled covenant and the engine drops it. A test the agreement applies regardless of which clause the borrower chooses ('irrespective of the foregoing') carries NO tag: it is a covenant in its own right.",
+    "status_rule": "breach if it fails the comparator; else at_risk if within at_risk_band of the threshold; else pass. headroom_abs = actual - threshold (signed; for max_ratio a negative headroom means breach). headroom_pct = headroom_abs / |threshold|.",
+    "definitions_block": "Top-level 'definitions' that inputs reference by name (EBITDA, Total Debt, Liquidity, ...). Each definition states HOW it is computed (a single model line, the model's EBITDA bridge row, or a formula over model lines) AND its 'basis' (flow | spot -- see above). EBITDA in particular must point to the model's single pinned EBITDA bridge row -- do NOT recompute a different EBITDA.",
+    "deemed_schedule": "Optional, on a definition, and the FIRST thing to look for in an acquisition / LBO financing: the agreement may override the formula it just gave with fixed per-month amounts -- 'notwithstanding anything to the contrary, for each of the calendar months set forth below, EBITDA shall be deemed to be the amount set forth below opposite such month'. Those months GOVERN over anything the model computes for them. Record the table as { \"months\": { \"YYYY-MM\": <amount>, ... }, \"stated_in\": \"dollars\", \"agreement_ref\": { \"section\": ..., \"page\": ..., \"quote\": ... } }. Transcribe EVERY month the table lists, in one continuous run -- a month left out is tested on the model while the months around it are contractual, and validate_spec.py refuses a schedule with a hole. 'stated_in' is what the AGREEMENT writes them in, which is raw dollars in every deal seen so far, against models that are often in thousands; the engine converts, so quote the agreement's own figures. Why it matters beyond tidiness: a deemed run covers the pre-close year, so most of its months predate the model's first column -- without the schedule a TTM leverage test cannot be computed at all, and the covenant reports 'not evaluable' at every early test date while the borrower's own certificate tests it on exactly these figures. The run then rolls OUT of the trailing window one month at a time, usually onto weaker computed figures, and the engine flags each period whose window still leans on it.",
+    "certified_values": "Monthly, the covenant subagent TRANSCRIBES the borrower's stated actuals from the compliance certificate (guided by each covenant's cert_ref) into a certified-values file: { \"source\": \"<certificate filename>\", \"period\": \"YYYY-MM\", \"values\": { \"<covenant_id>\": { \"YYYY-MM-DD\": <number> } } }, passed to the engine via --certified. The engine then reports BOTH sides per test -- certified and model reconstruction, each with status + headroom -- and flags any delta beyond 'cert_tolerance' (optional per covenant; defaults 0.05 absolute for ratios, max(1% of threshold, $1,000) for dollar covenants) and any pass/fail disagreement. Transcription only; the certificate is never a source of statement figures.",
+    "accounting_basis": "The covenant section's PREAMBLE and any accounting-basis clause, captured once at the top of the spec. Required: either the clause verbatim with the document it points at, or stated:false. The clause modifies how every definition below is APPLIED - a generic 'extraordinary charges' limb is resolved by whatever the named reference financials actually treated as extraordinary. covenant-setup resolves the described document to a real file and records how that document builds EBITDA; where it cannot be found, resolved stays false and the covenants that lean on it are flagged as resting on an unverified basis.",
+    "threshold_derivation": "Per covenant, when the agreement derives its levels. Captures the formula, the projection or plan it is calibrated against, and the roll-forward rule for periods past the tabulated schedule. Never replaces threshold / threshold_schedule - the stated numbers still govern the test. Two uses: it tells the monthly run what basis to measure the actual on, and it gives a free sanity check, since threshold divided by the stated percentage implies the projection the level was set from."
+  },
+  "definitions": {
+    "<DEFINITION_NAME>": {
+      "verbatim": "<verbatim defined-term text from the agreement, if any>",
+      "agreement_ref": "<Section reference>",
+      "basis": "flow | spot  -- REQUIRED (ebitda_bridge compute implies flow). flow = period amount aggregated over the covenant window; spot = point-in-time balance read at the test month.",
+      "compute": {
+        "_one_of": "Provide exactly one of: model_line | ebitda_bridge | formula",
+        "model_line": "<exact model row label, e.g. 'Total - 1000 - Cash'>",
+        "ebitda_bridge": "<exact label of the model's pinned EBITDA value row, e.g. 'Provisional EBITDA (=sum above)'>",
+        "formula": "<lines + op, e.g. { \"lines\": [\"Total Debt\", \"Capital Lease Obligations\"], \"op\": \"sum\" }>"
+      },
+      "deemed_schedule": {
+        "_when": "Only when the agreement fixes this term to stated per-month amounts for a run of months (common in acquisition / LBO financings). Delete this block if it does not. See '_contract.deemed_schedule'.",
+        "months": {
+          "<YYYY-MM>": 0
+        },
+        "stated_in": "dollars",
+        "agreement_ref": "<the clause that deems them — section / page / quote>"
+      },
+      "note": "<computation / consolidation-basis notes>"
+    }
+  },
+  "covenants": [
+    {
+      "id": "<machine_id>",
+      "name": "<human-readable name>",
+      "primitive": "min_level | max_ratio | min_coverage",
+      "metric": {
+        "_for": "min_level only",
+        "ref": "<definition name>  OR use lines/op form"
+      },
+      "numerator": {
+        "_for": "max_ratio / min_coverage only",
+        "ref": "<definition name>"
+      },
+      "denominator": {
+        "_for": "max_ratio / min_coverage only",
+        "ref": "<definition name>"
+      },
+      "window": "spot | ttm | t3m | { \"custom_months\": N }",
+      "threshold": "<number>  OR  use threshold_schedule",
+      "threshold_schedule": [
+        {
+          "effective": "YYYY-MM-DD",
+          "value": 0
+        }
+      ],
+      "frequency": "<monthly | quarterly | continuous | annual>",
+      "first_test_date": "<YYYY-MM-DD or description>",
+      "cure_rights": "<equity cure / none / description>",
+      "agreement_ref": "<Section reference>",
+      "cert_ref": "<where the borrower reports it on the Compliance Certificate, for cross-check (optional)>",
+      "threshold_unit": "dollars | model_units | unitless  -- optional; overrides the spec-level setting for this covenant only",
+      "at_risk_band": 0.1,
+      "threshold_derivation": {
+        "_when": "OPTIONAL, and load-bearing when the agreement DERIVES each level rather than simply stating it - '70% of projected TTM EBITDA', 'a 25% discount to plan', 'the greater of $2,000,000 and 75% of the Approved Annual Projections'. Record the rule even though threshold_schedule already carries the resulting numbers. The numbers are what you test against; the rule is the only thing that says what BASIS they were calibrated on, and a level set off an adjusted projection tested against an unadjusted actual is a breach on a compliant borrower. It also says where next year's levels come from once the tabulated ones run out.",
+        "formula": "",
+        "basis_document": "",
+        "basis_note": "",
+        "roll_forward": ""
+      }
+    }
+  ],
+  "either_or_groups": {
+    "_when": "Only when the agreement lets the borrower satisfy one of two tests. Delete this block if it does not. See '_contract.either_or_groups' and 'either_or_example' below.",
+    "<group_id>": {
+      "name": "<human-readable name, e.g. 'Section 6.8(b) — EBITDA or liquidity'>",
+      "rule": "any_pass",
+      "rule_plain": "<the choice in one sentence, as the memo should say it>",
+      "agreement_ref": "<Section reference>",
+      "members": [
+        "<covenant id>",
+        "<covenant id>"
+      ]
+    }
+  },
+  "_examples": {
+    "_note": "Worked example of each primitive, and of the either/or pair. Remove or keep for reference. Not read by the module (the module reads 'covenants' and 'either_or_groups').",
+    "definitions_example": {
+      "EBITDA": {
+        "verbatim": "net income/loss before interest, income taxes, depreciation and amortization, GAAP consistently applied; provided further that, for each of the calendar months set forth below, EBITDA shall be deemed to be the amount set forth below opposite such month",
+        "agreement_ref": "Section 1",
+        "basis": "flow",
+        "compute": {
+          "ebitda_bridge": "Provisional EBITDA (=sum above)"
+        },
+        "deemed_schedule": {
+          "_note": "Illustrative figures. Transcribe the agreement's own amounts, and every month its table lists -- include every pre-close month listed by the agreement.",
+          "months": {
+            "2024-11": 1000000,
+            "2024-12": 1100000,
+            "2025-01": 1200000,
+            "2025-02": 1300000
+          },
+          "stated_in": "dollars",
+          "agreement_ref": {
+            "section": "1.1",
+            "page": 18,
+            "quote": "for each of the calendar months set forth below, EBITDA shall be deemed to be the amount set forth below opposite such month"
+          }
+        },
+        "note": "Use the model's single pinned EBITDA bridge row; do not recompute. basis flow: a TTM covenant sums 12 monthly bridge values. The deemed months are the agreement's own figures for the pre-close run and govern over the bridge row through the last month listed; pre-model months let an early TTM test compute."
+      },
+      "Liquidity": {
+        "verbatim": "unrestricted cash on deposit ...",
+        "agreement_ref": "Section 1",
+        "basis": "spot",
+        "compute": {
+          "model_line": "Total - 1000 - Cash"
+        },
+        "note": "basis spot: a balance -- always the test month's value, never summed."
+      },
+      "Total_Debt": {
+        "verbatim": "all indebtedness for borrowed money ...",
+        "agreement_ref": "Section 1",
+        "basis": "spot",
+        "compute": {
+          "formula": {
+            "lines": [
+              "Total Long-Term Debt",
+              "Total Short-Term Debt"
+            ],
+            "op": "sum"
+          }
+        },
+        "note": "basis spot: the formula sums two BALANCE rows within one month -- it is still a point-in-time amount, so a TTM leverage covenant reads it at the test month only."
+      },
+      "Interest_Expense": {
+        "basis": "flow",
+        "compute": {
+          "model_line": "Total Interest Expense"
+        },
+        "note": "basis flow even though the compute is a single model_line: interest is a PERIOD amount, so a TTM coverage denominator sums 12 months of it. This is the definition that silently breaks (coverage overstated ~12x) if basis is omitted and inferred as spot."
+      }
+    },
+    "min_level_example": {
+      "id": "min_liquidity",
+      "name": "Minimum Liquidity",
+      "primitive": "min_level",
+      "metric": {
+        "ref": "Liquidity"
+      },
+      "window": "spot",
+      "threshold": 1000000,
+      "frequency": "continuous; reported monthly",
+      "first_test_date": "2025-03-31",
+      "cure_rights": "none",
+      "agreement_ref": "Section 6.7(a)",
+      "cert_ref": "Compliance Certificate line '1. Unrestricted Cash'",
+      "at_risk_band": 0.1
+    },
+    "max_ratio_example": {
+      "id": "max_total_leverage",
+      "name": "Maximum Total Leverage (Total Debt / EBITDA)",
+      "primitive": "max_ratio",
+      "numerator": {
+        "ref": "Total_Debt"
+      },
+      "denominator": {
+        "ref": "EBITDA"
+      },
+      "window": "ttm",
+      "_window_note": "numerator is a balance (spot) and denominator is a flow (TTM). The module reads each input on its definition basis: balance-sheet definitions resolve spot; flow definitions aggregate per the covenant window.",
+      "threshold": 4.0,
+      "frequency": "quarterly",
+      "first_test_date": "2025-06-30",
+      "cure_rights": "equity cure",
+      "agreement_ref": "Section 6.7(c)",
+      "cert_ref": "Compliance Certificate line 'Total Leverage Ratio'",
+      "at_risk_band": 0.1
+    },
+    "min_coverage_example": {
+      "id": "min_fccr",
+      "name": "Minimum Fixed Charge Coverage Ratio",
+      "primitive": "min_coverage",
+      "numerator": {
+        "ref": "EBITDA"
+      },
+      "denominator": {
+        "ref": "Fixed_Charges"
+      },
+      "window": "ttm",
+      "threshold_schedule": [
+        {
+          "effective": "2025-06-30",
+          "value": 1.1
+        },
+        {
+          "effective": "2026-06-30",
+          "value": 1.25
+        }
+      ],
+      "frequency": "quarterly",
+      "first_test_date": "2025-06-30",
+      "cure_rights": "equity cure",
+      "agreement_ref": "Section 6.7(d)",
+      "cert_ref": "Compliance Certificate line 'FCCR'",
+      "at_risk_band": 0.1
+    },
+    "either_or_example": {
+      "threshold_unit": "dollars",
+      "_note": "ONE covenant the borrower can satisfy two ways: hold EBITDA at or above the floor, OR hold liquidity at or above its floor. Each leg is an ordinary covenant entry tagged into the group; the group block holds the verdict. Missing one leg's level is NOT a breach while the other leg is met -- record the pair and the engine says so; leave it as two covenants and every such month reads as a breach.",
+      "either_or_groups": {
+        "s6_8_b": {
+          "name": "Section 6.8(b) — minimum EBITDA or minimum liquidity",
+          "rule": "any_pass",
+          "rule_plain": "Compliant in any month where either the T3M EBITDA floor or the liquidity floor is met.",
+          "agreement_ref": {
+            "section": "6.8(b)",
+            "page": 51,
+            "quote": "Borrower shall maintain either (i) Consolidated EBITDA for the trailing three months of not less than $2,000,000 or (ii) Liquidity of not less than $1,500,000"
+          },
+          "members": [
+            "min_t3m_ebitda",
+            "min_liquidity_leg"
+          ]
+        }
+      },
+      "covenants": [
+        {
+          "id": "min_t3m_ebitda",
+          "name": "Minimum T3M EBITDA (either/or leg)",
+          "primitive": "min_level",
+          "metric": {
+            "ref": "EBITDA"
+          },
+          "window": "t3m",
+          "threshold": 2000000,
+          "frequency": "monthly",
+          "first_test_date": "2025-03-31",
+          "cure_rights": "none",
+          "agreement_ref": {
+            "section": "6.8(b)(i)",
+            "page": 51,
+            "quote": "Consolidated EBITDA for the trailing three months of not less than $2,000,000"
+          },
+          "cert_ref": "Compliance Certificate line 'T3M EBITDA'",
+          "either_or_group": "s6_8_b"
+        },
+        {
+          "id": "min_liquidity_leg",
+          "name": "Minimum Liquidity (either/or leg)",
+          "primitive": "min_level",
+          "metric": {
+            "ref": "Liquidity"
+          },
+          "window": "spot",
+          "threshold": 1500000,
+          "frequency": "monthly",
+          "first_test_date": "2025-03-31",
+          "cure_rights": "none",
+          "agreement_ref": {
+            "section": "6.8(b)(ii)",
+            "page": 51,
+            "quote": "Liquidity of not less than $1,500,000"
+          },
+          "cert_ref": "Compliance Certificate line 'Unrestricted Cash'",
+          "either_or_group": "s6_8_b"
+        }
+      ]
+    }
+  },
+  "accounting_basis": {
+    "_when": "REQUIRED on every spec. Many agreements bind the covenant test to the borrower's own accounting, not to GAAP in the abstract - 'in accordance with Borrower's historic accounting practices as reflected in the most recent financial statements delivered to Agent prior to the Closing Date', or 'as calculated in the manner set out in the Model delivered on the Closing Date'. The clause usually sits in the PREAMBLE above the individual covenants, so a per-covenant extraction walks straight past it. When the agreement carries no such clause, set stated to false and say so - a recorded 'none' and an unasked question must not look the same.",
+    "stated": false,
+    "clause_verbatim": "",
+    "agreement_ref": {
+      "section": "",
+      "page": 0,
+      "quote": ""
+    },
+    "reference_financials": {
+      "_note": "The statements the clause points at. Agreements DESCRIBE this document rather than naming a file, so resolving it to something on disk is the work. Unresolved is a valid state: record the description, set resolved false, and raise it as an open request.",
+      "described_as": "",
+      "document": "",
+      "resolved": false,
+      "ebitda_build_note": "How that document itself builds EBITDA - the add-back lines it shows on its face. This is what the monthly reconstruction is checked against."
+    },
+    "note": ""
+  }
+}
