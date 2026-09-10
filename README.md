@@ -30,7 +30,7 @@ Turn borrower reporting and loan documents into a structured financial workbook 
 
 Each review produces exactly these two. The optional portfolio dashboard is a separate combined view of reviews you have already finished, not a third output.
 
-You can create a dashboard privately, open it again later, and ask whether it is still up to date. Updating one at the same link is not supported in v1 — create a new one instead. Full detail in [Limitations](docs/LIMITATIONS.md).
+You can create a dashboard privately, open it again later, and ask whether it is still up to date. Updating one at the same link is not supported in v1 — create a new one instead. See [the portfolio dashboard](#advanced-the-portfolio-dashboard) for how. Full detail in [Limitations](docs/LIMITATIONS.md).
 
 ## Before you start
 
@@ -60,6 +60,25 @@ Start a new chat and say **"credit monitoring"**. Then either:
 Claude asks for the read-only borrower source folder first, then a separate writable results folder. A first setup can take an hour or more for document-heavy borrowers; Claude reports progress and supports pause and resume.
 
 See [Getting started](docs/GETTING_STARTED.md) for the full walkthrough, and the packaged [illustrated folder guide](plugins/credit-monitoring/references/getting-your-folders-ready.html) for Local, OneDrive/SharePoint, and Google Drive desktop folders.
+
+## Advanced: the portfolio dashboard
+
+Once you have completed reviews, the plugin can combine them into one private dashboard — a single view across several borrowers, built from memos you have already accepted. It assembles verified results; it recalculates nothing.
+
+You need at least one saved review before this will work.
+
+| Say this | What happens |
+|---|---|
+| **"Create my portfolio dashboard"** | Claude lists which borrowers will appear, then asks permission before creating a private dashboard. Nothing is shared automatically. |
+| **"Open my portfolio dashboard"** | Reopens the existing one. Opening it is not proof that it matches your local results. |
+| **"Is my portfolio dashboard current?"** | Checks whether the local candidate still matches the dashboard you created. |
+| **"Show me how to share the dashboard"** | Points you at Claude's own Share control. The plugin never changes permissions itself. |
+
+Two skills sit behind this: `refresh-dashboard` rebuilds the local portfolio pages from verified saved runs, and `portfolio-artifact` creates, reopens, and checks the hosted copy.
+
+**Updating one at the same link is not supported in v1.** Create a new dashboard instead. A local refresh rebuilds your local pages but does not touch an existing hosted dashboard.
+
+Full walkthrough in [Getting started](docs/GETTING_STARTED.md#optional-portfolio-dashboard).
 
 ## Repository layout
 
