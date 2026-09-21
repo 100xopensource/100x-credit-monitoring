@@ -1,0 +1,92 @@
+{
+    "borrower": "Veyrona Decision Systems, LLC",
+    "borrower_key": "veyrona-decision-systems",
+    "model_output_path": "store:borrowers/veyrona-decision-systems/_model/Veyrona Decision Systems Monthly IS-BS-CF.xlsx",
+    "last_build": "2026-09-16",
+    "months_covered": {
+        "first": "2024-09",
+        "last": "2026-06",
+        "count": 22
+    },
+    "reporting_packages": {
+        "folder": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting",
+        "file_pattern": "<YYYY>/<MM>/<Month>_<Year>_Monthly_Package.xlsx (or ..._AS_FILED_Monthly_Package.xlsx -- both are point-in-time filing labels, not restatement flags) for Sep 2024-Feb 2026 (18 months); Mar/Apr/May 2026 from 2026/Q2/June Close/Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx (their individual monthly packages are confirmed stale); Jun 2026 from 2026/Q2/June Close/June_2026_Monthly_Package_2026-07-25.xlsx.",
+        "core_statement_sheets": [
+            "Income Statement",
+            "Balance Sheet",
+            "Cash Flow",
+            "Debt & Liquidity"
+        ],
+        "other_tabs_per_month": [
+            "Package Authority",
+            "Operating KPIs",
+            "Budget Comparison",
+            "Working Capital",
+            "Close Notes",
+            "Control Checks"
+        ],
+        "companion_files_per_month": [
+            "AP_AR_Aging_<Month>_<Year>.xlsx (Supporting Schedules/) -- ap-ar-aging module input, not a statement source",
+            "Sales_by_Channel_<Month>_<Year>.xlsx (Supporting Schedules/) -- not a statement source"
+        ],
+        "june_2026_ephemera_excluded": [
+            "Quarterly_Package_2026-06-18_ORIGINAL.xlsx -- pre-restatement original, superseded by the 2026-06-25 REVISED file, not used anywhere in this build",
+            "Restatement_Notice_2026-06-20.pdf -- read for context, not a statement source"
+        ],
+        "hidden_columns": false,
+        "each_package_is_single_month_snapshot": true,
+        "no_consolidated_by_month_or_ytd_file_for_full_history": "Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx exists but covers ONLY Mar-May 2026, used solely to correct the March 2026 restatement (and to source the also-stale Apr/May balance sheets); no full-history consolidated file exists.",
+        "encryption": "none observed",
+        "format": "xlsx (not SpreadsheetML XML)",
+        "row_labels_identical_across_all_22_months": true,
+        "period_orientation": "Each monthly package is periods-as-rows (one data row per its own single month) on each statement tab, header row 4, data row 5 -- opposite of the model's periods-as-columns layout; the build transposes accordingly."
+    },
+    "sign_conventions": {
+        "income_statement": "Cost of Revenue and Operating Expenses are stored POSITIVE (expense magnitude); Reported EBITDA = Revenue - Cost of Revenue - Operating Expenses (native source formula), reproduced here via the added Gross Profit (derived) = Revenue - Cost of Revenue.",
+        "cash_flow": "Beginning Cash, Operating/Investing/Financing Change are stored as signed net changes (Operating Change is negative in months of net cash use); Ending Cash = SUM of all four -- reproduced exactly.",
+        "debt_liquidity": "Scheduled Principal is stored POSITIVE (a reduction subtracted in the roll-forward formula: Ending Debt = Beginning Debt - Legacy Debt Payoff + New Facility Funding - Scheduled Principal)."
+    },
+    "model_lines_gaps": {
+        "net_income": "blank -- no accrual Net Income anywhere in the monthly cadence",
+        "interest_expense": "blank -- GENUINELY unmapped, not merely absent from this data room: no executed document states the facility's rate/index/day-count, and the borrower's own monthly packages carry no interest-expense line at all. Left unmapped rather than fabricated from debt-service-schedule.json's void 1bp placeholder rate.",
+        "taxes": "blank -- genuine N/A, pass-through LLC, no entity-level income tax (FY2022-2024 Reviewed Financial Statements)",
+        "depreciation_amortization": "blank -- no D&A anywhere in the monthly cadence (not on IS, Cash Flow, or Debt & Liquidity tabs)",
+        "gross_profit": "POPULATED via the derived 'Gross Profit (derived)' = Revenue - Cost of Revenue row (both native rows exist) -- unlocks budget-vs-actual and three-statement-analysis, which hard-require this line",
+        "note": "three-statement-analysis will report net_income/interest_expense/taxes/depreciation_amortization in lines_not_found with dependent ratios (interest coverage, etc.) suppressed."
+    },
+    "ebitda_bridge": {
+        "source": "covenant-spec.json#/definitions/Covenant_EBITDA (compute.ebitda_bridge = 'Reported EBITDA')",
+        "provisional": false,
+        "model_row": "Income Statement!'Reported EBITDA' -- computed subtotal (= Gross Profit (derived) - Operating Expenses), black formula, zero addback",
+        "verified_ties_to_certified_covenant_ebitda": "Zero add-backs found in any of six quarterly Covenant_Calculation workbooks (2025 Q1 - 2026 Q2); FY2024 Reviewed Financial Statements: Revenue 213,000,000.00 - Cost of Revenue 115,020,000.00 - Operating Expenses 64,519,339.31 = 33,460,660.69 = disclosed Covenant EBITDA exactly.",
+        "deemed_schedule": "none in covenant-spec.json#/definitions/Covenant_EBITDA"
+    },
+    "net_debt_and_funded_debt": {
+        "funded_debt_source": "Balance Sheet 'Funded Debt' row, sourced directly from each month's own certified monthly package (NOT from debt-service-schedule.json), per covenant-spec.json step7_signoff decision 'amortization_mechanic_declining_balance': the facility's 0.60%/month amortization is a declining-balance mechanic in the certified figures (verified 18+ months), which the generated schedule's flat-base model cannot reproduce (already ~5.2% too high cumulative by Jun 2026).",
+        "cross_tie": "Balance Sheet 'Funded Debt' ties exactly to the Debt & Liquidity block's own 'Ending Debt' roll-forward every month (memo row 25, diff = 0 every month checked) and to all six certified Covenant_Calculation workbooks (e.g. Q1'25 183,924,166.39; Q2'26 168,048,469.80).",
+        "net_debt_row": "Balance Sheet row 15, 'Net Debt (derived: Funded Debt - Cash)' = Funded Debt - Cash, added as a real model row per covenant-spec.json#/definitions/Net_Debt's engine-design note (the covenant engine's formula compute only supports op:'sum', so the subtraction cannot be expressed as a covenant-side formula). Verified against all six Covenant_Calculation workbooks: Net Debt = Funded Debt - Unrestricted Cash exactly, Debt check/Ratio check residuals = 0 every quarter."
+    },
+    "covenant_support": {
+        "debt_service_schedule_path": "store:borrowers/veyrona-decision-systems/.record/current/config/debt-service-schedule.json",
+        "override_in_effect": "NOT POPULATED. covenant-spec.json's sole financial covenant is Maximum Net Leverage Ratio (Net Debt / Covenant EBITDA) -- there is no Fixed Charges / coverage covenant in this spec for 'Cash Interest Expense' / 'Scheduled Debt Principal Payments' rows to bind to. Additionally, the schedule's cash-interest figures are built off a VOID 1bp non-contractual placeholder rate (step7_signoff decision 'interest_rate_placeholder') and its scheduled-principal figures are the same flat-base approximation superseded by the certified declining-balance figures already used for Funded Debt above -- neither would be usable even as reference-only detail.",
+        "recheck_on_refresh": "If a future amendment adds a Fixed Charges / coverage covenant, or if the true interest rate is confirmed with Granite Harbor Direct Lending, LP, revisit this decision -- a real rate would let 'Cash Interest Expense' be populated from the (then-corrected) schedule.",
+        "pre_facility_months": "N/A -- no covenant-support rows are written.",
+        "non_facility_debt": "None disclosed anywhere in the deal folder for this borrower."
+    },
+    "materiality_threshold": {
+        "absolute": 25000,
+        "relative_pct": 0.01,
+        "rule": "greater of $25,000 or 1% of the line"
+    },
+    "restatement_history": "March 2026 restatement (Atlas Acceptance milestone, non-cash, notice dated 2026-06-20): March Revenue $13,570,373.98 -> $14,062,563.71 (+$492,189.73), Cost of Revenue $7,328,001.95 -> $7,780,816.50 (+$452,814.55), Reported EBITDA $3,012,476.43 -> $3,051,851.61 (+$39,375.18 net). March/April/May 2026 Balance Sheet Contract Asset $5,000,000.00 -> $5,492,189.73, Accrued Cost $2,000,000.00 -> $2,452,814.55, Retained Earnings Effect $0.00 -> $39,375.18 in all three months (cumulative snapshot carried forward). April/May Income Statement verified UNCHANGED. Authoritative source: Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx. Twelve lines logged old->new, all material. See restatements.json.",
+    "known_gaps": {
+        "no_balance_sheet_totals": "This borrower's monthly Balance Sheet carries NO Total Assets/Total Liabilities/Total Equity anywhere -- only Cash, Accounts Receivable, Contract Asset, Accounts Payable, Accrued Cost, Funded Debt, and Retained Earnings Effect. NO Balance-Check row is written (nothing to invent from) -- same reading used for Selvara elsewhere in this batch. The closest native cross-check is the source package's own partial identity (Contract Asset - Accrued Cost - Retained Earnings Effect - $3,000,000 = 0 every month, verified).",
+        "interest_rate_absent": "No executed document (Original Credit Agreement + 3 Amendments) states the facility's rate, index/margin, or day-count -- a genuine drafting gap. Flagged HIGHEST PRIORITY open item in covenant-spec.json's step7_signoff for direct confirmation with Granite Harbor Direct Lending, LP.",
+        "no_covenant_support_rows": "Sole covenant is a leverage test (Net Debt / Covenant EBITDA) with no Fixed Charges/coverage component -- Cash Interest Expense / Scheduled Debt Principal Payments rows are not written to this model (see covenant_support above)."
+    },
+    "judgment_calls": {
+        "fy_ytd_column_treatment": "assembling-rules.md's 'Include FY / YTD total columns (SUM formulas)' bullet applied literally to flow rows (IS, CF, Debt & Liquidity flows) via SUM, while true stock/spot rows (Cash, AR, Contract Asset, AP, Accrued Cost, Funded Debt, Retained Earnings Effect, Net Debt, Beginning/Ending Debt, Beginning/Ending Cash) use period-start or period-end SPOT references instead -- matches the prior canonical builds in this plugin (Asteron, Selvara, Nemeris) exactly.",
+        "gross_profit_derived_row_placement": "Inserted between Cost of Revenue and Operating Expenses/Reported EBITDA per borrower-config.json's pre-defined construction note, verified exact against FY2024 annual audited figures.",
+        "no_cf_vs_is_ebitda_tie": "Unlike an indirect-method CF build, this borrower's 'Operating Change' has no formulaic relationship to Reported EBITDA (e.g. Sep 2024 EBITDA 3,015,947.48 vs Operating Change 26,562.26) -- no CF-vs-IS EBITDA memo row was added, only the exact CF-vs-BS Cash tie (which does hold to the penny every month)."
+    }
+}

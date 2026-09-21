@@ -1,0 +1,12 @@
+# debt-service-schedule — Orinth Vale Infrastructure, LLC, 2026-06
+
+Run engine-c7c1d3a2cf94 · 2026-09-15T09:26:49+00:00
+
+## How this period's figures were prepared
+
+- Contractual schedule generated from the validated debt-service-spec (terms per the executed agreement; rates and grid steps per the spec's pinned observations, index held flat beyond the last observation). Decimal arithmetic quantized to the cent per accrual; the life-of-loan identity is asserted before writing. No figure here comes from a ledger.
+
+## Flagged this period
+
+- **flag** (assumption) — SOFR is held flat beyond the last pinned observation (2025-01-15) from 2025-02 onward — re-pin observations.index_rates and re-run when the index moves
+- **flag** (ambiguity) — The Credit Agreement states NO day-count convention at all -- unlike a typical facility's 'actual days elapsed over a 360-day year' language, INTEREST AND FEES (p.4) says only 'Interest accrues at SOFR plus 6.25%, subject to a 2.00% SOFR floor. Interest is payable monthly in arrears.' actual/360 with both endpoints counted is recorded here as an ASSUMPTION (the market-standard convention for a SOFR facility, and debt_service.py's supported default), not a stated term. MATERIAL FINDING, larger than the usual stub-day ambiguity: the borrower's own certified monthly Debt & Covenant figures do NOT use any actual-day-count convention at all -- Cash Interest / Beginning Debt is IDENTICAL to 10 significant digits (0.906605097613...%) in every month checked (2025-01 through 2025-06), regardless of whether the month has 28, 30 or 31 days, which is only possible if the certified figures apply a flat (index+margin)/12 monthly-equivalent rate rather than any actual/360 or actual/365 calculation. No single pinned index rate can make this engine's actual/360 accrual reproduce the certified dollar amounts across months of different lengths. This means the generated schedule's cash-interest figures will NOT tie to the certified schedule even in ordinary, non-stub months -- a materially larger and more persistent gap than the funding/maturity-stub question this field is normally used to flag. Step-7 question: should the generated (actual/360) schedule stand as the CONTRACTUAL read notwithstanding the mismatch, or should the certified Debt & Covenant tab's flat-monthly convention be treated as the operative one (the engine has no 30/360-flat-monthly mode, so that would mean sourcing the cash-interest covenant-support figures from the certificate directly rather than from this generated schedule)?

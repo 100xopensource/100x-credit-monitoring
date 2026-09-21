@@ -1,0 +1,64 @@
+{
+  "borrower": "Nemeris Field Systems, LLC",
+  "borrower_key": "nemeris-field-systems",
+  "model_output_path": "store:borrowers/nemeris-field-systems/_model/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+  "last_build": "2026-09-15",
+  "months_covered": {
+    "first": "2024-04",
+    "last": "2026-06",
+    "count": 27
+  },
+  "reporting_packages": {
+    "folder": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts",
+    "file_pattern": "Monthly_Financial_Package_YYYY-MM.xlsx (one subfolder per month, 'YYYY.MM' naming)",
+    "core_statement_sheets": [
+      "Income Statement",
+      "Balance Sheet",
+      "Cash Flow",
+      "Debt & Liquidity"
+    ],
+    "dashboard_tab_name_rotates": "cosmetic-only first tab cycles through 'Executive Dashboard' / 'Monthly Flash' / 'Management Summary' month to month; never a core statement source, not read by the build.",
+    "other_files_per_month": [
+      "Sales_by_Channel_YYYY-MM.xlsx (not a core statement source)",
+      "Inventory_Aging_YYYY-MM.xlsx (not a core statement source)"
+    ],
+    "one_off_files": {
+      "2026-06": "Inventory_and_Deployment_Support_June_2026.xlsx \u2014 supplementary inventory reconciliation, not a core statement source; ties to BS Inventory line."
+    },
+    "hidden_columns": false,
+    "each_package_carries_rolling_window_months": 30,
+    "latest_package_supersedes_note": "Each monthly package carries a rolling ~30-month trailing window of Income Statement / Balance Sheet / Cash Flow / Debt & Liquidity actuals. The LATEST package in the folder therefore already spans the model's full history whenever that window reaches back far enough (it does for this borrower: the 2026-06 package covers 2024-01 through 2026-06). Per 'latest/most-consolidated source wins', future refresh builds should re-verify this \u2014 pull the latest package first, check its own earliest reported month, and only fall back to stitching multiple packages together if a gap appears (e.g. if the borrower ever shortens the window, or a month is skipped).",
+    "encryption": "none observed",
+    "format": "xlsx (not SpreadsheetML XML)"
+  },
+  "sign_conventions": {
+    "revenue_components_sum_directly_to_net_revenue": "no contra-revenue (returns/discounts) lines present; Net Revenue = SUM of the 6 revenue component lines.",
+    "scheduled_principal_is_negative": "Both the Cash Flow tab's 'Scheduled principal payments' and the Debt & Liquidity tab's 'Scheduled Principal' are stored as NEGATIVE numbers (a balance reduction). The model's 'Scheduled Debt Principal Payments' covenant-support row sign-flips this to a positive dollar amount.",
+    "capex_negative_in_cf": "Cash Flow tab's 'Capital expenditures' is stored negative (a use of cash); 'Net cash used in investing activities' = that same negative value directly (no further sign flip)."
+  },
+  "ebitda_bridge": {
+    "source": "covenant-spec.json#/definitions/Covenant_EBITDA (compute.ebitda_bridge = 'Reported EBITDA')",
+    "provisional": false,
+    "model_row": "Income Statement!'Reported EBITDA' = Net Revenue - Cost of Revenue - Operating Expenses, no add-backs on its face",
+    "deemed_schedule": "none \u2014 full-text search of the credit agreement + First Amendment found no deemed/stipulated EBITDA table"
+  },
+  "covenant_support": {
+    "debt_service_schedule_path": "store:borrowers/nemeris-field-systems/.record/current/config/debt-service-schedule.json",
+    "cash_interest_expense_source": "debt-service-schedule.json covenant_support.monthly[...].cash_interest \u2014 SOFR observation is a PLACEHOLDER pinned at 4.33%, not from an actual rate notice; flag on every refresh until a real rate notice is filed.",
+    "scheduled_debt_principal_payments_source": "OVERRIDE per debt-service-spec.json amortization_base.analyst_decision: sourced from the borrower's own certified Debt & Liquidity tab 'Scheduled Principal' line (0.60%/month declining-balance amortization), sign-flipped positive \u2014 NOT from the schedule's flat-base principal figures (engine v1 has no declining-balance support). Re-check this override on every refresh in case a v2 engine or a corrected schedule removes the mismatch.",
+    "pre_facility_months_are_zero": "Apr 2024 - Dec 2024 predate the credit agreement's Jan 15, 2025 closing; both covenant-support rows are 0 for those months (a contractual fact, not a blank) even though a predecessor debt balance and its own amortization appear in the Balance Sheet / Debt & Liquidity detail for that period.",
+    "net_debt_row": "Balance Sheet!'Net Debt' carries the Debt & Liquidity tab's own Net Debt figure forward (Ending Debt - Cash), per covenant-spec.json's Net_Debt definition note (the engine's primitive can't express Funded Debt-minus-Cash directly, so this model_line is the bound value)."
+  },
+  "materiality_threshold": {
+    "absolute": 25000,
+    "relative_pct": 0.01,
+    "rule": "greater of $25,000 or 1% of the line"
+  },
+  "restatement_history": "Zero restatements found across all 27 months / 4 source tabs on the first build (see restatements.json, empty). Borrower's own 2026-06 Close Notes confirm: 'First-and-final 2026-06 package; no restatement or basis change.'",
+  "known_gaps": {
+    "no_net_income_interest_tax_da": "Borrower's management accounts stop at Reported EBITDA; these four lines are absent everywhere (IS/BS/CF), by design, not an oversight.",
+    "no_customer_level_ar_aging": "Only Inventory_Aging files are delivered monthly; no AR aging export exists for this borrower.",
+    "no_current_subtotal_on_bs": "Balance Sheet has CURRENT ASSETS / NON-CURRENT ASSETS section headers with no Total Current Assets / Total Current Liabilities subtotal rows; none invented."
+  },
+  "duplicate_label_warning_accepted": "Income Statement carries 'NET REVENUE'/'COST OF REVENUE'/'OPERATING EXPENSES' section headers that normalize to the same key as their own subtotal rows ('Net Revenue'/'Cost of Revenue'/'Operating Expenses'); this mirrors the source file's own structure exactly and validate_model.py's last-wins resolution correctly serves the data-bearing subtotal row. Non-blocking warning, expected on every refresh."
+}

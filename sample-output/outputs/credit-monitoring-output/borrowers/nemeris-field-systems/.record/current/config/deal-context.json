@@ -1,0 +1,267 @@
+{
+  "borrower_name": "Nemeris Field Systems, LLC",
+  "fund": "",
+  "last_reviewed": {
+    "date": "2026-09-15",
+    "trigger": "monthly"
+  },
+  "static": {
+    "vertical": "Field equipment distribution and maintenance services (utility / industrial)",
+    "archetype": "asset-heavy-industrial",
+    "archetype_provenance": "inferred \u2014 unconfirmed",
+    "business_one_liner": "Provides ruggedized field equipment, diagnostics, replacement components and recurring maintenance services to utility contractors and industrial maintenance organizations.",
+    "sponsor_status": "non-sponsored",
+    "_sponsor_status_note": "IC memo Sources & Uses lists a 'Sponsor / balance-sheet equity' contribution of $6,904,846.29 at closing but names no financial sponsor anywhere else in the memo or credit agreement; borrower is owned by Nemeris Holdings, LLC. Treated as balance-sheet/owner equity, not institutional sponsor backing \u2014 flag for analyst confirmation.",
+    "deal_team": [],
+    "deal_team_provenance": "",
+    "_deal_team_note": "Left empty \u2014 the only named individuals in the IC memo are Nemeris's own management (Elena Marrow, Jordan Vale, Tomas Rill, Amina Corven, Derek Sol \u2014 the borrower's people, not ours) and the IC approvers (Rowan Pierce, Mira Sato) plus 'Credit Underwriting Team' as preparer. No individual internal deal-team member is named. Do not read the IC approvers or borrower executives into this field.",
+    "business_profile": {
+      "description": "Nemeris consolidates a regional field-equipment distribution operation and a recurring maintenance-services platform, supplying utility and industrial maintenance crews with ruggedized tools, diagnostics, replacement parts, and calibration/maintenance services.",
+      "revenue_model": {
+        "how_they_make_money": "product sales (equipment/diagnostics/parts) plus recurring contracted maintenance and calibration services",
+        "recurring_vs_transactional": "Mixed. Preventive maintenance plans and calibration services are recurring/contractual; ruggedized tool systems and diagnostic units are project-driven equipment shipments. Management explicitly does not treat every service dollar as contractually recurring and excludes unsupported ARR claims.",
+        "pricing_and_contracts": "Not itemized in the IC memo beyond channel mix; equipment revenue recognized on dispatch or customer acceptance, service revenue on contracted visits/coverage.",
+        "channels": [
+          {
+            "channel": "Utility contractors",
+            "mix": "34%",
+            "economics": "Project schedules and end-customer approvals drive timing"
+          },
+          {
+            "channel": "Industrial maintenance",
+            "mix": "27%",
+            "economics": "Plant outage and maintenance cadence drive timing"
+          },
+          {
+            "channel": "Rental and distribution",
+            "mix": "22%",
+            "economics": "Channel inventory and sell-through dependent"
+          },
+          {
+            "channel": "Field service plans",
+            "mix": "17%",
+            "economics": "Renewal, technician capacity and attachment rates"
+          }
+        ],
+        "source": "Final_IC_Memo.pdf, Section 5",
+        "source_tier": "internal-underwriting"
+      },
+      "end_markets": [
+        {
+          "market": "Utility contractors",
+          "exposure": "34% of revenue (channel share)",
+          "demand_drivers": "Field repair and deployment schedules"
+        },
+        {
+          "market": "Industrial maintenance organizations",
+          "exposure": "27% of revenue (channel share)",
+          "demand_drivers": "Plant outage and maintenance cadence"
+        }
+      ],
+      "customers": {
+        "profile": "Utility contractors, industrial maintenance organizations, rental/distribution partners, field-service plan buyers",
+        "concentration": "Not quantified in the IC memo (managed via account-level review and renewal tracking; no top-customer % disclosed) \u2014 flagged draft",
+        "stickiness": "Mixed \u2014 maintenance plans and calibration create renewal/contractual stickiness; equipment shipments are project/backlog-driven and not assumed to convert uniformly",
+        "source": "Final_IC_Memo.pdf, Section 5",
+        "source_tier": "internal-underwriting"
+      },
+      "suppliers_and_inputs": {
+        "key_inputs": "Equipment and component purchases, direct field labor, freight and logistics",
+        "concentration": "Not disclosed in the IC memo \u2014 flagged draft",
+        "cost_drivers": "Freight/logistics and component sourcing costs (per Income Statement COGS breakdown); competition may compress equipment margins",
+        "source": "Final_IC_Memo.pdf, Section 6; Monthly_Financial_Package Income Statement",
+        "source_tier": "internal-underwriting"
+      },
+      "geography_footprint": "Coordinated from a principal service center with regional field teams and third-party logistics support; no foreign subsidiary relied upon for collateral or cash flow in the base case \u2014 domestic operations.",
+      "seasonality_cyclicality": "Ordinary month-to-month volatility from equipment shipment/dispatch timing even where annual customer activity is stable; project timing affected by customer capital budgets, weather, permitting and labor availability.",
+      "competitive_position": "Fragmented market across equipment manufacturers, specialty distributors, service contractors and in-house teams. Competes on equipment availability, technical support, configuration expertise and service response rather than lowest price. Less purchasing leverage than large distributors (focused regional platform).",
+      "ownership": {
+        "structure": "Nemeris Holdings, LLC owns the borrower (Nemeris Field Systems, LLC); Nemeris Service Operations, LLC is a co-guarantor employing field personnel.",
+        "key_holders": "Not itemized beyond the holding company structure \u2014 flagged draft",
+        "source": "Final_IC_Memo.pdf, Section 3; Credit Agreement recitals",
+        "source_tier": "internal-underwriting"
+      },
+      "management": [
+        {
+          "name": "Elena Marrow",
+          "role": "Chief Executive Officer",
+          "note": "Strategy, major customer relationships and capital allocation"
+        },
+        {
+          "name": "Jordan Vale",
+          "role": "Chief Financial Officer",
+          "note": "Finance, treasury, lender reporting and covenant certification; also executed the Fee Letter"
+        },
+        {
+          "name": "Tomas Rill",
+          "role": "Chief Operating Officer",
+          "note": "Service delivery, inventory and field productivity"
+        },
+        {
+          "name": "Amina Corven",
+          "role": "VP, Product & Engineering",
+          "note": "Quality, diagnostics and product roadmap"
+        },
+        {
+          "name": "Derek Sol",
+          "role": "VP, Commercial",
+          "note": "Sales execution, channels and maintenance-plan renewal"
+        }
+      ],
+      "headcount": "Not disclosed in the IC memo \u2014 flagged draft",
+      "history": "Formed to consolidate a regional field-equipment distribution operation and a recurring maintenance-services platform; no specific founding year or acquisition history disclosed in the IC memo.",
+      "key_operating_kpis": [
+        {
+          "kpi": "Backlog / project conversion (utility & industrial channels)",
+          "drives": "Equipment revenue timing",
+          "reported_in_package": "no"
+        },
+        {
+          "kpi": "Technician capacity / utilization",
+          "drives": "Calibration and field-support revenue",
+          "reported_in_package": "no"
+        },
+        {
+          "kpi": "Maintenance-plan renewal rate",
+          "drives": "Recurring service revenue stability",
+          "reported_in_package": "no"
+        },
+        {
+          "kpi": "Days Sales Outstanding",
+          "drives": "Receivables / working capital",
+          "reported_in_package": "yes \u2014 Working Capital & KPI tab"
+        },
+        {
+          "kpi": "Inventory Days",
+          "drives": "Inventory / working capital",
+          "reported_in_package": "yes \u2014 Working Capital & KPI tab"
+        }
+      ],
+      "working_capital_profile": "DSO running ~40-42 days (Working Capital & KPI tab); no customer-level AR aging is delivered monthly (explicitly noted as not provided in 2026-06 Close Notes), so AR quality cannot be verified by bucket \u2014 only the DSO trend and inventory aging are observable monthly."
+    },
+    "facility": {
+      "instrument": "Senior secured term loan with delayed-draw term commitment",
+      "commitment_usd": 35000000,
+      "funded_usd": 26302782.34,
+      "draw_structure": "multi-draw (closing-date term loan funded in full; $8,697,217.66 delayed-draw commitment available only for approved capital expenditures through Jan 15, 2027, not funded through 2026-06)",
+      "close_date": "2025-01",
+      "maturity_date": "2030-01-15",
+      "interest_rate": "Adjusted Term SOFR + 6.25% cash, 2.00% SOFR floor; 360-day actual/360 day count; +2.00% default rate after specified Events of Default while continuing",
+      "oid": "None disclosed",
+      "fees": {
+        "Closing fee": "1.50% of funded commitments (Fee Letter)",
+        "Annual administration fee": "$75,000 (Fee Letter)"
+      },
+      "equity_kicker": "None disclosed (no warrant / equity kicker named in the executed documents)",
+      "security": "First-priority blanket lien on substantially all personal property (accounts, inventory, equipment, deposit accounts, general intangibles/IP, equity of domestic subsidiaries) per executed Security Agreement; guarantees from Nemeris Holdings, LLC and Nemeris Service Operations, LLC",
+      "source": "1_Original_Credit_Agreement.pdf; 4_Fee_Letter.pdf; 3_Security_Agreement.pdf; Final_IC_Memo.pdf. NOTE: Amendment No. 1 to Credit Agreement (executed January 2026) exists and should be re-checked by covenant-setup for any economic changes not yet reflected here."
+    },
+    "credit_thesis": [
+      {
+        "pillar": "Mixed product-and-service revenue model with a recurring maintenance/calibration base cushions month-to-month equipment shipment timing volatility",
+        "monitored_by": "Revenue mix by offering; EBITDA margin trend",
+        "status": "intact"
+      },
+      {
+        "pillar": "Modest opening leverage with a quarterly-tested 5.00x maximum Net Leverage covenant provides meaningful covenant cushion",
+        "monitored_by": "Net Leverage Ratio vs 5.00x cap (quarterly, from covenant compliance certificates)",
+        "status": "intact"
+      },
+      {
+        "pillar": "First-priority blanket collateral package (receivables, inventory, equipment, IP) supports recovery even though it is not relied on as primary repayment",
+        "monitored_by": "Collateral coverage vs funded debt (Collateral metrics box)",
+        "status": "intact"
+      },
+      {
+        "pillar": "Positive operating cash generation supports scheduled debt service without reliance on the undrawn delayed-draw tranche as a liquidity cure",
+        "monitored_by": "Operating cash flow; delayed-draw utilization (Debt & Liquidity tab)",
+        "status": "intact"
+      }
+    ],
+    "key_risks_at_uw": [
+      {
+        "risk": "Shipment timing \u2014 monthly equipment revenue can shift materially",
+        "early_warning_signal": "Large MoM swings in Ruggedized Tool Systems / Diagnostic Units revenue lines vs budget"
+      },
+      {
+        "risk": "Customer concentration \u2014 loss or delay can affect revenue and receivables",
+        "early_warning_signal": "AR concentration or DSO deterioration (note: no AR aging file is currently delivered to verify this directly)"
+      },
+      {
+        "risk": "Inventory exposure \u2014 availability strategy can create slow-moving stock",
+        "early_warning_signal": "Rising Inventory Days / inventory aging skew toward older buckets"
+      },
+      {
+        "risk": "Margin pressure \u2014 competition and freight affect gross profit",
+        "early_warning_signal": "Gross margin decline vs the 0.20 floor threshold or vs budget"
+      },
+      {
+        "risk": "Management depth \u2014 key technical and commercial relationships matter",
+        "early_warning_signal": "Management/executive turnover; reporting-quality lapses"
+      },
+      {
+        "risk": "Forecast execution \u2014 pipeline is not equivalent to contracted backlog",
+        "early_warning_signal": "Persistent revenue miss vs the approved budget (already observed: 2026-06 revenue -13.9% vs budget, YTD -11.8% vs budget)"
+      },
+      {
+        "risk": "Collateral realization \u2014 specialized assets may sell below book value",
+        "early_warning_signal": "Not monitorable monthly; noted as a structural limitation of the collateral read"
+      }
+    ]
+  },
+  "our_view": {
+    "watchlist": "off",
+    "trajectory": "stable",
+    "thesis_status": "Leverage remains well inside the 5.00x cap (1.32x at Q2 2026, corrected) and no delayed-draw reliance has occurred, so the core credit protections are intact. Revenue is running persistently below the approved budget (-13.9% in June 2026, -11.8% YTD) on shipment-timing, which is the underwriting's own named risk rather than a new one \u2014 worth tracking but not thesis-breaking at this cushion level.",
+    "what_would_change_our_mind": "A shift from a shipment-timing revenue miss to a structural gross-margin or EBITDA-margin decline; any recurrence of an unsupported/prospective EBITDA add-back attempt in a certificate; or Net Leverage approaching roughly half the 5.00x cap.",
+    "_provenance_note": "Auto-drafted by the onboarding assistant from the objective evidence on file (compliance certificates, budget variance, IC memo risks) per the analyst's standing instruction to proceed without per-field confirmation. Flagged for the analyst's own read at the next review."
+  },
+  "carry_forward": {
+    "open_requests_to_borrower": [],
+    "unresolved_flags": [],
+    "analyst_focus": [
+      {
+        "item": "Revenue vs budget shipment-timing risk, Net Leverage cushion, EBITDA add-back discipline after Q2 2026 correction",
+        "asked_period": "2026-06",
+        "finding": "Revenue -13.9% vs budget on shipment timing (named underwriting risk, not a broad decline); leverage 1.32x vs 5.00x cap, 74% headroom; the one Q2 2026 add-back attempt was caught by the lender and corrected, no other adjustments found."
+      }
+    ],
+    "last_period_headline": "2026-06: Net Leverage 1.32x vs 5.00x cap (COMPLIANT, corrected certificate); revenue $9.57M (-13.9% vs budget), YTD -11.8%; EBITDA $1.24M (-35.6% vs budget), YTD -30.6%; Q2 2026 EBITDA add-back dispute ($110K, unsupported prospective savings) resolved COMPLIANT under both submissions."
+  },
+  "provenance": {
+    "auto_draftable": [
+      "static.facility",
+      "static.business_one_liner",
+      "static.business_profile",
+      "static.credit_thesis",
+      "static.key_risks_at_uw",
+      "carry_forward"
+    ],
+    "analyst_required": [
+      "our_view.*",
+      "credit_thesis[].status",
+      "ebitda_addbacks.entries[].treatment"
+    ],
+    "_note": "our_view and credit_thesis[].status were auto-decided by the onboarding assistant per the analyst's explicit instruction not to pause for confirmation on this onboarding batch; they still require analyst sign-off at the next review, per provenance.analyst_required above."
+  },
+  "ebitda_addbacks": {
+    "entries": [
+      {
+        "line": "Prospective savings \u2014 unfilled territory-manager positions",
+        "limb": "Not a documented/permitted add-back limb \u2014 lender determined it is prospective and unsupported under the Covenant EBITDA definition (no executed restructuring program or incurred charge)",
+        "permitted_by_agreement": "no",
+        "treatment": "exclude",
+        "cap_usd": null,
+        "reason": "Lender Calculation Query (2026-07-28) rejected this $110,000 add-back as unsupported prospective savings; borrower's Correction Notice (2026-07-29) removed it and resubmitted. Excluded from both covenant and credit EBITDA going forward.",
+        "source": "Lender_Query_Unsupported_Addback_2026-07-28.pdf; Borrower_Correction_Notice_2026-07-29.pdf",
+        "credit_view": "same",
+        "decided_by": "Northlake Example Credit Partners (lender determination); recorded by onboarding assistant",
+        "decided_on": "2026-07-29",
+        "review_after_months": 6
+      }
+    ],
+    "credit_ebitda": {
+      "report_both_in_memo": true
+    }
+  }
+}

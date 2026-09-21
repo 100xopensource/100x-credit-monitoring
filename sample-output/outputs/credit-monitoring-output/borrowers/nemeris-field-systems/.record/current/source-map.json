@@ -1,0 +1,335 @@
+{
+  "model_file": "store:borrowers/nemeris-field-systems/_model/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+  "columns": {
+    "Income Statement": {
+      "2024-04": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2024-05": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2024-06": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2024-07": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2024-08": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2024-09": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2024-10": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2024-11": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2024-12": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-01": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-02": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-03": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-04": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-05": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-06": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-07": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-08": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-09": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-10": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-11": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-12": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2026-01": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2026-02": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2026-03": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2026-04": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2026-05": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2026-06": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Income Statement"
+      }
+    },
+    "Balance Sheet": {
+      "2024-04": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2024-05": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2024-06": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2024-07": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2024-08": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2024-09": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2024-10": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2024-11": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2024-12": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-01": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-02": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-03": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-04": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-05": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-06": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-07": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-08": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-09": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-10": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-11": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-12": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2026-01": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2026-02": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2026-03": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2026-04": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2026-05": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2026-06": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Balance Sheet"
+      }
+    },
+    "Cash Flow Statement": {
+      "2024-04": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2024-05": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2024-06": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2024-07": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2024-08": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2024-09": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2024-10": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2024-11": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2024-12": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-01": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-02": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-03": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-04": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-05": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-06": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-07": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-08": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-09": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-10": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-11": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-12": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2026-01": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2026-02": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2026-03": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2026-04": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2026-05": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2026-06": {
+        "file": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+        "sheet": "Cash Flow"
+      }
+    }
+  }
+}

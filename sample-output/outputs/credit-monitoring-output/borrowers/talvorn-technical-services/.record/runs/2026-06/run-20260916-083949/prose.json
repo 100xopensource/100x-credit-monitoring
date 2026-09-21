@@ -1,0 +1,164 @@
+{
+  "AGING_READ": "Accounts receivable ties exactly to the balance sheet at $18,721,487 for June 2026, with days sales outstanding of 40.6 days, improved from 42.4 days in May. Accounts payable also ties exactly at $9,144,005; days payable outstanding was 36.0 days, down from 37.2 days. The aging export reports Current/31-60/61-90/90+ bucket totals only, with no named customer or vendor rows anywhere in the file, so no counterparty concentration can be assessed; receivables and payables over 90 days both held steady at 5% of their respective totals month over month.",
+  "BS_OBSERVATIONS": "<li>Cash was $13,477,930 at June 30, 2026, building every month; its share of total assets rose from 12.8% to 23.7% over the model's history.</li><li>Net property and equipment has grown every month for 21 consecutive months, though its share of total assets fell from 32.1% to 25.3% as total assets grew faster.</li><li>Funded debt (gross) was $100,453,462 at June 30, 2026, down about 4% from $104,139,422.73 at the January 2025 closing.</li><li>Book equity was -$51,965,709 at June 30, 2026, up $18.4M from September 2024, funded entirely by retained net income with no distribution activity visible.</li><li>Unamortized financing fees, capitalized at the January 2025 closing, have amortized down every month since.</li>",
+  "CAPSTRUCTURE_NOTES": {
+    "our_instrument": "Senior secured term loan, $104,139,422.73 funded at the January 2025 closing as a straight par refinancing of a prior facility, fixed 10.64%/year cash-pay interest, 0.20%/month amortization of beginning funded debt with a balloon at the January 2030 maturity; no PIK, no revolver, no equity kicker.",
+    "total_funded_debt": "This single term loan is the borrower's only funded debt; its outstanding balance is tracked via the model's Funded Debt row (see Balance sheet review).",
+    "total_equity": "Book equity was -$51,965,709 at June 30, 2026, a legacy of the prior capital structure; it has improved by $18.4M since September 2024, funded entirely by retained net income.",
+    "total_capitalization": "Total capitalization at book is not a meaningful figure while book equity remains negative; see Total equity and Total funded debt above."
+  },
+  "CF_OBSERVATIONS": "<li>Cash built every month over the model's history, with no burn month recorded.</li><li>No operating-cash-flow distortions or one-time financing inflows were flagged in any month reviewed.</li>",
+  "COLLATERAL_COVERAGE_CLOSING": "The lien is a specific-asset package, not blanket; inventory, deposit accounts, and general intangibles are excluded from the pledge entirely.",
+  "COLLATERAL_READ": "Pledged collateral, accounts receivable and net equipment, totals $33.1M against $100.5M of secured debt at June 2026, a 33.0% coverage ratio on all trackable pledged assets (18.6% on accounts receivable alone); inventory and other current assets sit outside the lien.",
+  "COVENANT_DELTAS": {
+    "min_fccr": "Our reconstruction and the certificate agree to within 0.0001x at every test date the model can reach; the residual is rounding in the certificate's four-decimal display, not a reconciliation gap. Our reconstruction governs."
+  },
+  "COVENANT_OVERALL": "The Minimum Fixed Charge Coverage Ratio passed with wide headroom at June 30, 2026, our reconstruction at 2.15637x against the certificate's 2.1564x; headroom over the 1.20x minimum has widened every quarter since the first test date.",
+  "DATA_QUALITY_NOTES": "<li>The first two covenant test dates (2025-03-31, 2025-06-30) are not evaluable on the model side because their trailing-twelve-month window reaches back to April 2024, five months before the earliest reporting package in the archive (September 2024); the certified ratio was compliant at both dates from the borrower's own supplemental schedule.</li><li>Total current assets and total current liabilities are not reported on this borrower's condensed monthly Balance Sheet, which carries no current/non-current split; ratios that depend on them are suppressed.</li><li>Book equity was negative (-$51,965,709) at June 30, 2026, a legacy of the prior capital structure; it has improved every month since September 2024, funded by retained net income.</li>",
+  "DEAL_COMPANY_PROFILE": "Talvorn Technical Services provides technical field service, equipment solutions, and maintenance programs through four operating departments -- Sales, Operations, Product, and Corporate -- per the IC Memo; revenue mixes repeat maintenance-program scheduling with commissioned project work and equipment delivery, the latter introducing month-to-month timing variability.",
+  "DEAL_LEVERAGE_CONTEXT": "Gross funded debt has fallen only about 4% since the January 2025 closing ($104.1M to $100.5M); the FCCR improvement to date has been driven primarily by EBITDA growth rather than debt paydown.",
+  "DEAL_SECURITY_SOURCING": "Security is a specific-asset lien on business receivables, equipment, and proceeds under the Guaranty and Security Agreement, plus transferable intellectual property under a separate IP Security Agreement, both effective January 15, 2025; inventory, deposit accounts, and general intangibles are not pledged, and there are no guarantors.",
+  "DEAL_TRANSACTION": "The $104.1M senior secured term loan funded in a single advance at the January 15, 2025 closing as a straight par refinancing of a prior facility, with no new money and no sponsor equity; a 1% origination fee ($1,041,394.23) was paid in cash at closing.",
+  "DOCUMENT_NOTES": {
+    "budget.plan": "The Approved Budget plans Revenue, Gross Profit, Net Income, Interest, Taxes, and D&A for January through June 2026 only; no FY2025 budget exists for this borrower.",
+    "loan_documentation.credit_agreement": "The executed credit agreement (effective January 15, 2025) sets the 1.20x minimum Fixed Charge Coverage Ratio, the fixed 10.64% cash rate, and the facility's amortization terms; no amendments or waivers have been executed.",
+    "monthly_reporting.compliance_certificate": "The June 2026 compliance certificate certifies the 2.1564x Fixed Charge Coverage Ratio for the June 30, 2026 test date, consistent with the model's own reconstruction.",
+    "monthly_reporting.monthly-current-xlsx": "The June 2026 monthly package is the source for June's income statement, balance sheet, and cash flow figures in this memo.",
+    "underwriting.ic_uw_memo": "The IC Memo describes the business as technical field service, equipment solutions, and maintenance programs across four operating departments and is the source for the company profile.",
+    "working_analysis.archived_outputs": "The archived module outputs for June 2026 (covenant compliance, budget-vs-actual, AR/AP aging, and three-statement analysis) are the source for this memo's covenant, performance, aging, and trend figures.",
+    "working_analysis.model": "The canonical monitoring model consolidates 22 months of reporting packages (September 2024 through June 2026) into the Income Statement, Balance Sheet, and Cash Flow views this memo cites."
+  },
+  "FLAGS": "<li>FCCR has risen every quarter test from 1.7245x at the first test date to 2.1564x at June 30, 2026, roughly 80% headroom over the 1.20x minimum; continued monitoring of this trend is warranted given the amortization mechanics noted in Data quality.</li><li>Monthly amortization of 0.20% of beginning funded debt leaves a large balloon due at the January 2030 maturity; not a near-term concern given the current trend, but a structural feature worth tracking.</li><li>A working DRAFT department-to-GL mapping exists that swaps two Sales accounts' GL categories relative to the Board-approved exhibit; confirmation is open that the DRAFT version was never used for any actual monitoring or budget output.</li><li>Amendment/waiver/restatement history is clean: a full-text sweep of every executed document found zero amendments, waivers, or restatements since the January 2025 refinancing closing.</li><li>Collateral securing this facility is a specific-asset lien on receivables, equipment, and intellectual property; inventory and other current assets sit outside the lender's security package.</li><li>Confirmation is open on whether any named-counterparty AR/AP detail exists informally beyond the bucketed totals in the monthly aging export, to support customer or vendor concentration monitoring.</li><li>The identity of any parent, holding, or sponsor entity is unconfirmed; none is named in any document reviewed, consistent with this being a straight refinancing rather than a sponsor transaction.</li><li>Whether inventory, currently blended into the Balance Sheet's 'Inventory and Other Current Assets' line, is material enough to warrant its own reporting line is open for confirmation, particularly since it sits outside the pledged collateral.</li>",
+  "FORWARD_STRESS": "Continued EBITDA growth, not debt paydown, has driven FCCR headroom from roughly 61% to 80% over the past four test dates, since gross funded debt has declined only about 4% since the January 2025 closing; a reversal of the June gross-margin compression into a multi-month trend would test that dependence well before it tests the 1.20x minimum itself.",
+  "IS_OBSERVATIONS": "<li>Revenue was $13,852,035 in June 2026, up 0.25% month over month and up 6.1% year over year.</li><li>Gross profit was $6,232,030 in June 2026, a 45.0% margin, 15.3% below the $7,359,316 budgeted (49.8% budgeted margin).</li><li>Reported EBITDA was $2,517,745 in June 2026, an 18.2% margin, 29.1% below the $3,548,733 budgeted, though up 10.5% year over year.</li><li>Net income was $1,032,520 in June 2026, down 10.1% month over month and up 22.1% year over year.</li><li>All four operating-expense groups (Sales, Operations, Product, Corporate) ran at or under budget both for June and year to date; the budget miss on gross profit and EBITDA traces to gross margin, not spending.</li>",
+  "LIQUIDITY_READ": "<li>Cash was $13.5M at June 30, 2026 against no configured cash floor for this borrower.</li><li>Cash has built every month since the model's earliest period; June's movement was a build, not a burn.</li>",
+  "OPEN_QUESTIONS": "Whether June's gross-margin compression (49.8% budgeted to 45.0% actual) is a one-month cost-mix event or the start of a trend is open, since the covenant's EBITDA definition permits no add-backs and continued EBITDA growth, not debt paydown, is what has driven the FCCR trend to date. Confirmation is also open on the department-mapping discrepancy between the DRAFT and Board-approved exhibits, the identity of any parent or sponsor entity, and whether inventory warrants its own monthly reporting line.",
+  "REVENUE_QUALITY_NOTES": "",
+  "SUMMARY_COLLATERAL": "Pledged collateral, accounts receivable and net equipment, totals $33.1M against $100.5M of secured debt at June 2026, a 33.0% coverage ratio on all trackable pledged assets (18.6% on accounts receivable alone); inventory and other current assets sit outside the lien. No plan or prior-year comparison is on file for these components.",
+  "SUMMARY_COVENANTS": "The Minimum FCCR passed with wide headroom at June 30, 2026: our reconstruction reads 2.15637x against the certificate's 2.1564x, a 0.0001x gap from the certificate's rounding, and our reconstruction governs. Headroom over the 1.20x minimum has widened every quarter since the first test date; the earliest two test dates are not evaluable on the model side for lack of pre-archive history, though the certified ratio was compliant at both.",
+  "SUMMARY_LIQUIDITY": "Cash was $13.5M at June 30, 2026, building every month with no covenant cash floor configured; June's cash movement was a build, funded by continued, if margin-compressed, operating cash generation. No near-term liquidity concern is indicated.",
+  "SUMMARY_OUTLOOK": "The governing question is whether June's gross-margin compression is a one-month cost-mix event or the start of a trend, since Fixed Charges carry zero EBITDA add-back flexibility under the agreement and continued EBITDA growth, not debt paydown, is what has driven the FCCR trend to date, as gross funded debt has fallen only about 4% since closing. Open asks include confirming the department-mapping discrepancy was never used operationally, the identity of any parent or sponsor entity, and whether inventory warrants its own reporting line.",
+  "SUMMARY_UPDATE": "June 2026 revenue was $13.9M, 6.3% below the $14.8M budget and up 6.1% versus June 2025; Reported EBITDA was $2.5M, an 18.2% margin, 29.1% below the $3.5M budget though up 10.5% year over year. Year-to-date revenue is $78.7M, 4.1% below the $82.0M plan, and year-to-date EBITDA is $14.5M, 20.9% below the $18.4M plan. The miss traces to gross margin, not spending: gross margin was 45.0% in June against a 49.8% budgeted margin, while every operating-expense group ran at or under budget both for the month and year to date.",
+  "_contract": {
+    "deep_links": "a reference to another section is written <a class=\"jumpname\" href=\"#sec-covenant\">Covenant detail <span class=\"arw\">&#8599;</span></a> \u2014 same markup, any section id below",
+    "flags_must_name": {
+      "items": [
+        {
+          "write_one_of": [
+            "FCCR"
+          ]
+        },
+        {
+          "write_one_of": [
+            "January"
+          ]
+        },
+        {
+          "write_one_of": [
+            "DRAFT"
+          ]
+        },
+        {
+          "write_one_of": [
+            "Amendment/waiver/restatement"
+          ]
+        },
+        {
+          "write_one_of": [
+            "Collateral"
+          ]
+        },
+        {
+          "write_one_of": [
+            "AR/AP"
+          ]
+        },
+        {
+          "write_one_of": [
+            "identity"
+          ]
+        },
+        {
+          "write_one_of": [
+            "Other Current Assets"
+          ]
+        }
+      ],
+      "rule": "the FLAGS box covers every open item; the gate looks for each item's identifying token (or its dollar amount) in your prose"
+    },
+    "how": "Fill every key; values are HTML. Leave a box \"\" when the month gives it nothing, and say so in your report. Keys opening with \"_\" (this note) are ignored by the renderer.",
+    "keyed_boxes": {
+      "CAPSTRUCTURE_NOTES": "per row id: the instrument's pricing or terms in one clause",
+      "COVENANT_DELTAS": "per covenant id: one clause on WHY the certified figure and ours differ \u2014 the component that carries the gap, named. Our reconstruction governs; do not write that the borrower's basis governs, whichever way the gap runs",
+      "DOCUMENT_NOTES": "per document id: what the document is and what it settles, one sentence"
+    },
+    "language": "lead with the fact and its figure; the banned words and patterns are in references/report-structure.md under the language contract",
+    "list_boxes": {
+      "boxes": [
+        "BS_OBSERVATIONS",
+        "CF_OBSERVATIONS",
+        "DATA_QUALITY_NOTES",
+        "FLAGS",
+        "IS_OBSERVATIONS",
+        "LIQUIDITY_READ"
+      ],
+      "value": "a string of <li>\u2026</li> items and nothing outside them"
+    },
+    "paragraph_boxes": {
+      "boxes": [
+        "AGING_READ",
+        "OPEN_QUESTIONS",
+        "REVENUE_QUALITY_NOTES"
+      ],
+      "value": "one or two short paragraphs"
+    },
+    "section_ids": [
+      "sec-bs",
+      "sec-capstructure",
+      "sec-cf",
+      "sec-company",
+      "sec-covenant",
+      "sec-covstrip",
+      "sec-data",
+      "sec-files",
+      "sec-flags",
+      "sec-is",
+      "sec-security",
+      "sec-snapshot",
+      "sec-stress",
+      "sec-summary",
+      "sec-terms",
+      "sec-transaction",
+      "sec-trend"
+    ],
+    "sentence_boxes": {
+      "boxes": [
+        "COLLATERAL_COVERAGE_CLOSING",
+        "COLLATERAL_READ",
+        "COVENANT_OVERALL",
+        "DEAL_COMPANY_PROFILE",
+        "DEAL_LEVERAGE_CONTEXT",
+        "DEAL_SECURITY_SOURCING",
+        "DEAL_TRANSACTION",
+        "FORWARD_STRESS",
+        "SUMMARY_COLLATERAL",
+        "SUMMARY_COVENANTS",
+        "SUMMARY_LIQUIDITY",
+        "SUMMARY_OUTLOOK",
+        "SUMMARY_UPDATE"
+      ],
+      "value": "sentences that sit inside an existing paragraph \u2014 inline tags like <b> only, no <p> or <ul>"
+    },
+    "summary_blocks": {
+      "SUMMARY_COLLATERAL": "pledged components and their total, coverage against funded debt, and the prior-year or plan comparison where one is on file",
+      "SUMMARY_COVENANTS": "one sentence when everything passes with room; otherwise the failing or governing leg, the certified-vs-model gap, and the nearest tight test with what clearing it takes",
+      "SUMMARY_LIQUIDITY": "period-end cash against the floor, where the cash came from (earned, borrowed, working capital), months of runway when burning, and the expected direction with its basis",
+      "SUMMARY_OUTLOOK": "the forward indicators on file (backlog, order book, seasonality), the governing question for the credit, and the open asks \u2014 never a concern manufactured to fill the space",
+      "SUMMARY_UPDATE": "revenue and EBITDA vs Budget and prior year \u2014 the period first, the cumulative line second \u2014 then the driver: which segment or brand moved, mix or margin, at the finest level the package reports",
+      "bad_news": "a miss, a breach or a stretch is written in its home block with the same syntax as a beat \u2014 there is no separate red-flags list, and a fired concern must not be left out of its block",
+      "cadence": "the renderer titles the first block from the period: a March/June/September/December period reads 'Quarterly update' and its prose covers the quarter and the year so far; any other month reads 'Monthly update' and covers the month and the year so far",
+      "numbers": "round to $X.XM / $XXXK in these five blocks; full precision lives in the tables, where every figure is click-traceable",
+      "what": "the executive summary is the analyst's one-pager for the deal team: five labelled prose blocks, each 2-5 sentences, written the way a portfolio review reads \u2014 the figure, its comparator (vs Budget, vs prior year), then the driver. The template owns the labels; write only the prose."
+    }
+  }
+}

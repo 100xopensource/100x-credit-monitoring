@@ -1,0 +1,882 @@
+{
+  "module": "covenant-compliance",
+  "period": "2026-06",
+  "run_id": "run-20260916-094426",
+  "run_id_from": "run",
+  "produced_at": "2026-09-16T09:53:57+00:00",
+  "produced_by": {
+    "engine": "covenant-compliance",
+    "plugin_version": null
+  },
+  "reporting_unit": {
+    "scale": 1.0,
+    "currency": "USD",
+    "verbatim": "Fictional clean-room borrower evidence | USD unless noted",
+    "plain": "USD"
+  },
+  "stores": {
+    "store": {
+      "url_base": null
+    },
+    "source": {
+      "url_base": null
+    }
+  },
+  "source_ref_reach": {
+    "cell": 8,
+    "file": 20,
+    "unlocated": 0,
+    "borrower_doc": 28
+  },
+  "source_files": [
+    "store:borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/config/covenant-spec.json",
+    "store:borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/_monitor/certified-values-2026-06.json",
+    "store:borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/Veyrona Decision Systems Monthly IS-BS-CF.xlsx"
+  ],
+  "results": [
+    {
+      "id": "max_net_leverage",
+      "name": "Maximum Net Leverage Ratio",
+      "primitive": "max_ratio",
+      "test_date": "2025-03-31",
+      "window": "ttm",
+      "required": null,
+      "actual": null,
+      "headroom_abs": null,
+      "headroom_pct": null,
+      "status": "not_evaluable",
+      "reason": "insufficient_history",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/config/covenant-spec.json",
+          "section": "covenants.max_net_leverage",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/3_Loan Documentation/Executed/Original_Credit_Agreement.pdf",
+              "page": 2,
+              "section": "Article VIII -- Financial Covenant",
+              "quote": "Maximum Net Leverage Ratio: 6.00x beginning March 31, 2025. No waiver is effective unless executed in writing by the required lenders."
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/_monitor/certified-values-2026-06.json",
+          "section": "values.max_net_leverage.2025-03-31",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Quarterly Compliance/2026 Q2/Compliance_Certificate_Q2_2026.pdf",
+              "section": "2025 Q1/Compliance_Certificate_Q1_2025.pdf, page 1, 'CALCULATION'",
+              "quote": "Funded debt: $183,924,166.39; unrestricted cash: $9,998,329.80. TTM Covenant EBITDA: $33,261,193.26. Net Leverage: 5.2291x versus 6.0000x maximum - COMPLIANT."
+            }
+          ]
+        }
+      ],
+      "calc": "not evaluable at 2025-03-31: the model does not reach back far enough to fill this covenant's trailing window (covenants.max_net_leverage); the model starts at 2024-09-30. No pass/breach is asserted. The borrower's certificate reports 5.2291 for this date; it is shown as a cross-check and does not stand in for the model.",
+      "cert_value": 5.2291,
+      "cert_status": "pass",
+      "cert_headroom_abs": 0.7709000000000001,
+      "cert_headroom_pct": 0.12848333333333337,
+      "cert_agrees": null,
+      "delta_model_vs_cert": null
+    },
+    {
+      "id": "max_net_leverage",
+      "name": "Maximum Net Leverage Ratio",
+      "primitive": "max_ratio",
+      "test_date": "2025-06-30",
+      "window": "ttm",
+      "required": null,
+      "actual": null,
+      "headroom_abs": null,
+      "headroom_pct": null,
+      "status": "not_evaluable",
+      "reason": "insufficient_history",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/config/covenant-spec.json",
+          "section": "covenants.max_net_leverage",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/3_Loan Documentation/Executed/Original_Credit_Agreement.pdf",
+              "page": 2,
+              "section": "Article VIII -- Financial Covenant",
+              "quote": "Maximum Net Leverage Ratio: 6.00x beginning March 31, 2025. No waiver is effective unless executed in writing by the required lenders."
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/_monitor/certified-values-2026-06.json",
+          "section": "values.max_net_leverage.2025-06-30",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Quarterly Compliance/2026 Q2/Compliance_Certificate_Q2_2026.pdf",
+              "section": "2025 Q2/Compliance_Certificate_Q2_2025.pdf, page 1, 'CALCULATION'",
+              "quote": "Funded debt: $180,633,355.47; unrestricted cash: $10,063,231.36. TTM Covenant EBITDA: $32,762,524.70. Net Leverage: 5.2063x versus 6.0000x maximum - COMPLIANT."
+            }
+          ]
+        }
+      ],
+      "calc": "not evaluable at 2025-06-30: the model does not reach back far enough to fill this covenant's trailing window (covenants.max_net_leverage); the model starts at 2024-09-30. No pass/breach is asserted. The borrower's certificate reports 5.2063 for this date; it is shown as a cross-check and does not stand in for the model.",
+      "cert_value": 5.2063,
+      "cert_status": "pass",
+      "cert_headroom_abs": 0.7937000000000003,
+      "cert_headroom_pct": 0.1322833333333334,
+      "cert_agrees": null,
+      "delta_model_vs_cert": null
+    },
+    {
+      "id": "max_net_leverage",
+      "name": "Maximum Net Leverage Ratio",
+      "primitive": "max_ratio",
+      "test_date": "2025-09-30",
+      "window": "ttm",
+      "required": 5.75,
+      "actual": 5.282517,
+      "headroom_abs": 0.467483,
+      "headroom_pct": 0.081301,
+      "status": "at_risk",
+      "source": "(model:'Net Debt (derived: Funded Debt - Cash)')/(model:'Reported EBITDA' (EBITDA bridge)) [ttm]",
+      "source_ref": [
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/Veyrona Decision Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Balance Sheet",
+          "row": 15,
+          "label": "Net Debt (derived: Funded Debt - Cash)",
+          "cells": "N15",
+          "period": "2025-09",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/09/September_2025_Monthly_Package.xlsx",
+              "sheet": "Balance Sheet"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/config/covenant-spec.json",
+          "section": "definitions.Net_Debt",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/3_Loan Documentation/Executed/Original_Credit_Agreement.pdf"
+            }
+          ]
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/Veyrona Decision Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 11,
+          "label": "Reported EBITDA",
+          "cells": "C11:N11",
+          "period": "2024-10..2025-09",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2024/10/October_2024_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2024/11/November_2024_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2024/12/December_2024_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/01/January_2025_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/02/February_2025_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/03/March_2025_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/04/April_2025_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/05/May_2025_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/06/June_2025_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/07/July_2025_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/08/August_2025_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/09/September_2025_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/config/covenant-spec.json",
+          "section": "definitions.Covenant_EBITDA",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/3_Loan Documentation/Executed/Original_Credit_Agreement.pdf"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/config/covenant-spec.json",
+          "section": "covenants.max_net_leverage",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/3_Loan Documentation/Executed/Original_Credit_Agreement.pdf",
+              "page": 2,
+              "section": "Article VIII -- Financial Covenant",
+              "quote": "Maximum Net Leverage Ratio: 6.00x beginning March 31, 2025. No waiver is effective unless executed in writing by the required lenders."
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/_monitor/certified-values-2026-06.json",
+          "section": "values.max_net_leverage.2025-09-30",
+          "kind": "certified-transcription",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Quarterly Compliance/2026 Q2/Compliance_Certificate_Q2_2026.pdf"
+            }
+          ]
+        }
+      ],
+      "calc": "actual 5.28252 = [model:'Net Debt (derived: Funded Debt - Cash)' at Sep 2025 = 1.67273e+08] / [model:'Reported EBITDA' (EBITDA bridge) summed Oct 2024..Sep 2025 (12 mo) = 3.16655e+07]; test: max_ratio 5.28252 <= 5.75 (threshold per covenant-spec covenants.max_net_leverage, schedule effective 2025-08-05)",
+      "cert_value": 5.2825,
+      "cert_status": "at_risk",
+      "cert_headroom_abs": 0.4675,
+      "cert_headroom_pct": 0.081304,
+      "delta_model_vs_cert": 1.7e-05,
+      "cert_agrees": true,
+      "cert_tolerance_applied": 0.05,
+      "notes": "numerator=167273292, denominator=31665454",
+      "threshold_effective": "2025-08-05"
+    },
+    {
+      "id": "max_net_leverage",
+      "name": "Maximum Net Leverage Ratio",
+      "primitive": "max_ratio",
+      "test_date": "2025-12-31",
+      "window": "ttm",
+      "required": 5.75,
+      "actual": 5.305557,
+      "headroom_abs": 0.444443,
+      "headroom_pct": 0.077295,
+      "status": "at_risk",
+      "source": "(model:'Net Debt (derived: Funded Debt - Cash)')/(model:'Reported EBITDA' (EBITDA bridge)) [ttm]",
+      "source_ref": [
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/Veyrona Decision Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Balance Sheet",
+          "row": 15,
+          "label": "Net Debt (derived: Funded Debt - Cash)",
+          "cells": "Q15",
+          "period": "2025-12",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/12/December_2025_Monthly_Package.xlsx",
+              "sheet": "Balance Sheet"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/config/covenant-spec.json",
+          "section": "definitions.Net_Debt",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/3_Loan Documentation/Executed/Original_Credit_Agreement.pdf"
+            }
+          ]
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/Veyrona Decision Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 11,
+          "label": "Reported EBITDA",
+          "cells": "F11:Q11",
+          "period": "2025-01..2025-12",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/01/January_2025_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/02/February_2025_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/03/March_2025_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/04/April_2025_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/05/May_2025_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/06/June_2025_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/07/July_2025_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/08/August_2025_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/09/September_2025_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/10/October_2025_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/11/November_2025_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/12/December_2025_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/config/covenant-spec.json",
+          "section": "definitions.Covenant_EBITDA",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/3_Loan Documentation/Executed/Original_Credit_Agreement.pdf"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/config/covenant-spec.json",
+          "section": "covenants.max_net_leverage",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/3_Loan Documentation/Executed/Original_Credit_Agreement.pdf",
+              "page": 2,
+              "section": "Article VIII -- Financial Covenant",
+              "quote": "Maximum Net Leverage Ratio: 6.00x beginning March 31, 2025. No waiver is effective unless executed in writing by the required lenders."
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/_monitor/certified-values-2026-06.json",
+          "section": "values.max_net_leverage.2025-12-31",
+          "kind": "certified-transcription",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Quarterly Compliance/2026 Q2/Compliance_Certificate_Q2_2026.pdf"
+            }
+          ]
+        }
+      ],
+      "calc": "actual 5.30556 = [model:'Net Debt (derived: Funded Debt - Cash)' at Dec 2025 = 1.64034e+08] / [model:'Reported EBITDA' (EBITDA bridge) summed Jan 2025..Dec 2025 (12 mo) = 3.09175e+07]; test: max_ratio 5.30556 <= 5.75 (threshold per covenant-spec covenants.max_net_leverage, schedule effective 2025-08-05)",
+      "cert_value": 5.3056,
+      "cert_status": "at_risk",
+      "cert_headroom_abs": 0.4444,
+      "cert_headroom_pct": 0.077287,
+      "delta_model_vs_cert": -4.3e-05,
+      "cert_agrees": true,
+      "cert_tolerance_applied": 0.05,
+      "notes": "numerator=164034285, denominator=30917451",
+      "threshold_effective": "2025-08-05"
+    },
+    {
+      "id": "max_net_leverage",
+      "name": "Maximum Net Leverage Ratio",
+      "primitive": "max_ratio",
+      "test_date": "2026-03-31",
+      "window": "ttm",
+      "required": 5.25,
+      "actual": 5.120049,
+      "headroom_abs": 0.129951,
+      "headroom_pct": 0.024753,
+      "status": "at_risk",
+      "source": "(model:'Net Debt (derived: Funded Debt - Cash)')/(model:'Reported EBITDA' (EBITDA bridge)) [ttm]",
+      "source_ref": [
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/Veyrona Decision Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Balance Sheet",
+          "row": 15,
+          "label": "Net Debt (derived: Funded Debt - Cash)",
+          "cells": "T15",
+          "period": "2026-03",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx",
+              "sheet": "Balance Sheet"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/config/covenant-spec.json",
+          "section": "definitions.Net_Debt",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/3_Loan Documentation/Executed/Original_Credit_Agreement.pdf"
+            }
+          ]
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/Veyrona Decision Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 11,
+          "label": "Reported EBITDA",
+          "cells": "I11:T11",
+          "period": "2025-04..2026-03",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/04/April_2025_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/05/May_2025_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/06/June_2025_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/07/July_2025_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/08/August_2025_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/09/September_2025_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/10/October_2025_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/11/November_2025_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/12/December_2025_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/01/January_2026_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/02/February_2026_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/config/covenant-spec.json",
+          "section": "definitions.Covenant_EBITDA",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/3_Loan Documentation/Executed/Original_Credit_Agreement.pdf"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/config/covenant-spec.json",
+          "section": "covenants.max_net_leverage",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/3_Loan Documentation/Executed/Original_Credit_Agreement.pdf",
+              "page": 2,
+              "section": "Article VIII -- Financial Covenant",
+              "quote": "Maximum Net Leverage Ratio: 6.00x beginning March 31, 2025. No waiver is effective unless executed in writing by the required lenders."
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/_monitor/certified-values-2026-06.json",
+          "section": "values.max_net_leverage.2026-03-31",
+          "kind": "certified-transcription",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Quarterly Compliance/2026 Q2/Compliance_Certificate_Q2_2026.pdf"
+            }
+          ]
+        }
+      ],
+      "calc": "actual 5.12005 = [model:'Net Debt (derived: Funded Debt - Cash)' at Mar 2026 = 1.60852e+08] / [model:'Reported EBITDA' (EBITDA bridge) summed Apr 2025..Mar 2026 (12 mo) = 3.14161e+07]; test: max_ratio 5.12005 <= 5.25 (threshold per covenant-spec covenants.max_net_leverage, schedule effective 2026-01-31)",
+      "cert_value": 5.1265,
+      "cert_status": "at_risk",
+      "cert_headroom_abs": 0.1235,
+      "cert_headroom_pct": 0.023524,
+      "delta_model_vs_cert": -0.006451,
+      "cert_agrees": true,
+      "cert_tolerance_applied": 0.05,
+      "notes": "numerator=160852071, denominator=31416120",
+      "threshold_effective": "2026-01-31"
+    },
+    {
+      "id": "max_net_leverage",
+      "name": "Maximum Net Leverage Ratio",
+      "primitive": "max_ratio",
+      "test_date": "2026-06-30",
+      "window": "ttm",
+      "required": 5.0,
+      "actual": 4.896184,
+      "headroom_abs": 0.103816,
+      "headroom_pct": 0.020763,
+      "status": "at_risk",
+      "source": "(model:'Net Debt (derived: Funded Debt - Cash)')/(model:'Reported EBITDA' (EBITDA bridge)) [ttm]",
+      "source_ref": [
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/Veyrona Decision Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Balance Sheet",
+          "row": 15,
+          "label": "Net Debt (derived: Funded Debt - Cash)",
+          "cells": "W15",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/June_2026_Monthly_Package_2026-07-25.xlsx",
+              "sheet": "Balance Sheet"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/config/covenant-spec.json",
+          "section": "definitions.Net_Debt",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/3_Loan Documentation/Executed/Original_Credit_Agreement.pdf"
+            }
+          ]
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/Veyrona Decision Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 11,
+          "label": "Reported EBITDA",
+          "cells": "L11:W11",
+          "period": "2025-07..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/07/July_2025_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/08/August_2025_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/09/September_2025_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/10/October_2025_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/11/November_2025_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/12/December_2025_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/01/January_2026_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/02/February_2026_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/June_2026_Monthly_Package_2026-07-25.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/config/covenant-spec.json",
+          "section": "definitions.Covenant_EBITDA",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/3_Loan Documentation/Executed/Original_Credit_Agreement.pdf"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/config/covenant-spec.json",
+          "section": "covenants.max_net_leverage",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/3_Loan Documentation/Executed/Original_Credit_Agreement.pdf",
+              "page": 2,
+              "section": "Article VIII -- Financial Covenant",
+              "quote": "Maximum Net Leverage Ratio: 6.00x beginning March 31, 2025. No waiver is effective unless executed in writing by the required lenders."
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/_monitor/certified-values-2026-06.json",
+          "section": "values.max_net_leverage.2026-06-30",
+          "kind": "certified-transcription",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Quarterly Compliance/2026 Q2/Compliance_Certificate_Q2_2026.pdf"
+            }
+          ]
+        }
+      ],
+      "calc": "actual 4.89618 = [model:'Net Debt (derived: Funded Debt - Cash)' at Jun 2026 = 1.57726e+08] / [model:'Reported EBITDA' (EBITDA bridge) summed Jul 2025..Jun 2026 (12 mo) = 3.2214e+07]; test: max_ratio 4.89618 <= 5 (threshold per covenant-spec covenants.max_net_leverage, schedule effective 2026-04-30)",
+      "cert_value": 4.8962,
+      "cert_status": "at_risk",
+      "cert_headroom_abs": 0.1038,
+      "cert_headroom_pct": 0.02076,
+      "delta_model_vs_cert": -1.6e-05,
+      "cert_agrees": true,
+      "cert_tolerance_applied": 0.05,
+      "notes": "numerator=157725632, denominator=32213989",
+      "threshold_effective": "2026-04-30"
+    }
+  ],
+  "exceptions": [
+    {
+      "covenant": "max_net_leverage",
+      "type": "not_evaluable",
+      "reason": "insufficient_history",
+      "warning": "Covenant 'Maximum Net Leverage Ratio' cannot be computed for its earliest periods \u2014 its ttm window reaches back further than the model's first month. Those periods are reported as not evaluable, not as a pass or breach.",
+      "test_dates": [
+        "2025-03-31",
+        "2025-06-30"
+      ]
+    },
+    {
+      "covenant": "max_net_leverage",
+      "name": "Maximum Net Leverage Ratio",
+      "test_date": "2025-09-30",
+      "status": "at_risk",
+      "required": 5.75,
+      "actual": 5.28
+    },
+    {
+      "covenant": "max_net_leverage",
+      "name": "Maximum Net Leverage Ratio",
+      "test_date": "2025-12-31",
+      "status": "at_risk",
+      "required": 5.75,
+      "actual": 5.31
+    },
+    {
+      "covenant": "max_net_leverage",
+      "name": "Maximum Net Leverage Ratio",
+      "test_date": "2026-03-31",
+      "status": "at_risk",
+      "required": 5.25,
+      "actual": 5.12
+    },
+    {
+      "covenant": "max_net_leverage",
+      "name": "Maximum Net Leverage Ratio",
+      "test_date": "2026-06-30",
+      "status": "at_risk",
+      "required": 5.0,
+      "actual": 4.9
+    }
+  ],
+  "engine": "spec-driven v5 (per-figure source refs + calc records; explicit flow/spot basis; certified-vs-model dual columns with per-component delta decomposition; dollar thresholds put on the model's declared unit; ledger-proxy flag on coverage covenants without a debt-service schedule)",
+  "borrower": "Veyrona Decision Systems, LLC",
+  "reconciliation_required": false,
+  "reconciliation_blockers": [],
+  "reconciliation_override": false,
+  "spec_agreement_ref": "Executed Credit Agreement (Veyrona 2025 Senior Secured Credit Facility) among Veyrona Decision Systems, LLC, as Borrower; Veyron Holdings, LLC, as Guarantor/co-Grantor; and Granite Harbor Direct Lending, LP, as Administrative Agent and sole Lender. Issued January 10, 2025; effective/closing January 15, 2025; matures January 15, 2030. $250,000,000 total commitment = $187,274,929.89 funded term loan + $62,725,070.11 undrawn revolver (Schedule 1.1), refinancing $179,250,000 of legacy debt at closing. As amended by three executed amendments, each of which states in identical language that 'Net Debt, Covenant EBITDA, Test Date, and other definitions remain unchanged unless expressly modified here' -- confirmed by an independent full-text read of all three amendments: none touches pricing, amortization, day count, fees, or the EBITDA/Net Debt definitions. Only the Maximum Net Leverage Ratio threshold steps down, each amendment paired with one small bundled accommodation.",
+  "cure_rights": {
+    "max_net_leverage": "Not specified for the financial covenant. Article IX (Events of Default) refers generically to 'Events of Default ... subject to stated cure periods,' but no actual cure-period length or equity-cure mechanism is spelled out anywhere in the executed document set for this covenant specifically (full-text search for 'cure', 'equity contribution', 'equity cure', 'grace period' across all seven executed documents returns only that generic Article IX phrase and each amendment's boilerplate 'No waiver, cure, forbearance, test suspension, novation, or replacement facility is granted' disclaiming that the amendment itself is a cure). Treated as NO cure right pending confirmation."
+  },
+  "model_month_ends": [
+    "2024-09-30",
+    "2024-10-31",
+    "2024-11-30",
+    "2024-12-31",
+    "2025-01-31",
+    "2025-02-28",
+    "2025-03-31",
+    "2025-04-30",
+    "2025-05-31",
+    "2025-06-30",
+    "2025-07-31",
+    "2025-08-31",
+    "2025-09-30",
+    "2025-10-31",
+    "2025-11-30",
+    "2025-12-31",
+    "2026-01-31",
+    "2026-02-28",
+    "2026-03-31",
+    "2026-04-30",
+    "2026-05-31",
+    "2026-06-30"
+  ],
+  "certified_source": "Compliance_Certificate_Q2_2026.pdf",
+  "certified_period": "2026-06",
+  "transcription_notes": [
+    "Per the run's request to report the full covenant history and cross-check every quarter, all six certified quarterly test dates (2025-03-31 through 2026-06-30) were transcribed from each quarter's own Compliance_Certificate_QX_20XX.pdf 'CALCULATION' section (each a one-page PDF; no page numbering beyond page 1 of 1), cross-checked against that quarter's Covenant_Calculation_QX_20XX.xlsx 'Leverage Summary' tab -- every quarter's Funded Debt, Unrestricted Cash, TTM Covenant EBITDA and Net Leverage figure tie EXACTLY between the certificate PDF and the matching workbook (Debt check / Ratio check residuals = 0.00 in every quarter's workbook).",
+    "EXCEPTION (recorded for the orchestrator, same class of issue as a prior run in this batch, different root cause): the certified-values contract's top-level 'source' field names ONE certificate file; this borrower has six distinctly-named quarterly certificates (Compliance_Certificate_Q1_2025.pdf ... Compliance_Certificate_Q2_2026.pdf). 'source' above is set to the CURRENT period's file (Q2 2026). The engine binds ONE upstream document to the certified-values file as a whole, so the archived output's automatic 'upstream' hyperlink for the five PRIOR quarters' certified figures will resolve to the Q2 2026 PDF rather than each quarter's own certificate, even though this JSON's own per-date 'section' field names the correct file for each. A person following a historical row's link should use the 'section' text, not the row's auto-resolved upstream link, to find the actual document.",
+    "Q1 2026 STALE CERTIFICATE (per covenant-spec.json step7_signoff decision 'q1_2026_stale_certificate_handling'): the value transcribed above for 2026-03-31 (5.1265x) is the AS-FILED, certified-of-record figure -- Compliance_Certificate_Q1_2026.pdf and Covenant_Calculation_Q1_2026_AS_FILED.xlsx were both signed/delivered 2026-04-12, using PRE-restatement Q1 2026 quarterly Reported EBITDA of $8,437,990.42 in the TTM build (TTM Covenant EBITDA $31,376,744.39). The March 2026 restatement (notice dated 2026-06-20; +$39,375.18 to March 2026 EBITDA, $8,437,990.42 -> $8,477,365.60) was discovered AFTER this certificate was signed. No re-signed Q1 2026 certificate or covenant-calculation workbook exists anywhere in the deal folder (confirmed: only the three original April-2026-dated files exist under Quarterly Compliance/2026 Q1/, none touched since). The CORRECTED Q1 2026 TTM Covenant EBITDA, transcribed for reference (NOT as a certified value -- nobody has certified it) from the Q2 2026 Covenant_Calculation workbook's own 'TTM Build' tab, is $31,416,119.57 (= $7,779,229.61 + $7,280,561.04 + $7,878,963.32 + $8,477,365.60 for 2025-Q2 through 2026-Q1), giving a corrected Net Leverage of 160,852,070.94 / 31,416,119.57 = 5.1197x -- comfortably under the 5.25x threshold in effect on 2026-03-31 either way. This corrected figure is intentionally NOT entered under 'values' above (it was never certified); the model side of the engine's 2026-03-31 row will independently reproduce it, because build-monitoring-model already sourced March 2026 from the restated Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx, so the model's own TTM window carries the corrected EBITDA while the certified column carries the as-filed number -- both are reported side by side by design, not merged."
+  ],
+  "action_items": [
+    "No re-signed Q1 2026 compliance certificate exists after the March 2026 restatement was discovered on 2026-06-20 -- request one from the borrower for the file, even though the verdict does not change (5.1265x as-filed vs. 5.1197x corrected, both comfortably under the 5.25x threshold then in effect)."
+  ],
+  "methodology": "Company-prepared/unaudited model; EBITDA taken from the model's single pinned EBITDA bridge row (not recomputed). Thresholds and definitions per the standardized covenant-spec; each definition's flow/spot basis is explicit in the spec. cert_* fields are the borrower's own certified actuals transcribed from the compliance certificate -- reported alongside the model reconstruction, never merged with it."
+}

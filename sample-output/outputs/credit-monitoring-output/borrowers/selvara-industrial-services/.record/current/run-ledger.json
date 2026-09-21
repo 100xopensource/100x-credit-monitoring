@@ -1,0 +1,54 @@
+{
+  "schema": "credit-monitoring-run-ledger/v1",
+  "schema_version": 1,
+  "run_id": "run-20260915-105656",
+  "period": "2026-06",
+  "status": "finished",
+  "started_at": "2026-09-15T10:56:56+00:00",
+  "base": {
+    "from": "seed"
+  },
+  "packages_seen": [],
+  "analyst_focus": [
+    "2026-09-30 FCCR test date coverage and readiness given the expired waiver",
+    "process/controls signal from the recurring single-month-vs-TTM measurement error",
+    "amortization step-up mechanical driver of FCCR deterioration vs EBITDA trend"
+  ],
+  "steps": {
+    "config": "done",
+    "model": "done",
+    "modules": {
+      "covenant-compliance": "done",
+      "budget-vs-actual": "skipped",
+      "ap-ar-aging": "done",
+      "three-statement-analysis": "done"
+    },
+    "coverage": "done",
+    "memo": "done",
+    "write_back": "done"
+  },
+  "delivery_base": {
+    ".record/changelog.jsonl": null,
+    ".record/current/config/_history/debt-service-schedule--engine-175f563a3106.json": "sha256:1e562480d9253367b3e575a394e044cf66d82fa96b1f3de476b815770340c176",
+    ".record/current/config/borrower-config.json": "sha256:4185a109f444c7e6f436eb5cbba01c55a19df0d94eb044d546cf2508a21bcaf6",
+    ".record/current/config/budget-map.json": "sha256:6e41bd96842056174cb5cabeb73972234a2222eed8cac5b5efee6f5586592c5b",
+    ".record/current/config/collateral-map.json": "sha256:19d2b3025dad0fb26fc00f7915e266f3da1e7e95ce79bf1c351febe14f1c4df0",
+    ".record/current/config/covenant-spec.json": "sha256:f4dea56e971d094f957ff6c2c0ad3161c12ec0df2bc4d788130ba993d3ee3272",
+    ".record/current/config/deal-context.json": "sha256:f42d90e23098e96a2cf0351bcba942322006e581be826e31928326a17eae6406",
+    ".record/current/config/debt-service-schedule.json": "sha256:ff888fbec402595aae2c625864ffad1dc89f064ef2db6d9c40d1e57ffbe092f9",
+    ".record/current/config/debt-service-schedule.md": "sha256:408ba48f4153694ec75fd1138f2d5222da3dfd59e2873d2bd2eb4d4a08850f44",
+    ".record/current/config/debt-service-spec.json": "sha256:ce1078f325ebddb6e8ee2b5645943b5054ba4e0e29d5b0219c9a6e40a9f90a1d",
+    ".record/edit-intake.json": null,
+    ".record/manifest.json": null,
+    ".record/published.json": null
+  },
+  "inputs": {
+    "config": "config",
+    "model": "Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+    "sidecars": [
+      "source-map.json",
+      "restatements.json"
+    ],
+    "execution_config": "execution-config.json"
+  }
+}

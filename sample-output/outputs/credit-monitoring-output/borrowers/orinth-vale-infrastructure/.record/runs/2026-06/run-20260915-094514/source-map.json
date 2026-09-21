@@ -1,0 +1,287 @@
+{
+  "model_file": "store:borrowers/orinth-vale-infrastructure/_model/Orinth Vale Infrastructure Monthly IS-BS-CF.xlsx",
+  "columns": {
+    "Income Statement": {
+      "2024-09": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2024/09/a.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2024-10": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2024/10/a.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2024-11": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2024/11/a.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2024-12": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2024/12/a.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-01": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/01/a.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-02": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/02/a.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-03": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/03/a.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-04": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/04/a.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-05": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/05/a.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-06": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/06/a.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-07": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/07/a.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-08": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/08/a.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-09": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/09/a.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-10": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/10/a.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-11": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/11/a.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-12": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/12/a.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2026-01": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/01/a.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2026-02": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/02/a.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2026-03": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/03/a.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2026-04": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/04/a.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2026-05": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/05/a.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2026-06": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/06/a.xlsx",
+        "sheet": "Income Statement"
+      }
+    },
+    "Balance Sheet": {
+      "2024-09": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2024/09/a.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2024-10": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2024/10/a.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2024-11": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2024/11/a.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2024-12": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2024/12/a.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-01": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/01/a.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-02": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/02/a.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-03": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/03/a.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-04": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/04/a.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-05": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/05/a.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-06": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/06/a.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-07": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/07/a.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-08": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/08/a.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-09": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/09/a.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-10": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/10/a.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-11": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/11/a.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-12": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/12/a.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2026-01": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/01/a.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2026-02": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/02/a.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2026-03": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/03/a.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2026-04": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/04/a.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2026-05": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/05/a.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2026-06": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/06/a.xlsx",
+        "sheet": "Balance Sheet"
+      }
+    },
+    "Cash Flow Statement": {
+      "2024-09": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2024/09/a.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2024-10": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2024/10/a.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2024-11": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2024/11/a.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2024-12": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2024/12/a.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-01": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/01/a.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-02": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/02/a.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-03": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/03/a.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-04": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/04/a.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-05": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/05/a.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-06": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/06/a.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-07": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/07/a.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-08": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/08/a.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-09": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/09/a.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-10": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/10/a.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-11": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/11/a.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-12": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/12/a.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2026-01": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/01/a.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2026-02": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/02/a.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2026-03": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/03/a.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2026-04": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/04/a.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2026-05": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/05/a.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2026-06": {
+        "file": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/06/a.xlsx",
+        "sheet": "Cash Flow"
+      }
+    }
+  },
+  "_debt_service_rows": {
+    "Cash Interest Expense": {
+      "source": "each month's own reporting package 'a.xlsx', 'Debt & Covenant' tab, 'Cash Interest' row (monthly-native, delivered every month, not just quarter-ends) -- NOT debt-service-schedule.json and NOT the quarterly Covenant Calculation.xlsx (that certificate carries no cash-interest or scheduled-principal line at all; verified independently across all 6 quarters). Zero for Sep-Dec 2024 (before the facility's Jan 15, 2025 closing) -- a contractual fact, not a blank.",
+      "reference": "store:borrowers/orinth-vale-infrastructure/.record/current/config/debt-service-spec.json#/covenant_support_rows (row label only; the day_count and amortization_base sections there document why the generated schedule's own dollar figures were NOT used)",
+      "note": "Balance Sheet!'Cash Interest Expense' (row 43) is a live formula referencing the same row's Debt & Covenant roll-forward 'Cash Interest' cell (row 35) for Jan 2025 onward; hardcoded 0 for Sep-Dec 2024."
+    },
+    "Scheduled Debt Principal Payments": {
+      "source": "each month's own reporting package 'a.xlsx', 'Debt & Covenant' tab, 'Repayments' row (monthly-native; ties exactly to 0.60% of that month's own Beginning Debt, the agreement's stated monthly amortization rate, for every month checked) -- NOT debt-service-schedule.json (its flat-original-principal-base amortization diverges from the certified declining-balance figures starting month 2, per debt-service-spec.json's own documented engine limitation) and NOT the quarterly Covenant Calculation.xlsx (carries no such line). Zero for Sep-Dec 2024 -- a contractual fact, not a blank.",
+      "reference": "store:borrowers/orinth-vale-infrastructure/.record/current/config/debt-service-spec.json#/covenant_support_rows",
+      "note": "Balance Sheet!'Scheduled Debt Principal Payments' (row 44) is a live formula referencing the same column's Debt & Covenant roll-forward 'Repayments' cell (row 33) for Jan 2025 onward; hardcoded 0 for Sep-Dec 2024. No non-facility (vehicle/SBA) scheduled debt is disclosed anywhere in the reporting package, so nothing is added on top."
+    }
+  }
+}

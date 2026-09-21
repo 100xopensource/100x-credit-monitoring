@@ -1,0 +1,32 @@
+{
+  "open_requests_to_borrower": [
+    "Status of new waiver/amendment authority for the September 30, 2026 FCCR test date -- none in effect as of this run.",
+    "Root-cause confirmation on the twice-repeated single-month-vs-TTM FCCR measurement-window error (March and June 2026).",
+    "Confirm no further restatements are pending beyond the corrected March 2026 revenue reclassification ($617,841.06).",
+    "Confirm the facility's true contractual cash interest rate against a fuller version of the credit agreement than the one-page excerpt reviewed."
+  ],
+  "unresolved_flags": [
+    "September 30, 2026 FCCR test date has no waiver or amendment authority in place -- next test in ~2 weeks as of this run.",
+    "Two independent reporting/compliance correction episodes landed in 2026-Q1 and 2026-Q2 -- a controls/process signal independent of the FCCR magnitude.",
+    "Archive/2026-03/monthly.xlsx was never updated after the July 22, 2026 revision and still shows stale March revenue -- build-monitoring-model must keep sourcing March revenue from consolidated-revised.xlsx.",
+    "Model's Fixed Charges sums the lease-payment leg with the native ledger's negative sign instead of a positive covenant-support figure, inflating model FCCR by ~1.5pts vs certified (0.9337x vs 0.9192x) -- fix needed in the next model refresh."
+  ],
+  "analyst_focus": [
+    {
+      "item": "2026-09-30 FCCR test date coverage and readiness given the expired waiver",
+      "asked_period": "2026-06",
+      "finding": "No executed relief in effect as of this run; FCCR on current trend would remain below 1.2000x absent new relief or a reversal of Fixed Charges growth."
+    },
+    {
+      "item": "process/controls signal from the recurring single-month-vs-TTM measurement error",
+      "asked_period": "2026-06",
+      "finding": "Confirmed recurring in both March and June 2026 certificates; flagged as an open root-cause question to the borrower, contributing to the watchlist designation."
+    },
+    {
+      "item": "amortization step-up mechanical driver of FCCR deterioration vs EBITDA trend",
+      "asked_period": "2026-06",
+      "finding": "Confirmed: TTM Covenant EBITDA rose every month for 11 straight months ($25.7M to $30.1M); FCCR compression traces entirely to the First Amendment's required-principal step-up (0.20% to 2.00%/month), not to EBITDA."
+    }
+  ],
+  "last_period_headline": "FCCR breached 1.2000x for a second straight quarter at June 30, 2026 (certified 0.9192x); the covering waiver expired the same day and no relief covers the September 30, 2026 test date. TTM Covenant EBITDA has grown every month for eleven straight months, so the deterioration traces to the First Amendment's amortization step-up, not to operating performance."
+}

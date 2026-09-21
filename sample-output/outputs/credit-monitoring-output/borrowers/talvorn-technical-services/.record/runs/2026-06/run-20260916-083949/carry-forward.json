@@ -1,0 +1,27 @@
+{
+  "open_requests_to_borrower": [
+    "Confirm the DRAFT department-to-GL mapping (swapping two Sales accounts vs the Board-approved exhibit) was never used for any actual monitoring or budget output.",
+    "Confirm the identity of any parent, holding, or sponsor entity -- none is named in any document reviewed.",
+    "Confirm whether inventory, blended into 'Inventory and Other Current Assets', is material enough to warrant its own reporting line.",
+    "Confirm whether any named-counterparty AR/AP detail exists informally beyond the bucketed totals in the monthly aging export."
+  ],
+  "unresolved_flags": [
+    "June 2026 gross margin compressed to 45.0% against a 49.8% budgeted margin, driving a 29.1% EBITDA miss vs budget for the month even though every opex group ran at or under budget -- watch whether this is a one-month cost-mix event or a trend.",
+    "FCCR improvement to date (1.7245x to 2.1564x) has been driven primarily by EBITDA growth, not debt paydown -- gross funded debt has fallen only ~4% since the January 2025 closing.",
+    "0.20%/month amortization leaves a large balloon due at the January 2030 maturity -- a structural feature to track, not a near-term concern.",
+    "Book equity remains negative (-$51,965,709 at June 2026) though improving $18.4M since September 2024, funded entirely by retained earnings."
+  ],
+  "analyst_focus": [
+    {
+      "item": "confirm the improving FCCR trend holds up under the module's own independent checks",
+      "asked_period": "2026-06",
+      "finding": "Confirmed: covenant-compliance independently transcribed all six certificates and reproduced the certified ratio to within rounding at every reachable test date; trend is genuinely improving, though structurally aided more by EBITDA growth than debt paydown."
+    },
+    {
+      "item": "pre-archive TTM window gap at the 2025-03-31 and 2025-06-30 test dates -- model insufficient-history vs certified ratio",
+      "asked_period": "2026-06",
+      "finding": "Confirmed as the expected, disclosed outcome: model reads not_evaluable/insufficient_history at both dates while the certified ratio (1.7245x, 1.7687x) still computes from the borrower's own supplemental schedule."
+    }
+  ],
+  "last_period_headline": "FCCR passed with wide headroom at June 30, 2026 (2.1564x certified vs 1.20x minimum), continuing an unbroken improving trend since the first test date. June revenue and EBITDA both missed budget materially (-6.3%/-29.1%), driven entirely by gross-margin compression rather than opex overspend -- worth watching as a possible trend rather than a one-month event."
+}

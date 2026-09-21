@@ -1,0 +1,119 @@
+{
+ "AGING_READ": "Accounts receivable and accounts payable both tie exactly to the Balance Sheet at June 2026 ($18.09M and $8.70M respectively). Days sales outstanding improved to 41.2 days from 41.9, and days payable outstanding improved to 36.0 days from 37.2; the over-90-day bucket held flat at about 6% of the total on both sides, showing no deterioration. Customer and vendor concentration cannot be assessed from this borrower's aging export, which reports only bucket totals rather than a counterparty-level breakdown; the Final IC Memo's own customer-concentration analysis (five largest customers at 41% of FY2024 revenue, no single customer above 12%) is the most recent concentration data on file.",
+ "BS_OBSERVATIONS": "<li>Cash was $36.45M at June 2026, down 1.1% ($405K) from May on stronger accounts receivable and inventory, but up 28.2% year over year.</li><li>Accounts receivable rose 7.9% to $18.09M; days sales outstanding improved to 41.2 days from 41.9.</li><li>Total debt declined to $58.65M (-0.6% month over month), consistent with the facility's scheduled monthly amortization; total assets grew 1.2% to $134.47M.</li><li>Total debt to trailing-twelve-month EBITDA is 2.39x, improving every quarter since the January 2025 close; total debt to trailing-twelve-month gross profit is 0.89x.</li><li>The monitoring workbook holds no total-current-assets or total-current-liabilities subtotal for this borrower, so current-ratio-type figures are omitted rather than shown as zero.</li>",
+ "CAPSTRUCTURE_NOTES": {
+  "our_instrument": "Senior secured term loan, single tranche, SOFR + 6.25% cash interest with a 2.00% floor (8.25% effective minimum), 0.60%/month scheduled amortization, first-priority lien on substantially all assets plus a separate IP security interest, final maturity January 15, 2030.",
+  "total_funded_debt": "Equal to the single term loan tranche shown above; no other funded-debt instrument exists in this capital structure.",
+  "total_equity": "Book value, not a market figure.",
+  "total_capitalization": "Funded debt plus equity at book."
+ },
+ "CF_OBSERVATIONS": "<li>Operating cash flow was $186K in June, down sharply from $1.23M in May, as the month's receivables and inventory build absorbed cash that net income does not show.</li><li>Investing cash flow was a $237K net use in June, consistent with ongoing equipment and fleet capital expenditure; financing cash flow was a $354K net use, the facility's scheduled monthly amortization payment.</li><li>Free cash flow was slightly negative in June (-$51K) but remains positive year to date at $3.54M.</li>",
+ "COLLATERAL_COVERAGE_CLOSING": "Total pledged components rose 1.4% month over month and 9.6% year over year, tracking growth in cash and receivables alongside a stable equipment and vehicle fleet.",
+ "COLLATERAL_READ": "Pledged collateral covers the $58.7M of secured debt 2.0x on an all-assets basis, but only 0.9x on liquid collateral (cash plus receivables) alone, so recovery in a downside scenario depends materially on the equipment and vehicle fleet ($53.1M net, the largest single pledged component) rather than liquid assets.",
+ "COVENANT_DELTAS": {
+  "max_total_leverage": "Our reconstruction and the borrower's certificate agree to within about 3-4 basis points at every quarter checked (2.3911x versus the certified 2.3911x at June 2026), since Covenant EBITDA and Funded Debt both bind directly to the model's native EBITDA and Funded Debt rows with no reconciling add-back -- our reconstruction governs, and the small residual gap is rounding in the certificate's own workbook, not a definitional difference."
+ },
+ "COVENANT_OVERALL": "The one financial covenant, Maximum Total Leverage, passes with about 57% headroom (2.39x against 5.50x) and has improved every quarter since the January 2025 close with no new debt or amendment since then.",
+ "DATA_QUALITY_NOTES": "<li>AP/AR aging concentration (top-5 customer/vendor breakdown) is not available from this borrower's aging export, which reports bucket totals only rather than counterparty-level detail; DSO, DPO, and bucket distribution are otherwise complete and tie exactly to the Balance Sheet.</li><li>The monitoring workbook holds no total-current-assets or total-current-liabilities lines for this borrower, so ratios needing them are omitted rather than shown as zero.</li><li>The Maximum Total Leverage covenant cannot be independently reconstructed by the model for its first two test dates (2025-03-31 and 2025-06-30), since their trailing-twelve-month windows reach back to 2024-04 and 2024-07, both before the model's earliest month (2024-09); the borrower's own certified figures are shown as a cross-check for those two dates (3.33x and 2.90x, both compliant).</li><li>Lender/agent identity is not captured as a distinct field in this review's deal-context record, though the credit agreement itself names Cairn Ridge Private Credit, LP as administrative agent.</li>",
+ "DEAL_COMPANY_PROFILE": "Orinth Vale Infrastructure provides inspection, construction support, repair, and maintenance for essential infrastructure (utility networks, municipal projects, and industrial sites) through regional field crews, subcontractors, and an owned equipment fleet, with its five largest customers representing 41% of FY2024 revenue and no single customer exceeding 12%.",
+ "DEAL_LEVERAGE_CONTEXT": "Total Leverage has fallen every quarter since the January 2025 close (3.33x to 2.39x against the 5.50x cap), driven by contractual amortization on a single fully-funded term loan and steady EBITDA growth, with no new debt instrument or capital structure change since closing.",
+ "DEAL_SECURITY_SOURCING": "First-priority blanket lien on substantially all personal property, including the equipment and vehicle fleet within the same lien class as accounts and inventory, plus a separate first-priority security interest in registered and unregistered intellectual property, per the executed Guaranty and Security Agreement and IP Security Agreement, both effective January 15, 2025.",
+ "DEAL_TRANSACTION": "The January 15, 2025 closing, arranged with Cairn Ridge Private Credit, LP as administrative agent, funded a $65.4M senior secured term loan in a single advance to refinance legacy debt in full, with $3.0M of closing fees paid from $12.0M of sponsor equity rather than financed into the loan balance.",
+ "DOCUMENT_NOTES": {
+  "budget.plan": "The approved H1 2026 budget, covering January through June 2026, the current pinned plan for this borrower.",
+  "loan_documentation.credit_agreement": "The initial-closing Credit Agreement, executed January 10 and effective January 15, 2025, the sole and unamended operative facility for this borrower.",
+  "monthly_reporting.a-xlsx": "The borrower's own monthly financial reporting package, carrying Income Statement, Balance Sheet, Cash Flow, and Debt & Covenant detail together in one file.",
+  "monthly_reporting.compliance_certificate": "The lender's quarterly Covenant Calculation exhibit, source of the certified leverage-ratio figures used in this review.",
+  "underwriting.ic_uw_memo": "The Final IC Memo approving the January 2025 closing, source of the business profile, credit thesis, and customer-concentration detail captured in this review.",
+  "working_analysis.archived_outputs": "This run's four archived module outputs (covenant compliance, budget versus actual, AP/AR aging, and three-statement analysis), each validated and gated before this memo was composed.",
+  "working_analysis.model": "The canonical monthly IS/BS/CF workbook this review's figures are read from, snapshotted for this run."
+ },
+ "FLAGS": "<li>No open requests to the borrower or unresolved flags are carried forward from a prior review -- this is the first monitoring cycle for this borrower.</li><li>EBITDA has missed its monthly budget three months running (April, May, June 2026) after three straight beats in the first quarter, worth watching into the second half even though the year-to-date position remains favorable.</li><li>The credit agreement's negative covenants section states no dollar baskets or carve-outs for debt, liens, restricted payments, or investments anywhere in the nine executed closing documents reviewed -- confirm whether a fuller schedule exists outside that document set.</li><li>The day-count convention for cash interest is not stated in the executed documents and was assumed (actual/360, both endpoints counted) rather than confirmed.</li>",
+ "FORWARD_STRESS": "With leverage already at 2.39x against a 5.50x cap and roughly 57% headroom, the covenant carries substantial room even against a meaningful EBITDA decline; the more immediate item to watch is whether June's small budget miss (revenue -0.5%, EBITDA -3.6%) is the start of a run of misses or a single soft month, since EBITDA has now missed budget three months running after three straight beats in the first quarter.",
+ "IS_OBSERVATIONS": "<li>Revenue rose 6.1% month over month to $13.16M in June, essentially matching the $13.22M budget (-0.5%), and remains 1.5% ahead of budget on a year-to-date basis ($73.0M vs $71.9M).</li><li>Gross margin was 44.9% in June, just below the 45.4% budgeted margin, though YTD margin of 45.0% runs slightly ahead of the 44.6% budgeted YTD margin.</li><li>EBITDA rose 5.6% month over month to $2.29M (17.4% margin) but missed the $2.38M June budget by 3.6% -- the third straight monthly miss (April -4.1%, May -9.9%, June -3.6%) after three straight beats in Q1 2026 (January +25.7%, February +25.3%, March +13.4%).</li><li>Net income rose 8.4% month over month to $1.38M.</li><li>EBITDA YTD of $12.24M remains 5.3% ($614K) ahead of the $11.62M budget, so the year-to-date position is still favorable despite the recent monthly pattern.</li>",
+ "LIQUIDITY_READ": "<li>Cash of $36.45M at June 2026 is down 1.1% ($405K) from May but up 28.2% year over year, and the trailing three-month average shows cash still building rather than burning.</li><li>Cash is running well above the $8.0M planned in the approved H1 2026 budget, reflecting stronger operating cash generation than the plan assumed.</li><li>No covenant on this facility tests liquidity directly; the sole financial covenant is the leverage test.</li>",
+ "OPEN_QUESTIONS": "The main open question is whether June's EBITDA miss against budget, the third in a row after three consecutive beats in the first quarter, reflects a pacing issue in the H1 budget's assumed margin ramp or an early sign of deceleration; the year-to-date EBITDA beat (+5.3% against budget) still favors a pacing read, but this is worth revisiting at the next review once a full second half of actuals is available. Separately, the credit agreement states no day-count convention and no dollar baskets or carve-outs anywhere in its negative covenants section; whether a fuller schedule of terms exists outside the nine executed documents reviewed at closing remains open. No open requests to the borrower or unresolved flags are otherwise carried forward from this review.",
+ "REVENUE_QUALITY_NOTES": "Revenue is project- and service-based field work billed under unit-rate, milestone, and recurring-service contract structures across municipal, utility, industrial, and maintenance service lines. The Final IC Memo's own customer-concentration analysis shows the five largest customers representing 41% of FY2024 revenue with no single customer above 12%, a moderate concentration for a project-based contractor. June's small revenue miss against budget (-0.5%) is immaterial and consistent with normal month-to-month variation in project timing rather than a demand or pricing issue.",
+ "SUMMARY_COLLATERAL": "Pledged collateral totals $117.4M at June 2026: cash $36.4M, accounts receivable $18.1M, inventory $9.8M, and equipment/property net $53.1M -- the largest single component. That covers the $58.7M of secured debt 2.0x on an all-assets basis, though only 0.9x on liquid collateral (cash plus receivables) alone, so recovery value leans on the equipment fleet rather than liquid assets. Total pledged components grew 9.6% year over year, tracking overall balance-sheet growth.",
+ "SUMMARY_COVENANTS": "The one financial covenant, Maximum Total Leverage, passes comfortably at 2.39x against the 5.50x cap (about 57% headroom) and has improved every quarter since the January 2025 close (3.33x, 2.90x, 2.66x, 2.51x, 2.42x, 2.39x), with the model and the borrower's own certificate agreeing to within a few basis points. No other financial covenant exists on this facility.",
+ "SUMMARY_LIQUIDITY": "Cash ended June at $36.4M, down 1.1% ($405K) from May on stronger receivables and inventory build, though the trailing three-month average shows cash still building, not burning. Cash is running well above the $8.0M planned in the approved budget, reflecting stronger operating cash generation than the plan assumed. No covenant tests liquidity directly on this facility, and no near-term cash concern is evident.",
+ "SUMMARY_OUTLOOK": "The governing question for this credit is whether June's small EBITDA miss against budget -- the third straight monthly miss after three consecutive beats in the first quarter -- signals a pacing issue in the H1 budget's assumed margin ramp or an emerging deceleration; the year-to-date position (EBITDA 5.3% ahead of plan) still favors the former reading. No open requests to the borrower or unresolved flags are carried from this review, and leverage headroom remains wide enough to absorb a meaningful further slowdown without approaching the 5.50x cap.",
+ "SUMMARY_UPDATE": "June revenue was $13.2M, essentially in line with the $13.2M budget (-0.5%, -$60K), up 6.1% from May's $12.4M. Quarter to date and year to date, revenue of $73.0M runs 1.5% (+$1.1M) ahead of the $71.9M budget and 4.3% ahead of the prior year. EBITDA missed budget in June at $2.3M against a $2.4M plan (-$86K, -3.6%) -- the third straight monthly miss after three straight beats in the first quarter -- though EBITDA YTD remains $614K (5.3%) ahead of budget at $12.2M, so the year-to-date position is still favorable.",
+ "_contract": {
+  "deep_links": "a reference to another section is written <a class=\"jumpname\" href=\"#sec-covenant\">Covenant detail <span class=\"arw\">&#8599;</span></a> \u2014 same markup, any section id below",
+  "how": "Fill every key; values are HTML. Leave a box \"\" when the month gives it nothing, and say so in your report. Keys opening with \"_\" (this note) are ignored by the renderer.",
+  "keyed_boxes": {
+   "CAPSTRUCTURE_NOTES": "per row id: the instrument's pricing or terms in one clause",
+   "COVENANT_DELTAS": "per covenant id: one clause on WHY the certified figure and ours differ \u2014 the component that carries the gap, named. Our reconstruction governs; do not write that the borrower's basis governs, whichever way the gap runs",
+   "DOCUMENT_NOTES": "per document id: what the document is and what it settles, one sentence"
+  },
+  "language": "lead with the fact and its figure; the banned words and patterns are in references/report-structure.md under the language contract",
+  "list_boxes": {
+   "boxes": [
+    "BS_OBSERVATIONS",
+    "CF_OBSERVATIONS",
+    "DATA_QUALITY_NOTES",
+    "FLAGS",
+    "IS_OBSERVATIONS",
+    "LIQUIDITY_READ"
+   ],
+   "value": "a string of <li>\u2026</li> items and nothing outside them"
+  },
+  "paragraph_boxes": {
+   "boxes": [
+    "AGING_READ",
+    "OPEN_QUESTIONS",
+    "REVENUE_QUALITY_NOTES"
+   ],
+   "value": "one or two short paragraphs"
+  },
+  "section_ids": [
+   "sec-bs",
+   "sec-capstructure",
+   "sec-cf",
+   "sec-company",
+   "sec-covenant",
+   "sec-covstrip",
+   "sec-data",
+   "sec-files",
+   "sec-flags",
+   "sec-is",
+   "sec-security",
+   "sec-snapshot",
+   "sec-stress",
+   "sec-summary",
+   "sec-terms",
+   "sec-transaction",
+   "sec-trend"
+  ],
+  "sentence_boxes": {
+   "boxes": [
+    "COLLATERAL_COVERAGE_CLOSING",
+    "COLLATERAL_READ",
+    "COVENANT_OVERALL",
+    "DEAL_COMPANY_PROFILE",
+    "DEAL_LEVERAGE_CONTEXT",
+    "DEAL_SECURITY_SOURCING",
+    "DEAL_TRANSACTION",
+    "FORWARD_STRESS",
+    "SUMMARY_COLLATERAL",
+    "SUMMARY_COVENANTS",
+    "SUMMARY_LIQUIDITY",
+    "SUMMARY_OUTLOOK",
+    "SUMMARY_UPDATE"
+   ],
+   "value": "sentences that sit inside an existing paragraph \u2014 inline tags like <b> only, no <p> or <ul>"
+  },
+  "summary_blocks": {
+   "SUMMARY_COLLATERAL": "pledged components and their total, coverage against funded debt, and the prior-year or plan comparison where one is on file",
+   "SUMMARY_COVENANTS": "one sentence when everything passes with room; otherwise the failing or governing leg, the certified-vs-model gap, and the nearest tight test with what clearing it takes",
+   "SUMMARY_LIQUIDITY": "period-end cash against the floor, where the cash came from (earned, borrowed, working capital), months of runway when burning, and the expected direction with its basis",
+   "SUMMARY_OUTLOOK": "the forward indicators on file (backlog, order book, seasonality), the governing question for the credit, and the open asks \u2014 never a concern manufactured to fill the space",
+   "SUMMARY_UPDATE": "revenue and EBITDA vs Budget and prior year \u2014 the period first, the cumulative line second \u2014 then the driver: which segment or brand moved, mix or margin, at the finest level the package reports",
+   "bad_news": "a miss, a breach or a stretch is written in its home block with the same syntax as a beat \u2014 there is no separate red-flags list, and a fired concern must not be left out of its block",
+   "cadence": "the renderer titles the first block from the period: a March/June/September/December period reads 'Quarterly update' and its prose covers the quarter and the year so far; any other month reads 'Monthly update' and covers the month and the year so far",
+   "numbers": "round to $X.XM / $XXXK in these five blocks; full precision lives in the tables, where every figure is click-traceable",
+   "what": "the executive summary is the analyst's one-pager for the deal team: five labelled prose blocks, each 2-5 sentences, written the way a portfolio review reads \u2014 the figure, its comparator (vs Budget, vs prior year), then the driver. The template owns the labels; write only the prose."
+  }
+ }
+}

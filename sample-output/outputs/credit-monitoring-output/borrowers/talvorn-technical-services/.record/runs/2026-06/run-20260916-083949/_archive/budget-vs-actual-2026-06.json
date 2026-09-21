@@ -1,0 +1,2081 @@
+{
+  "module": "budget-vs-actual",
+  "period": "2026-06",
+  "run_id": "run-20260916-083949",
+  "run_id_from": "run",
+  "produced_at": "2026-09-16T08:41:54+00:00",
+  "produced_by": {
+    "engine": "budget-vs-actual",
+    "plugin_version": "1.0.0"
+  },
+  "reporting_unit": {
+    "scale": 1.0,
+    "currency": "USD",
+    "verbatim": "Authoritative consolidated actuals | USD",
+    "plain": "USD"
+  },
+  "stores": {
+    "store": {
+      "url_base": null
+    },
+    "source": {
+      "url_base": null
+    }
+  },
+  "source_ref_reach": {
+    "cell": 54,
+    "file": 14,
+    "unlocated": 0,
+    "borrower_doc": 28
+  },
+  "source_files": [
+    "store:borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+    "store:borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+    "store:borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/budget-map.json"
+  ],
+  "results": [
+    {
+      "metric": "Revenue",
+      "scope": "latest",
+      "actual": 13852034.69,
+      "budget": 14776294.89,
+      "var_abs": -924260.2,
+      "var_pct": -0.0626,
+      "favorable": false,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 12,
+          "label": "Net Revenue",
+          "cells": "W12",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 3,
+          "cells": "G3",
+          "period": "2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 4,
+          "cells": "G4",
+          "period": "2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 5,
+          "cells": "G5",
+          "period": "2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 6,
+          "cells": "G6",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/budget-map.json",
+          "section": "metric_rows.revenue",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Planning/Approved/Approved Budget.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -924,260.20 = actual 13,852,034.69 (model 'Net Revenue' (Income Statement W12), Jun 2026) - budget 14,776,294.89 (budget 'Budget (consolidated)' rows 3+4+5+6, Jun 2026); var_pct -6.3% = variance / |budget|"
+    },
+    {
+      "metric": "Revenue",
+      "scope": "YTD",
+      "actual": 78659744.68,
+      "budget": 82039856.44,
+      "var_abs": -3380111.76,
+      "var_pct": -0.0412,
+      "favorable": false,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 12,
+          "label": "Net Revenue",
+          "cells": "R12:W12",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/01/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/02/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/03/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/04/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/05/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 3,
+          "cells": "B3:G3",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 4,
+          "cells": "B4:G4",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 5,
+          "cells": "B5:G5",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 6,
+          "cells": "B6:G6",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/budget-map.json",
+          "section": "metric_rows.revenue",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Planning/Approved/Approved Budget.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -3,380,111.76 = actual 78,659,744.68 (model 'Net Revenue' (Income Statement R12:W12), Jan 2026..Jun 2026 summed (6 mo)) - budget 82,039,856.44 (budget 'Budget (consolidated)' rows 3+4+5+6, Jan 2026..Jun 2026 summed (6 mo)); var_pct -4.1% = variance / |budget|"
+    },
+    {
+      "metric": "Gross Profit (as-reported)",
+      "scope": "latest",
+      "actual": 6232030.41,
+      "budget": 7359315.65,
+      "var_abs": -1127285.24,
+      "var_pct": -0.1532,
+      "favorable": false,
+      "material": true,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 15,
+          "label": "Gross Profit",
+          "cells": "W15",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 3,
+          "cells": "G3",
+          "period": "2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 4,
+          "cells": "G4",
+          "period": "2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 5,
+          "cells": "G5",
+          "period": "2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 6,
+          "cells": "G6",
+          "period": "2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 7,
+          "cells": "G7",
+          "period": "2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 8,
+          "cells": "G8",
+          "period": "2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 9,
+          "cells": "G9",
+          "period": "2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 10,
+          "cells": "G10",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/budget-map.json",
+          "section": "metric_rows.gross_profit",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Planning/Approved/Approved Budget.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -1,127,285.24 = actual 6,232,030.41 (model 'Gross Profit' (Income Statement W15), Jun 2026) - budget 7,359,315.65 (budget 'Budget (consolidated)' rows 3+4+5+6 minus 7+8+9+10, Jun 2026); var_pct -15.3% = variance / |budget|"
+    },
+    {
+      "metric": "Gross Profit (as-reported)",
+      "scope": "YTD",
+      "actual": 35969302.62,
+      "budget": 40098149.03,
+      "var_abs": -4128846.41,
+      "var_pct": -0.103,
+      "favorable": false,
+      "material": true,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 15,
+          "label": "Gross Profit",
+          "cells": "R15:W15",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/01/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/02/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/03/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/04/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/05/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 3,
+          "cells": "B3:G3",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 4,
+          "cells": "B4:G4",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 5,
+          "cells": "B5:G5",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 6,
+          "cells": "B6:G6",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 7,
+          "cells": "B7:G7",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 8,
+          "cells": "B8:G8",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 9,
+          "cells": "B9:G9",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 10,
+          "cells": "B10:G10",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/budget-map.json",
+          "section": "metric_rows.gross_profit",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Planning/Approved/Approved Budget.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -4,128,846.41 = actual 35,969,302.62 (model 'Gross Profit' (Income Statement R15:W15), Jan 2026..Jun 2026 summed (6 mo)) - budget 40,098,149.03 (budget 'Budget (consolidated)' rows 3+4+5+6 minus 7+8+9+10, Jan 2026..Jun 2026 summed (6 mo)); var_pct -10.3% = variance / |budget|"
+    },
+    {
+      "metric": "Gross Margin %",
+      "scope": "latest",
+      "unit": "pct",
+      "actual": 0.4499,
+      "budget": 0.498,
+      "var_abs": -0.0481,
+      "var_pct": null,
+      "favorable": false,
+      "material": false,
+      "note": "margin points (actual - budget)",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 15,
+          "label": "Gross Profit",
+          "cells": "W15",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 12,
+          "label": "Net Revenue",
+          "cells": "W12",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 3,
+          "cells": "G3",
+          "period": "2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 4,
+          "cells": "G4",
+          "period": "2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 5,
+          "cells": "G5",
+          "period": "2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 6,
+          "cells": "G6",
+          "period": "2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 7,
+          "cells": "G7",
+          "period": "2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 8,
+          "cells": "G8",
+          "period": "2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 9,
+          "cells": "G9",
+          "period": "2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 10,
+          "cells": "G10",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/budget-map.json",
+          "section": "metric_rows.gross_profit",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Planning/Approved/Approved Budget.xlsx"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 3,
+          "cells": "G3",
+          "period": "2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 4,
+          "cells": "G4",
+          "period": "2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 5,
+          "cells": "G5",
+          "period": "2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 6,
+          "cells": "G6",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/budget-map.json",
+          "section": "metric_rows.revenue",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Planning/Approved/Approved Budget.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "actual margin 44.99% = gross profit 6,232,030.41 / revenue 13,852,034.69 (model, Jun 2026); budget margin 49.80% = 7,359,315.65 / 14,776,294.89 (budget 'Budget (consolidated)'); var_abs = margin points (actual - budget)"
+    },
+    {
+      "metric": "Gross Margin % (as-reported)",
+      "scope": "YTD",
+      "unit": "pct",
+      "actual": 0.4573,
+      "budget": 0.4888,
+      "var_abs": -0.0315,
+      "var_pct": null,
+      "favorable": false,
+      "material": false,
+      "note": "margin points; as-reported",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 15,
+          "label": "Gross Profit",
+          "cells": "R15:W15",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/01/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/02/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/03/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/04/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/05/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 12,
+          "label": "Net Revenue",
+          "cells": "R12:W12",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/01/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/02/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/03/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/04/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/05/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 3,
+          "cells": "B3:G3",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 4,
+          "cells": "B4:G4",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 5,
+          "cells": "B5:G5",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 6,
+          "cells": "B6:G6",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 7,
+          "cells": "B7:G7",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 8,
+          "cells": "B8:G8",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 9,
+          "cells": "B9:G9",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 10,
+          "cells": "B10:G10",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/budget-map.json",
+          "section": "metric_rows.gross_profit",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Planning/Approved/Approved Budget.xlsx"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 3,
+          "cells": "B3:G3",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 4,
+          "cells": "B4:G4",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 5,
+          "cells": "B5:G5",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 6,
+          "cells": "B6:G6",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/budget-map.json",
+          "section": "metric_rows.revenue",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Planning/Approved/Approved Budget.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "actual margin 45.73% = gross profit 35,969,302.62 / revenue 78,659,744.68 (model, Jan 2026..Jun 2026 summed (6 mo)); budget margin 48.88% = 40,098,149.03 / 82,039,856.44 (budget 'Budget (consolidated)'); var_abs = margin points (actual - budget)"
+    },
+    {
+      "metric": "EBITDA (as-reported)",
+      "scope": "latest",
+      "actual": 2517745.05,
+      "budget": 3548732.94,
+      "var_abs": -1030987.89,
+      "var_pct": -0.2905,
+      "favorable": false,
+      "material": true,
+      "note": "Actual EBITDA is read from the model's EBITDA bridge row 'Reported EBITDA' (single, system-wide definition), not recomputed -- so it equals what covenant-compliance reads.",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 23,
+          "label": "Reported EBITDA",
+          "cells": "W23",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "label": "net_income",
+          "sheet": "Budget (consolidated)",
+          "row": 19,
+          "cells": "G19",
+          "period": "2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "label": "interest_expense",
+          "sheet": "Budget (consolidated)",
+          "row": 16,
+          "cells": "G16",
+          "period": "2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "label": "taxes",
+          "sheet": "Budget (consolidated)",
+          "row": 17,
+          "cells": "G17",
+          "period": "2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "label": "depreciation_amortization",
+          "sheet": "Budget (consolidated)",
+          "row": 18,
+          "cells": "G18",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/budget-map.json",
+          "section": "metric_rows",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Planning/Approved/Approved Budget.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -1,030,987.89 = actual 2,517,745.05 (model 'Reported EBITDA' (Income Statement W23), Jun 2026) - budget 3,548,732.94 (budget EBITDA = net_income + interest_expense + taxes + depreciation_amortization per budget-map metric_rows, sheet 'Budget (consolidated)', Jun 2026); var_pct -29.1% = variance / |budget|"
+    },
+    {
+      "metric": "EBITDA (as-reported)",
+      "scope": "YTD",
+      "actual": 14531936.86,
+      "budget": 18363564.31,
+      "var_abs": -3831627.45,
+      "var_pct": -0.2087,
+      "favorable": false,
+      "material": true,
+      "note": "Actual EBITDA read from the model's EBITDA bridge row (single definition shared with covenant-compliance), not recomputed.",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 23,
+          "label": "Reported EBITDA",
+          "cells": "R23:W23",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/01/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/02/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/03/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/04/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/05/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "label": "net_income",
+          "sheet": "Budget (consolidated)",
+          "row": 19,
+          "cells": "B19:G19",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "label": "interest_expense",
+          "sheet": "Budget (consolidated)",
+          "row": 16,
+          "cells": "B16:G16",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "label": "taxes",
+          "sheet": "Budget (consolidated)",
+          "row": 17,
+          "cells": "B17:G17",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "label": "depreciation_amortization",
+          "sheet": "Budget (consolidated)",
+          "row": 18,
+          "cells": "B18:G18",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/budget-map.json",
+          "section": "metric_rows",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Planning/Approved/Approved Budget.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -3,831,627.45 = actual 14,531,936.86 (model 'Reported EBITDA' (Income Statement R23:W23), Jan 2026..Jun 2026 summed (6 mo)) - budget 18,363,564.31 (budget EBITDA = net_income + interest_expense + taxes + depreciation_amortization per budget-map metric_rows, sheet 'Budget (consolidated)', Jan 2026..Jun 2026 summed (6 mo)); var_pct -20.9% = variance / |budget|"
+    },
+    {
+      "metric": "Total Opex (normalized)",
+      "scope": "latest",
+      "actual": 3714285.36,
+      "budget": 3793226.14,
+      "var_abs": -78940.78,
+      "var_pct": -0.0208,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 18,
+          "label": "Growth and Bid Support",
+          "cells": "W18",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 19,
+          "label": "Branch Overhead",
+          "cells": "W19",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 20,
+          "label": "Product Engineering",
+          "cells": "W20",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 21,
+          "label": "General and Administrative",
+          "cells": "W21",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 11,
+          "cells": "G11",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/budget-map.json",
+          "section": "opex_groups.Growth and Bid Support",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Planning/Approved/Approved Budget.xlsx"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 12,
+          "cells": "G12",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/budget-map.json",
+          "section": "opex_groups.Branch Overhead",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Planning/Approved/Approved Budget.xlsx"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 13,
+          "cells": "G13",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/budget-map.json",
+          "section": "opex_groups.Product Engineering",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Planning/Approved/Approved Budget.xlsx"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 14,
+          "cells": "G14",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/budget-map.json",
+          "section": "opex_groups.General and Administrative",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Planning/Approved/Approved Budget.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -78,940.78 = actual 3,714,285.36 (sum of the 4 configured opex-group model rows [Growth and Bid Support, Branch Overhead, Product Engineering, General and Administrative], Jun 2026) - budget 3,793,226.14 (sum of the budget-map opex_groups rows, budget 'Budget (consolidated)', Jun 2026); var_pct -2.1% = variance / |budget|"
+    },
+    {
+      "metric": "Total Opex (normalized)",
+      "scope": "YTD",
+      "actual": 21437365.76,
+      "budget": 21630445.3,
+      "var_abs": -193079.54,
+      "var_pct": -0.0089,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 18,
+          "label": "Growth and Bid Support",
+          "cells": "R18:W18",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/01/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/02/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/03/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/04/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/05/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 19,
+          "label": "Branch Overhead",
+          "cells": "R19:W19",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/01/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/02/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/03/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/04/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/05/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 20,
+          "label": "Product Engineering",
+          "cells": "R20:W20",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/01/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/02/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/03/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/04/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/05/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 21,
+          "label": "General and Administrative",
+          "cells": "R21:W21",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/01/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/02/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/03/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/04/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/05/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 11,
+          "cells": "B11:G11",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/budget-map.json",
+          "section": "opex_groups.Growth and Bid Support",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Planning/Approved/Approved Budget.xlsx"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 12,
+          "cells": "B12:G12",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/budget-map.json",
+          "section": "opex_groups.Branch Overhead",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Planning/Approved/Approved Budget.xlsx"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 13,
+          "cells": "B13:G13",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/budget-map.json",
+          "section": "opex_groups.Product Engineering",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Planning/Approved/Approved Budget.xlsx"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 14,
+          "cells": "B14:G14",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/budget-map.json",
+          "section": "opex_groups.General and Administrative",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Planning/Approved/Approved Budget.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -193,079.54 = actual 21,437,365.76 (sum of the 4 configured opex-group model rows [Growth and Bid Support, Branch Overhead, Product Engineering, General and Administrative], Jan 2026..Jun 2026 summed (6 mo)) - budget 21,630,445.30 (sum of the budget-map opex_groups rows, budget 'Budget (consolidated)', Jan 2026..Jun 2026 summed (6 mo)); var_pct -0.9% = variance / |budget|"
+    },
+    {
+      "metric": "Opex: Growth and Bid Support",
+      "scope": "latest",
+      "actual": 706936.95,
+      "budget": 708335.13,
+      "var_abs": -1398.18,
+      "var_pct": -0.002,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 18,
+          "label": "Growth and Bid Support",
+          "cells": "W18",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 11,
+          "cells": "G11",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/budget-map.json",
+          "section": "opex_groups.Growth and Bid Support",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Planning/Approved/Approved Budget.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -1,398.18 = actual 706,936.95 (model 'Growth and Bid Support' (Income Statement W18), Jun 2026) - budget 708,335.13 (budget 'Budget (consolidated)' row 11, Jun 2026); var_pct -0.2% = variance / |budget|"
+    },
+    {
+      "metric": "Opex: Growth and Bid Support",
+      "scope": "YTD",
+      "actual": 4061325.46,
+      "budget": 4116917.49,
+      "var_abs": -55592.03,
+      "var_pct": -0.0135,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 18,
+          "label": "Growth and Bid Support",
+          "cells": "R18:W18",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/01/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/02/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/03/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/04/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/05/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 11,
+          "cells": "B11:G11",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/budget-map.json",
+          "section": "opex_groups.Growth and Bid Support",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Planning/Approved/Approved Budget.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -55,592.03 = actual 4,061,325.46 (model 'Growth and Bid Support' (Income Statement R18:W18), Jan 2026..Jun 2026 summed (6 mo)) - budget 4,116,917.49 (budget 'Budget (consolidated)' row 11, Jan 2026..Jun 2026 summed (6 mo)); var_pct -1.4% = variance / |budget|"
+    },
+    {
+      "metric": "Opex: Branch Overhead",
+      "scope": "latest",
+      "actual": 1355437.14,
+      "budget": 1358509.19,
+      "var_abs": -3072.05,
+      "var_pct": -0.0023,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 19,
+          "label": "Branch Overhead",
+          "cells": "W19",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 12,
+          "cells": "G12",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/budget-map.json",
+          "section": "opex_groups.Branch Overhead",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Planning/Approved/Approved Budget.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -3,072.05 = actual 1,355,437.14 (model 'Branch Overhead' (Income Statement W19), Jun 2026) - budget 1,358,509.19 (budget 'Budget (consolidated)' row 12, Jun 2026); var_pct -0.2% = variance / |budget|"
+    },
+    {
+      "metric": "Opex: Branch Overhead",
+      "scope": "YTD",
+      "actual": 7736466.53,
+      "budget": 7782409.92,
+      "var_abs": -45943.39,
+      "var_pct": -0.0059,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 19,
+          "label": "Branch Overhead",
+          "cells": "R19:W19",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/01/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/02/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/03/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/04/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/05/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 12,
+          "cells": "B12:G12",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/budget-map.json",
+          "section": "opex_groups.Branch Overhead",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Planning/Approved/Approved Budget.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -45,943.39 = actual 7,736,466.53 (model 'Branch Overhead' (Income Statement R19:W19), Jan 2026..Jun 2026 summed (6 mo)) - budget 7,782,409.92 (budget 'Budget (consolidated)' row 12, Jan 2026..Jun 2026 summed (6 mo)); var_pct -0.6% = variance / |budget|"
+    },
+    {
+      "metric": "Opex: Product Engineering",
+      "scope": "latest",
+      "actual": 1023161.24,
+      "budget": 1069374.21,
+      "var_abs": -46212.97,
+      "var_pct": -0.0432,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 20,
+          "label": "Product Engineering",
+          "cells": "W20",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 13,
+          "cells": "G13",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/budget-map.json",
+          "section": "opex_groups.Product Engineering",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Planning/Approved/Approved Budget.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -46,212.97 = actual 1,023,161.24 (model 'Product Engineering' (Income Statement W20), Jun 2026) - budget 1,069,374.21 (budget 'Budget (consolidated)' row 13, Jun 2026); var_pct -4.3% = variance / |budget|"
+    },
+    {
+      "metric": "Opex: Product Engineering",
+      "scope": "YTD",
+      "actual": 6002472.31,
+      "budget": 6042510.63,
+      "var_abs": -40038.32,
+      "var_pct": -0.0066,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 20,
+          "label": "Product Engineering",
+          "cells": "R20:W20",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/01/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/02/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/03/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/04/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/05/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 13,
+          "cells": "B13:G13",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/budget-map.json",
+          "section": "opex_groups.Product Engineering",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Planning/Approved/Approved Budget.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -40,038.32 = actual 6,002,472.31 (model 'Product Engineering' (Income Statement R20:W20), Jan 2026..Jun 2026 summed (6 mo)) - budget 6,042,510.63 (budget 'Budget (consolidated)' row 13, Jan 2026..Jun 2026 summed (6 mo)); var_pct -0.7% = variance / |budget|"
+    },
+    {
+      "metric": "Opex: General and Administrative",
+      "scope": "latest",
+      "actual": 628750.03,
+      "budget": 657007.61,
+      "var_abs": -28257.58,
+      "var_pct": -0.043,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 21,
+          "label": "General and Administrative",
+          "cells": "W21",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 14,
+          "cells": "G14",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/budget-map.json",
+          "section": "opex_groups.General and Administrative",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Planning/Approved/Approved Budget.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -28,257.58 = actual 628,750.03 (model 'General and Administrative' (Income Statement W21), Jun 2026) - budget 657,007.61 (budget 'Budget (consolidated)' row 14, Jun 2026); var_pct -4.3% = variance / |budget|"
+    },
+    {
+      "metric": "Opex: General and Administrative",
+      "scope": "YTD",
+      "actual": 3637101.46,
+      "budget": 3688607.26,
+      "var_abs": -51505.8,
+      "var_pct": -0.014,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 21,
+          "label": "General and Administrative",
+          "cells": "R21:W21",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/01/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/02/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/03/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/04/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/05/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+          "sheet": "Budget (consolidated)",
+          "row": 14,
+          "cells": "B14:G14",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/budget-map.json",
+          "section": "opex_groups.General and Administrative",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Planning/Approved/Approved Budget.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -51,505.80 = actual 3,637,101.46 (model 'General and Administrative' (Income Statement R21:W21), Jan 2026..Jun 2026 summed (6 mo)) - budget 3,688,607.26 (budget 'Budget (consolidated)' row 14, Jan 2026..Jun 2026 summed (6 mo)); var_pct -1.4% = variance / |budget|"
+    }
+  ],
+  "exceptions": [
+    {
+      "metric": "Gross Profit (as-reported)",
+      "scope": "latest",
+      "actual": 6232030.41,
+      "budget": 7359315.65,
+      "var_abs": -1127285.24,
+      "var_pct": -0.1532,
+      "favorable": false,
+      "rule": "|var%|>=10% AND |var$|>=$50,000"
+    },
+    {
+      "metric": "Gross Profit (as-reported)",
+      "scope": "YTD",
+      "actual": 35969302.62,
+      "budget": 40098149.03,
+      "var_abs": -4128846.41,
+      "var_pct": -0.103,
+      "favorable": false,
+      "rule": "|var%|>=10% AND |var$|>=$50,000"
+    },
+    {
+      "metric": "EBITDA (as-reported)",
+      "scope": "latest",
+      "actual": 2517745.05,
+      "budget": 3548732.94,
+      "var_abs": -1030987.89,
+      "var_pct": -0.2905,
+      "favorable": false,
+      "rule": "|var%|>=10% AND |var$|>=$50,000"
+    },
+    {
+      "metric": "EBITDA (as-reported)",
+      "scope": "YTD",
+      "actual": 14531936.86,
+      "budget": 18363564.31,
+      "var_abs": -3831627.45,
+      "var_pct": -0.2087,
+      "favorable": false,
+      "rule": "|var%|>=10% AND |var$|>=$50,000"
+    }
+  ],
+  "engine": "data-driven budget-map v4 (config-driven, borrower-agnostic) + per-figure source refs/calc",
+  "borrower": "Talvorn Technical Services, LLC",
+  "latest_month": "Jun 2026",
+  "ytd_months": [
+    "Jan 2026",
+    "Feb 2026",
+    "Mar 2026",
+    "Apr 2026",
+    "May 2026",
+    "Jun 2026"
+  ],
+  "materiality_rule": "|var%| >= 10% AND |var$| >= $50,000",
+  "budget_source": {
+    "file": "store:borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+    "sheet": "Budget (consolidated)",
+    "basis": "management-prepared / unaudited"
+  },
+  "comparability_notes": [
+    "Actual EBITDA is sourced from the model's single EBITDA bridge row 'Reported EBITDA' -- the SAME row covenant-compliance reads -- so the two modules report identical actual EBITDA (one system-wide definition). Budget EBITDA is computed with the identical bridge formula (Net Income + Interest Expense + Financing Cost if enabled and present + Income Taxes + D&A - Interest Income) so it is like-for-like. The financing-cost add-back is DISABLED via ebitda.addback_financing_cost in borrower-config.",
+    "Reporting-consistency check: spot-checked file lists across all 22 Finance Uploads/Monthly Close months (2024-09 through 2026-06) -- every month holds exactly the expected file set with byte-identical filenames (4 files pre-close 2024-09 through 2024-12, 5 files 2025-01 onward adding certificate.pdf). No amendment/waiver, no restatement, no correction notice, and no schema deviation was found anywhere in the deal folder -- this is the cleanest file (no data-quality flags) of the five borrowers onboarded in this batch so far. analysis.basis_breaks and comparability_items are both intentionally empty.",
+    "Covenant trend: TTM FCCR has risen MONOTONICALLY every single month for the full 18-month certified history, from 1.6680x (2025-01, first certificate) to 2.1564x (2026-06, latest) against a flat 1.2000x minimum -- cushion has nearly tripled (0.47x to 0.96x). All four quarterly tests to date (2025-Q1 through 2026-Q2) certified COMPLIANT with growing margin. See deal-context.json our_view for the full trajectory read.",
+    "EBITDA add-back sweep: the credit agreement's own Accounting Notes state explicitly 'No EBITDA adjustments are permitted under this agreement; forecasts, synergies and owner contributions are not earnings' -- Covenant EBITDA is CONTRACTUALLY DEFINED to equal Reported EBITDA with zero addback flexibility (stronger than Selvara's 'none found by inspection' -- here none are even permitted by contract). No restructuring/impairment/write-off/severance/transaction-cost/one-time line was found in any monthly package, the IC Memo, or the Management Presentation either. ebitda_addbacks.entries in deal-context.json is therefore empty by contractual design, not merely by absence of candidates."
+  ],
+  "comparability_items_ytd": [],
+  "financing_cost_ytd": null,
+  "methodology": "Actuals from the company-prepared/unaudited monthly financials model (read via monitor_lib). Budget is management-prepared/unaudited, extracted via budget-map.json. ACTUAL EBITDA is read from the model's single EBITDA bridge row (the same definition covenant-compliance uses); budget EBITDA mirrors that bridge formula for like-for-like comparison."
+}

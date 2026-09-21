@@ -1,0 +1,108 @@
+{
+  "borrower": "Orinth Vale Infrastructure, LLC",
+  "agreement": "Executed Credit Agreement (Orinth Vale 2025 Senior Secured Facility), issued January 10, 2025, effective/closing January 15, 2025, between Orinth Vale Infrastructure, LLC (Borrower) and Cairn Ridge Private Credit, LP (Administrative Agent); executed Fee Letter, effective January 15, 2025 (one-time closing fees only). Single initial-closing agreement -- no amendments.",
+  "as_of_agreement_date": "2025-01-15",
+  "amendments_reflected": [],
+
+  "facility": {
+    "name": "Orinth Vale 2025 Senior Secured Facility (Term Loan)",
+    "maturity_date": "2030-01-15",
+    "agreement_ref": {
+      "section": "FACILITY AND PAYMENTS",
+      "page": 3,
+      "quote": "Maturity is January 15, 2030."
+    }
+  },
+
+  "tranches": [
+    {
+      "id": "term_loan",
+      "fundings": [
+        {
+          "date": "2025-01-15",
+          "amount": 65360723.38,
+          "agreement_ref": {
+            "section": "FACILITY AND PAYMENTS",
+            "page": 3,
+            "quote": "The $65,360,723.38 term loan is fully funded at closing to refinance legacy debt; no delayed-draw or revolving capacity remains."
+          }
+        }
+      ]
+    }
+  ],
+
+  "amortization_base": {
+    "definition_verbatim": "Scheduled monthly principal equals 0.60% of beginning funded debt and is due with monthly interest.",
+    "agreement_ref": {
+      "section": "FACILITY AND PAYMENTS",
+      "page": 3,
+      "quote": "Scheduled monthly principal equals 0.60% of beginning funded debt and is due with monthly interest."
+    },
+    "engine_limitation_note": "ENGINE LIMITATION -- READ BEFORE RELYING ON THE GENERATED SCHEDULE'S scheduled_principal FIGURES. The agreement's own wording ('0.60% of BEGINNING funded debt') and the borrower's own certified monthly Debt & Covenant tabs (04 Reporting/Period Archive/<YYYY>/<MM>/a.xlsx, 'Debt & Covenant' sheet) both confirm this is a DECLINING-BALANCE (self-amortizing) mechanic, not a flat percentage of original principal: verified exactly across 8 non-adjacent months (2025-01 through 2025-06, 2025-12, 2026-01, 2026-06) that 'Repayments' = 0.006 x that month's own 'Beginning Debt' to the cent -- e.g. $392,164.34 in 2025-01 (0.006 x $65,360,723.38) declining to $354,027.20 by 2026-06 (0.006 x $59,004,534.00). debt_service.py v1's amortization_base concept instead computes the base as 'the aggregate original principal of all fundings dated strictly before the payment date' -- for this single up-front-funded tranche that base is FIXED at $65,360,723.38 for the life of the loan (no further draws), so the engine computes a FLAT $392,164.34 installment every month instead of the true shrinking one. The generated schedule below therefore ties the certified figure in month 1 only; from month 2 onward the engine's cumulative scheduled principal is progressively HIGHER than the certified declining-balance paydown, and the gap widens every month (by 2026-06 -- 17 months of amortization -- the flat schedule would have paid down roughly $6.67M vs. the certified ~$6.36M actually paid, a gap that keeps compounding through the 60-month term). This is an engine capability gap (no declining-balance amortization base supported in v1), not a data-entry error -- flagged as a step-7 ambiguity with the two paths forward (accept the flat approximation and reconcile scheduled_principal to the certificates by hand each period, or hold the covenant-support 'scheduled_principal' row and have build-monitoring-model read the certified Debt & Covenant tab directly instead)."
+  },
+
+  "cash_interest": {
+    "index": "SOFR",
+    "floor": 0.02,
+    "margin_grid": [
+      { "above": null, "rate": 0.0625, "when": "flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement" }
+    ],
+    "adjustment": "Not specified beyond 'Interest is payable monthly in arrears' -- no reset-tenor (1-month vs 3-month SOFR) or certificate-driven adjustment clause appears in the extracted text. Assumed to reset/settle in step with the monthly payment dates.",
+    "first_payment_date": "2025-02-01",
+    "payment_day": 1,
+    "agreement_ref": {
+      "section": "INTEREST AND FEES",
+      "page": 4,
+      "quote": "Interest accrues at SOFR plus 6.25%, subject to a 2.00% SOFR floor. Interest is payable monthly in arrears; overdue amounts bear an additional 2.00% margin."
+    }
+  },
+
+  "amortization": {
+    "start_date": "2025-02-01",
+    "annual_pct_of_base_grid": [
+      { "above": null, "rate": 0.072, "when": "flat 0.60% per month (7.20% per annum) of the base -- see amortization_base.engine_limitation_note for how the engine's fixed-original-principal base differs from the agreement's own declining-balance base" }
+    ],
+    "payments_per_year": 12,
+    "balloon_at_maturity": true,
+    "fixed_charges_attribution": "accrued",
+    "agreement_ref": {
+      "section": "FACILITY AND PAYMENTS",
+      "page": 3,
+      "quote": "Scheduled monthly principal equals 0.60% of beginning funded debt and is due with monthly interest."
+    }
+  },
+
+  "day_count": {
+    "convention": "actual/360",
+    "count_both_endpoints": true,
+    "verbatim": "Interest is payable monthly in arrears; overdue amounts bear an additional 2.00% margin.",
+    "agreement_ref": {
+      "section": "INTEREST AND FEES",
+      "page": 4,
+      "quote": "Interest is payable monthly in arrears; overdue amounts bear an additional 2.00% margin."
+    },
+    "ambiguities": [
+      "The Credit Agreement states NO day-count convention at all -- unlike a typical facility's 'actual days elapsed over a 360-day year' language, INTEREST AND FEES (p.4) says only 'Interest accrues at SOFR plus 6.25%, subject to a 2.00% SOFR floor. Interest is payable monthly in arrears.' actual/360 with both endpoints counted is recorded here as an ASSUMPTION (the market-standard convention for a SOFR facility, and debt_service.py's supported default), not a stated term. MATERIAL FINDING, larger than the usual stub-day ambiguity: the borrower's own certified monthly Debt & Covenant figures do NOT use any actual-day-count convention at all -- Cash Interest / Beginning Debt is IDENTICAL to 10 significant digits (0.906605097613...%) in every month checked (2025-01 through 2025-06), regardless of whether the month has 28, 30 or 31 days, which is only possible if the certified figures apply a flat (index+margin)/12 monthly-equivalent rate rather than any actual/360 or actual/365 calculation. No single pinned index rate can make this engine's actual/360 accrual reproduce the certified dollar amounts across months of different lengths. This means the generated schedule's cash-interest figures will NOT tie to the certified schedule even in ordinary, non-stub months -- a materially larger and more persistent gap than the funding/maturity-stub question this field is normally used to flag. Step-7 question: should the generated (actual/360) schedule stand as the CONTRACTUAL read notwithstanding the mismatch, or should the certified Debt & Covenant tab's flat-monthly convention be treated as the operative one (the engine has no 30/360-flat-monthly mode, so that would mean sourcing the cash-interest covenant-support figures from the certificate directly rather than from this generated schedule)?"
+    ]
+  },
+
+  "fees": [],
+  "_fees_not_modeled_note": "The executed Fee Letter (7.pdf) states four ONE-TIME closing fees, all 'earned and payable on the closing date' and 'paid from sponsor equity ... [that] do not increase funded debt': Origination fee $1,960,821.70; Structuring fee $650,000.00; Documentation and diligence fee $239,178.30; Agency setup fee $150,000.00; Total $3,000,000.00. Confirmed against the Closing Funding Request (6.pdf), which funds only the $65,360,723.38 legacy-debt payoff with no fee draw -- consistent with the fees being paid outside the loan proceeds. No annual, recurring, monitoring, or exit fee is stated anywhere in the Fee Letter or Credit Agreement (full-text sweep for 'annual fee', 'administration fee', 'monitoring fee', 'exit fee', 'prepayment premium', 'make-whole' returns no hits). None of the three fees.when enum values ('close_and_payment_dates', 'payment_dates', 'maturity') represents a ONE-TIME, close-only cadence: 'close_and_payment_dates' would incorrectly repeat the $3,000,000 at every one of the 60 monthly payment dates through maturity; 'payment_dates' would repeat it 60 times with no closing occurrence; 'maturity' would misplace it five years late. Rather than generate a fee schedule that is silently and dramatically wrong (the same limitation documented in Nemeris's debt-service-spec.json for its closing/admin fees), the $3,000,000 in closing fees is OMITTED from the modeled fees[] array and flagged here for the analyst / engine owner. None of these fees would be a covenant Fixed Charge in any case -- this facility carries no Fixed Charges / coverage covenant at all (see covenant-spec.json) -- and none increases funded debt.",
+
+  "observations": {
+    "index_rates": [
+      {
+        "date": "2025-01-15",
+        "rate": 0.046293,
+        "source": "ASSUMPTION derived from the certified January 2025 Debt & Covenant tab (04 Reporting/Period Archive/2025/01/a.xlsx): Cash Interest $592,563.65 / Beginning Debt $65,360,723.38 = 0.9066051% for the month; back-solved assuming that figure is a flat (index+margin)/12 monthly-equivalent rate (see day_count.ambiguities) gives an implied SOFR of approximately 4.6293% (0.9066051% x 12 = 10.8792611...%, less the 6.25% margin). No SOFR rate notice or published index print appears anywhere in the executed documents or the deal folder; this is the closest available data point, and it is itself convention-dependent -- see day_count.ambiguities for why no single actual/360 or actual/365 rate can reproduce the certified figures across months of different lengths. Held flat for the life of the generated schedule per the engine's standard (disclosed) behavior."
+      }
+    ],
+    "grid_state": []
+  },
+
+  "covenant_support_rows": {
+    "cash_interest": "Cash Interest Expense",
+    "scheduled_principal": "Scheduled Debt Principal Payments"
+  },
+  "_covenant_support_rows_note": "This agreement's only financial covenant (Maximum Total Leverage Ratio, covenant-spec.json id 'max_total_leverage') is a leverage test, not a Fixed-Charges/coverage test, so no covenant-spec definition currently binds to these two row labels. Captured anyway per Method step 3b so build-monitoring-model can populate a real cash-interest and scheduled-principal view in the model, distinct from the native Income Statement 'Interest Expense' row (which nets in $50,000/month of Deferred Financing Fee Amortization on top of Cash Interest per borrower-config.json model_lines._gap_note, and is therefore NOT the same figure as the facility's own contractual cash interest). If a future amendment adds an FCCR/DSCR covenant, its Fixed_Charges definition should bind to exactly these two labels. Given the amortization_base and day_count engine-limitation findings above, neither row's generated figures should be assumed to tie to the borrower's certified Debt & Covenant tab -- see those notes for the expected direction and growing magnitude of the drift."
+}

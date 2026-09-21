@@ -1,0 +1,231 @@
+{
+  "borrower_name": "Selvara Industrial Services, LLC",
+  "fund": "",
+  "last_reviewed": {
+    "date": "2026-09-16",
+    "trigger": "monthly"
+  },
+  "static": {
+    "vertical": "Industrial inspection, maintenance, turnaround, and specialist engineering services",
+    "archetype": "services-project",
+    "archetype_provenance": "inferred \u2014 unconfirmed",
+    "_archetype_note": "JUDGMENT CALL: 'services-project' is the closer fit of the three named archetypes -- revenue is billed per project/turnaround with 'project timing, field utilization, mobilization, and customer acceptance' driving monthly volatility (IC Memo), working capital is genuinely collections-led (customer-level AR aging with named 'Collection plan' accounts tracked separately every month), and the company is monitored via 'collections, project-margin, liquidity, and required-principal review' -- all project-services framing, not consumer-inventory (no inventory pledged or tracked) or a fleet-utilization asset-heavy-industrial read. COUNTERPOINT flagged for the analyst: the FY2024 Annual Balance Sheet shows 'Fixed and other assets' of $121,347,780.77 -- fully 77% of total assets ($157,589,224.69) -- which is unusually large for a pure people/project services business and could reflect either genuine owned inspection/testing equipment and facilities, or goodwill/intangibles from the sponsor's acquisition of the business (purchase-price allocation), or both; the annual statement does not break the line down further and the monthly package never reports fixed assets at all. If this balance is substantially operating equipment rather than goodwill, 'asset-heavy-industrial' could be the better-fitting archetype -- flagged for analyst confirmation.",
+    "business_one_liner": "Provides inspection, maintenance, turnaround, and specialist engineering services to asset-intensive industrial customers (refining, chemicals, utilities, pulp/paper, metals, midstream, energy, aggregates, cement, packaging) across four service lines: Inspection, Maintenance, Turnaround, and Engineering.",
+    "sponsor_status": "sponsor-backed (sponsor entity not named in the available documents)",
+    "_sponsor_status_note": "The IC Memo, Sources and Uses, and Closing Capitalization workbooks each reference a '$12,000,000.00 Sponsor equity contribution' / 'Sponsor equity' at the January 2025 closing, without ever naming the sponsor. No parent/holding entity is named either -- the Guaranty and Security Agreement refers only to 'its parent guarantor'. Flagged for analyst confirmation of the sponsor's and parent guarantor's identity.",
+    "deal_team": [],
+    "deal_team_provenance": "",
+    "_deal_team_note": "Left empty -- no individual is named anywhere in the Selvara deal documents as OUR OWN deal-team member (the IC Memo is an unsigned, unattributed one-page transaction-approval memo). Three individuals recur throughout the borrower's own monthly Close Notes and certificates -- Mara Ellison (Chief Financial Officer; signs the Closing Officer Certificate, Solvency Certificate, Funding Request, and every quarterly Compliance Certificate), Priya Shah (owns the 'Revenue' topic in every month's Close Notes), and Jonas Reed (owns 'Collections') -- these are captured under business_profile.management below as BORROWER management, not proposed as our deal team (per the standing caution that every person named in a deal folder is the borrower's own, not ours).",
+    "business_profile": {
+      "description": "Selvara Industrial Services provides inspection, maintenance, turnaround, and specialist engineering services to asset-intensive industrial customers -- refineries, chemical plants, utilities, pulp/paper mills, steel and aggregates producers, midstream and energy operators, and cement/packaging plants. Revenue is earned project-by-project (refinery turnarounds, pipeline integrity work, boiler and tank inspections, plant maintenance, electrical reliability work, shutdown engineering, asset-data programs, safety compliance, and field mobilization), recognized on customer acceptance, with recurring maintenance programs supporting a base level of activity between scheduled turnaround/outage events.",
+      "revenue_model": {
+        "how_they_make_money": "Project- and program-based billing for field inspection, maintenance, turnaround, and engineering work at customer industrial sites",
+        "recurring_vs_transactional": "Mixed: 'Recurring maintenance programs support base activity; turnaround timing, field utilization, mobilization, and customer acceptance drive monthly volatility' (IC Memo) -- not a contractual ARR/subscription model; no retention metric is reported.",
+        "pricing_and_contracts": "Not disclosed beyond project-level revenue recognition on customer acceptance -- flagged draft.",
+        "channels": [],
+        "_channels_note": "No distinct sales/distribution channel mix is disclosed; all revenue flows through named projects tagged to one of four service lines (see key_operating_kpis below).",
+        "source": "Deal Docs/IC Memo.pdf; Deal Docs/Underwriting/Management Presentation.pdf; Monthly/Archive/<YYYY-MM>/sales-by-channel.xlsx (Project and Service-Line Detail, computed by monitor-setup)",
+        "source_tier": "internal-underwriting"
+      },
+      "end_markets": [
+        {
+          "market": "Refining and chemicals",
+          "exposure": "Largest two named customers by June 2026 AR balance (Aster Refining 18.0%, Caldera Chemical 15.0%) -- combined ~33% of AR",
+          "demand_drivers": "Refinery/chemical-plant turnaround and outage schedules, regulatory inspection cadence"
+        },
+        {
+          "market": "Utilities, metals, and midstream/energy",
+          "exposure": "Ironbridge Utilities, Northline Steel, Red Mesa Midstream, Sable Energy -- combined ~30% of June 2026 AR balance",
+          "demand_drivers": "Asset-integrity and reliability programs, capital maintenance budgets"
+        },
+        {
+          "market": "Pulp/paper, aggregates, cement, and packaging",
+          "exposure": "Mercer Pulp, Triton Aggregates, Vanguard Cement, Westport Packaging, Zephyr Industrial -- the remaining named customers",
+          "demand_drivers": "Plant maintenance and safety-compliance programs"
+        }
+      ],
+      "customers": {
+        "profile": "12 named industrial customers across refining, chemicals, utilities, pulp/paper, metals, midstream, energy, aggregates, cement, and packaging",
+        "concentration": "By June 2026 AR balance ($19,744,595.81 total): top customer (Aster Refining) 18.0%; top 3 (Aster Refining, Caldera Chemical, Ironbridge Utilities) ~45.0%; top 5 ~65.0% -- meaningful concentration in the top 5 of 12 named accounts, though no single customer exceeds ~18%",
+        "stickiness": "Not contractually locked-in at the project level (project-by-project billing); 4 of 12 named accounts (Union Process, Vanguard Cement, Westport Packaging, Zephyr Industrial) are flagged 'Collection plan' status (vs 'Current') in every AR aging export checked (2024-09 through 2026-06) -- a persistent, not one-off, collections concern on a stable subset of the customer base",
+        "source": "Monthly/Archive/<YYYY-MM>/ap-ar-aging.xlsx and Monthly/Current/2026-06/June_2026_AR-AP_Detail.xlsx (AR Detail, computed by monitor-setup)",
+        "source_tier": "corroborated"
+      },
+      "suppliers_and_inputs": {
+        "key_inputs": "Third-party specialist subcontractors and equipment/materials for field work -- named AP vendors suggest access/scaffolding (Atlas Access, Delta Scaffold, Granite Rentals), safety/PPE (Blueforge Safety, Forge PPE), non-destructive testing/inspection (Canyon NDT, Helix Inspection), and controls (Everline Controls)",
+        "concentration": "8 named vendors; 2 of 8 (Granite Rentals, Helix Inspection) flagged 'Scheduled' payment status vs 'Ordinary' for the other 6, consistent across every month checked -- not itemized further beyond the AP aging export",
+        "cost_drivers": "Field labor/subcontractor rates, specialist equipment rental, and safety/PPE and inspection-service costs -- IC Memo names 'weaker turnaround margins' among the underwriting downside risks",
+        "source": "Monthly/Archive/<YYYY-MM>/ap-ar-aging.xlsx and Monthly/Current/2026-06/June_2026_AR-AP_Detail.xlsx (AP Detail, computed by monitor-setup)",
+        "source_tier": "corroborated"
+      },
+      "geography_footprint": "Not disclosed in the available documents beyond a domestic (implied US) industrial customer base -- flagged draft.",
+      "seasonality_cyclicality": "IC Memo/Management Presentation both attribute monthly volatility to 'turnaround timing, field utilization, mobilization, and customer acceptance' rather than calendar seasonality; no specific low/peak months are identified in any document -- analysis.seasonality left empty in borrower-config accordingly.",
+      "competitive_position": "Not disclosed in the available documents (the IC Memo is a one-page transaction-approval memo, not a competitive analysis) -- flagged draft.",
+      "ownership": {
+        "structure": "Sponsor-backed; parent guarantor entity named only as 'its parent guarantor' in the executed Guaranty and Security Agreement, not otherwise identified. $12,000,000.00 of sponsor equity was contributed at the January 2025 closing (Sources and Uses; Closing Capitalization).",
+        "key_holders": "Not itemized -- flagged draft",
+        "source": "Deal Docs/Executed/Initial Closing/guaranty-and-security.pdf; Deal Docs/Transaction Models/Sources and Uses.xlsx",
+        "source_tier": "internal-underwriting"
+      },
+      "management": [
+        {
+          "name": "Mara Ellison",
+          "role": "Chief Financial Officer",
+          "note": "Signs the Closing Officer Certificate, Solvency Certificate, Funding Request, and every quarterly Compliance Certificate (2025-Q1 through 2026-Q2); owns 'Debt service' and 'Covenant' topics in every month's Close Notes."
+        },
+        {
+          "name": "Priya Shah",
+          "role": "Not explicitly titled -- owns the 'Revenue' topic in every month's Close Notes",
+          "note": "Function inferred from recurring topic ownership only; no title disclosed."
+        },
+        {
+          "name": "Jonas Reed",
+          "role": "Not explicitly titled -- owns the 'Collections' topic in every month's Close Notes",
+          "note": "Function inferred from recurring topic ownership only; no title disclosed."
+        }
+      ],
+      "headcount": "Not disclosed in any available document -- flagged draft.",
+      "history": "No founding year, acquisition history, or predecessor-facility history disclosed -- the January 2025 Selvara 2025 Senior Secured Credit Facility (original_agreement.pdf) is the only facility on file for this borrower (unlike Asteron's multi-generation restructuring history); this appears to be the original, first-lien financing of the current ownership structure.",
+      "key_operating_kpis": [
+        {
+          "kpi": "Project revenue by service line (Inspection / Maintenance / Turnaround / Engineering)",
+          "drives": "Revenue",
+          "reported_in_package": "yes -- Project and Service-Line Detail"
+        },
+        {
+          "kpi": "Project status flag ('On plan' vs 'Margin action')",
+          "drives": "Reported EBITDA / margin",
+          "reported_in_package": "yes -- Project and Service-Line Detail; 3 of 10 named projects (Asset data program, Safety compliance, Field mobilization) have been flagged 'Margin action' in every month checked (2024-09 through 2026-06), a persistent rather than transient margin concern"
+        },
+        {
+          "kpi": "AR days / AP days",
+          "drives": "Working capital, liquidity",
+          "reported_in_package": "yes -- Operating KPIs tab, every monthly package"
+        },
+        {
+          "kpi": "'Collection plan' vs 'Current' customer accounts",
+          "drives": "AR quality, cash conversion",
+          "reported_in_package": "yes -- AR Detail, every monthly package"
+        }
+      ],
+      "working_capital_profile": "AR is customer-level (12 named industrial customers, aged Current/31-60/61-90/>90) and ties exactly to the monthly package's Working Capital tab every month checked; AP is vendor-level (8 named specialist subcontractors/suppliers, aged Current/31-60/61-90) and also ties exactly. No inventory anywhere in the monthly package (see borrower-config analysis_lines._omitted_note) despite a real inventory balance on the annual statements -- monthly working-capital monitoring for this borrower is effectively AR/AP-only. AR days ran ~40-42 days and AP days ~36-37 days across every month checked, both fairly stable; the persistent 'Collection plan' flag on 4 of 12 customers and 'Margin action' flag on 3 of 10 projects are the primary things to watch, not the aggregate DSO/DPO level."
+    },
+    "facility": {
+      "instrument": "Senior secured term loan",
+      "commitment_usd": 122814287.29,
+      "funded_usd": 122814287.29,
+      "draw_structure": "single advance at closing (no revolver or delayed-draw commitment; Management Presentation: 'no post-closing draw assumed'); Debt Roll-Forward 'Draws'/'PIK' rows have read $0 in every month checked",
+      "close_date": "2025-01",
+      "maturity_date": "2030-01-15",
+      "interest_rate": "Not disclosed as an index/margin or stated percentage in any executed document available (the executed credit agreement's own text covers only the FCCR covenant, amortization, and execution -- no interest-rate section at all; the fee letter states fee terms are confidential and does not state the loan rate). REVERSE-ENGINEERED by monitor-setup from the Cash Flow tab's monthly 'Cash interest' figure divided by that month's 'Beginning debt' (Debt Roll-Forward tab): consistently ~0.8546%/month (~10.26%/year) in every month checked (2024-09, 2026-05, 2026-06), with no drift across nearly two years -- consistent with a FIXED cash coupon of approximately 10.25%/year rather than a floating index, but this is an ESTIMATE, not a disclosed contractual rate. Flagged for covenant-setup/debt-service-spec (not run in this task) to confirm the actual contractual rate when it parses the full credit agreement text.",
+      "oid": "None disclosed.",
+      "fees": {
+        "Closing-date fees": "$4,000,000.00 in aggregate per the IC Memo ('closing fees are $4,000,000.00'), the executed Sources and Uses, and the Closing Capitalization workbook (all three tie exactly). The executed Fee Letter (effective 2025-01-15) covers 'Upfront, agency, and unused commitment fees ... payable under agreed timing' but states fee terms are confidential except for required legal/professional disclosures and does NOT itemize a dollar breakdown in the available text -- the $4,000,000.00 aggregate is sourced from Sources and Uses / Closing Capitalization instead, per the discrepancy-sweep protocol (the fee letter does not conflict with this figure; it simply does not itemize it)."
+      },
+      "equity_kicker": "None disclosed -- no lender warrant/kicker referenced in any document. The $12,000,000.00 of sponsor equity contributed at closing is ordinary sponsor equity, not a lender-held instrument.",
+      "security": "Blanket security interest in accounts, equipment, contract rights, deposit accounts, general intangibles, records, and proceeds, granted by Selvara and its (unnamed) parent guarantor to Northstar Ridge Credit Partners, LP as Administrative Agent, per the executed Guaranty and Security Agreement (effective 2025-01-15). See collateral-map.json for the full pledged-asset detail and the note on why inventory and several named collateral categories cannot currently be tracked against the monthly model.",
+      "_amendment_and_waiver_history": "AMENDMENT 1 (executed 2025-10-01, effective 2025-10-05): raised required monthly principal from 0.20% to 2.00% of beginning funded debt (a 10x step-up) beginning the October 2025 payment; explicitly left the 1.2000x FCCR minimum, TTM measurement window, and quarterly Test Dates unchanged. THIS AMENDMENT IS CURRENTLY IN EFFECT (in force since October 2025) and is the primary driver of the FCCR's subsequent decline -- see our_view below. TEMPORARY LIMITED WAIVER (executed 2026-03-20, effective 2026-03-31, EXPIRED 2026-06-30): granted narrow, already-lapsed relief covering ONLY the March 31, 2026 and June 30, 2026 FCCR Test Dates, explicitly NOT amending the 1.2000x minimum and NOT deeming either test compliant ('BREACH - WAIVED', underlying breach remains reportable, all lender rights reserved). THIS WAIVER HAS EXPIRED and covers no future Test Date -- the next quarterly Test Date (September 30, 2026) is only 15 days after this onboarding review (2026-09-15) and currently has NO waiver or amendment authority in place. A draft waiver-request document exists (Deal Docs/Reference/Waiver_Request_DRAFT_NOT_EXECUTED.pdf) but its own disposition states it is a 'superseded request draft; not legal authority' -- there is no evidence any new relief has been executed for the September 30, 2026 Test Date as of this review.",
+      "source": "Executed Credit Agreement (original_agreement.pdf, executed 2025-01-10, effective 2025-01-15); Executed First Amendment (amendment_1.pdf, effective 2025-10-05); Executed Temporary Limited Waiver (waiver_1.pdf, effective 2026-03-31, expired 2026-06-30); Closing Officer Certificate; Funding Request; Fee Letter; Guaranty and Security Agreement; Solvency Certificate; Information Certificate; Insurance Certificate (all effective 2025-01-15); IC Memo; Sources and Uses.xlsx; Closing Capitalization.xlsx."
+    },
+    "credit_thesis": [
+      {
+        "pillar": "Recurring maintenance-program revenue provides a stable base of activity that cushions the inherent lumpiness of turnaround/outage project timing, supporting steady debt-service coverage.",
+        "monitored_by": "Revenue trend and EBITDA margin (Income Statement / Operating KPIs); project-level status flags (Project and Service-Line Detail)",
+        "status": "pressured"
+      },
+      {
+        "pillar": "A diversified, asset-intensive industrial customer base (12 named accounts across refining, chemicals, utilities, metals, and other heavy industries, no customer above ~18% of AR) limits single-customer concentration risk to collections and revenue.",
+        "monitored_by": "AR concentration by customer and 'Collection plan' flag count (AR Detail)",
+        "status": "intact"
+      },
+      {
+        "pillar": "The 1.2000x minimum FCCR, tested quarterly on a trailing-twelve-month basis, together with the blanket collateral package, protects the lender's position and gives early warning of coverage deterioration well before a payment default.",
+        "monitored_by": "Quarterly Compliance Certificate / Covenant Calculation TTM FCCR vs 1.2000x",
+        "status": "broken"
+      },
+      {
+        "pillar": "Timely, accurate monthly and quarterly financial and covenant reporting (a named underwriting requirement -- 'monthly financials, detailed aging, project support, quarterly FCCR calculations') gives the lender reliable, real-time visibility into credit deterioration.",
+        "monitored_by": "Certificate delivery timeliness and accuracy; correction/restatement history",
+        "status": "broken"
+      }
+    ],
+    "_credit_thesis_note": "The one-page IC Memo does not itself enumerate discrete thesis 'pillars' -- these four were constructed by monitor-setup from the memo's stated Revenue Model / Downside / Monitoring sections and the credit agreement's own FCCR/reporting mechanics, not copied from an explicit pillar list (same construction method used for Asteron, which also had only a short-form memo). Pillar 3 (covenant protection) is graded 'broken', not merely 'pressured', because the covenant has now been in ACTUAL BREACH for two consecutive quarters (2026-Q1, 2026-Q2) with the only relief obtained (the Temporary Limited Waiver) having already EXPIRED before the next Test Date -- the covenant is not currently doing the protective job it was underwritten to do. Pillar 4 (reporting reliability) is graded 'broken' given TWO independent, confirmed-separate correction episodes landed in the same two quarters (see our_view) -- a materially worse read than a single isolated error. Flagged for analyst review and override -- these are onboarding-assistant judgment calls per the standing instruction not to pause for confirmation on this batch.",
+    "key_risks_at_uw": [
+      {
+        "risk": "Slower collections -- named at underwriting as a downside driver of reduced debt-service coverage",
+        "early_warning_signal": "AR aging bucket skew and 'Collection plan' flag count/persistence (AR Detail); AR days (Operating KPIs)"
+      },
+      {
+        "risk": "Weaker turnaround margins -- named at underwriting",
+        "early_warning_signal": "Project-level 'Margin action' flags (Project and Service-Line Detail); EBITDA margin trend"
+      },
+      {
+        "risk": "Delayed customer acceptance -- named at underwriting as a driver of monthly revenue volatility and reduced coverage",
+        "early_warning_signal": "Month-to-month revenue variance vs the Approved Budget; project status flags"
+      }
+    ],
+    "_key_risks_note": "These three risks are copied verbatim in substance from the IC Memo's one-line 'DOWNSIDE' section -- the memo names no other risks explicitly. The amortization step-up (Amendment 1) and the two 2026 correction episodes were NOT named at underwriting (they postdate the January 2025 closing) and are therefore NOT listed here as key_risks_at_uw, but are the dominant post-closing developments -- see our_view and carry_forward below."
+  },
+  "our_view": {
+    "watchlist": "on",
+    "trajectory": "deteriorating",
+    "thesis_status": "This credit has moved from comfortably compliant to two consecutive quarters of covenant breach, compounded by two separate, confirmed-independent reporting-integrity failures in the same window -- pillars 3 and 4 are graded 'broken' above, not merely 'pressured'. TTM FCCR has declined for five straight quarters: 1.6245x (2025-Q1) -> 1.6099x (Q2) -> 1.6436x (Q3) -> 1.2365x (Q4, the first quarter to fully reflect Amendment 1's 2.00%/month amortization step-up) -> 1.0338x (2026-Q1, BREACH -- WAIVED) -> 0.9192x (2026-Q2, BREACH -- WAIVED). The underlying driver so far looks MECHANICAL rather than purely operational: TTM Covenant EBITDA has actually been broadly stable-to-growing across the same window (~$25.2M at 2024-09 to ~$30.1M at 2026-06, EBITDA margin holding in the ~17-20% range every month checked) -- the deterioration is concentrated in the Fixed Charges denominator (required principal 10x'd by Amendment 1), not a collapse in operating performance. That is a real distinction (this is not (yet) a business in decline) but it does not change the credit fact: the covenant has been breached for two straight quarters, the only relief obtained (the Temporary Limited Waiver) explicitly does NOT deem either test compliant and has now EXPIRED (2026-06-30), and there is no evidence of any new waiver or amendment executed ahead of the September 30, 2026 Test Date -- 15 days from this review. On top of the covenant trajectory, the borrower's own compliance process failed twice in a row: BOTH the March 31 and June 30, 2026 quarterly certificates were originally submitted using a single-month FCCR calculation instead of the agreement-required trailing-twelve-month measurement (caught only by lender query each time), and a SEPARATE March 2026 revenue/cost reclassification error (a $617,841.06 understatement, EBITDA-neutral) was found and corrected in July 2026. Two independent, confirmed-separate correction episodes landing in the same two quarters is a legitimate governance/controls flag in its own right, independent of the FCCR magnitude -- per the standing guidance, this alone would argue against defaulting to watchlist 'off' even if the covenant were compliant.",
+    "what_would_change_our_mind": "Watchlist could move toward 'off'/trajectory toward 'stable' if: (a) new waiver or amendment authority is executed covering the September 30, 2026 Test Date before it arrives, removing the immediate uncovered-breach exposure; (b) TTM Covenant EBITDA growth outpaces the now-stepped-up amortization enough to visibly arrest the five-quarter FCCR decline (even a flattening at 2026-Q3, rather than continued deterioration, would be meaningful); and (c) at least one clean quarterly certificate cycle is delivered with no lender query and no correction notice, evidencing the compliance-preparation process has actually been fixed rather than merely caught twice. Conversely, an unwaived breach at the September 30, 2026 Test Date, a third correction/restatement episode, or a genuine EBITDA decline (as opposed to the amortization-driven denominator effect seen so far) would harden 'deteriorating' further and could warrant escalation beyond routine watchlist monitoring.",
+    "_provenance_note": "Auto-drafted by the onboarding assistant from the objective evidence on file (five quarters of compliance certificates and covenant calculations, both correction episodes, the waiver's own expiration date, and the monthly packages) per the analyst's standing instruction to proceed without per-field confirmation on this onboarding batch. Flagged for the analyst's own read at the next review -- given the imminent (15-day) unwaived Test Date, this warrants faster-than-routine analyst attention, not just the next scheduled monthly cycle."
+  },
+  "carry_forward": {
+    "open_requests_to_borrower": [
+      "Status of new waiver/amendment authority for the September 30, 2026 FCCR test date -- none in effect as of this run.",
+      "Root-cause confirmation on the twice-repeated single-month-vs-TTM FCCR measurement-window error (March and June 2026).",
+      "Confirm no further restatements are pending beyond the corrected March 2026 revenue reclassification ($617,841.06).",
+      "Confirm the facility's true contractual cash interest rate against a fuller version of the credit agreement than the one-page excerpt reviewed."
+    ],
+    "unresolved_flags": [
+      "September 30, 2026 FCCR test date has no waiver or amendment authority in place -- next test in ~2 weeks as of this run.",
+      "Two independent reporting/compliance correction episodes landed in 2026-Q1 and 2026-Q2 -- a controls/process signal independent of the FCCR magnitude.",
+      "Archive/2026-03/monthly.xlsx was never updated after the July 22, 2026 revision and still shows stale March revenue -- build-monitoring-model must keep sourcing March revenue from consolidated-revised.xlsx.",
+      "Model's Fixed Charges sums the lease-payment leg with the native ledger's negative sign instead of a positive covenant-support figure, inflating model FCCR by ~1.5pts vs certified (0.9337x vs 0.9192x) -- fix needed in the next model refresh."
+    ],
+    "analyst_focus": [
+      {
+        "item": "2026-09-30 FCCR test date coverage and readiness given the expired waiver",
+        "asked_period": "2026-06",
+        "finding": "No executed relief in effect as of this run; FCCR on current trend would remain below 1.2000x absent new relief or a reversal of Fixed Charges growth."
+      },
+      {
+        "item": "process/controls signal from the recurring single-month-vs-TTM measurement error",
+        "asked_period": "2026-06",
+        "finding": "Confirmed recurring in both March and June 2026 certificates; flagged as an open root-cause question to the borrower, contributing to the watchlist designation."
+      },
+      {
+        "item": "amortization step-up mechanical driver of FCCR deterioration vs EBITDA trend",
+        "asked_period": "2026-06",
+        "finding": "Confirmed: TTM Covenant EBITDA rose every month for 11 straight months ($25.7M to $30.1M); FCCR compression traces entirely to the First Amendment's required-principal step-up (0.20% to 2.00%/month), not to EBITDA."
+      }
+    ],
+    "last_period_headline": "FCCR breached 1.2000x for a second straight quarter at June 30, 2026 (certified 0.9192x); the covering waiver expired the same day and no relief covers the September 30, 2026 test date. TTM Covenant EBITDA has grown every month for eleven straight months, so the deterioration traces to the First Amendment's amortization step-up, not to operating performance."
+  },
+  "provenance": {
+    "auto_draftable": [
+      "static.facility",
+      "static.business_one_liner",
+      "static.business_profile",
+      "static.credit_thesis",
+      "static.key_risks_at_uw",
+      "carry_forward"
+    ],
+    "analyst_required": [
+      "our_view.*",
+      "credit_thesis[].status",
+      "ebitda_addbacks.entries[].treatment"
+    ],
+    "_note": "our_view and credit_thesis[].status were auto-decided by the onboarding assistant per the analyst's explicit instruction not to pause for confirmation on this onboarding batch; they still require analyst sign-off at the next review, per provenance.analyst_required above. Given the imminent (15-day) unwaived Test Date, this borrower in particular warrants that sign-off promptly rather than waiting for the next scheduled monthly cycle."
+  },
+  "ebitda_addbacks": {
+    "entries": [],
+    "credit_ebitda": {
+      "report_both_in_memo": false
+    },
+    "_sweep_note": "No restructuring/impairment/write-off/write-down/severance/transaction-cost/legal-settlement/one-time/miscellaneous line was found anywhere above or below the EBITDA line in any monthly package (2024-09 through 2026-06, including both the original and corrected/revised March-June figures), the FY2022-2024 annual statements, the IC Memo, or the Management Presentation. 'Reported EBITDA' was independently verified to tie EXACTLY to the certified 'Covenant EBITDA' at three separate points (March 2026: both 2,618,535.91; June 2026: both 2,696,995.08; May 2026 TTM-Build single-month column: both 2,588,973.90) -- there is no addback of any kind (unlike Asteron's constant lease addback), so entries is empty and credit_ebitda.report_both_in_memo is set false (there is only one EBITDA figure to report, not two divergent covenant-vs-credit readings)."
+  }
+}

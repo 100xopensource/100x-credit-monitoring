@@ -1,0 +1,248 @@
+{
+  "borrower_name": "Orinth Vale Infrastructure, LLC",
+  "fund": "",
+  "last_reviewed": {
+    "date": "2026-09-15",
+    "trigger": "monthly"
+  },
+  "static": {
+    "vertical": "Infrastructure field services (utility, municipal, and industrial inspection/construction-support/repair/maintenance)",
+    "archetype": "asset-heavy-industrial",
+    "archetype_provenance": "inferred \u2014 unconfirmed",
+    "_archetype_note": "JUDGMENT CALL: 'consumer-inventory' clearly does not fit (no consumer/D2C sales). The closer call is 'asset-heavy-industrial' vs 'services-project'. Chose asset-heavy-industrial because the collateral and balance sheet are genuinely EQUIPMENT-led, not just receivables-led: Net Property and Equipment ($53.1M) is ~39% of Total Assets ($134.5M) at June 2026 -- larger than Accounts Receivable ($18.1M) or Inventory ($9.8M) -- and the security agreement pledges 'machinery, vehicles, and equipment' as a named collateral category alongside accounts and inventory (equipment yards in Albany, Syracuse, and Buffalo per the Information Certificate). The IC memo and management presentation also frame the business around 'backlog visibility' and 'crew utilization/materials purchasing/change-order capture' driving margin -- close to asset-heavy-industrial's 'backlog and book-to-bill, margin vs volume (absorption)' KPI emphasis. 'services-project' was the other real candidate (payroll-heavy field crews, project/milestone billing, unbilled-AR dynamics) and would also be defensible; flagging both for the analyst since the memo does not itself use either label and this is a genuinely close call between a construction/field-services contractor (asset-heavy-industrial-ish but not a manufacturer) and a project-services business (services-project-ish but with real owned equipment as collateral, not just cash-flow-based recovery).",
+    "business_one_liner": "Provides inspection, construction support, repair, and maintenance for essential infrastructure (utility networks, municipal projects, and industrial sites) through regional field crews, specialty subcontractors, and an owned equipment fleet.",
+    "sponsor_status": "sponsor-backed (sponsor entity not named in the available documents)",
+    "_sponsor_status_note": "The Final IC Memo (Approval Conditions: 'the $12,000,000 sponsor contribution') and the Management Presentation (Liquidity: 'Sponsor equity funds $3,000,000.00 of fees and $9,000,000.00 of minimum liquidity') and the underwriting model's Sources & Uses (Sponsor Equity $12,000,000.00) all refer only to a 'sponsor' without ever naming the entity. No other executed document identifies an equity holder. Flagged for analyst confirmation of the sponsor's identity.",
+    "deal_team": [],
+    "deal_team_provenance": "",
+    "_deal_team_note": "Left empty. No 'deal team' page or list of our own analysts/deal officers appears in the IC Memo or any other document. The only individuals named anywhere in the deal folder are the BORROWER's own officers (Elias Thorn - CEO, Mara Sellen - CFO, Rhea Danton - COO, per Company_Overview.pdf and the Executed Officer Certificate) and the Administrative Agent/Lender's signer (Dorian Cole, Managing Director, Cairn Ridge Private Credit, LP, who executed the Credit Agreement and Security Agreement) -- none of these is 'the memo header's own deal team' in the sense this field is meant to capture, and mapping any of them in would repeat the exact failure mode this field's instructions warn against (reading a borrower's or counterparty's officer into our own deal-team field). Ran references/deal_team.py against these four candidates: all four returned verdict 'unknown' (no match on the book, no officer title recognized as ours) with an empty 'propose' list and an empty 'others_on_the_book' list -- consistent with Nemeris and Asteron, this fund's onboarded deal records so far name no individual deal-team members at all. Nothing to propose or confirm.",
+    "business_profile": {
+      "description": "Orinth Vale Infrastructure provides inspection, construction support, repair, and maintenance services for essential infrastructure -- utility networks (grid hardening, fiber routes, inspection programs), municipal projects (water, transit, public-facility upgrades), and industrial sites (reliability and field installation) -- plus recurring maintenance services (inspection, repair, emergency response). The company coordinates regional field crews, specialty subcontractors, an owned equipment fleet, and project controls from a single Northeast operating base.",
+      "revenue_model": {
+        "how_they_make_money": "Project and service-based field work billed under unit-rate, milestone, and recurring-service contract structures across four service lines",
+        "recurring_vs_transactional": "Mixed -- project/milestone-billed construction-support and utility/municipal work alongside recurring maintenance service agreements ('Maintenance Services' is one of the four reported channels); not a subscription/ARR business, no retention metric is reported.",
+        "pricing_and_contracts": "Unit-rate, milestone, and recurring-service contract structures per the Company Overview; contract milestones and retainage are explicitly monitored monthly per the IC memo. Further pricing detail (rate cards, typical contract length) not disclosed -- flagged draft.",
+        "channels": [
+          {
+            "channel": "Municipal Projects",
+            "mix": "~33% of June 2026 revenue (Channel Detail)",
+            "economics": "Water/transit/public-facility programs; milestone and unit-rate billing"
+          },
+          {
+            "channel": "Utility Networks",
+            "mix": "~29% of June 2026 revenue (Channel Detail)",
+            "economics": "Grid hardening, fiber routes, inspection programs"
+          },
+          {
+            "channel": "Industrial Sites",
+            "mix": "~23% of June 2026 revenue (Channel Detail)",
+            "economics": "Reliability and field installation work for industrial operators"
+          },
+          {
+            "channel": "Maintenance Services",
+            "mix": "~15% of June 2026 revenue (Channel Detail)",
+            "economics": "Recurring inspection, repair, and emergency-response work -- the closest thing to a recurring-revenue base"
+          }
+        ],
+        "_channels_note": "Mix percentages computed by monitor-setup from 04 Reporting/Period Archive/2026/06/c.xlsx (Channel Detail); this file is supplemental business-mix color, not part of the Income Statement itself (see borrower-config model_lines._revenue_components_note) -- not re-derived automatically each month unless a future revenue-quality-style module is added.",
+        "source": "07 Borrower Information/Company_Overview.pdf (Service Lines); Final IC Memo (Business and Market); 04 Reporting/Period Archive/2026/06/c.xlsx (Channel Detail, computed by monitor-setup)",
+        "source_tier": "management-prepared"
+      },
+      "end_markets": [
+        {
+          "market": "Municipal authorities",
+          "exposure": "Water, transit, and public-facility upgrade programs",
+          "demand_drivers": "Municipal capital-improvement budgets and regulatory/infrastructure-renewal cycles"
+        },
+        {
+          "market": "Regulated utilities",
+          "exposure": "Grid hardening, fiber routes, inspection programs",
+          "demand_drivers": "Utility capex programs, grid-reliability and hardening mandates"
+        },
+        {
+          "market": "Industrial operators",
+          "exposure": "Reliability and field installation work",
+          "demand_drivers": "Industrial plant maintenance and reliability capital spend"
+        }
+      ],
+      "customers": {
+        "profile": "Municipal authorities, regulated utilities, industrial operators, and prime contractors (per Company_Overview.pdf Customer Profile)",
+        "concentration": "Per the Final IC Memo's own Customer Concentration analysis: the five largest customers represent 41% of FY2024 revenue; no single customer exceeds 12%",
+        "stickiness": "Not a subscription/recurring-contract relationship at the customer level; maintenance agreements (one of four channels) provide some recurring work, but project/milestone work is not contractually locked in beyond the current backlog. Contract milestones, retainage, and collection timing are monitored monthly per the IC memo.",
+        "source": "Final IC Memo (Customer Concentration)",
+        "source_tier": "internal-underwriting"
+      },
+      "suppliers_and_inputs": {
+        "key_inputs": "Field labor (employed crews and specialty subcontractors), materials, fleet/equipment",
+        "concentration": "Not itemized by named vendor in the available documents -- flagged draft (AP aging is bucketed by cost category -- field labor and materials, specialty subcontractors, fleet and equipment vendors, other approved vendors -- not by individual vendor name).",
+        "cost_drivers": "Crew mix and utilization, materials purchasing, subcontractor mix, and change-order capture per the Management Presentation's FY2024 Operating Review and the Approved Budget's own Assumptions tabs (gross margin driven by 'crew, materials, and subcontractor mix')",
+        "source": "02 Underwriting/presentation.pdf (FY2024 Operating Review); 03 Budgets/Approved/budget-h1.xlsx (Assumptions); 04 Reporting/Period Archive/2026/06/b.xlsx (AP Aging categories, computed by monitor-setup)",
+        "source_tier": "management-prepared"
+      },
+      "geography_footprint": "Operations coordinated from Albany, New York, with equipment yards in Syracuse and Buffalo; crews serve New York and adjacent Northeast markets. Domestic operations only, no foreign exposure disclosed.",
+      "seasonality_cyclicality": "Not explicitly disclosed as a quantified pattern -- flagged draft. Field/construction/utility work of this type can typically see weather-driven seasonality (winter slowdown in the Northeast), and monthly revenue does show a step-down in December/January in the data reviewed (e.g. 2025-12 revenue $10.99M vs 2025-10 $12.37M), but no seasonality has been confirmed or attributed by management in any document, so seasonality.low_months/peak_months in borrower-config analysis are left empty pending analyst confirmation rather than inferring a pattern from two data points.",
+      "competitive_position": "Not disclosed in the available documents -- flagged draft. The Final IC Memo is a transaction-approval memo, not a competitive/market-share analysis.",
+      "ownership": {
+        "structure": "Sponsor-backed; sponsor entity not named in the available documents (see sponsor_status note). Orinth Vale Infrastructure, LLC is a Delaware LLC (per the Executed Information Certificate); Orinth Vale Field Services, LLC is a subsidiary guarantor.",
+        "key_holders": "Not itemized -- flagged draft.",
+        "source": "Executed Information Certificate; Executed Guaranty and Security Agreement; underwriting model Sources & Uses",
+        "source_tier": "internal-underwriting"
+      },
+      "management": [
+        {
+          "name": "Elias Thorn",
+          "role": "Chief Executive Officer",
+          "note": "Infrastructure operations and customer delivery (per Company_Overview.pdf and Management Presentation); authorized signer on the Executed Officer Certificate."
+        },
+        {
+          "name": "Mara Sellen",
+          "role": "Chief Financial Officer",
+          "note": "Finance, liquidity, and lender reporting (per Company_Overview.pdf and Management Presentation); executed the Credit Agreement, Fee Letter, and all closing certificates on the Borrower's behalf, and signs each monthly Compliance Certificate."
+        },
+        {
+          "name": "Rhea Danton",
+          "role": "Chief Operating Officer",
+          "note": "Field execution, safety, and fleet utilization (per Company_Overview.pdf and Management Presentation)."
+        }
+      ],
+      "headcount": "Not disclosed as a company total in the available documents -- flagged draft.",
+      "history": "Not disclosed (no founding year or acquisition history in the available documents) beyond FY2022-FY2024 financial history: revenue grew from $111.3M (FY2022) to $123.8M (FY2023) to $126.5M (FY2024), with EBITDA of $13.1M / $18.2M / $17.5M respectively (underwriting model Historical Performance tab) -- flagged draft for company founding/ownership history.",
+      "key_operating_kpis": [
+        {
+          "kpi": "Revenue by service line / channel (Municipal, Utility, Industrial, Maintenance)",
+          "drives": "Revenue mix and growth",
+          "reported_in_package": "yes -- monthly Channel Detail (c.xlsx)"
+        },
+        {
+          "kpi": "Backlog conversion and crew/subcontractor capacity",
+          "drives": "Revenue realization from signed backlog",
+          "reported_in_package": "no -- referenced qualitatively in the IC memo and management presentation ('Signed backlog provides twelve-month project visibility'), but no backlog balance or book-to-bill figure is itemized in any monthly package reviewed"
+        },
+        {
+          "kpi": "Gross margin (crew utilization, materials purchasing, subcontractor mix, change-order capture)",
+          "drives": "Gross Profit / EBITDA",
+          "reported_in_package": "yes -- monthly Income Statement (Gross Profit is a native row)"
+        },
+        {
+          "kpi": "AR aging by project / collections timing",
+          "drives": "Working capital, DSO",
+          "reported_in_package": "yes -- monthly AR Aging (b.xlsx)"
+        }
+      ],
+      "working_capital_profile": "AR is project-based (aged Current/31-60/61-90/90+, with a representative program named per bucket -- e.g. North County Water Program, Metro Fiber Corridor, Pine District Utilities) and ties exactly to the Balance Sheet. AP is cost-category based (field labor and materials, specialty subcontractors, fleet and equipment vendors, other approved vendors) and ties exactly to the Balance Sheet's combined 'Accounts Payable and Accruals' line. The company also carries a meaningful Inventory balance ($9.8M at June 2026, ~7% of Total Assets) for project materials. Collection timing and retainage on milestone-billed contracts is the primary working-capital signal to watch per the IC memo."
+    },
+    "facility": {
+      "instrument": "Senior secured term loan, single tranche, fully funded at closing",
+      "commitment_usd": 65360723.38,
+      "funded_usd": 65360723.38,
+      "draw_structure": "Single advance at closing (2025-01-15); no delayed-draw or revolving capacity. Proceeds refinanced legacy debt in full -- no proceeds retained for later borrowing.",
+      "close_date": "2025-01",
+      "maturity_date": "2030-01-15",
+      "interest_rate": "SOFR + 6.25% cash interest, subject to a 2.00% SOFR floor (effective minimum all-in rate 8.25%); interest payable monthly in arrears; overdue amounts bear an additional 2.00% default margin. No PIK. Scheduled monthly principal amortization of 0.60% of beginning funded debt, due with monthly interest.",
+      "oid": "None disclosed. $3,000,000.00 of closing fees were capitalized as a 'Deferred Financing Fees' balance-sheet asset and are amortized straight-line at exactly $50,000.00/month (verified constant across every month checked, 2025-01 through 2026-06; $3,000,000 / 60 months = $50,000/month, matching the facility's 5-year term) -- funded entirely by the $12,000,000 sponsor equity contribution at closing rather than financed into the loan balance, consistent with the Fee Letter's own statement that fees 'do not increase funded debt.'",
+      "fees": {
+        "Closing fee schedule (executed Fee Letter, effective 2025-01-15)": "Origination fee $1,960,821.70; Structuring fee $650,000.00; Documentation and diligence fee $239,178.30; Agency setup fee $150,000.00; Total closing fees $3,000,000.00 -- all earned and payable on the closing date, paid from sponsor equity (Payment Terms: 'Fees are paid from sponsor equity at closing and do not increase funded debt'). The Fee Letter was read in full per the mandatory discrepancy-sweep protocol; it carries no additional layered fees (no separate agent PIK, no success/exit fee) beyond this single schedule."
+      },
+      "equity_kicker": "None disclosed -- no lender warrant or equity kicker appears in any executed document.",
+      "security": "First-priority blanket lien on substantially all personal property (accounts and contract rights; inventory and materials; machinery, vehicles, and equipment; deposit and securities accounts; books and records; insurance and other proceeds) per the executed Guaranty and Security Agreement (effective 2025-01-15), guaranteed by Orinth Vale Field Services, LLC, PLUS a separate first-priority security interest in registered/unregistered intellectual property (ORINTH VALE trademark application, VALEGRID service mark application, and related domain names) per the executed Intellectual Property Security Agreement (effective 2025-01-15). Controlled deposit accounts at Cairn National Bank (operating account ending 1842, payroll account ending 7710).",
+      "source": "Executed Credit Agreement (issued 2025-01-10, effective 2025-01-15); Executed Fee Letter (2025-01-15); Executed Guaranty and Security Agreement (2025-01-15); Executed Intellectual Property Security Agreement (2025-01-15); Executed Closing Funding Request (2025-01-15); Executed Information Certificate (2025-01-15); Executed Officer Certificate; Executed Solvency Certificate; Final IC Memo; Management Presentation; underwriting model Sources & Uses (02 Underwriting/model.xlsx). All 9 executed closing documents in 01 Legal/Executed/Initial Closing were opened and read in full; no additive or conflicting economics were found beyond the single fee/rate schedule above."
+    },
+    "credit_thesis": [
+      {
+        "pillar": "Backlog visibility and repeat maintenance work support the base plan -- twelve-month signed-backlog visibility across water, grid, fiber, and plant programs, plus recurring maintenance agreements, smooth mobilization timing and reduce the risk of a revenue air-pocket.",
+        "monitored_by": "Revenue vs the Approved H1 2026 Budget; Maintenance Services share of monthly Channel Detail revenue",
+        "status": "intact"
+      },
+      {
+        "pillar": "Diversified customer base limits single-customer loss risk -- the five largest customers represent 41% of FY2024 revenue with no single customer exceeding 12%.",
+        "monitored_by": "AR aging concentration by project/program (b.xlsx Representative Support) and Channel Detail revenue mix stability",
+        "status": "intact"
+      },
+      {
+        "pillar": "Conservative opening leverage (3.7276x pro forma vs a 5.50x covenant maximum) plus contractual 0.60%/month amortization delevers the credit over time even without EBITDA growth.",
+        "monitored_by": "Quarterly Total Leverage Ratio (Covenant Calculation) vs the 5.50x maximum",
+        "status": "intact"
+      },
+      {
+        "pillar": "The modeled downside case (a 5% revenue shortfall combined with 200bp of gross-margin compression) still retains debt-service capacity, supported by monthly amortization and the $9,000,000 sponsor-funded minimum-liquidity contribution at closing.",
+        "monitored_by": "Cash balance and gross margin trend vs the Approved Budget's 44.64% (H1 2026) gross-margin assumption",
+        "status": "intact"
+      }
+    ],
+    "_credit_thesis_note": "These four pillars are drawn directly from the Final IC Memo's own Business and Market / Customer Concentration / Covenant / Downside Case sections (not invented) -- each is close to a verbatim restatement of the memo's own stated rationale. No prior facility or restructuring history exists for this borrower (this is the original, still-current facility), so there is nothing to reconcile against.",
+    "key_risks_at_uw": [
+      {
+        "risk": "Customer/project concentration -- the five largest customers represent 41% of FY2024 revenue (Final IC Memo)",
+        "early_warning_signal": "AR aging concentration by project (b.xlsx Representative Support); Channel Detail revenue mix"
+      },
+      {
+        "risk": "Collections timing and retainage risk on milestone-billed contracts -- 'Contract milestones, retainage, and collection timing are monitored monthly' (Final IC Memo)",
+        "early_warning_signal": "AR aging bucket shift (31-60/61-90/90+) and DSO trend (ap-ar-aging module)"
+      },
+      {
+        "risk": "Gross-margin compression from crew, materials, or subcontractor cost pressure -- the IC memo's own Downside Case explicitly models '200 basis-point gross-margin compression'",
+        "early_warning_signal": "Gross margin trend (Gross Profit / Revenue) vs the Approved Budget's 44.64% (H1 2026) / 45.91% (FY2025) gross-margin assumptions"
+      },
+      {
+        "risk": "Revenue shortfall from slower backlog conversion or project mobilization -- the IC memo's own Downside Case explicitly models a '5% revenue shortfall'",
+        "early_warning_signal": "Revenue vs the Approved Budget (budget-vs-actual module) and backlog/mobilization commentary in Portfolio Management update.pdf"
+      }
+    ]
+  },
+  "our_view": {
+    "watchlist": "off",
+    "trajectory": "improving",
+    "thesis_status": "All four thesis pillars remain intact through the full 6-quarter history reviewed (2025 Q1 through 2026 Q2). Total Leverage Ratio has improved every single quarter since close -- 3.3304x (2025 Q1) -> 2.8972x -> 2.6612x -> 2.5098x -> 2.4235x -> 2.3911x (2026 Q2) -- comfortably inside the 5.50x maximum with a wide and widening cushion (~57% headroom at June 2026), driven by contractual amortization and steady EBITDA growth (TTM Covenant EBITDA $24.5M vs FY2024 UW EBITDA $17.5M). Cash has built every quarter ($27.3M -> $36.4M). Revenue and EBITDA beat the approved budget in 5 of the last 6 quarters; June 2026 is the FIRST quarter with a negative variance (-$59,787.70 revenue, -$85,898.18 EBITDA vs the monthly plan), but both misses are small (<0.5% and <3.7% respectively) and both revenue ($13.16M) and EBITDA ($2.29M) are still up year-over-year (+6.2% and +9.3% vs June 2025). No customer, collections, or covenant stress is evident: AR aging buckets have grown roughly in proportion to revenue with no material bucket-mix deterioration across the months sampled, and no restatement, correction notice, or lender query appears anywhere in the Portfolio Management or Period Archive history (unlike Nemeris's corrected Q2 2026 covenant calc or Asteron's restructuring). This reads as a clean, steadily deleveraging credit; watchlist is off.",
+    "what_would_change_our_mind": "A second consecutive quarter of negative budget variance on revenue or EBITDA, a Total Leverage Ratio reversal (an increase quarter-over-quarter rather than the steady decline seen to date), a material AR aging bucket shift toward 61-90/90+ (collections/retainage risk crystallizing), or loss of a top-5 customer/project would move trajectory toward 'stable' or 'deteriorating' and warrant turning the watchlist on.",
+    "_provenance_note": "Auto-drafted by the onboarding assistant from the objective evidence on file (6 quarterly Covenant Calculations and Portfolio Management updates, 2025 Q1 through 2026 Q2, plus the full monthly Period Archive history 2024-09 through 2026-06) per the analyst's standing instruction to proceed without per-field confirmation on this onboarding batch. Flagged for the analyst's own read at the next review -- this is a genuinely clean credit on the evidence reviewed, with no restructuring, no correction history, and comfortable covenant headroom, but the June 2026 first-ever negative budget variance is worth a second look next cycle before the analyst signs off on 'improving' continuing."
+  },
+  "carry_forward": {
+    "open_requests_to_borrower": [],
+    "unresolved_flags": [
+      "EBITDA has missed its monthly budget three months running (April, May, June 2026) after three straight beats in Q1 2026 -- watch into H2 even though YTD EBITDA remains 5.3% ahead of budget.",
+      "Credit agreement's negative covenants section states no dollar baskets or carve-outs anywhere in the 9 executed closing documents -- confirm whether a fuller schedule exists outside that set.",
+      "Day-count convention for cash interest is not stated in the executed documents and was assumed (actual/360, both endpoints counted) rather than confirmed."
+    ],
+    "analyst_focus": [
+      {
+        "item": "Leverage trend and headroom against the 5.50x cap, and confirmation of the improving trajectory",
+        "asked_period": "2026-06",
+        "finding": "Confirmed: leverage improved to 2.39x at June 2026 (from 3.33x at close), the sixth straight quarter of improvement, with model and certificate agreeing to within a few basis points."
+      },
+      {
+        "item": "June 2026 first negative budget variance in the last six quarters -- is it noise or an inflection",
+        "asked_period": "2026-06",
+        "finding": "Reads as noise/pacing so far: revenue miss is immaterial (-0.5%) and EBITDA's miss (-3.6%) is the third in a row after three straight beats, but YTD EBITDA is still 5.3% ahead of budget. Worth re-checking at the next review once H2 actuals are available."
+      },
+      {
+        "item": "Equipment/fleet collateral concentration and archetype classification (asset-heavy-industrial vs services-project)",
+        "asked_period": "2026-06",
+        "finding": "Equipment/fleet (net PP&E $53.1M) is the largest single pledged component and growing modestly (capex outpacing depreciation); archetype classification (asset-heavy-industrial) was not revisited this run but nothing in June's data contradicts it."
+      }
+    ],
+    "last_period_headline": "June 2026: revenue $13.2M essentially in line with budget (-0.5%) while EBITDA $2.3M missed budget by 3.6% (third straight monthly miss); YTD remains solidly ahead of budget (revenue +1.5%, EBITDA +5.3%); Maximum Total Leverage passed at 2.39x vs the 5.50x cap, improving every quarter since the January 2025 close."
+  },
+  "provenance": {
+    "auto_draftable": [
+      "static.facility",
+      "static.business_one_liner",
+      "static.business_profile",
+      "static.credit_thesis",
+      "static.key_risks_at_uw",
+      "carry_forward"
+    ],
+    "analyst_required": [
+      "our_view.*",
+      "credit_thesis[].status",
+      "ebitda_addbacks.entries[].treatment"
+    ],
+    "_note": "our_view and credit_thesis[].status were auto-decided by the onboarding assistant per the analyst's explicit instruction not to pause for confirmation on this onboarding batch; they still require analyst sign-off at the next review, per provenance.analyst_required above. archetype (asset-heavy-industrial vs the close alternative services-project) is likewise inferred-unconfirmed and should get an explicit analyst call."
+  },
+  "ebitda_addbacks": {
+    "entries": [],
+    "credit_ebitda": {
+      "report_both_in_memo": false
+    },
+    "_sweep_note": "Swept the executed Credit Agreement's own EBITDA definition ('consolidated net income adjusted for interest, taxes, depreciation, and permitted noncash items' -- no named limbs beyond that generic language), the FY2022-2024 Annual Financials, the Final IC Memo, the underwriting model, and every monthly Income Statement 2024-09 through 2026-06 for restructuring / impairment / write-off / write-down / severance / transaction-cost / legal-settlement / one-time / non-recurring / miscellaneous line items -- NONE were found anywhere above or below the EBITDA line. This borrower's own certified TTM Covenant EBITDA (Debt & Covenant tab / quarterly Covenant Calculation.xlsx) ties EXACTLY to the sum of the trailing 12 monthly 'EBITDA' Income Statement rows with zero gap (verified for 2026 Q2: 24,529,022.34 = sum of 2025-07 through 2026-06 monthly EBITDA), unlike Asteron's structural lease add-back. No add-back register entries are warranted; report_both_in_memo is set to false since Covenant EBITDA and Credit EBITDA are identical for this borrower (nothing to discount)."
+  }
+}

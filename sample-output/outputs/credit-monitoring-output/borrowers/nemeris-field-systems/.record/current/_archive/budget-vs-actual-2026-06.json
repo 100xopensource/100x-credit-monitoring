@@ -1,0 +1,2662 @@
+{
+  "module": "budget-vs-actual",
+  "period": "2026-06",
+  "run_id": "run-20260915-060221",
+  "run_id_from": "run",
+  "produced_at": "2026-09-15T06:04:50+00:00",
+  "produced_by": {
+    "engine": "budget-vs-actual",
+    "plugin_version": "1.0.0"
+  },
+  "reporting_unit": {
+    "scale": 1.0,
+    "currency": "USD",
+    "verbatim": "Management accounts | USD | Unaudited",
+    "plain": "USD"
+  },
+  "stores": {
+    "store": {
+      "url_base": null
+    },
+    "source": {
+      "url_base": null
+    }
+  },
+  "source_ref_reach": {
+    "cell": 62,
+    "file": 28,
+    "unlocated": 0,
+    "borrower_doc": 56
+  },
+  "source_files": [
+    "store:borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+    "source:Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+    "store:borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json"
+  ],
+  "results": [
+    {
+      "metric": "Revenue",
+      "scope": "latest",
+      "actual": 9570056.36,
+      "budget": 11115786.65,
+      "var_abs": -1545730.29,
+      "var_pct": -0.1391,
+      "favorable": false,
+      "material": true,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 14,
+          "label": "Net Revenue",
+          "cells": "AB14",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 13,
+          "cells": "S13",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "metric_rows.revenue",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -1,545,730.29 = actual 9,570,056.36 (model 'Net Revenue' (Income Statement AB14), Jun 2026) - budget 11,115,786.65 (budget 'Monthly Operating Plan' row 13, Jun 2026); var_pct -13.9% = variance / |budget|"
+    },
+    {
+      "metric": "Revenue",
+      "scope": "YTD",
+      "actual": 55574230.48,
+      "budget": 63034185.85,
+      "var_abs": -7459955.37,
+      "var_pct": -0.1183,
+      "favorable": false,
+      "material": true,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 14,
+          "label": "Net Revenue",
+          "cells": "W14:AB14",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 13,
+          "cells": "N13:S13",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "metric_rows.revenue",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -7,459,955.37 = actual 55,574,230.48 (model 'Net Revenue' (Income Statement W14:AB14), Jan 2026..Jun 2026 summed (6 mo)) - budget 63,034,185.85 (budget 'Monthly Operating Plan' row 13, Jan 2026..Jun 2026 summed (6 mo)); var_pct -11.8% = variance / |budget|"
+    },
+    {
+      "metric": "Gross Profit (as-reported)",
+      "scope": "latest",
+      "actual": 4353418.64,
+      "budget": 5217370.69,
+      "var_abs": -863952.05,
+      "var_pct": -0.1656,
+      "favorable": false,
+      "material": true,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 24,
+          "label": "Gross Profit",
+          "cells": "AB24",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 23,
+          "cells": "S23",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "metric_rows.gross_profit",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -863,952.05 = actual 4,353,418.64 (model 'Gross Profit' (Income Statement AB24), Jun 2026) - budget 5,217,370.69 (budget 'Monthly Operating Plan' row 23, Jun 2026); var_pct -16.6% = variance / |budget|"
+    },
+    {
+      "metric": "Gross Profit (as-reported)",
+      "scope": "YTD",
+      "actual": 25201765.09,
+      "budget": 29122152.6,
+      "var_abs": -3920387.51,
+      "var_pct": -0.1346,
+      "favorable": false,
+      "material": true,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 24,
+          "label": "Gross Profit",
+          "cells": "W24:AB24",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 23,
+          "cells": "N23:S23",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "metric_rows.gross_profit",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -3,920,387.51 = actual 25,201,765.09 (model 'Gross Profit' (Income Statement W24:AB24), Jan 2026..Jun 2026 summed (6 mo)) - budget 29,122,152.60 (budget 'Monthly Operating Plan' row 23, Jan 2026..Jun 2026 summed (6 mo)); var_pct -13.5% = variance / |budget|"
+    },
+    {
+      "metric": "Gross Margin %",
+      "scope": "latest",
+      "unit": "pct",
+      "actual": 0.4549,
+      "budget": 0.4694,
+      "var_abs": -0.0145,
+      "var_pct": null,
+      "favorable": false,
+      "material": false,
+      "note": "margin points (actual - budget)",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 24,
+          "label": "Gross Profit",
+          "cells": "AB24",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 14,
+          "label": "Net Revenue",
+          "cells": "AB14",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 23,
+          "cells": "S23",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "metric_rows.gross_profit",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 13,
+          "cells": "S13",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "metric_rows.revenue",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "actual margin 45.49% = gross profit 4,353,418.64 / revenue 9,570,056.36 (model, Jun 2026); budget margin 46.94% = 5,217,370.69 / 11,115,786.65 (budget 'Monthly Operating Plan'); var_abs = margin points (actual - budget)"
+    },
+    {
+      "metric": "Gross Margin % (as-reported)",
+      "scope": "YTD",
+      "unit": "pct",
+      "actual": 0.4535,
+      "budget": 0.462,
+      "var_abs": -0.0085,
+      "var_pct": null,
+      "favorable": false,
+      "material": false,
+      "note": "margin points; as-reported",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 24,
+          "label": "Gross Profit",
+          "cells": "W24:AB24",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 14,
+          "label": "Net Revenue",
+          "cells": "W14:AB14",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 23,
+          "cells": "N23:S23",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "metric_rows.gross_profit",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 13,
+          "cells": "N13:S13",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "metric_rows.revenue",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "actual margin 45.35% = gross profit 25,201,765.09 / revenue 55,574,230.48 (model, Jan 2026..Jun 2026 summed (6 mo)); budget margin 46.20% = 29,122,152.60 / 63,034,185.85 (budget 'Monthly Operating Plan'); var_abs = margin points (actual - budget)"
+    },
+    {
+      "metric": "EBITDA (as-reported)",
+      "scope": "latest",
+      "actual": 1238610.25,
+      "budget": 1924116.4,
+      "var_abs": -685506.15,
+      "var_pct": -0.3563,
+      "favorable": false,
+      "material": true,
+      "note": "Actual EBITDA is read from the model's EBITDA bridge row 'Reported EBITDA' (single, system-wide definition), not recomputed -- so it equals what covenant-compliance reads.",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 40,
+          "label": "Reported EBITDA",
+          "cells": "AB40",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "label": "net_income",
+          "sheet": "Monthly Operating Plan",
+          "row": 40,
+          "cells": "S40",
+          "period": "2026-06"
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "label": "interest_expense",
+          "sheet": "Monthly Operating Plan",
+          "row": 5,
+          "cells": "S5",
+          "period": "2026-06"
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "label": "taxes",
+          "sheet": "Monthly Operating Plan",
+          "row": 5,
+          "cells": "S5",
+          "period": "2026-06"
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "label": "depreciation_amortization",
+          "sheet": "Monthly Operating Plan",
+          "row": 5,
+          "cells": "S5",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "metric_rows",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -685,506.15 = actual 1,238,610.25 (model 'Reported EBITDA' (Income Statement AB40), Jun 2026) - budget 1,924,116.40 (budget EBITDA = net_income + interest_expense + taxes + depreciation_amortization per budget-map metric_rows, sheet 'Monthly Operating Plan', Jun 2026); var_pct -35.6% = variance / |budget|"
+    },
+    {
+      "metric": "EBITDA (as-reported)",
+      "scope": "YTD",
+      "actual": 6996371.34,
+      "budget": 10087603.77,
+      "var_abs": -3091232.43,
+      "var_pct": -0.3064,
+      "favorable": false,
+      "material": true,
+      "note": "Actual EBITDA read from the model's EBITDA bridge row (single definition shared with covenant-compliance), not recomputed.",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 40,
+          "label": "Reported EBITDA",
+          "cells": "W40:AB40",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "label": "net_income",
+          "sheet": "Monthly Operating Plan",
+          "row": 40,
+          "cells": "N40:S40",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "label": "interest_expense",
+          "sheet": "Monthly Operating Plan",
+          "row": 5,
+          "cells": "N5:S5",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "label": "taxes",
+          "sheet": "Monthly Operating Plan",
+          "row": 5,
+          "cells": "N5:S5",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "label": "depreciation_amortization",
+          "sheet": "Monthly Operating Plan",
+          "row": 5,
+          "cells": "N5:S5",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "metric_rows",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -3,091,232.43 = actual 6,996,371.34 (model 'Reported EBITDA' (Income Statement W40:AB40), Jan 2026..Jun 2026 summed (6 mo)) - budget 10,087,603.77 (budget EBITDA = net_income + interest_expense + taxes + depreciation_amortization per budget-map metric_rows, sheet 'Monthly Operating Plan', Jan 2026..Jun 2026 summed (6 mo)); var_pct -30.6% = variance / |budget|"
+    },
+    {
+      "metric": "Total Opex (normalized)",
+      "scope": "latest",
+      "actual": 3114808.39,
+      "budget": 3293254.29,
+      "var_abs": -178445.9,
+      "var_pct": -0.0542,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 28,
+          "label": "Sales compensation",
+          "cells": "AB28",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 29,
+          "label": "Marketing programs",
+          "cells": "AB29",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 30,
+          "label": "Operations payroll",
+          "cells": "AB30",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 31,
+          "label": "Product and engineering",
+          "cells": "AB31",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 32,
+          "label": "Corporate payroll",
+          "cells": "AB32",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 33,
+          "label": "Facilities and occupancy",
+          "cells": "AB33",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 34,
+          "label": "Technology and communications",
+          "cells": "AB34",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 35,
+          "label": "Insurance",
+          "cells": "AB35",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 36,
+          "label": "Professional fees",
+          "cells": "AB36",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 37,
+          "label": "Travel and training",
+          "cells": "AB37",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 38,
+          "label": "Other operating expense",
+          "cells": "AB38",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 27,
+          "cells": "S27",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Sales compensation",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 28,
+          "cells": "S28",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Marketing programs",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 29,
+          "cells": "S29",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Operations payroll",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 30,
+          "cells": "S30",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Product and engineering",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 31,
+          "cells": "S31",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Corporate payroll",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 32,
+          "cells": "S32",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Facilities and occupancy",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 33,
+          "cells": "S33",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Technology and communications",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 34,
+          "cells": "S34",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Insurance",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 35,
+          "cells": "S35",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Professional fees",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 36,
+          "cells": "S36",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Travel and training",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 37,
+          "cells": "S37",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Other operating expense",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -178,445.90 = actual 3,114,808.39 (sum of the 11 configured opex-group model rows [Sales compensation, Marketing programs, Operations payroll, Product and engineering, Corporate payroll, Facilities and occupancy, Technology and communications, Insurance, Professional fees, Travel and training, Other operating expense], Jun 2026) - budget 3,293,254.29 (sum of the budget-map opex_groups rows, budget 'Monthly Operating Plan', Jun 2026); var_pct -5.4% = variance / |budget|"
+    },
+    {
+      "metric": "Total Opex (normalized)",
+      "scope": "YTD",
+      "actual": 18205393.75,
+      "budget": 19034548.83,
+      "var_abs": -829155.08,
+      "var_pct": -0.0436,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 28,
+          "label": "Sales compensation",
+          "cells": "W28:AB28",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 29,
+          "label": "Marketing programs",
+          "cells": "W29:AB29",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 30,
+          "label": "Operations payroll",
+          "cells": "W30:AB30",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 31,
+          "label": "Product and engineering",
+          "cells": "W31:AB31",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 32,
+          "label": "Corporate payroll",
+          "cells": "W32:AB32",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 33,
+          "label": "Facilities and occupancy",
+          "cells": "W33:AB33",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 34,
+          "label": "Technology and communications",
+          "cells": "W34:AB34",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 35,
+          "label": "Insurance",
+          "cells": "W35:AB35",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 36,
+          "label": "Professional fees",
+          "cells": "W36:AB36",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 37,
+          "label": "Travel and training",
+          "cells": "W37:AB37",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 38,
+          "label": "Other operating expense",
+          "cells": "W38:AB38",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 27,
+          "cells": "N27:S27",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Sales compensation",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 28,
+          "cells": "N28:S28",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Marketing programs",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 29,
+          "cells": "N29:S29",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Operations payroll",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 30,
+          "cells": "N30:S30",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Product and engineering",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 31,
+          "cells": "N31:S31",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Corporate payroll",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 32,
+          "cells": "N32:S32",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Facilities and occupancy",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 33,
+          "cells": "N33:S33",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Technology and communications",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 34,
+          "cells": "N34:S34",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Insurance",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 35,
+          "cells": "N35:S35",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Professional fees",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 36,
+          "cells": "N36:S36",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Travel and training",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 37,
+          "cells": "N37:S37",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Other operating expense",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -829,155.08 = actual 18,205,393.75 (sum of the 11 configured opex-group model rows [Sales compensation, Marketing programs, Operations payroll, Product and engineering, Corporate payroll, Facilities and occupancy, Technology and communications, Insurance, Professional fees, Travel and training, Other operating expense], Jan 2026..Jun 2026 summed (6 mo)) - budget 19,034,548.83 (sum of the budget-map opex_groups rows, budget 'Monthly Operating Plan', Jan 2026..Jun 2026 summed (6 mo)); var_pct -4.4% = variance / |budget|"
+    },
+    {
+      "metric": "Opex: Sales compensation",
+      "scope": "latest",
+      "actual": 389351.05,
+      "budget": 411656.79,
+      "var_abs": -22305.74,
+      "var_pct": -0.0542,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 28,
+          "label": "Sales compensation",
+          "cells": "AB28",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 27,
+          "cells": "S27",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Sales compensation",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -22,305.74 = actual 389,351.05 (model 'Sales compensation' (Income Statement AB28), Jun 2026) - budget 411,656.79 (budget 'Monthly Operating Plan' row 27, Jun 2026); var_pct -5.4% = variance / |budget|"
+    },
+    {
+      "metric": "Opex: Sales compensation",
+      "scope": "YTD",
+      "actual": 2275674.21,
+      "budget": 2379318.6,
+      "var_abs": -103644.39,
+      "var_pct": -0.0436,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 28,
+          "label": "Sales compensation",
+          "cells": "W28:AB28",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 27,
+          "cells": "N27:S27",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Sales compensation",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -103,644.39 = actual 2,275,674.21 (model 'Sales compensation' (Income Statement W28:AB28), Jan 2026..Jun 2026 summed (6 mo)) - budget 2,379,318.60 (budget 'Monthly Operating Plan' row 27, Jan 2026..Jun 2026 summed (6 mo)); var_pct -4.4% = variance / |budget|"
+    },
+    {
+      "metric": "Opex: Marketing programs",
+      "scope": "latest",
+      "actual": 149510.8,
+      "budget": 158076.21,
+      "var_abs": -8565.41,
+      "var_pct": -0.0542,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 29,
+          "label": "Marketing programs",
+          "cells": "AB29",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 28,
+          "cells": "S28",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Marketing programs",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -8,565.41 = actual 149,510.80 (model 'Marketing programs' (Income Statement AB29), Jun 2026) - budget 158,076.21 (budget 'Monthly Operating Plan' row 28, Jun 2026); var_pct -5.4% = variance / |budget|"
+    },
+    {
+      "metric": "Opex: Marketing programs",
+      "scope": "YTD",
+      "actual": 873858.89,
+      "budget": 913658.34,
+      "var_abs": -39799.45,
+      "var_pct": -0.0436,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 29,
+          "label": "Marketing programs",
+          "cells": "W29:AB29",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 28,
+          "cells": "N28:S28",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Marketing programs",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -39,799.45 = actual 873,858.89 (model 'Marketing programs' (Income Statement W29:AB29), Jan 2026..Jun 2026 summed (6 mo)) - budget 913,658.34 (budget 'Monthly Operating Plan' row 28, Jan 2026..Jun 2026 summed (6 mo)); var_pct -4.4% = variance / |budget|"
+    },
+    {
+      "metric": "Opex: Operations payroll",
+      "scope": "latest",
+      "actual": 582469.17,
+      "budget": 615838.55,
+      "var_abs": -33369.38,
+      "var_pct": -0.0542,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 30,
+          "label": "Operations payroll",
+          "cells": "AB30",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 29,
+          "cells": "S29",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Operations payroll",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -33,369.38 = actual 582,469.17 (model 'Operations payroll' (Income Statement AB30), Jun 2026) - budget 615,838.55 (budget 'Monthly Operating Plan' row 29, Jun 2026); var_pct -5.4% = variance / |budget|"
+    },
+    {
+      "metric": "Opex: Operations payroll",
+      "scope": "YTD",
+      "actual": 3404408.63,
+      "budget": 3559460.63,
+      "var_abs": -155052.0,
+      "var_pct": -0.0436,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 30,
+          "label": "Operations payroll",
+          "cells": "W30:AB30",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 29,
+          "cells": "N29:S29",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Operations payroll",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -155,052.00 = actual 3,404,408.63 (model 'Operations payroll' (Income Statement W30:AB30), Jan 2026..Jun 2026 summed (6 mo)) - budget 3,559,460.63 (budget 'Monthly Operating Plan' row 29, Jan 2026..Jun 2026 summed (6 mo)); var_pct -4.4% = variance / |budget|"
+    },
+    {
+      "metric": "Opex: Product and engineering",
+      "scope": "latest",
+      "actual": 351973.35,
+      "budget": 372137.73,
+      "var_abs": -20164.38,
+      "var_pct": -0.0542,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 31,
+          "label": "Product and engineering",
+          "cells": "AB31",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 30,
+          "cells": "S30",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Product and engineering",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -20,164.38 = actual 351,973.35 (model 'Product and engineering' (Income Statement AB31), Jun 2026) - budget 372,137.73 (budget 'Monthly Operating Plan' row 30, Jun 2026); var_pct -5.4% = variance / |budget|"
+    },
+    {
+      "metric": "Opex: Product and engineering",
+      "scope": "YTD",
+      "actual": 2057209.5,
+      "budget": 2150904.01,
+      "var_abs": -93694.51,
+      "var_pct": -0.0436,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 31,
+          "label": "Product and engineering",
+          "cells": "W31:AB31",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 30,
+          "cells": "N30:S30",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Product and engineering",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -93,694.51 = actual 2,057,209.50 (model 'Product and engineering' (Income Statement W31:AB31), Jan 2026..Jun 2026 summed (6 mo)) - budget 2,150,904.01 (budget 'Monthly Operating Plan' row 30, Jan 2026..Jun 2026 summed (6 mo)); var_pct -4.4% = variance / |budget|"
+    },
+    {
+      "metric": "Opex: Corporate payroll",
+      "scope": "latest",
+      "actual": 535747.04,
+      "budget": 566439.74,
+      "var_abs": -30692.7,
+      "var_pct": -0.0542,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 32,
+          "label": "Corporate payroll",
+          "cells": "AB32",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 31,
+          "cells": "S31",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Corporate payroll",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -30,692.70 = actual 535,747.04 (model 'Corporate payroll' (Income Statement AB32), Jun 2026) - budget 566,439.74 (budget 'Monthly Operating Plan' row 31, Jun 2026); var_pct -5.4% = variance / |budget|"
+    },
+    {
+      "metric": "Opex: Corporate payroll",
+      "scope": "YTD",
+      "actual": 3131327.73,
+      "budget": 3273942.4,
+      "var_abs": -142614.67,
+      "var_pct": -0.0436,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 32,
+          "label": "Corporate payroll",
+          "cells": "W32:AB32",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 31,
+          "cells": "N31:S31",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Corporate payroll",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -142,614.67 = actual 3,131,327.73 (model 'Corporate payroll' (Income Statement W32:AB32), Jan 2026..Jun 2026 summed (6 mo)) - budget 3,273,942.40 (budget 'Monthly Operating Plan' row 31, Jan 2026..Jun 2026 summed (6 mo)); var_pct -4.4% = variance / |budget|"
+    },
+    {
+      "metric": "Opex: Facilities and occupancy",
+      "scope": "latest",
+      "actual": 255414.29,
+      "budget": 270046.85,
+      "var_abs": -14632.56,
+      "var_pct": -0.0542,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 33,
+          "label": "Facilities and occupancy",
+          "cells": "AB33",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 32,
+          "cells": "S32",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Facilities and occupancy",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -14,632.56 = actual 255,414.29 (model 'Facilities and occupancy' (Income Statement AB33), Jun 2026) - budget 270,046.85 (budget 'Monthly Operating Plan' row 32, Jun 2026); var_pct -5.4% = variance / |budget|"
+    },
+    {
+      "metric": "Opex: Facilities and occupancy",
+      "scope": "YTD",
+      "actual": 1492842.29,
+      "budget": 1560832.99,
+      "var_abs": -67990.7,
+      "var_pct": -0.0436,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 33,
+          "label": "Facilities and occupancy",
+          "cells": "W33:AB33",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 32,
+          "cells": "N32:S32",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Facilities and occupancy",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -67,990.70 = actual 1,492,842.29 (model 'Facilities and occupancy' (Income Statement W33:AB33), Jan 2026..Jun 2026 summed (6 mo)) - budget 1,560,832.99 (budget 'Monthly Operating Plan' row 32, Jan 2026..Jun 2026 summed (6 mo)); var_pct -4.4% = variance / |budget|"
+    },
+    {
+      "metric": "Opex: Technology and communications",
+      "scope": "latest",
+      "actual": 214921.78,
+      "budget": 227234.55,
+      "var_abs": -12312.77,
+      "var_pct": -0.0542,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 34,
+          "label": "Technology and communications",
+          "cells": "AB34",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 33,
+          "cells": "S33",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Technology and communications",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -12,312.77 = actual 214,921.78 (model 'Technology and communications' (Income Statement AB34), Jun 2026) - budget 227,234.55 (budget 'Monthly Operating Plan' row 33, Jun 2026); var_pct -5.4% = variance / |budget|"
+    },
+    {
+      "metric": "Opex: Technology and communications",
+      "scope": "YTD",
+      "actual": 1256172.18,
+      "budget": 1313383.87,
+      "var_abs": -57211.69,
+      "var_pct": -0.0436,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 34,
+          "label": "Technology and communications",
+          "cells": "W34:AB34",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 33,
+          "cells": "N33:S33",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Technology and communications",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -57,211.69 = actual 1,256,172.18 (model 'Technology and communications' (Income Statement W34:AB34), Jan 2026..Jun 2026 summed (6 mo)) - budget 1,313,383.87 (budget 'Monthly Operating Plan' row 33, Jan 2026..Jun 2026 summed (6 mo)); var_pct -4.4% = variance / |budget|"
+    },
+    {
+      "metric": "Opex: Insurance",
+      "scope": "latest",
+      "actual": 115247.91,
+      "budget": 121850.41,
+      "var_abs": -6602.5,
+      "var_pct": -0.0542,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 35,
+          "label": "Insurance",
+          "cells": "AB35",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 34,
+          "cells": "S34",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Insurance",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -6,602.50 = actual 115,247.91 (model 'Insurance' (Income Statement AB35), Jun 2026) - budget 121,850.41 (budget 'Monthly Operating Plan' row 34, Jun 2026); var_pct -5.4% = variance / |budget|"
+    },
+    {
+      "metric": "Opex: Insurance",
+      "scope": "YTD",
+      "actual": 673599.57,
+      "budget": 704278.31,
+      "var_abs": -30678.74,
+      "var_pct": -0.0436,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 35,
+          "label": "Insurance",
+          "cells": "W35:AB35",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 34,
+          "cells": "N34:S34",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Insurance",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -30,678.74 = actual 673,599.57 (model 'Insurance' (Income Statement W35:AB35), Jan 2026..Jun 2026 summed (6 mo)) - budget 704,278.31 (budget 'Monthly Operating Plan' row 34, Jan 2026..Jun 2026 summed (6 mo)); var_pct -4.4% = variance / |budget|"
+    },
+    {
+      "metric": "Opex: Professional fees",
+      "scope": "latest",
+      "actual": 190003.31,
+      "budget": 200888.51,
+      "var_abs": -10885.2,
+      "var_pct": -0.0542,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 36,
+          "label": "Professional fees",
+          "cells": "AB36",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 35,
+          "cells": "S35",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Professional fees",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -10,885.20 = actual 190,003.31 (model 'Professional fees' (Income Statement AB36), Jun 2026) - budget 200,888.51 (budget 'Monthly Operating Plan' row 35, Jun 2026); var_pct -5.4% = variance / |budget|"
+    },
+    {
+      "metric": "Opex: Professional fees",
+      "scope": "YTD",
+      "actual": 1110529.02,
+      "budget": 1161107.47,
+      "var_abs": -50578.45,
+      "var_pct": -0.0436,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 36,
+          "label": "Professional fees",
+          "cells": "W36:AB36",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 35,
+          "cells": "N35:S35",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Professional fees",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -50,578.45 = actual 1,110,529.02 (model 'Professional fees' (Income Statement W36:AB36), Jan 2026..Jun 2026 summed (6 mo)) - budget 1,161,107.47 (budget 'Monthly Operating Plan' row 35, Jan 2026..Jun 2026 summed (6 mo)); var_pct -4.4% = variance / |budget|"
+    },
+    {
+      "metric": "Opex: Travel and training",
+      "scope": "latest",
+      "actual": 127707.14,
+      "budget": 135023.43,
+      "var_abs": -7316.29,
+      "var_pct": -0.0542,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 37,
+          "label": "Travel and training",
+          "cells": "AB37",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 36,
+          "cells": "S36",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Travel and training",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -7,316.29 = actual 127,707.14 (model 'Travel and training' (Income Statement AB37), Jun 2026) - budget 135,023.43 (budget 'Monthly Operating Plan' row 36, Jun 2026); var_pct -5.4% = variance / |budget|"
+    },
+    {
+      "metric": "Opex: Travel and training",
+      "scope": "YTD",
+      "actual": 746421.15,
+      "budget": 780416.51,
+      "var_abs": -33995.36,
+      "var_pct": -0.0436,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 37,
+          "label": "Travel and training",
+          "cells": "W37:AB37",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 36,
+          "cells": "N36:S36",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Travel and training",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -33,995.36 = actual 746,421.15 (model 'Travel and training' (Income Statement W37:AB37), Jan 2026..Jun 2026 summed (6 mo)) - budget 780,416.51 (budget 'Monthly Operating Plan' row 36, Jan 2026..Jun 2026 summed (6 mo)); var_pct -4.4% = variance / |budget|"
+    },
+    {
+      "metric": "Opex: Other operating expense",
+      "scope": "latest",
+      "actual": 202462.55,
+      "budget": 214061.52,
+      "var_abs": -11598.97,
+      "var_pct": -0.0542,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 38,
+          "label": "Other operating expense",
+          "cells": "AB38",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 37,
+          "cells": "S37",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Other operating expense",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -11,598.97 = actual 202,462.55 (model 'Other operating expense' (Income Statement AB38), Jun 2026) - budget 214,061.52 (budget 'Monthly Operating Plan' row 37, Jun 2026); var_pct -5.4% = variance / |budget|"
+    },
+    {
+      "metric": "Opex: Other operating expense",
+      "scope": "YTD",
+      "actual": 1183350.58,
+      "budget": 1237245.7,
+      "var_abs": -53895.12,
+      "var_pct": -0.0436,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 38,
+          "label": "Other operating expense",
+          "cells": "W38:AB38",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "source",
+          "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+          "sheet": "Monthly Operating Plan",
+          "row": 37,
+          "cells": "N37:S37",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/budget-map.json",
+          "section": "opex_groups.Other operating expense",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -53,895.12 = actual 1,183,350.58 (model 'Other operating expense' (Income Statement W38:AB38), Jan 2026..Jun 2026 summed (6 mo)) - budget 1,237,245.70 (budget 'Monthly Operating Plan' row 37, Jan 2026..Jun 2026 summed (6 mo)); var_pct -4.4% = variance / |budget|"
+    }
+  ],
+  "exceptions": [
+    {
+      "metric": "Revenue",
+      "scope": "latest",
+      "actual": 9570056.36,
+      "budget": 11115786.65,
+      "var_abs": -1545730.29,
+      "var_pct": -0.1391,
+      "favorable": false,
+      "rule": "|var%|>=10% AND |var$|>=$50,000"
+    },
+    {
+      "metric": "Revenue",
+      "scope": "YTD",
+      "actual": 55574230.48,
+      "budget": 63034185.85,
+      "var_abs": -7459955.37,
+      "var_pct": -0.1183,
+      "favorable": false,
+      "rule": "|var%|>=10% AND |var$|>=$50,000"
+    },
+    {
+      "metric": "Gross Profit (as-reported)",
+      "scope": "latest",
+      "actual": 4353418.64,
+      "budget": 5217370.69,
+      "var_abs": -863952.05,
+      "var_pct": -0.1656,
+      "favorable": false,
+      "rule": "|var%|>=10% AND |var$|>=$50,000"
+    },
+    {
+      "metric": "Gross Profit (as-reported)",
+      "scope": "YTD",
+      "actual": 25201765.09,
+      "budget": 29122152.6,
+      "var_abs": -3920387.51,
+      "var_pct": -0.1346,
+      "favorable": false,
+      "rule": "|var%|>=10% AND |var$|>=$50,000"
+    },
+    {
+      "metric": "EBITDA (as-reported)",
+      "scope": "latest",
+      "actual": 1238610.25,
+      "budget": 1924116.4,
+      "var_abs": -685506.15,
+      "var_pct": -0.3563,
+      "favorable": false,
+      "rule": "|var%|>=10% AND |var$|>=$50,000"
+    },
+    {
+      "metric": "EBITDA (as-reported)",
+      "scope": "YTD",
+      "actual": 6996371.34,
+      "budget": 10087603.77,
+      "var_abs": -3091232.43,
+      "var_pct": -0.3064,
+      "favorable": false,
+      "rule": "|var%|>=10% AND |var$|>=$50,000"
+    }
+  ],
+  "engine": "data-driven budget-map v4 (config-driven, borrower-agnostic) + per-figure source refs/calc",
+  "borrower": "Nemeris Field Systems, LLC",
+  "latest_month": "Jun 2026",
+  "ytd_months": [
+    "Jan 2026",
+    "Feb 2026",
+    "Mar 2026",
+    "Apr 2026",
+    "May 2026",
+    "Jun 2026"
+  ],
+  "materiality_rule": "|var%| >= 10% AND |var$| >= $50,000",
+  "budget_source": {
+    "file": "source:Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+    "sheet": "Monthly Operating Plan",
+    "basis": "management-prepared / unaudited"
+  },
+  "comparability_notes": [
+    "Actual EBITDA is sourced from the model's single EBITDA bridge row 'Reported EBITDA' -- the SAME row covenant-compliance reads -- so the two modules report identical actual EBITDA (one system-wide definition). Budget EBITDA is computed with the identical bridge formula (Net Income + Interest Expense + Financing Cost if enabled and present + Income Taxes + D&A - Interest Income) so it is like-for-like. The financing-cost add-back is DISABLED via ebitda.addback_financing_cost in borrower-config.",
+    "Reporting basis note (2026-06 Close Notes): first-and-final package, no restatement or basis change.",
+    "2026 Q2 Portfolio Management folder contains a Lender_Query_Unsupported_Addback and Borrower_Correction_Notice plus both an ORIGINAL and CORRECTED Covenant_Calculation for Q2 2026 \u2014 covenant-setup and the covenant-compliance module should use the CORRECTED version and note the correction history.",
+    "Budget (Monthly Operating Plan) is only built down to Budget EBITDA \u2014 it does not budget interest, taxes, D&A or net income, consistent with the model's own gap noted in model_lines."
+  ],
+  "comparability_items_ytd": [],
+  "financing_cost_ytd": null,
+  "methodology": "Actuals from the company-prepared/unaudited monthly financials model (read via monitor_lib). Budget is management-prepared/unaudited, extracted via budget-map.json. ACTUAL EBITDA is read from the model's single EBITDA bridge row (the same definition covenant-compliance uses); budget EBITDA mirrors that bridge formula for like-for-like comparison."
+}

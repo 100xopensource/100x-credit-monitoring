@@ -1,0 +1,48 @@
+{
+  "borrower": "Asteron Care Partners, LLC",
+  "lien_type": "blanket",
+  "security_summary": "Senior secured; first-priority blanket lien on substantially all personal property of the borrower and guarantors (accounts, chattel paper, deposit accounts, equipment, fixtures, general intangibles, instruments, inventory, books/records, and proceeds), subject to customary exclusions/permitted liens. Guarantees from Asteron Care Holdings, Inc. and the five regional operating subsidiaries (Southeast, Mid-Atlantic, Northeast, Great Lakes, Central Operations, LLC). Reinstated exit debt and new-money term debt share the SAME first-priority lien class (pari passu). Source: executed Guaranty and Security Agreement (effective 2026-03-31) and Amended and Restated Credit Agreement (executed 2026-03-20, effective 2026-03-31) -- the CURRENT/Exit Facility. No inventory line exists on this borrower's Balance Sheet (healthcare-services business), so inventory is not tracked as a pledged component below even though the security agreement nominally covers it.",
+  "funded_debt_source": {
+    "covenant_spec_ref": "covenant-spec.json#/definitions/Indebtedness",
+    "model_rows": [
+      "Funded debt, carrying amount"
+    ]
+  },
+  "pledged_components": [
+    {
+      "label": "Cash (controlled accounts)",
+      "model_line": "Cash",
+      "tier": "liquid"
+    },
+    {
+      "label": "Accounts receivable (net)",
+      "model_line": "Accounts receivable",
+      "tier": "liquid"
+    },
+    {
+      "label": "PP&E, net",
+      "model_line": "PP&E, net",
+      "tier": "tangible_ip"
+    },
+    {
+      "label": "Goodwill",
+      "model_line": "Goodwill",
+      "tier": "goodwill"
+    }
+  ],
+  "_pledged_components_note": "'Operating lease ROU assets' and 'Other current assets'/'Tax refund receivable' are excluded -- ROU assets are not owned property available to a secured creditor (they track leased real estate liabilities), and the other two are not identifiable collateral categories under the security agreement. Goodwill ($78.1M at June 2026, ~39% of total assets) is nominal/intangible collateral only -- flagged in coverage cuts via 'Ex-goodwill assets'. No inventory line exists on the Balance Sheet (see security_summary).",
+  "coverage_cuts": {
+    "All pledged assets": [
+      "liquid",
+      "tangible_ip",
+      "goodwill"
+    ],
+    "Ex-goodwill assets": [
+      "liquid",
+      "tangible_ip"
+    ],
+    "Liquid (cash + A/R)": [
+      "liquid"
+    ]
+  }
+}

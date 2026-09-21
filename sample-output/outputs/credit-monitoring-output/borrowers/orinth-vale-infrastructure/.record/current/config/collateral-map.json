@@ -1,0 +1,44 @@
+{
+  "borrower": "Orinth Vale Infrastructure, LLC",
+  "lien_type": "blanket",
+  "security_summary": "First-priority blanket lien on substantially all personal property of the Borrower (accounts and contract rights; inventory and materials; machinery, vehicles, and equipment; deposit accounts and securities accounts; books and records; insurance proceeds and other proceeds) per the executed Guaranty and Security Agreement (effective 2025-01-15), guaranteed by Orinth Vale Field Services, LLC, PLUS a separate first-priority security interest in registered/unregistered intellectual property (ORINTH VALE trademark application, VALEGRID service mark application, and related domain names) per the executed Intellectual Property Security Agreement (effective 2025-01-15). Controlled deposit accounts at Cairn National Bank (operating account ending 1842, payroll account ending 7710) per the executed Information Certificate. Source: executed Guaranty and Security Agreement, executed Intellectual Property Security Agreement, executed Information Certificate, executed Credit Agreement (Initial Closing, 01 Legal/Executed/Initial Closing).",
+  "_ip_collateral_note": "The IP Security Agreement's pledged trademarks/service marks/domains have no distinct 'Intangible Assets' line on this borrower's Balance Sheet (only a catch-all 'Other Assets' row, not itemized) -- so IP is NOT included as a pledged_components tier below (there is no model row to track it against). Noted in security_summary for completeness; the Collateral box coverage math is therefore conservative (excludes an asset class the lender does in fact have a lien on).",
+  "funded_debt_source": {
+    "covenant_spec_ref": "covenant-spec.json#/definitions/Funded_Debt",
+    "model_rows": [
+      "Funded Debt"
+    ]
+  },
+  "pledged_components": [
+    {
+      "label": "Cash (controlled accounts)",
+      "model_line": "Cash",
+      "tier": "liquid"
+    },
+    {
+      "label": "Accounts receivable",
+      "model_line": "Accounts Receivable",
+      "tier": "liquid"
+    },
+    {
+      "label": "Inventory",
+      "model_line": "Inventory",
+      "tier": "tangible_ip"
+    },
+    {
+      "label": "Property and equipment, net",
+      "model_line": "Net Property and Equipment",
+      "tier": "tangible_ip"
+    }
+  ],
+  "_no_goodwill_note": "Borrower's Balance Sheet carries no goodwill line (only a catch-all 'Other Assets' row), so no goodwill-tier component or 'ex-goodwill' cut is defined -- 'All pledged assets' and 'Ex-goodwill assets' would be identical here, so only one all-inclusive cut is defined below.",
+  "coverage_cuts": {
+    "All pledged assets": [
+      "liquid",
+      "tangible_ip"
+    ],
+    "Liquid (cash + A/R)": [
+      "liquid"
+    ]
+  }
+}

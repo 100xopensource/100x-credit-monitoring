@@ -1,0 +1,53 @@
+{
+  "schema": "credit-monitoring-run-ledger/v1",
+  "schema_version": 1,
+  "run_id": "run-20260915-094514",
+  "period": "2026-06",
+  "status": "finished",
+  "started_at": "2026-09-15T09:45:14+00:00",
+  "base": {
+    "from": "seed"
+  },
+  "packages_seen": [],
+  "analyst_focus": [
+    "Leverage trend and headroom against the 5.50x cap, and confirmation of the improving trajectory",
+    "June 2026 first negative budget variance in the last six quarters -- is it noise or an inflection",
+    "Equipment/fleet collateral concentration and archetype classification (asset-heavy-industrial vs services-project)"
+  ],
+  "steps": {
+    "config": "done",
+    "model": "done",
+    "modules": {
+      "covenant-compliance": "done",
+      "budget-vs-actual": "done",
+      "ap-ar-aging": "done",
+      "three-statement-analysis": "done"
+    },
+    "coverage": "done",
+    "memo": "done",
+    "write_back": "done"
+  },
+  "delivery_base": {
+    ".record/changelog.jsonl": null,
+    ".record/current/config/borrower-config.json": "sha256:a809b01b3203724d3d8cf70a9958833a950d167846a42b7ee9e796a8dde8ad09",
+    ".record/current/config/budget-map.json": "sha256:a4116dc35995c3f1b23d0860be465b59c3d8673519f8cace481b36a4d18d44ac",
+    ".record/current/config/collateral-map.json": "sha256:b8f92ff5749f2b9c7b03d9af144d507e75fb6d4fa850277cc387fbf9f964fcc2",
+    ".record/current/config/covenant-spec.json": "sha256:ace35caaf72e4b5c2b702fcc91443532d1de62b507b2404f2ee60806b96d5285",
+    ".record/current/config/deal-context.json": "sha256:6ed174c0617cbfb0c47f83664236a1ea1e762c3a6d88ac5775402fb927ce4143",
+    ".record/current/config/debt-service-schedule.json": "sha256:41d944fad5733bd1735ba60531cf181c48240ab949452d8b7daee3ac1c697897",
+    ".record/current/config/debt-service-schedule.md": "sha256:b323ab9399dda278fccee3a12a07672b9e8c1d7a50699037f2e975f926ef6ac0",
+    ".record/current/config/debt-service-spec.json": "sha256:62c577fa94d8fac53ba34dbac3da7ca7b3ca5f9630b26775a29451f91178832a",
+    ".record/edit-intake.json": null,
+    ".record/manifest.json": null,
+    ".record/published.json": null
+  },
+  "inputs": {
+    "config": "config",
+    "model": "Orinth Vale Infrastructure Monthly IS-BS-CF.xlsx",
+    "sidecars": [
+      "source-map.json",
+      "restatements.json"
+    ],
+    "execution_config": "execution-config.json"
+  }
+}

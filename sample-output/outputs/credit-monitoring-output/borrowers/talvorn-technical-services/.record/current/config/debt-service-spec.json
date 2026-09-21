@@ -1,0 +1,112 @@
+{
+  "borrower": "Talvorn Technical Services, LLC",
+  "agreement": "Talvorn 2025 Senior Secured Credit Facility -- Executed Credit Agreement between Talvorn Technical Services, LLC (Borrower) and Blue Mesa Private Credit, LP (Administrative Agent). Issued January 10, 2025; effective/closing January 15, 2025; maturity January 15, 2030. Par refinancing of $104,139,422.73 of legacy (January 2022) principal at the same 10.64% fixed rate; no new money, no PIK, no draws, no mandatory sweep. No amendments or waivers found anywhere in the deal folder (confirmed by full-text sweep -- see covenant-spec.json's 'agreement' field for the sweep detail).",
+  "as_of_agreement_date": "2025-01-15",
+  "amendments_reflected": [],
+
+  "facility": {
+    "name": "Talvorn 2025 Senior Secured Credit Facility (Term Loan)",
+    "maturity_date": "2030-01-15",
+    "agreement_ref": {
+      "section": "FACILITY",
+      "page": 1,
+      "quote": "Senior secured term facility; maturity January 15, 2030."
+    }
+  },
+
+  "tranches": [
+    {
+      "id": "term_loan",
+      "fundings": [
+        {
+          "date": "2025-01-15",
+          "amount": 104139422.73,
+          "agreement_ref": {
+            "section": "FACILITY",
+            "page": 1,
+            "quote": "Principal commitment and initial funding: $104,139,422.73 at par, solely to refinance legacy principal."
+          }
+        }
+      ]
+    }
+  ],
+
+  "amortization_base": {
+    "definition_verbatim": "Required monthly principal amortization is 0.20% of beginning funded debt.",
+    "agreement_ref": {
+      "section": "FACILITY",
+      "page": 1,
+      "quote": "Required monthly principal amortization is 0.20% of beginning funded debt."
+    },
+    "engine_limitation_note": "ENGINE LIMITATION, VERIFIED against the borrower's own certified monthly Debt Service tab in 5 non-adjacent months (2025-01, 02, 03, 07; 2026-06): this is a DECLINING-BALANCE (self-amortizing) mechanic, not a flat-original-principal one. E.g. 2025-02 Scheduled Principal $207,862.29 = exactly 0.20% x that month's OWN (already-reduced) beginning debt of $103,931,143.88; 2026-06 Scheduled Principal $201,309.54 = exactly 0.20% x June 2026's own beginning debt of $100,654,771.63 -- NOT 0.20% of the fixed original $104,139,422.73 (which would be a flat $208,278.85 every month for the life of the loan). debt_service.py v1's amortization_base is fixed at the aggregate original principal of fundings before the payment date -- constant at $104,139,422.73 for this single up-front-funded tranche (no draws ever occur) -- so it produces a FLAT $208,278.85/month installment throughout instead of the true, gradually shrinking one. The two readings tie ONLY for the very first ordinary (February 2025) installment; from March 2025 onward the engine's flat figure runs progressively higher than the true declining-balance amount, and the gap widens every month for the rest of the loan's life (compounding further because the engine's own carried balance is then also too high, inflating its own interest calc slightly in every later month). Sign-off question, same as posed in covenant-spec.json's Fixed_Charges note: accept the generated schedule as a documented, informational approximation, or source the covenant-support 'scheduled_principal' figure directly from the borrower's own native Debt Service-tab 'Scheduled Principal' line, verified exact to the penny in every month checked."
+  },
+
+  "cash_interest": {
+    "index": null,
+    "floor": 0,
+    "margin_grid": [
+      {
+        "above": null,
+        "rate": 0.1064,
+        "when": "fixed annual rate for all periods; no floating index, margin grid, or periodic reset"
+      }
+    ],
+    "adjustment": "None -- fixed for the life of the facility.",
+    "first_payment_date": "2025-02-01",
+    "payment_day": 1,
+    "agreement_ref": {
+      "section": "FACILITY",
+      "page": 1,
+      "quote": "Fixed annual interest rate: 10.64%; no floating index or reset."
+    },
+    "rate_confirmation_note": "CONFIRMED GENUINELY STATED, not reverse-engineered (unlike some sibling deals in this portfolio where original_agreement.pdf is silent on rate). Page 1 states the rate explicitly twice: 'Fixed annual interest rate: 10.64%; no floating index or reset' and 'Legacy financing from January 2022 used the same 10.64% fixed annual rate.' Independently verified against the borrower's own booked Debt Service tab: 2025-02 Cash Interest $921,522.81 = beginning debt $103,931,143.88 x 0.1064 / 12 (to the cent); 2025-03 Cash Interest $919,679.76 = beginning debt $103,723,281.59 x 0.1064 / 12 (to the cent, despite March having 31 days vs. February's 28 -- see day_count.ambiguities below for why this matters). First payment date (2025-02-01) and payment_day (1) are NOT literally stated in the agreement (it says only 'payable monthly'); assumed to be the first of the month following the funding month, consistent with the engine's payment_day=1 requirement and with the borrower's own booking (Debt Service tab reports on a calendar-month cadence starting with the funding month itself, 2025-01)."
+  },
+
+  "amortization": {
+    "start_date": "2025-02-01",
+    "annual_pct_of_base_grid": [
+      {
+        "above": null,
+        "rate": 0.024,
+        "when": "0.20% of beginning funded debt per month = 2.40% annualized; flat, no step-up schedule (contrast with sibling deals in this portfolio whose amortization steps by amendment -- Talvorn carries none)"
+      }
+    ],
+    "payments_per_year": 12,
+    "balloon_at_maturity": true,
+    "fixed_charges_attribution": "accrued",
+    "agreement_ref": {
+      "section": "FACILITY",
+      "page": 1,
+      "quote": "Required monthly principal amortization is 0.20% of beginning funded debt."
+    }
+  },
+
+  "day_count": {
+    "convention": "actual/365",
+    "count_both_endpoints": true,
+    "verbatim": "Interest payable monthly on beginning funded principal at annual rate / 12, rounded to cents.",
+    "agreement_ref": {
+      "section": "FACILITY",
+      "page": 1,
+      "quote": "Interest payable monthly on beginning funded principal at annual rate / 12, rounded to cents."
+    },
+    "ambiguities": [
+      "RECURRING MONTHLY CONVENTION: the agreement states interest as a flat 'annual rate / 12' on the beginning balance -- a day-count-INDEPENDENT monthly-equivalent, not a real actual/360 or actual/365 day count. Verified against the borrower's own Debt Service tab: 2025-02 (28 days) Cash Interest $921,522.81 = beginning debt x 0.1064/12 exactly; 2025-03 (31 days) Cash Interest $919,679.76 = beginning debt x 0.1064/12 exactly -- the SAME per-dollar monthly rate applies regardless of the number of calendar days in the month. This is closer to a 30/360 bond-basis monthly-equivalent than to either convention debt_service.py v1 supports (actual/360 or actual/365 with REAL calendar-day counting; there is no flat/30-360 mode). 'actual/365' is recorded here because it is the closer of the two on an ANNUAL basis: a full non-leap year's real days sum to exactly 365, so actual/365 totals to exactly the stated annual rate over a full 12-month year with zero aggregate drift, whereas actual/360 systematically overcounts annual interest by 365/360 (~1.39%) every year, compounding to a materially overstated total interest figure over the facility's 5-year life. Expect the GENERATED schedule's month-by-month cash-interest figures to differ from the borrower's own booked Debt Service tab in every ordinary month (higher in 31-day months, lower in 28-day February), even though the annual total should be close.",
+      "FUNDING-MONTH STUB (January 2025), MATERIAL: the agreement states a mid-month effective/closing date (2025-01-15) and separately states 'January accrual is allocated between legacy and successor debt without duplicate interest' -- implying THIS facility's own share of January's interest is prorated for the ~17 days it existed after closing. The borrower's OWN books instead record a FULL month of both cash interest ($923,369.55) and scheduled principal ($208,278.85) against this facility for January 2025 (Debt Service tab, period 2025-01), consistent with the borrower's Accounting Notes stating explicitly: 'Full-month fee convention: Jan 2025-Dec 2029; final rounding true-up before Jan 15, 2030 maturity' -- i.e. the borrower defers ALL proration to the final stub month at maturity rather than prorating the funding month. debt_service.py v1 always computes a REAL stub from the literal funding date forward (17 of 31 days counted both endpoints in January 2025) and a real stub to the literal maturity date in the final month -- it has no 'full month from inception, true-up entirely at the back end' mode. This spec records the funding date as the agreement's own literally stated date (2025-01-15), NOT backdated to 2025-01-01 to force a match with the borrower's booking convention -- extracting the contract, not the ledger, per Method step 3b. EXPECT the generated schedule's January 2025 cash-interest to run roughly 44% below the borrower's booked full-month figure, and its scheduled-principal to be $0 (this spec's amortization start_date is 2025-02-01) versus the borrower's booked $208,278.85 for that month. Sign-off question: accept this one-time, quantified first-month shortfall as a known engine-limitation gap (the same class of gap as the declining-balance amortization-base issue above), or source month-1 (and eventually the final stub month at maturity) covenant-support figures directly from the borrower's own native Debt Service tab instead."
+    ]
+  },
+
+  "fees": [],
+  "fees_not_modeled_note": "Origination fee: 1% of $104,139,422.73 = $1,041,394.23, paid ONCE at closing (2025-01-15) from existing cash (fee-letter.pdf: 'Origination fee: 1% of $104,139,422.73, or $1,041,394.23, paid from existing cash. No other transaction fee, discount or premium.'). NOT modeled in fees[] above: the schema's 'when' enum (close_and_payment_dates | payment_dates | maturity) has no 'at close only, one-time' option -- 'close_and_payment_dates' would incorrectly recur this fee at every monthly payment date thereafter, which the agreement does not intend ('No other transaction fee ... 1% origination fee' is explicitly a single closing-date event). This is an engine/schema limitation, not an omission of a real term: the fee is explicitly excluded from covenant Fixed Charges regardless ('The closing origination fee and par legacy payoff are financing transactions, not recurring Fixed Charges' -- original_agreement.pdf page 2), so leaving it out of fees[] does not affect the FCCR covenant. It DOES belong in a payoff / sources-and-uses view, which is out of scope for this spec -- record it there by hand if one is built ($1,041,394.23, 2025-01-15, paid from cash, fixed_charges_treatment would be 'excluded').",
+
+  "observations": {
+    "index_rates": [],
+    "grid_state": []
+  },
+
+  "covenant_support_rows": {
+    "cash_interest": "Cash Interest Expense",
+    "scheduled_principal": "Scheduled Debt Principal Payments"
+  },
+  "covenant_support_rows_note": "These two labels are exactly what covenant-spec.json's Fixed_Charges definition sums (together with the native 'Lease Payments' line) to build the agreement's own three-part TTM Fixed Charges. Given the amortization_base and day_count engine-limitation findings above -- both independently verified against 5 months of the borrower's own certified Debt Service tab -- NEITHER generated row should be assumed to tie to the borrower's own booked 'Cash Interest' / 'Scheduled Principal' figures beyond the first ordinary (non-stub) month; see those notes for the expected direction and growing magnitude of the drift, and the step-7 question of whether to source these two covenant-support rows from this generated schedule (per the standard pipeline) or directly from the borrower's own native Debt Service-tab lines (independently verified exact for this specific single-facility borrower)."
+}

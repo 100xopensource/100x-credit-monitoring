@@ -1,0 +1,288 @@
+{
+  "model_file": "store:borrowers/selvara-industrial-services/_model/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+  "columns": {
+    "Income Statement": {
+      "2024-09": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2024-09/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2024-10": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2024-10/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2024-11": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2024-11/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2024-12": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2024-12/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-01": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2025-01/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-02": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2025-02/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-03": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2025-03/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-04": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2025-04/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-05": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2025-05/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-06": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2025-06/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-07": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2025-07/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-08": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2025-08/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-09": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2025-09/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-10": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2025-10/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-11": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2025-11/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-12": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2025-12/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2026-01": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2026-02": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2026-03": {
+        "file": "source:Selvara Industrial Services/Monthly/Current/2026-06/consolidated-revised.xlsx",
+        "sheet": "Income Statement",
+        "restated": true
+      },
+      "2026-04": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2026-05": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2026-06": {
+        "file": "source:Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+        "sheet": "Income Statement"
+      }
+    },
+    "Balance Sheet": {
+      "2024-09": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2024-09/monthly.xlsx",
+        "sheet": "Working Capital"
+      },
+      "2024-10": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2024-10/monthly.xlsx",
+        "sheet": "Working Capital"
+      },
+      "2024-11": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2024-11/monthly.xlsx",
+        "sheet": "Working Capital"
+      },
+      "2024-12": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2024-12/monthly.xlsx",
+        "sheet": "Working Capital"
+      },
+      "2025-01": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2025-01/monthly.xlsx",
+        "sheet": "Working Capital"
+      },
+      "2025-02": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2025-02/monthly.xlsx",
+        "sheet": "Working Capital"
+      },
+      "2025-03": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2025-03/monthly.xlsx",
+        "sheet": "Working Capital"
+      },
+      "2025-04": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2025-04/monthly.xlsx",
+        "sheet": "Working Capital"
+      },
+      "2025-05": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2025-05/monthly.xlsx",
+        "sheet": "Working Capital"
+      },
+      "2025-06": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2025-06/monthly.xlsx",
+        "sheet": "Working Capital"
+      },
+      "2025-07": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2025-07/monthly.xlsx",
+        "sheet": "Working Capital"
+      },
+      "2025-08": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2025-08/monthly.xlsx",
+        "sheet": "Working Capital"
+      },
+      "2025-09": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2025-09/monthly.xlsx",
+        "sheet": "Working Capital"
+      },
+      "2025-10": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2025-10/monthly.xlsx",
+        "sheet": "Working Capital"
+      },
+      "2025-11": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2025-11/monthly.xlsx",
+        "sheet": "Working Capital"
+      },
+      "2025-12": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2025-12/monthly.xlsx",
+        "sheet": "Working Capital"
+      },
+      "2026-01": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+        "sheet": "Working Capital"
+      },
+      "2026-02": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+        "sheet": "Working Capital"
+      },
+      "2026-03": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2026-03/monthly.xlsx",
+        "sheet": "Working Capital"
+      },
+      "2026-04": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+        "sheet": "Working Capital"
+      },
+      "2026-05": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+        "sheet": "Working Capital"
+      },
+      "2026-06": {
+        "file": "source:Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+        "sheet": "Working Capital"
+      }
+    },
+    "Cash Flow Statement": {
+      "2024-09": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2024-09/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2024-10": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2024-10/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2024-11": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2024-11/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2024-12": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2024-12/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-01": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2025-01/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-02": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2025-02/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-03": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2025-03/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-04": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2025-04/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-05": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2025-05/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-06": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2025-06/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-07": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2025-07/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-08": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2025-08/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-09": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2025-09/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-10": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2025-10/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-11": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2025-11/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-12": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2025-12/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2026-01": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2026-02": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2026-03": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2026-03/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2026-04": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2026-05": {
+        "file": "source:Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2026-06": {
+        "file": "source:Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+        "sheet": "Cash Flow"
+      }
+    }
+  },
+  "_debt_service_rows": {
+    "Cash Interest Expense": {
+      "source": "DEVIATION per covenant-spec.json step7_signoff decision 'fixed_charges_component_source': all 22 months (Sep 2024 - Jun 2026) sourced from the borrower's OWN NATIVE Cash Flow tab 'Cash interest' line (via a live in-workbook cross-sheet formula, 'Balance Sheet'!row19 = -'Cash Flow Statement'!row12), NOT from debt-service-schedule.json. Selvara carries no debt other than this one facility -- no sweep-in risk the ledger-vs-contract distinction usually guards against -- and the native line is independently verified exact to the penny every month checked.",
+      "reference": "store:borrowers/selvara-industrial-services/.record/current/config/debt-service-spec.json#/covenant_support_rows/cash_interest (row-label binding only); actual monthly figures from this model's own Cash Flow Statement sheet, 'Cash interest' row, sourced to each month's own monthly.xlsx / June_2026_Monthly_Package.xlsx 'Cash Flow' tab",
+      "note": "debt-service-schedule.json (generated 2026-09-15, store:borrowers/selvara-industrial-services/.record/current/config/debt-service-schedule.json) exists but was NOT used for this row per the deviation -- the generated schedule is a documented approximation (flat-original-principal-base amortization vs. the agreement's true declining-balance reality; a day-count mismatch the engine cannot reproduce, per debt-service-spec.json's ambiguities)."
+    },
+    "Scheduled Debt Principal Payments": {
+      "source": "DEVIATION per covenant-spec.json step7_signoff decision 'fixed_charges_component_source': all 22 months sourced from the borrower's OWN NATIVE Cash Flow tab 'Required principal' line (via a live in-workbook cross-sheet formula, 'Balance Sheet'!row20 = -'Cash Flow Statement'!row18), NOT from debt-service-schedule.json. Ties exactly to the Debt Roll-Forward block's own 'Required principal' line every month (e.g. Jun 2026: both $2,052,401.70).",
+      "reference": "store:borrowers/selvara-industrial-services/.record/current/config/debt-service-spec.json#/covenant_support_rows/scheduled_principal (row-label binding only); actual monthly figures from this model's own Cash Flow Statement sheet, 'Required principal' row, sourced to each month's own monthly.xlsx / June_2026_Monthly_Package.xlsx 'Cash Flow' tab",
+      "note": "No non-facility scheduled debt (vehicle loans, SBA notes) is disclosed anywhere in the deal folder for this borrower, so nothing is added beyond the native facility figure. debt-service-schedule.json exists but was NOT used for this row per the deviation."
+    }
+  }
+}

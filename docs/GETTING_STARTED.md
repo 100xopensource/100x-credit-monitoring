@@ -1,6 +1,16 @@
 # Getting started
 
-## What you need
+## Choose your starting point
+
+**[View the live sample dashboard](https://100xpartners.ai/credit-monitoring/)** on the 100x Partners website, or download the files using the sample guide below.
+
+- **[View sample results](../sample-output/README.md#1-view-sample-results):** open the completed June 2026 dashboard, workbooks, and memos for six fictional borrowers. No Claude account or plugin is needed. Download HTML before opening it; GitHub shows its source.
+- **[Continue from the sample](../sample-output/README.md#2-continue-from-the-sample):** read the compatibility notes first. The prepared plugin currently rejects this saved store during folder setup; standalone reports remain available. This is not a seamless-resume package.
+- **[Run the sample yourself](../sample-output/README.md#3-run-the-sample-yourself):** use the source dataset, one borrower, and a separate empty results folder. First setup can take an hour or more.
+
+For the download links, folder map, and limitations, use the [sample guide](../sample-output/README.md). To run your own review, continue below.
+
+## What you need for a review
 
 - Claude Cowork. Reviews run three background agents, which do not run in a plain chat.
 - One borrower folder containing reporting and signed loan documents, or the [synthetic dataset](https://github.com/100xopensource/100x-credit-monitoring-synthetic-dataset).

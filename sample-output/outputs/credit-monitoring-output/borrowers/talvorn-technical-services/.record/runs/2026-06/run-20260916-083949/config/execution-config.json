@@ -1,0 +1,149 @@
+{
+  "borrower_name": "Talvorn Technical Services, LLC",
+  "fund": "",
+  "timezone": "America/New_York",
+  "paths": {
+    "reporting_packages_folder": "source:Talvorn Technical Services/Finance Uploads/Monthly Close",
+    "compliance_certificate_folder": "",
+    "model_output_path": "store:borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+    "monitor_output_folder": "store:borrowers/talvorn-technical-services/.record/current",
+    "credit_agreement_path": "source:Talvorn Technical Services/Credit & Legal/Executed/original_agreement.pdf",
+    "ic_uw_memo_path": "source:Talvorn Technical Services/Credit & Legal/IC Memo.pdf",
+    "covenant_spec_path": "store:borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/covenant-spec.json",
+    "debt_service_spec_path": "store:borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/debt-service-spec.json",
+    "debt_service_schedule_path": "store:borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/debt-service-schedule.json",
+    "deal_context_path": "store:borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/deal-context.json",
+    "budget_path": "source:Talvorn Technical Services/Planning/Approved/Approved Budget.xlsx",
+    "budget_version_note": "Approved Budget.xlsx, 'Consolidated' tab (periods-as-columns 2026-01 through 2026-06) -- approved 2025-12-17 by the Talvorn Board Finance Committee (per the workbook's own 'Approved Budget' cover sheet: Approval Status=APPROVED, Approved By=Board Finance Committee, Approval Date=2025-12-17, Budget Period='2026-01 through 2026-06', Required Mapping Authority='Department to GL Mapping.xlsx'). This is the ONLY approved budget file found anywhere in the deal folder -- unlike Selvara/Orinth Vale, there is no separate prior-year (FY2025) approved budget superseded by this one; the approved planning horizon simply starts at 2026-01, meaning budget-vs-actual can only run for 2026-01 through 2026-06 of the 22-month (2024-09 through 2026-06) reporting history -- the 16 months before 2026-01 have no approved budget to compare against and will read as budget-vs-actual 'no budget for this period', not a data error. 'Working Budget NOT APPROVED.xlsx' is an explicit decoy per its own filename -- excluded.",
+    "budget_map_path": "store:borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/budget-map.json",
+    "collateral_map_path": "store:borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/collateral-map.json",
+    "_compliance_certificate_folder_note": "Left BLANK, not pointed at 'Portfolio Monitoring/' -- Portfolio Monitoring/<period>/ only holds a narrative 'PM Update <period>.pdf' (no covenant figures, confirmed by direct read of 2025-Q1 and 2026-Q2). The ACTUAL compliance certificate for this borrower is 'certificate.pdf', filed monthly INSIDE each Finance Uploads/Monthly Close/<YYYY>/<MM>/ folder (present for 2025-01 onward; absent 2024-09 through 2024-12 because the Talvorn 2025 facility did not close until 2025-01-15 -- those four months are pre-close historical packages, not a gap relative to the first covenant test date). Since the certificate already lives inside reporting_packages_folder, per the skill's own guidance the compliance_certificate_folder field is left blank so covenant-compliance falls back to the reporting folder automatically -- confirmed by reading certificate.pdf for 2025-01 and 2026-06: EVERY month (18 of 18, 2025-01 through 2026-06) carries a Trailing Covenant EBITDA / Trailing Fixed Charges / FCCR figure, but the Status field reads 'COMPLIANT' only at the four quarter-ends per year (Mar/Jun/Sep/Dec) and 'NOT TESTED' for the 8 interim months -- i.e. the single covenant (quarterly TTM FCCR) is genuinely tested quarterly, the monthly cadence just recomputes and displays the running ratio every month for informational purposes. covenant-compliance should treat 'NOT TESTED' months as informational, not as missing certificates.",
+    "_amendment_waiver_note": "NONE FOUND. Full recursive search of the entire Talvorn Technical Services folder tree for amend*/waiver*/modif*/consent* filenames returned zero results, and no Amendments/Waivers subfolder exists anywhere. This is a clean, single-instrument closing package -- unlike some other borrowers in this portfolio batch, Talvorn has no amendment or waiver chain to track.",
+    "_department_mapping_trap_note": "JUDGMENT CALL / FLAG: 'Planning/Working/Department to GL Mapping DRAFT NOT APPROVED.xlsx' is not just a stale-numbers decoy -- it SWAPS the GL category of two Sales accounts relative to the Board-approved mapping ('Planning/Approved/Department to GL Mapping.xlsx'): the draft maps 'Customer Programs' (the borrower's single largest revenue account, ~$5.1-5.4M/month) to Operating Expenses and 'Growth and Bid Support' to Net Revenue -- exactly backwards from the approved mapping. Both budget-map.json (below) and build-monitoring-model (run separately) must hard-code the Approved path and never fall back to the Working draft, or revenue collapses and opex inflates by the same swapped amount."
+  },
+  "modules": [
+    "covenant-compliance",
+    "budget-vs-actual",
+    "ap-ar-aging",
+    "three-statement-analysis"
+  ],
+  "module_inputs": {
+    "_comment": "budget-vs-actual INCLUDED and will actually RUN for this borrower (for 2026-01 through 2026-06 only, see paths.budget_version_note) -- model_lines.gross_profit is populated ('Gross Profit' is a native, verbatim row on this borrower's own monthly Income Statement, verified tying exactly to Net Revenue minus Cost of Revenue for 2026-06: 13,852,034.69 - 7,620,004.28 = 6,232,030.41), so this borrower does NOT hit the budget-vs-actual engine's gross_profit-required limitation that skipped the module for Selvara. revenue-quality EXCLUDED: revenue is a mixed project/recurring-maintenance model -- 'Maintenance creates repeat scheduling opportunities while commissioned work and equipment delivery introduce timing variability' (Management Presentation) -- with no ARR/subscription/retention metric reported anywhere, the same basis Orinth Vale and Selvara were excluded on. ap-ar-aging INCLUDED: ap-ar-aging.xlsx is delivered every month and its Current/31-60/61-90/90+ bucket totals tie EXACTLY (to the penny) to the Balance Sheet's Accounts Receivable and Accounts Payable lines in monthly-current.xlsx for every month checked (2024-09 and 2026-06) -- BUT unlike every other borrower onboarded this batch, this aging file is BUCKETED TOTALS ONLY with NO named customers or vendors (confirmed: just Current / 31-60 Days / 61-90 Days / 90+ Days / Total rows on an 'Accounts Receivable' and 'Accounts Payable' tab). DSO/DPO and aging-bucket-mix trend metrics will compute normally, but ap-ar-aging's per-counterparty concentration output will be empty for this borrower -- a data-shape gap, not a misconfiguration."
+  },
+  "model": {
+    "entity": "consolidated",
+    "scale": 1,
+    "currency": "USD",
+    "unit_verbatim": "Authoritative consolidated actuals | USD",
+    "as_of": "2026-06",
+    "_scale_verification": "Sanity-checked against 2026-06 Net Revenue: monthly-current.xlsx reads 13,852,034.69, i.e. $13,852,034.69 (whole dollars, scale=1) -- consistent with FY2024 annual revenue of $135,209,741.65 per the Management Presentation (~$11.3M/month average in FY2024, growing to ~$13.9M/month by mid-2026), and the December 2024 IC Memo figure of $11,185,497.14 for that single month lines up with FY2024 annual revenue of $135,209,741.65 (~$11.3M/month average). No '$ in thousands' caption anywhere in any workbook; the verbatim caption on every tab is 'Authoritative consolidated actuals | USD' -- whole dollars."
+  },
+  "model_lines": {
+    "revenue": "Net Revenue",
+    "gross_profit": "Gross Profit",
+    "operating_cogs": "Cost of Revenue",
+    "ebitda_bridge": "Reported EBITDA",
+    "net_income": "Net Income",
+    "interest_expense": "Interest Expense",
+    "taxes": "Taxes",
+    "depreciation_amortization": "Depreciation and Amortization",
+    "financing_cost": "",
+    "accounts_receivable": "Accounts Receivable",
+    "accounts_payable": "Accounts Payable",
+    "pre_financing_subtotal": "Operating Income",
+    "revenue_components": [
+      "Technical Field Service",
+      "Maintenance Programs",
+      "Equipment Solutions",
+      "Engineering Support"
+    ],
+    "total_debt": "Funded Debt",
+    "_gap_note": "NO GAP -- this is the THICKEST monthly reporting package of the five borrowers onboarded so far in this batch: monthly-current.xlsx's Income Statement carries a full accrual P&L (Net Revenue -> Cost of Revenue -> Gross Profit -> Operating Expenses -> Reported EBITDA -> D&A -> Operating Income -> Interest Expense -> Income Before Taxes -> Taxes -> Net Income), verified identical in shape across 2024-09, 2025-06 and 2026-06. Every model_lines key above is a NATIVE, verbatim row -- no derivation needed. Full bridge VERIFIED for 2026-06: Net Income 1,032,520.46 + Interest Expense 909,828.88 + Taxes 326,059.09 + Depreciation and Amortization 249,336.62 = 2,517,745.05 = Reported EBITDA exactly, so financing_cost is intentionally left blank (the bridge already closes with no separate financing-cost addback needed, same convention as Orinth Vale). Gross Profit tie also VERIFIED: Net Revenue 13,852,034.69 - Cost of Revenue 7,620,004.28 = Gross Profit 6,232,034.69... (exact: 6,232,030.41). 'revenue_components' is sourced from sales-by-channel.xlsx's four channels (Technical Field Service / Maintenance Programs / Equipment Solutions / Engineering Support), verified to sum exactly to Net Revenue for both 2024-09 and 2026-06 -- same convention as Nemeris. Interest Expense and Taxes are true P&L ACCRUAL lines here (not cash-flow 'cash interest/cash taxes' proxies like Selvara/Asteron needed), and were independently confirmed to equal the Debt Service tab's cash-interest figure exactly in every month checked (no cash/accrual timing difference -- consistent with a fixed-rate, no-PIK, no-capitalized-interest facility per Accounting Notes). Covenant EBITDA = Reported EBITDA exactly by contract (the credit agreement states 'No EBITDA adjustments are permitted' -- see deal-context.json ebitda_addbacks for the full note)."
+  },
+  "opex_groups": {
+    "Growth and Bid Support": "Growth and Bid Support",
+    "Branch Overhead": "Branch Overhead",
+    "Product Engineering": "Product Engineering",
+    "General and Administrative": "General and Administrative",
+    "_comment": "JUDGMENT CALL, flagged for build-monitoring-model (not run in this task): monthly-current.xlsx itself carries only ONE lumped 'Operating Expenses' line on its Income Statement -- these four group labels come from a SEPARATE file in the same monthly folder, department-actuals.xlsx (Source Account / Department / Amount, 12 rows, identical shape verified across 2024-09, 2025-06, 2026-06), read through the Board-approved 'Department to GL Mapping.xlsx' (approved 2024-12-18, effective 2025-01-01; its own Board Finance Committee Mapping Policy.pdf is a one-line governance pointer naming this exhibit as 'the sole authority'). Each of Talvorn's 4 departments (Sales/Operations/Product/Corporate) has exactly one Net Revenue account, one Cost of Revenue account, and one Operating Expenses account -- these are the 4 Operating-Expenses-mapped accounts. VERIFIED for 2026-06: 706,936.95 (Growth and Bid Support) + 1,355,437.14 (Branch Overhead) + 1,023,161.24 (Product Engineering) + 628,750.03 (General and Administrative) = 3,714,285.36, which ties EXACTLY to monthly-current.xlsx's consolidated 'Operating Expenses' line for the same month. This is genuinely MORE granular than Selvara/Orinth Vale (both had only one lumped opex line with no sub-breakdown available anywhere) -- build-monitoring-model must pull department-actuals.xlsx into the canonical model specifically to populate these 4 opex sub-rows. CRITICAL: use ONLY the Approved mapping -- the Working DRAFT mapping swaps two Sales accounts' GL categories (see paths._department_mapping_trap_note)."
+  },
+  "comparability_items": [],
+  "ebitda": {
+    "addback_financing_cost": false
+  },
+  "aging": {
+    "file_format": "auto",
+    "dpo_basis": "operating_cogs",
+    "amount_scale": 1,
+    "tie_tolerance": 1.0,
+    "top_n": 5,
+    "_dpo_basis_note": "dpo_basis correctly points at 'operating_cogs' -- unlike Selvara, this borrower HAS a real Cost of Revenue line (see model_lines), so DPO is a genuine, non-proxy ratio for this borrower. amount_scale=1 verified: ap-ar-aging.xlsx's AR/AP bucket totals tie EXACTLY (to the penny) to monthly-current.xlsx's Balance Sheet AR/AP lines for both 2024-09 ($14,830,585.44 / $7,157,958.70) and 2026-06 ($18,721,486.62 / $9,144,005.14) -- same whole-dollar unit throughout, no 1000x scale mismatch."
+  },
+  "analysis_notes": [
+    "Reporting-consistency check: spot-checked file lists across all 22 Finance Uploads/Monthly Close months (2024-09 through 2026-06) -- every month holds exactly the expected file set with byte-identical filenames (4 files pre-close 2024-09 through 2024-12, 5 files 2025-01 onward adding certificate.pdf). No amendment/waiver, no restatement, no correction notice, and no schema deviation was found anywhere in the deal folder -- this is the cleanest file (no data-quality flags) of the five borrowers onboarded in this batch so far. analysis.basis_breaks and comparability_items are both intentionally empty.",
+    "Covenant trend: TTM FCCR has risen MONOTONICALLY every single month for the full 18-month certified history, from 1.6680x (2025-01, first certificate) to 2.1564x (2026-06, latest) against a flat 1.2000x minimum -- cushion has nearly tripled (0.47x to 0.96x). All four quarterly tests to date (2025-Q1 through 2026-Q2) certified COMPLIANT with growing margin. See deal-context.json our_view for the full trajectory read.",
+    "EBITDA add-back sweep: the credit agreement's own Accounting Notes state explicitly 'No EBITDA adjustments are permitted under this agreement; forecasts, synergies and owner contributions are not earnings' -- Covenant EBITDA is CONTRACTUALLY DEFINED to equal Reported EBITDA with zero addback flexibility (stronger than Selvara's 'none found by inspection' -- here none are even permitted by contract). No restructuring/impairment/write-off/severance/transaction-cost/one-time line was found in any monthly package, the IC Memo, or the Management Presentation either. ebitda_addbacks.entries in deal-context.json is therefore empty by contractual design, not merely by absence of candidates."
+  ],
+  "analysis": {
+    "basis_breaks": [],
+    "business_model": "services",
+    "cash_floor": null,
+    "fiscal_year_start_month": 1,
+    "trend_window": 3,
+    "line_read": {
+      "materiality_floor": null,
+      "run_min_months": 3,
+      "frozen_min_months": 3,
+      "big_move_pct": 0.25,
+      "share_shift_ppt": 5.0
+    },
+    "drift": {
+      "min_months": 6,
+      "min_same_sign_share": 0.7,
+      "min_total_pct": 0.15
+    },
+    "trend": {
+      "window": 4,
+      "trend_min_months": 3,
+      "trend_max_months": 5,
+      "run_end_tolerance": 2,
+      "k_vol": 1.5,
+      "ratio_rel": 0.2,
+      "wc_driver_pct": 0.1,
+      "wc_rev_pct": 0.1,
+      "reclass_net_frac": 0.2,
+      "reclass_min_pct": 0.25
+    },
+    "seasonality": {
+      "low_months": [],
+      "peak_months": []
+    },
+    "thresholds": {
+      "gross_margin_floor": 0.2,
+      "one_time_reliance_ppt": 0.05,
+      "dpo_days_high": 60,
+      "dio_days_high": 120,
+      "current_ratio_low": 1.0,
+      "revenue_drop_vs_trailing": 0.2,
+      "liquidity_months_to_floor": 3.0
+    }
+  },
+  "analysis_lines": {
+    "cash": "Cash",
+    "accounts_receivable": "Accounts Receivable",
+    "accounts_payable": "Accounts Payable",
+    "total_debt": "Funded Debt",
+    "operating_cf": "Operating Cash Flow",
+    "investing_cf": "Capital Expenditures",
+    "financing_cf": "Financing Cash Flow",
+    "inventory": "Inventory and Other Current Assets",
+    "total_assets": "Total Assets",
+    "total_equity": "Equity",
+    "net_change_cash": "Net Cash Movement",
+    "_omitted_note": "total_current_assets / total_current_liabilities omitted -- the Balance Sheet is CONDENSED, not classified: it has Cash/AR/Inventory-and-Other-Current-Assets/Net PP&E/Total Assets and AP/Funded Debt/Total Liabilities/Equity, but no current-vs-non-current subtotal split anywhere (confirmed across 2024-09, 2025-06, 2026-06). current_ratio-style metrics will be flagged unresolved rather than guessed. 'inventory' maps to 'Inventory and Other Current Assets' -- a COMBINED line (inventory blended with other current assets, not a pure inventory balance) -- flagged as a proxy, not a clean inventory figure; consistent with inventory being absent from the pledged collateral anyway (see collateral-map.json).",
+    "_tie_verification_note": "Full cash-flow tie VERIFIED for 2026-06 (all three subtotals are NATIVE rows, no derivation needed unlike Selvara/Orinth Vale/Asteron): Operating Cash Flow 1,445,185.90 + Capital Expenditures -304,744.76 + Financing Cash Flow -201,309.54 = 939,131.60 = Net Cash Movement (939,131.60, also native) = Ending Cash 13,477,929.53 minus Beginning Cash 12,538,797.93 (939,131.60) -- exact on every leg."
+  },
+  "shared_definitions": {
+    "ebitda_definition_ref": "covenant-spec.json#/definitions/EBITDA"
+  }
+}

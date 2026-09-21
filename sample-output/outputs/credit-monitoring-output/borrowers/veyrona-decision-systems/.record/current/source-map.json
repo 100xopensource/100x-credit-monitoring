@@ -1,0 +1,284 @@
+{
+  "model_file": "store:borrowers/veyrona-decision-systems/_model/Veyrona Decision Systems Monthly IS-BS-CF.xlsx",
+  "columns": {
+    "Income Statement": {
+      "2024-09": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2024/09/September_2024_Monthly_Package.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2024-10": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2024/10/October_2024_Monthly_Package.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2024-11": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2024/11/November_2024_Monthly_Package.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2024-12": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2024/12/December_2024_Monthly_Package.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-01": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/01/January_2025_Monthly_Package.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-02": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/02/February_2025_Monthly_Package.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-03": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/03/March_2025_Monthly_Package.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-04": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/04/April_2025_Monthly_Package.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-05": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/05/May_2025_Monthly_Package.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-06": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/06/June_2025_Monthly_Package.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-07": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/07/July_2025_Monthly_Package.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-08": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/08/August_2025_Monthly_Package.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-09": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/09/September_2025_Monthly_Package.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-10": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/10/October_2025_Monthly_Package.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-11": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/11/November_2025_Monthly_Package.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-12": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/12/December_2025_Monthly_Package.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2026-01": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/01/January_2026_Monthly_Package.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2026-02": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/02/February_2026_Monthly_Package.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2026-03": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx",
+        "sheet": "Income Statement",
+        "restated": true
+      },
+      "2026-04": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx",
+        "sheet": "Income Statement",
+        "restated": true
+      },
+      "2026-05": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx",
+        "sheet": "Income Statement",
+        "restated": true
+      },
+      "2026-06": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/June_2026_Monthly_Package_2026-07-25.xlsx",
+        "sheet": "Income Statement"
+      }
+    },
+    "Balance Sheet": {
+      "2024-09": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2024/09/September_2024_Monthly_Package.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2024-10": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2024/10/October_2024_Monthly_Package.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2024-11": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2024/11/November_2024_Monthly_Package.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2024-12": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2024/12/December_2024_Monthly_Package.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-01": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/01/January_2025_Monthly_Package.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-02": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/02/February_2025_Monthly_Package.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-03": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/03/March_2025_Monthly_Package.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-04": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/04/April_2025_Monthly_Package.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-05": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/05/May_2025_Monthly_Package.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-06": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/06/June_2025_Monthly_Package.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-07": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/07/July_2025_Monthly_Package.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-08": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/08/August_2025_Monthly_Package.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-09": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/09/September_2025_Monthly_Package.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-10": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/10/October_2025_Monthly_Package.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-11": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/11/November_2025_Monthly_Package.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-12": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/12/December_2025_Monthly_Package.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2026-01": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/01/January_2026_Monthly_Package.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2026-02": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/02/February_2026_Monthly_Package.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2026-03": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx",
+        "sheet": "Balance Sheet",
+        "restated": true
+      },
+      "2026-04": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx",
+        "sheet": "Balance Sheet",
+        "restated": true
+      },
+      "2026-05": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx",
+        "sheet": "Balance Sheet",
+        "restated": true
+      },
+      "2026-06": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/June_2026_Monthly_Package_2026-07-25.xlsx",
+        "sheet": "Balance Sheet"
+      }
+    },
+    "Cash Flow Statement": {
+      "2024-09": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2024/09/September_2024_Monthly_Package.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2024-10": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2024/10/October_2024_Monthly_Package.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2024-11": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2024/11/November_2024_Monthly_Package.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2024-12": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2024/12/December_2024_Monthly_Package.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-01": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/01/January_2025_Monthly_Package.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-02": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/02/February_2025_Monthly_Package.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-03": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/03/March_2025_Monthly_Package.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-04": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/04/April_2025_Monthly_Package.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-05": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/05/May_2025_Monthly_Package.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-06": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/06/June_2025_Monthly_Package.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-07": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/07/July_2025_Monthly_Package.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-08": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/08/August_2025_Monthly_Package.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-09": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/09/September_2025_Monthly_Package.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-10": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/10/October_2025_Monthly_Package.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-11": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/11/November_2025_Monthly_Package.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-12": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2025/12/December_2025_Monthly_Package.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2026-01": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/01/January_2026_Monthly_Package.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2026-02": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/02/February_2026_Monthly_Package.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2026-03": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx",
+        "sheet": "Cash Flow",
+        "restated": true
+      },
+      "2026-04": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx",
+        "sheet": "Cash Flow",
+        "restated": true
+      },
+      "2026-05": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx",
+        "sheet": "Cash Flow",
+        "restated": true
+      },
+      "2026-06": {
+        "file": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/June_2026_Monthly_Package_2026-07-25.xlsx",
+        "sheet": "Cash Flow"
+      }
+    }
+  }
+}

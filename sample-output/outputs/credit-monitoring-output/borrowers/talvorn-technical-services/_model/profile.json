@@ -1,0 +1,70 @@
+{
+  "borrower": "Talvorn Technical Services, LLC",
+  "borrower_key": "talvorn-technical-services",
+  "model_output_path": "store:borrowers/talvorn-technical-services/_model/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+  "last_build": "2026-09-16",
+  "months_covered": {
+    "first": "2024-09",
+    "last": "2026-06",
+    "count": 22
+  },
+  "reporting_packages": {
+    "folder": "source:Talvorn Technical Services/Finance Uploads/Monthly Close",
+    "file_pattern": "<YYYY>/<MM>/ subfolder per month, each holding ap-ar-aging.xlsx, department-actuals.xlsx, monthly-current.xlsx, sales-by-channel.xlsx, plus certificate.pdf from 2025-01 onward (facility closed 2025-01-15; the 4 months before that predate the agreement and carry no certificate).",
+    "core_statement_sheets_in_monthly_current": [
+      "Income Statement",
+      "Balance Sheet",
+      "Cash Flow",
+      "FCCR",
+      "Package Authority",
+      "Debt Service",
+      "TTM Detail",
+      "Accounting Notes"
+    ],
+    "single_month_per_package": "UNLIKE Nemeris/Orinth Vale/Selvara in this batch, monthly-current.xlsx is a SINGLE-COLUMN (one month only) package every month -- no rolling multi-month window, no consolidated/YTD file anywhere in the folder. 'Latest/most-consolidated source wins' has exactly one candidate per month; each month's own package is definitionally its own winner.",
+    "supplementary_files_per_month": [
+      "sales-by-channel.xlsx ('Detail' tab) -- 4 revenue channels (Technical Field Service / Maintenance Programs / Equipment Solutions / Engineering Support), verified to SUM EXACTLY to Net Revenue every month.",
+      "department-actuals.xlsx ('Department Detail' tab) -- 12 rows (Source Account / Department / Amount); filtered through Planning/Approved/Department to GL Mapping.xlsx to isolate the 4 Operating-Expenses-mapped accounts, verified to SUM EXACTLY to the consolidated Operating Expenses line every month.",
+      "ap-ar-aging.xlsx -- bucketed AR/AP totals only, no named counterparties; NOT used by this model (native BS AR/AP lines are already exact); consumed separately by the ap-ar-aging analysis module."
+    ],
+    "external_mapping_file": "source:Talvorn Technical Services/Planning/Approved/Department to GL Mapping.xlsx (APPROVED, Board Finance Committee, approved 2024-12-18) -- the DRAFT NOT APPROVED version in Planning/Working/ swaps 'Customer Programs' and 'Growth and Bid Support' between Net Revenue and Operating Expenses (exactly backwards) and must never be used.",
+    "mapping_effective_date_predates_check": "The Approved mapping states Effective Date 2025-01-01 on every row; this build applies it to all 22 months including the 4 pre-effective months (2024-09 through 2024-12) since it is the only mapping instrument and the account list is identical across all 22 months -- a disclosed, low-stakes judgment call (see Sources & Notes on the model workbook).",
+    "hidden_columns": false,
+    "encryption": "none observed",
+    "format": "xlsx (not SpreadsheetML XML)"
+  },
+  "sign_conventions": {
+    "revenue_components_sum_directly_to_net_revenue": "no contra-revenue lines present; Net Revenue = SUM of the 4 channel lines, verified exact all 22 months.",
+    "opex_components_sum_directly_to_operating_expenses": "Operating Expenses = SUM of the 4 department-mapped accounts, verified exact all 22 months.",
+    "cf_scheduled_principal_and_capex_positive_signed_in_source": "unlike some other borrowers in this batch, this borrower's native Cash Flow tab stores Capital Expenditures as a NEGATIVE number (a use of cash) but Scheduled Principal / Legacy Principal Payoff / Gross Refinancing Proceeds / Cash Financing Fees as POSITIVE numbers combined via an explicit subtraction formula (Financing CF = GrossRefi - LegacyPayoff - ScheduledPrincipal - CashFinancingFees); this model reproduces that exact native formula rather than sign-flipping.",
+    "lease_payments_positive": "The synthesized 'Lease Payments' covenant-support row is carried POSITIVE as delivered in the TTM Detail tab (repeating 3-month cycle $18,653.68/$20,985.39/$23,317.10) -- a negative sign here would silently break the Fixed_Charges SUM."
+  },
+  "ebitda_bridge": {
+    "source": "covenant-spec.json#/definitions/Covenant_EBITDA (compute.ebitda_bridge = 'Reported EBITDA')",
+    "provisional": false,
+    "model_row": "Income Statement!'Reported EBITDA' = Gross Profit - Operating Expenses, no add-backs on its face (agreement: 'No EBITDA adjustments are permitted')",
+    "deemed_schedule": "none -- covenant-spec.json confirms no deemed-EBITDA schedule exists in this agreement",
+    "independent_verification": "Mar 2025: Income Statement Reported EBITDA $1,952,840.78 = TTM Detail tab's own 'Covenant EBITDA' column for the same month, to the cent."
+  },
+  "covenant_support": {
+    "debt_service_schedule_path": "store:borrowers/talvorn-technical-services/.record/current/config/debt-service-schedule.json",
+    "deviation_from_standard_pipeline": "Per covenant-spec.json step7_signoff decision 'fixed_charges_component_source' (analyst-approved 2026-09-16), BOTH 'Cash Interest Expense' and 'Scheduled Debt Principal Payments' are sourced DIRECTLY from this borrower's own native monthly-current.xlsx 'Debt Service' tab ('Cash Interest' / 'Scheduled Principal' lines) for every month -- NOT from the generated debt-service-schedule.json. The schedule is confirmed to exist but was intentionally NOT read for these two rows: debt-service-spec.json documents it as a flat-original-principal-base / day-count approximation of this borrower's true declining-balance (0.20% of each month's own beginning balance), flat-rate/12 facility. The native ledger lines are independently verified exact to the penny against both contractual formulas in every month checked.",
+    "lease_payments_row_synthesized": "The Fixed_Charges formula's third component has no home on any native statement tab; this model adds a 'Lease Payments' row to the Balance Sheet's COVENANT-SUPPORT ROWS section, reading each month's own TTM Detail tab 'Lease Payments' column (E) for that same month's own Period row -- no cross-month reach-back needed since each package's own TTM Detail tab already carries its own current month's figure.",
+    "pre_facility_months": "Not applicable -- Talvorn's facility closed 2025-01-15, but this model's 4 pre-close months (2024-09 through 2024-12) still carry real Debt Service tab figures from the LEGACY (pre-refinancing) facility at the same 10.64% rate, so no covenant-support row is zero/blank anywhere in this model's 22-month range.",
+    "pre_archive_ttm_window_gap": "The first quarterly FCCR test date (2025-03-31) needs a trailing-12-month window back to 2024-04; this model's own archive begins 2024-09 (5 months short). Built honestly from what the archive contains; a downstream covenant-compliance module may correctly read 'insufficient history' at the 2025-03-31 and 2025-06-30 test dates even though the borrower's own certified TTM Detail tabs already carry those months -- disclosed, not a build defect."
+  },
+  "materiality_threshold": {
+    "absolute": 25000,
+    "relative_pct": 0.01,
+    "rule": "greater of $25,000 or 1% of the line"
+  },
+  "restatement_history": "Zero restatements found on this first build (see restatements.json, empty). No prior canonical model existed; no two packages in the archive overlap the same month (single-month-per-package structure), so there was nothing to adjudicate. The only overlapping-period document anywhere in the deal folder is Finance/Annual Statements/2024/Income-Statement.xlsx (FY2024 annual total, $135,209,741.65) -- an annual total, not comparable at month granularity without the missing Jan-Aug 2024 months; cited for context only.",
+  "known_gaps": {
+    "no_current_subtotal_on_bs": "Balance Sheet is condensed (Cash/AR/Inventory-and-Other/Net PP&E/Total Assets, AP/Funded Debt/Total Liabilities/Equity) with no current-vs-non-current split anywhere in the source; none invented.",
+    "inventory_is_a_combined_line": "'Inventory and Other Current Assets' blends inventory with other current assets -- a proxy, not a clean inventory figure.",
+    "no_ar_ap_counterparty_detail": "ap-ar-aging.xlsx is bucketed totals only (Current/31-60/61-90/90+), no named customers or vendors -- affects the ap-ar-aging module's concentration output, not this model."
+  },
+  "config_discrepancy_flagged": "borrower-config.json's model_lines._gap_note states Interest Expense/Taxes 'were independently confirmed to equal the Debt Service tab's cash-interest figure exactly ... (no cash/accrual timing difference)'. This build's own direct read contradicts that: e.g. Mar 2025 native IS Interest Expense $937,036.33 vs. Debt Service tab Cash Interest $919,679.76, a $17,356.57 gap equal exactly to that month's Financing Fee Amortization -- matching covenant-spec.json's OWN more careful finding (which this build follows). Worth a correction pass on borrower-config.json's gap_note.",
+  "duplicate_label_warning_accepted": "Income Statement carries 'NET REVENUE'/'OPERATING EXPENSES' section headers that normalize to the same key as their own subtotal rows ('Net Revenue'/'Operating Expenses'); validate_model.py's last-wins resolution correctly serves the data-bearing subtotal row (it is written after the header in row order). Same accepted, non-blocking pattern already shipped on Nemeris's canonical model in this batch.",
+  "derived_cashflow_classifier_warning_accepted": "validate_model.py's blanket derived-CF sanity check cannot classify 'Draws', 'Lease Payments', and 'Scheduled Principal' as balance-sheet buckets -- these are Balance Sheet roll-forward / covenant-support labels, not classic BS leaf accounts, and this model's actual Cash Flow Statement is AS-REPORTED (native), never the derived builder. Non-blocking, does not affect the real output."
+}

@@ -1,0 +1,292 @@
+{
+  "model_file": "store:borrowers/talvorn-technical-services/_model/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+  "columns": {
+    "Income Statement": {
+      "2024-09": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2024/09/monthly-current.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2024-10": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2024/10/monthly-current.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2024-11": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2024/11/monthly-current.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2024-12": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2024/12/monthly-current.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-01": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2025/01/monthly-current.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-02": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2025/02/monthly-current.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-03": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2025/03/monthly-current.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-04": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2025/04/monthly-current.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-05": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2025/05/monthly-current.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-06": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2025/06/monthly-current.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-07": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2025/07/monthly-current.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-08": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2025/08/monthly-current.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-09": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2025/09/monthly-current.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-10": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2025/10/monthly-current.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-11": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2025/11/monthly-current.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-12": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2025/12/monthly-current.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2026-01": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2026/01/monthly-current.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2026-02": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2026/02/monthly-current.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2026-03": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2026/03/monthly-current.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2026-04": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2026/04/monthly-current.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2026-05": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2026/05/monthly-current.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2026-06": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/monthly-current.xlsx",
+        "sheet": "Income Statement"
+      }
+    },
+    "Balance Sheet": {
+      "2024-09": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2024/09/monthly-current.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2024-10": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2024/10/monthly-current.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2024-11": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2024/11/monthly-current.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2024-12": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2024/12/monthly-current.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-01": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2025/01/monthly-current.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-02": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2025/02/monthly-current.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-03": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2025/03/monthly-current.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-04": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2025/04/monthly-current.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-05": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2025/05/monthly-current.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-06": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2025/06/monthly-current.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-07": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2025/07/monthly-current.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-08": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2025/08/monthly-current.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-09": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2025/09/monthly-current.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-10": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2025/10/monthly-current.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-11": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2025/11/monthly-current.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-12": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2025/12/monthly-current.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2026-01": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2026/01/monthly-current.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2026-02": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2026/02/monthly-current.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2026-03": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2026/03/monthly-current.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2026-04": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2026/04/monthly-current.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2026-05": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2026/05/monthly-current.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2026-06": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/monthly-current.xlsx",
+        "sheet": "Balance Sheet"
+      }
+    },
+    "Cash Flow Statement": {
+      "2024-09": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2024/09/monthly-current.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2024-10": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2024/10/monthly-current.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2024-11": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2024/11/monthly-current.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2024-12": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2024/12/monthly-current.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-01": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2025/01/monthly-current.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-02": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2025/02/monthly-current.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-03": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2025/03/monthly-current.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-04": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2025/04/monthly-current.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-05": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2025/05/monthly-current.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-06": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2025/06/monthly-current.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-07": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2025/07/monthly-current.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-08": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2025/08/monthly-current.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-09": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2025/09/monthly-current.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-10": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2025/10/monthly-current.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-11": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2025/11/monthly-current.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-12": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2025/12/monthly-current.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2026-01": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2026/01/monthly-current.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2026-02": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2026/02/monthly-current.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2026-03": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2026/03/monthly-current.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2026-04": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2026/04/monthly-current.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2026-05": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2026/05/monthly-current.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2026-06": {
+        "file": "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/monthly-current.xlsx",
+        "sheet": "Cash Flow"
+      }
+    }
+  },
+  "_debt_service_rows": {
+    "Cash Interest Expense": {
+      "source": "borrower's own native 'Debt Service' tab, 'Cash Interest' line, read from that month's own monthly-current.xlsx package -- DEVIATION from the standard Method (which would read debt-service-schedule.json)",
+      "reference": "store:borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/covenant-spec.json#/step7_signoff/decisions/0",
+      "note": "Per covenant-spec.json step7_signoff decision 'fixed_charges_component_source' (analyst-approved 2026-09-16), sourced directly from the borrower's own native ledger line (independently verified exact to the penny against the 0.20%-of-beginning-balance / 10.64%-annual/12 contractual formulas in every month checked), NOT from the generated debt-service-schedule.json, which debt-service-spec.json documents as a flat-original-principal-base / day-count approximation for this borrower's true declining-balance, flat-rate/12 facility. debt-service-schedule.json was confirmed to exist but was NOT read for this row."
+    },
+    "Scheduled Debt Principal Payments": {
+      "source": "borrower's own native 'Debt Service' tab, 'Scheduled Principal' line, read from that month's own monthly-current.xlsx package -- DEVIATION from the standard Method",
+      "reference": "store:borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/covenant-spec.json#/step7_signoff/decisions/0",
+      "note": "Same deviation and rationale as 'Cash Interest Expense' above. No non-facility debt exists for this borrower (single-facility deal), so no additional disclosed amortization is added."
+    },
+    "Lease Payments": {
+      "source": "borrower's own native 'TTM Detail' tab, 'Lease Payments' column (E), that month's own row (Period == that month), read from that month's own monthly-current.xlsx package",
+      "reference": "store:borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/covenant-spec.json#/definitions/Fixed_Charges",
+      "note": "Synthesized model row -- this Fixed_Charges component exists nowhere on the native Income Statement, Balance Sheet, or Cash Flow tabs (lease costs stay embedded, undetailed, inside the native 'Operating Expenses' figure). Surfaced here solely so the Fixed_Charges formula (Cash Interest Expense + Scheduled Debt Principal Payments + Lease Payments) can resolve. Values carried POSITIVE as delivered."
+    }
+  }
+}

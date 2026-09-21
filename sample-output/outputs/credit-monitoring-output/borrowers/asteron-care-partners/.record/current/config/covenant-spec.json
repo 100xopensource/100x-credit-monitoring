@@ -1,0 +1,271 @@
+{
+  "borrower": "Asteron Care Partners, LLC",
+  "agreement": "Amended and Restated Credit Agreement among Asteron Care Partners, LLC (borrower), Asteron Care Holdings, Inc. and the regional operating subsidiaries (guarantors), and Cairn Ridge Private Credit, LP (administrative agent) -- executed 2026-03-20, effective 2026-03-31. This is the CURRENT/operative agreement (every 2026 monthly package's Status/Covenant tab names it as 'Operative document' from 2026-03 forward, confirmed independently against Successor Reporting/Archive/2026-03/monthly.xlsx through 2026/06/monthly.xlsx). It reflects the exit capitalization: $60,910,820.62 of predecessor/legacy debt exchanged into $44,000,000.00 reinstated term debt + $16,910,820.62 Series A preferred equity, plus $7,000,000.00 new-money term debt and $8,000,000.00 sponsor new common equity.",
+  "as_of_agreement_date": "2026-03-31",
+  "amendments_reflected": [
+    {
+      "date": "2021-01-15",
+      "name": "Predecessor Credit Agreement",
+      "effect": "Original senior secured term facility; 11.50% cash interest, 0.70%/month principal, remaining principal due at maturity. First-priority liens on accounts, deposit accounts, equipment, general intangibles, material contracts, books, records, proceeds. Guarantors: Asteron Care Holdings, Inc. and the regional operating subsidiaries. No FCCR or other financial covenant found in this agreement's text."
+    },
+    {
+      "date": "2025-01-15",
+      "name": "Legacy Credit Agreement",
+      "effect": "Refinanced the Predecessor facility AT PAR (same $57,834,030.22 balance per borrower-config's restructuring-timeline note; same economics, same agent Cairn Ridge Private Credit, LP). Introduced the 1.2000x quarterly trailing-twelve-month FCCR covenant (Covenant EBITDA / fixed charges) -- the only financial covenant identified across the full document set until the A&R's Minimum Liquidity covenant."
+    },
+    {
+      "date": "2025-12-05",
+      "name": "Exit Amendment",
+      "effect": "$7,000,000.00 bridge commitment at 11.50% fixed cash interest, $140,000.00 upfront fee, maturity 2026-03-31 (now repaid/superseded). SUSPENDED the Legacy Credit Agreement's 1.2000x FCCR test (informational only) through 2026-12-31, expressly stating the suspension 'is not a waiver, amendment of the 1.2000x threshold, or compliance determination.' Added a minimum-liquidity reporting control and weekly cash/variance reporting."
+    },
+    {
+      "date": "2026-03-31",
+      "name": "Amended and Restated Credit Agreement (current/operative agreement)",
+      "effect": "Executed the exit capitalization: $44,000,000.00 reinstated term debt + $16,910,820.62 Series A preferred equity (from the $60,910,820.62 predecessor/legacy debt exchange), plus $7,000,000.00 new-money term debt and $8,000,000.00 sponsor common equity. Cash interest stepped down to 10.00% (from 11.50%) and monthly principal amortization stepped down to 0.10% (from 0.70%), both effective April 2026; new final maturity 2031-03-31. CONTINUES the 1.2000x FCCR suspension through 2026-12-31 unchanged (does not reinstate, waive, or replace it). Adds a new, independent Minimum Liquidity covenant ($10,000,000.00, continuous, weekly reporting). Supersedes the Exit Amendment and the Legacy Credit Agreement 'without importing later operating information.'"
+    }
+  ],
+  "threshold_unit": "dollars",
+  "definitions": {
+    "EBITDA": {
+      "verbatim": "\"Minimum Fixed Charge Coverage Ratio is 1.2000x at quarter-end Test Dates. The ratio is trailing-twelve-month Covenant EBITDA divided by trailing-twelve-month fixed charges.\" (Legacy Credit Agreement, 'FCCR' section) -- this is the only place any of the four executed credit-agreement documents made available (Predecessor, Legacy, Exit Amendment, A&R) uses or names the term 'Covenant EBITDA'. None of them include Definitions-section text spelling out an add-back list; the executed documents provided for this extraction are short-form/summary instruments without numbered clauses.",
+      "agreement_ref": {
+        "section": "FCCR",
+        "page": 1,
+        "quote": "The ratio is trailing-twelve-month Covenant EBITDA divided by trailing-twelve-month fixed charges."
+      },
+      "basis": "flow",
+      "compute": {
+        "ebitda_bridge": "Reported EBITDA"
+      },
+      "note": "AMBIGUITY #1 (see step-7 list). Bound to the model's single pinned EBITDA bridge row ('Reported EBITDA') per the standard contract -- do not recompute a different EBITDA. Independently re-verified (not merely copied from a prior pass) against every monthly package from 2024-09 through 2026-06 (22 of 22 months checked): the borrower's own CERTIFIED 'Covenant EBITDA' (Portfolio Monitoring/<quarter>/Covenant Calculation.xlsx TTM Detail 'EBITDA' column, identical every quarter to the matching Compliance Certificate's 'CALCULATION' figure) equals this Reported-EBITDA bridge row PLUS A CONSTANT $553,353.26/month ($6,640,239.12/year), to the penny, in EVERY month checked -- spanning the Predecessor, Legacy, AND A&R agreements alike, so it is not a restructuring-era or A&R-specific feature. NONE of the nine executed documents read for this extraction (A&R Agreement, Legacy Credit Agreement, Exit Amendment, Predecessor Credit Agreement, Guaranty and Security Agreement, Fee Letter, Closing Officer Certificate, Funding Request, Solvency Certificate) states an EBITDA add-back, an operating-lease/rent add-back, or any other reconciling item in words. The only place a similarly-sized figure appears in writing anywhere in the deal folder is Restructuring/Closing Materials/Goodwill Impairment Support.xlsx ('Lease Basis Demonstration' tab: '2025 facility lease expense included above' = $6,640,239.12 = $553,353.26 x 12) -- an UNRELATED ASC 350 goodwill-impairment DCF workpaper (not an executed loan document, not a compliance schedule), whose own stated conclusion is the OPPOSITE of an addback ('Post-rent cash flows and no lease-liability addback; no double count'). That figure also does NOT match the borrower's actual disclosed monthly lease cash payments (operating-support.xlsx 'Leases' tab: $546,675.00/month in 2026, $534,608.07/month in early 2025, both escalating) -- the $553,353.26 gap is INVARIANT every single month, which real lease cash flows are not. CONCLUSION OF THIS EXTRACTION: the reconciling constant is real and precisely quantifiable in the certified exhibits, but this extraction could NOT verify it traces to agreement text, so it is recorded here as a NOTE only and is NOT folded into 'compute' (per the hard rule that a borrower/certificate add-back the agreement does not support stays out of the EBITDA definition). Net effect: a TTM FCCR reconstructed off this spec's EBITDA will run BELOW the borrower's own certified Covenant EBITDA by $553,353.26/month x 12 = $6,640,239.12 TTM understated. Since the only covenant that reads this definition (FCCR) is currently SUSPENDED (informational only), this does not misstate an active compliance determination today, but must be resolved -- against a longer-form agreement if one exists, or by an explicit analyst election -- before the FCCR is ever reactivated or quoted as anything more than a rough approximation."
+    },
+    "Fixed_Charges": {
+      "verbatim": "\"The ratio is trailing-twelve-month Covenant EBITDA divided by trailing-twelve-month fixed charges.\" (Legacy Credit Agreement, 'FCCR' section -- same source as EBITDA above.) No itemized 'Fixed Charges' definition text was included in any executed document made available.",
+      "agreement_ref": {
+        "section": "FCCR",
+        "page": 1,
+        "quote": "The ratio is trailing-twelve-month Covenant EBITDA divided by trailing-twelve-month fixed charges."
+      },
+      "basis": "flow",
+      "compute": {
+        "formula": {
+          "lines": [
+            "Facility Cash Interest Expense",
+            "Facility Scheduled Debt Principal Payments"
+          ],
+          "op": "sum"
+        }
+      },
+      "note": "Bound to the two facility debt-service rows the debt-service-spec/schedule populate (contractual cash interest + scheduled principal), per the standard 'Fixed Charges = facility's own cash interest and scheduled amortization' reading. IMPORTANT GAP: the borrower's own CERTIFIED Fixed Charges (Covenant Calculation.xlsx TTM Detail) is BROADER -- it sums Cash interest + Principal + Lease payments + Maintenance capex + Cash taxes. At June 2026 TTM: 6,238,068.98 + 2,080,006.60 + 6,487,698.42 + 2,611,783.44 + 0 = 17,417,557.44 certified, versus 6,238,068.98 + 2,080,006.60 = 8,318,075.58 that this definition alone reconstructs from facility debt service -- roughly a $9.1M TTM gap (lease payments + maintenance capex, the two uncaptured components; no 'Lease payments' or 'Maintenance capex' row exists in this borrower's canonical model per borrower-config model_lines). Do not treat this definition's reconstruction as a stand-in for the certified Fixed Charges without accounting for that gap -- flagged as ambiguity #1's companion for step 7."
+    },
+    "Liquidity": {
+      "verbatim": "\"The loan parties must maintain at least $10,000,000.00 of liquidity and deliver weekly liquidity and variance reporting during stabilization.\" (A&R Agreement, 'MINIMUM LIQUIDITY' section)",
+      "agreement_ref": {
+        "section": "MINIMUM LIQUIDITY",
+        "page": 1,
+        "quote": "The loan parties must maintain at least $10,000,000.00 of liquidity and deliver weekly liquidity and variance reporting during stabilization."
+      },
+      "basis": "spot",
+      "compute": {
+        "model_line": "Cash"
+      },
+      "note": "No revolving commitment or borrowing-base availability is disclosed anywhere in the executed documents made available (this facility is term debt only -- reinstated + new-money tranches, no revolver); the Balance Sheet carries one undifferentiated 'Cash' line (no restricted/unrestricted split), so Liquidity is bound to that line alone. If a fuller version of the agreement defines Liquidity to include availability or excludes specific accounts, this definition would need to be broadened."
+    },
+    "Indebtedness": {
+      "verbatim": "No formal 'Indebtedness'/'Total Debt' definition text was included in any executed document made available. The A&R Agreement's 'EXIT CAPITALIZATION' section states the funded amounts directly: \"Reinstated exit debt is $44,000,000.00 and new-money term debt is $7,000,000.00.\"",
+      "agreement_ref": {
+        "section": "EXIT CAPITALIZATION",
+        "page": 1,
+        "quote": "Reinstated exit debt is $44,000,000.00 and new-money term debt is $7,000,000.00."
+      },
+      "basis": "spot",
+      "compute": {
+        "model_line": "Funded debt, carrying amount"
+      },
+      "note": "Referenced by collateral-map.json's funded_debt_source (covenant_spec_ref: '#/definitions/Indebtedness') -- defined here for that cross-reference even though no ACTIVE financial covenant in this spec currently uses it as an input. 'Funded debt, carrying amount' on the Balance Sheet ($49,707,152.95 at June 2026) runs below the debt-service schedule's gross/face combined principal ($51,000,000.00 funded, amortizing to $50,847,152.95 gross by June 2026 per the Approved Stabilization Budget) -- the ~$1.14M gap is consistent with unamortized debt-issuance-cost / provisional debt-exchange accounting (see accounting_basis below) and is PROVISIONAL pending the TDR/instrument-level workpapers."
+    }
+  },
+  "covenants": [
+    {
+      "id": "min_liquidity",
+      "name": "Minimum Liquidity",
+      "primitive": "min_level",
+      "metric": {
+        "ref": "Liquidity"
+      },
+      "window": "spot",
+      "threshold": 10000000,
+      "frequency": "continuous; reported monthly",
+      "first_test_date": "2026-03-31",
+      "cure_rights": "Not stated in the executed documents made available.",
+      "agreement_ref": {
+        "section": "MINIMUM LIQUIDITY",
+        "page": 1,
+        "quote": "The loan parties must maintain at least $10,000,000.00 of liquidity and deliver weekly liquidity and variance reporting during stabilization."
+      },
+      "cert_ref": "Stabilization Milestones.xlsx, Milestone M3 ('Maintain minimum liquidity of $10 million', owner CFO, due 2026-06-30, status COMPLETE); cross-checked against each month's Portfolio Management Update 'LIQUIDITY' line (e.g. 2026-Q2 PM Update: 'Ending cash was $18,817,443.79').",
+      "at_risk_band": 0.1,
+      "note": "ACTIVE covenant -- the only financial covenant in the current A&R agreement that is actually tested (not suspended). Reporting cadence is stated as WEEKLY in the A&R text ('deliver weekly liquidity and variance reporting'); 'frequency' is recorded here as the closest value the spec's controlled vocabulary supports ('continuous; reported monthly') because this covenant-compliance module and the underlying financial model run on a monthly cadence. The weekly reporting obligation itself is captured separately below as a reference-only reporting covenant."
+    },
+    {
+      "id": "fccr",
+      "name": "Minimum Fixed Charge Coverage Ratio (FCCR)",
+      "primitive": "min_coverage",
+      "numerator": {
+        "ref": "EBITDA"
+      },
+      "denominator": {
+        "ref": "Fixed_Charges"
+      },
+      "window": "ttm",
+      "threshold_schedule": [
+        {
+          "effective": "2025-01-15",
+          "value": 1.2
+        },
+        {
+          "effective": "2025-12-05",
+          "value": null
+        },
+        {
+          "effective": "2027-01-01",
+          "value": 1.2
+        }
+      ],
+      "frequency": "quarterly",
+      "first_test_date": "2025-03-31",
+      "cure_rights": "Not stated in the executed documents made available.",
+      "agreement_ref": {
+        "section": "COVENANT DISPOSITION",
+        "page": 1,
+        "quote": "The legacy 1.2000x FCCR remains SUSPENDED through December 31, 2026. Economic calculations remain informational and do not create compliance or waiver."
+      },
+      "cert_ref": "Quarterly Compliance Certificate 'CALCULATION'/'GOVERNING DISPOSITION' sections (e.g. 2026-Q2: 'TTM Covenant EBITDA is $6,413,418.70; TTM fixed charges are $17,417,557.44; FCCR is 0.3682x versus 1.2000x' / 'SUSPENDED under operative authority; not waived and not deemed compliant') and the matching Portfolio Monitoring/<quarter>/Covenant Calculation.xlsx exhibit.",
+      "threshold_unit": "unitless",
+      "at_risk_band": 0.1,
+      "note": "STATUS AS OF THIS EXTRACTION (2026-09-15 knowledge date): SUSPENDED, INFORMATIONAL ONLY. Origin: introduced at 1.2000x quarterly TTM by the Legacy Credit Agreement effective 2025-01-15 ('FCCR' section) and ACTIVELY TESTED AND COMPLIANT for three quarters (2025-Q1 1.7322x, 2025-Q2 1.7755x, 2025-Q3 1.4273x, each 'Governing disposition: COMPLIANT'). SUSPENDED (informational only, expressly 'not deemed compliant or waived') by the Exit Amendment effective 2025-12-05 ('STABILIZATION PERIOD' / 'RESERVATION OF RIGHTS' sections: 'The legacy FCCR Test is SUSPENDED through December 31, 2026 ... The suspension is not a waiver, amendment of the 1.2000x threshold, or compliance determination'). The A&R Agreement (effective 2026-03-31) CONTINUES this suspension UNCHANGED through the same December 31, 2026 date ('COVENANT DISPOSITION' section) -- it does not reinstate, waive, or replace the test with a different one; it is the SAME suspended legacy covenant carried forward, not a new A&R-native covenant. Every quarter since suspension (2025-Q4 through 2026-Q2) shows 'Test applicability: SUSPENDED' / 'Governing disposition: SUSPENDED' alongside an informational 'Economic state: WOULD BREACH' calculation that has WORSENED every quarter (2025-Q4 1.0478x; 2026-Q1 0.6687x; 2026-Q2 0.3682x -- all below 1.2000x). AMBIGUITY #2 (see step-7 list) -- REINSTATEMENT: Stabilization Milestones.xlsx names Milestone M4 ('Deliver FCCR reinstatement readiness analysis', owner CFO, due 2026-09-30, status PENDING as of the June 2026 package). On the face of the documents made available this is a DELIVERABLE (an analysis to be produced), not a stated automatic-reinstatement trigger, level, or mechanism. This spec's threshold_schedule nonetheless assumes reinstatement at the original 1.2000x level effective 2027-01-01, immediately upon expiry of the suspension window, because the A&R's own wording bounds the suspension to a date certain ('through December 31, 2026') rather than stating it continues until further amendment. The alternative reading -- that suspension persists past 2026-12-31 absent a further amendment/waiver (consistent with the Exit Amendment's own 'reservation of rights' language), or that M4's analysis could itself reset the reinstatement date or level -- is equally supportable and is the analyst's call. Given the deeply sub-1.0x and worsening informational trend (0.3682x TTM at June 2026), and the further EBITDA/Fixed-Charges definitional gaps noted above, a mechanical reinstatement at 1.2000x on 2027-01-01 would very likely register as an immediate breach."
+    },
+    {
+      "id": "reporting_monthly_financials",
+      "name": "Monthly financial statements and lender reporting package",
+      "type": "reporting",
+      "agreement_ref": {
+        "section": "REPORTING AND MILESTONES",
+        "page": 1,
+        "quote": "Monthly statements, detailed aging, site and labor support, budgets, compliance calculations, and named stabilization milestones are lender deliverables."
+      }
+    },
+    {
+      "id": "reporting_weekly_liquidity",
+      "name": "Weekly liquidity and variance reporting during stabilization",
+      "type": "reporting",
+      "agreement_ref": {
+        "section": "MINIMUM LIQUIDITY",
+        "page": 1,
+        "quote": "The loan parties must maintain at least $10,000,000.00 of liquidity and deliver weekly liquidity and variance reporting during stabilization."
+      }
+    },
+    {
+      "id": "reporting_stabilization_milestones",
+      "name": "Stabilization milestones (M1 agency-vendor reset; M2 weak-site remediation plans; M3 minimum-liquidity maintenance; M4 FCCR reinstatement-readiness analysis due 2026-09-30)",
+      "type": "reporting",
+      "agreement_ref": {
+        "section": "REPORTING AND MILESTONES",
+        "page": 1,
+        "quote": "Monthly statements, detailed aging, site and labor support, budgets, compliance calculations, and named stabilization milestones are lender deliverables."
+      }
+    },
+    {
+      "id": "reporting_quarterly_covenant_calc",
+      "name": "Quarterly compliance certificate and covenant calculation exhibit",
+      "type": "reporting",
+      "agreement_ref": {
+        "section": "REPORTING",
+        "page": 1,
+        "quote": "Monthly statements, annual statements, compliance certificates, budgets, aging schedules, site reporting, and additional lender information are required within agreed deadlines."
+      }
+    },
+    {
+      "id": "affirmative_existence_licenses_insurance",
+      "name": "Preserve existence, comply with law, maintain healthcare licenses and insurance, pay taxes, maintain properties, protect collateral",
+      "type": "affirmative",
+      "agreement_ref": {
+        "section": "AFFIRMATIVE COVENANTS",
+        "page": 1,
+        "quote": "Loan parties must preserve existence, comply with law, maintain healthcare licenses and insurance, pay taxes, maintain properties, and protect collateral."
+      }
+    },
+    {
+      "id": "negative_debt_liens_investments_etc",
+      "name": "Restrictions on additional debt, liens, acquisitions, dispositions, restricted payments, investments, affiliate transactions, business changes, and amendments to material documents",
+      "type": "negative",
+      "agreement_ref": {
+        "section": "NEGATIVE COVENANTS",
+        "page": 2,
+        "quote": "Debt, liens, acquisitions, dispositions, restricted payments, investments, affiliate transactions, business changes, and amendments to material documents remain restricted."
+      }
+    }
+  ],
+  "accounting_basis": {
+    "stated": true,
+    "clause_verbatim": "\"Debt framework, instrument-level modification analysis, and resulting fee or gain/loss accounting remain provisional pending the required workpapers.\" (A&R Agreement, 'ACCOUNTING' section)",
+    "agreement_ref": {
+      "section": "ACCOUNTING",
+      "page": 2,
+      "quote": "Debt framework, instrument-level modification analysis, and resulting fee or gain/loss accounting remain provisional pending the required workpapers."
+    },
+    "reference_financials": {
+      "described_as": "The debt-framework / instrument-level-modification / gain-or-loss accounting workpapers referenced by the A&R Agreement's ACCOUNTING section, evaluating the debt-for-equity exchange (predecessor/legacy debt exchanged into reinstated debt + Series A preferred equity), the TDR framework, CODI, and Section 382 -- not a named financial-statement document, but the restructuring closing accounting workpaper set.",
+      "document": "Restructuring/Closing Materials/Predecessor Close and Successor Opening.xlsx ('Transaction Journal' and 'Open Workpapers' tabs) and Restructuring/Closing Materials/IC Memo.pdf ('ACCOUNTING STATUS' section)",
+      "resolved": true,
+      "ebitda_build_note": "This workpaper set does not build an EBITDA bridge -- it is a balance-sheet/journal-entry record of the restructuring, not an income-statement document. It confirms CARRYOVER (historical-cost) accounting for the successor's opening balance sheet -- NOT a fresh-start / revalued basis: IC Memo 'ACCOUNTING STATUS': 'Carryover accounting applies. TDR framework, instrument-level modification, CODI, Section 382, and related gain/loss workpapers remain pending; no final conclusion is asserted.' Predecessor Close and Successor Opening's 'Basis' column tags 'Other assets' and 'Operating liabilities' as 'Carryover basis' explicitly. The TDR framework selection, instrument-level 10% modification test, resulting gain-or-loss, CODI and Section 382 conclusions are explicitly PENDING as of the June 2026 reporting package ('Open Workpapers' tab: TDR framework 'PENDING - framework assessment'; instrument-level test 'PENDING after framework assessment'; gain or loss 'Not recorded pending required accounting workpapers'). Every monthly package's Status tab through 2026-06 repeats 'PROVISIONAL' for the successor Balance Sheet and 'Restructuring accounting' (e.g. June 2026 Status tab: 'Statement status: PROVISIONAL - TDR/framework and instrument tests pending'). Consequence for this spec: the successor Balance Sheet lines that feed spot-basis definitions here (Liquidity/Cash, Indebtedness/Funded debt carrying amount) are PROVISIONAL and could restate once the workpapers conclude -- flagged as ambiguity #3 for step 7."
+    },
+    "note": "No clause in the executed documents made available ties the FINANCIAL-COVENANT tests specifically to the borrower's own historic accounting practices or to a named model (the canonical form of this clause, e.g. 'in accordance with Borrower's historic accounting practices as reflected in financial statements delivered prior to the Closing Date'). The clause recorded here is the A&R's general provisional-accounting disclosure, which is the most directly relevant statement found in the executed documents made available for this extraction and does carry real consequence for how the successor's balance-sheet-based definitions (Liquidity, Indebtedness) should be read today."
+  },
+  "step7_signoff": {
+    "decided_on": "2026-09-15",
+    "decided_by": "onboarding session (auto-decided per analyst's standing instruction not to pause for confirmation on this onboarding batch; every decision below is flagged here for the analyst's own review before the FCCR is ever relied on for a live compliance call)",
+    "decisions": [
+      {
+        "id": "ebitda_addback_553k",
+        "question": "Does the constant $553,353.26/month gap between Reported EBITDA and the borrower's certified 'Covenant EBITDA' belong in the EBITDA definition's compute block?",
+        "options_considered": ["Accept as parsed: exclude the add-back, bind EBITDA to Reported EBITDA only, keep the reconciliation as a note", "Fold the $553,353.26/month add-back into compute since it reproduces the certified figure exactly"],
+        "decision": "Accept as parsed: exclude the add-back",
+        "rationale": "The extractor swept all nine executed documents and found no add-back language anywhere; the one document with a matching dollar figure (Goodwill Impairment Support.xlsx) is an unrelated ASC 350 workpaper whose own conclusion is 'no lease addback taken' -- the opposite of what it would be cited for. Folding an unsupported number into a covenant definition is a bigger error than leaving a documented gap, especially since the only covenant that reads this definition (FCCR) is currently suspended. Reopen this once a longer-form credit agreement or an actual EBITDA-definition exhibit is located."
+      },
+      {
+        "id": "fixed_charges_scope",
+        "question": "Should Fixed_Charges be broadened to match the certified TTM figure (interest + principal + leases + maintenance capex), or held to facility debt service only?",
+        "options_considered": ["Accept as parsed: facility cash interest + scheduled principal only (per the standard template reading)", "Broaden to include lease payments and maintenance capex to match the certificate"],
+        "decision": "Accept as parsed: facility debt service only",
+        "rationale": "No lease-payment or maintenance-capex model row exists in this borrower's canonical model (borrower-config model_lines has no such lines), and no agreement text defines Fixed Charges beyond the one FCCR sentence. Matching the certified figure would require inventing rows and a formula the agreement doesn't support. The ~$9.1M TTM gap is disclosed in the definition's note so nobody mistakes this reconstruction for the certified number."
+      },
+      {
+        "id": "fccr_reinstatement_schedule",
+        "question": "Does the FCCR reinstate at 1.2000x on 2027-01-01, or does the suspension persist indefinitely pending a further amendment / the M4 deliverable?",
+        "options_considered": ["Accept as parsed: assume mechanical reinstatement at 1.2000x effective 2027-01-01, since the suspension text is bounded to a date certain ('through December 31, 2026')", "Leave open-ended: suspension continues past 2026-12-31 absent a further amendment, consistent with the Exit Amendment's 'reservation of rights' language"],
+        "decision": "Accept as parsed: keep the 2027-01-01 / 1.2000x schedule entry, but treat it as a forward-stress marker rather than a confirmed compliance date",
+        "rationale": "The A&R's own wording bounds the suspension to a date certain rather than 'until further amendment,' so the literal reading supports reinstatement absent new action. But this is explicitly NOT a confident reading -- Milestone M4 (due 2026-09-30, ~2 weeks from today) is only a 'deliver a reinstatement-readiness analysis' deliverable, not a stated trigger, and the informational FCCR is deeply sub-1.0x and worsening (0.3682x at June 2026). Left OPEN for analyst review: this is the single highest-priority open item on this credit and should be revisited immediately once the M4 analysis is delivered or a further amendment is executed -- do not let the monitor quietly assume compliance resumes on 2027-01-01 without an analyst sign-off closer to that date."
+      },
+      {
+        "id": "amortization_day_count_approximation",
+        "question": "Accept the engine's flat, original-principal-base amortization and actual/360 day-count approximation, knowing it will not tie to certified declining-balance / flat-30/360 figures?",
+        "options_considered": ["Accept as parsed: use the flat approximation, reconcile to certificates by hand each quarter", "Hold the debt-service schedule entirely and read only the certified exhibits"],
+        "decision": "Accept as parsed: use the generated schedule for interest/principal timing and covenant-support-row structure, but read the certified Covenant Calculation exhibits as the governing figures for actual cash interest and scheduled principal each quarter",
+        "rationale": "Same class of engine limitation already accepted for Nemeris. The gap is fully quantified and documented (engine ~$150/month interest gap in three of three months checked; principal gap grows from $0 to material by later years) -- not a data error, a v1 engine capability gap. Facility Cash Interest Expense / Facility Scheduled Debt Principal Payments should be populated from the certified figures where available, per assembling-rules, with the generated schedule as fallback for months no certificate covers."
+      },
+      {
+        "id": "series_a_preferred_treatment",
+        "question": "Should the $16,910,820.62 Series A preferred be modeled as debt service (cash-pay or PIK dividend) given no coupon rate is disclosed?",
+        "options_considered": ["Accept as parsed: not modeled as debt service; balance held static", "Assume a market-rate PIK coupon and accrue it"],
+        "decision": "Accept as parsed: not modeled",
+        "rationale": "No dividend/coupon rate appears in any executed document or financial package, and the balance has been static across all four successor months reported -- consistent with no accrual to date. Inventing a coupon rate would be worse than leaving it flagged."
+      }
+    ],
+    "open_items_for_analyst": [
+      "fccr_reinstatement_schedule (highest priority -- ~2 weeks to the M4 deliverable due date)",
+      "ebitda_addback_553k (resolve if/when a longer-form credit agreement or EBITDA-definition exhibit surfaces)",
+      "Restructuring accounting: TDR framework, instrument-level 10% test, CODI, and Section 382 all remain PENDING per the A&R's own ACCOUNTING section and every monthly package through 2026-06 -- successor balance-sheet figures (Liquidity, Indebtedness) could restate once resolved."
+    ]
+  }
+}

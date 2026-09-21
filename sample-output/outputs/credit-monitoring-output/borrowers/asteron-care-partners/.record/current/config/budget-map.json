@@ -1,0 +1,31 @@
+{
+  "borrower": "Asteron Care Partners, LLC",
+  "file": "store:borrowers/asteron-care-partners/_model/Approved Stabilization Budget (transposed for budget-map).xlsx",
+  "sheet": "Budget (transposed)",
+  "_orientation_workaround_note": "ORIENTATION WORKAROUND (judgment call, flagged for the analyst): the real approved budget (source:Asteron Care Partners/Successor Reporting/Planning/Approved Budget.xlsx, 'Approved Budget' tab) is laid out PERIODS-AS-ROWS / METRICS-AS-COLUMNS (one row per month: Period, Revenue, EBITDA, Cash interest, Principal, Capex, Ending cash, Ending debt, Agency ratio). The budget-vs-actual engine reads a FIXED cell(row=metric_rows[metric], column=period_columns[period]) address, i.e. it hard-requires METRICS-AS-ROWS / PERIODS-AS-COLUMNS -- the opposite orientation -- with no way to swap row/column roles per metric. Since the real workbook cannot be reshaped in place (it is the read-only, lender-approved source document), monitor-setup built a byte-verified TRANSPOSED COPY at the 'file' path above (borrowers/asteron-care-partners/_model/), reshaping the SAME 9 months x 8 metrics into metrics-as-rows/periods-as-columns with no value changes -- every Revenue and EBITDA figure was read back and compared to the source workbook and matched exactly (see the transposed file's own row 1-2 note). paths.budget_path in borrower-config still points at the ORIGINAL source workbook (the authoritative approved document); this 'file' here is the reshaped copy the engine actually reads. If a future analyst re-approves a new budget in the same periods-as-rows shape, this transposed copy must be regenerated the same way.",
+  "_workaround_note": "METRIC-COVERAGE WORKAROUND (judgment call, same spirit as a prior borrower's fix): this budget is only built down to a single 'EBITDA' column -- it has NO Gross Profit, Net Income, Interest Expense, Taxes, or D&A breakout at all (unlike the actuals model, which DOES have all of those once the derived Gross Profit / Cost of Patient Services rows are built -- see borrower-config paths._model_lines_construction_note). Row 6 of the transposed workbook is a VERIFIED-BLANK row (confirmed None across all 9 period columns) used as a zero proxy for interest_expense/taxes/depreciation_amortization, and row 5 (the real 'EBITDA' figures) is pointed to by BOTH net_income and gross_profit below, so the engine's fixed Net Income + Interest + Taxes + D&A bridge reconstructs to EXACTLY the real Budget EBITDA for every period (EBITDA + 0 + 0 + 0 = EBITDA). Two consequences to flag for whoever reads the rendered memo: (1) 'net_income' in this map is REALLY 'Budget EBITDA' -- do not read it as a true net-income budget; (2) 'gross_profit' in this map is ALSO really 'Budget EBITDA' -- the memo's Budget-vs-Actual Gross Margin comparison for this borrower will show a large, MEANINGLESS 'favorable' variance (true actual gross margin ~33-34% vs a proxy budget 'gross margin' that is really the ~8-10% EBITDA margin) and should be read as NOT a real signal. Revenue and EBITDA themselves (rows 4 and 5) ARE the budget's real, analyst-approved figures and are fully reliable.",
+  "period_columns": {
+    "2026-04-30": 2,
+    "2026-05-31": 3,
+    "2026-06-30": 4,
+    "2026-07-31": 5,
+    "2026-08-31": 6,
+    "2026-09-30": 7,
+    "2026-10-31": 8,
+    "2026-11-30": 9,
+    "2026-12-31": 10
+  },
+  "metric_rows": {
+    "revenue": 4,
+    "gross_profit": 5,
+    "net_income": 5,
+    "interest_expense": 6,
+    "taxes": 6,
+    "depreciation_amortization": 6
+  },
+  "balance_sheet_rows": {
+    "Cash (controlled accounts)": 10
+  },
+  "_balance_sheet_rows_note": "Only Cash is planned in this budget (row 10, 'Ending cash'). No AR/PP&E/Goodwill projections exist in the Approved Stabilization Budget, so the Collateral box will render '-' vs Budget for every other pledged component.",
+  "_opex_groups_omitted_note": "opex_groups intentionally omitted -- this budget does not plan Occupancy & Site Costs or Corporate & Administrative costs separately from EBITDA (it goes straight from Revenue to EBITDA, like the metric_rows gap above); the engine handles a missing opex_groups block gracefully (empty breakdown, no crash)."
+}

@@ -1,0 +1,754 @@
+{
+  "module": "ap-ar-aging",
+  "period": "2026-06",
+  "run_id": "run-20260916-094426",
+  "run_id_from": "run",
+  "produced_at": "2026-09-16T09:59:34+00:00",
+  "produced_by": {
+    "engine": "ap-ar-aging",
+    "plugin_version": "1.0.0"
+  },
+  "reporting_unit": {
+    "scale": 1.0,
+    "currency": "USD",
+    "verbatim": "Fictional clean-room borrower evidence | USD unless noted",
+    "plain": "USD"
+  },
+  "stores": {
+    "source": {
+      "url_base": null
+    },
+    "store": {
+      "url_base": null
+    }
+  },
+  "source_ref_reach": {
+    "cell": 36,
+    "file": 0,
+    "unlocated": 0,
+    "borrower_doc": 6
+  },
+  "source_files": [
+    "source:Veyrona Decision Systems/5_Loan Monitoring/Supporting Schedules/June 2026/AP_AR_Aging_June_2026.xlsx",
+    "source:Veyrona Decision Systems/5_Loan Monitoring/Supporting Schedules/May 2026/AP_AR_Aging_May_2026.xlsx",
+    "store:borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/Veyrona Decision Systems Monthly IS-BS-CF.xlsx"
+  ],
+  "results": [
+    {
+      "side": "AR",
+      "latest": {
+        "month": "June 2026",
+        "as_of": null,
+        "total": 26793751.51,
+        "pct_over_90": 0.262771,
+        "bucket_distribution": {
+          "current": {
+            "amount": 6455543.62,
+            "pct_of_total": 0.240935
+          },
+          "1-30": {
+            "amount": 0.0,
+            "pct_of_total": 0.0
+          },
+          "31-60": {
+            "amount": 5677680.4,
+            "pct_of_total": 0.211903
+          },
+          "61-90": {
+            "amount": 7619905.17,
+            "pct_of_total": 0.284391
+          },
+          ">90": {
+            "amount": 7040622.32,
+            "pct_of_total": 0.262771
+          }
+        },
+        "top5_concentration": [
+          {
+            "name": "Northstar Grid Services",
+            "amount": 3552144.91,
+            "pct_of_total": 0.132574,
+            "source_ref": [
+              {
+                "file": 0,
+                "store": "source",
+                "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Supporting Schedules/June 2026/AP_AR_Aging_June_2026.xlsx",
+                "sheet": "AR Detail",
+                "row": 5
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 5 in the June 2026 AR aging export; pct_of_total = amount / AR aging grand total 26,793,751.51"
+          },
+          {
+            "name": "Cobalt Risk Partners",
+            "amount": 3217330.98,
+            "pct_of_total": 0.120078,
+            "source_ref": [
+              {
+                "file": 0,
+                "store": "source",
+                "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Supporting Schedules/June 2026/AP_AR_Aging_June_2026.xlsx",
+                "sheet": "AR Detail",
+                "row": 6
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 6 in the June 2026 AR aging export; pct_of_total = amount / AR aging grand total 26,793,751.51"
+          },
+          {
+            "name": "Arcwell Transit",
+            "amount": 3134347.87,
+            "pct_of_total": 0.116981,
+            "source_ref": [
+              {
+                "file": 0,
+                "store": "source",
+                "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Supporting Schedules/June 2026/AP_AR_Aging_June_2026.xlsx",
+                "sheet": "AR Detail",
+                "row": 7
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 7 in the June 2026 AR aging export; pct_of_total = amount / AR aging grand total 26,793,751.51"
+          },
+          {
+            "name": "Harborline Utilities",
+            "amount": 2823932.5,
+            "pct_of_total": 0.105395,
+            "source_ref": [
+              {
+                "file": 0,
+                "store": "source",
+                "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Supporting Schedules/June 2026/AP_AR_Aging_June_2026.xlsx",
+                "sheet": "AR Detail",
+                "row": 8
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 8 in the June 2026 AR aging export; pct_of_total = amount / AR aging grand total 26,793,751.51"
+          },
+          {
+            "name": "Meridian Process Controls",
+            "amount": 2478586.52,
+            "pct_of_total": 0.092506,
+            "source_ref": [
+              {
+                "file": 0,
+                "store": "source",
+                "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Supporting Schedules/June 2026/AP_AR_Aging_June_2026.xlsx",
+                "sheet": "AR Detail",
+                "row": 9
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 9 in the June 2026 AR aging export; pct_of_total = amount / AR aging grand total 26,793,751.51"
+          }
+        ],
+        "dso_days": 40.35,
+        "days_basis": 30,
+        "n_counterparties": 12,
+        "rows_reconciliation": {
+          "grand_total": 26793751.51,
+          "counterparty_rows_total": 26793751.51,
+          "difference": 0.0,
+          "reconciles": true,
+          "n_counterparties": 12,
+          "rolled_up_rows": []
+        },
+        "source_ref": [
+          {
+            "file": 0,
+            "store": "source",
+            "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Supporting Schedules/June 2026/AP_AR_Aging_June_2026.xlsx",
+            "sheet": "AR Detail",
+            "row": "5-16"
+          },
+          {
+            "file": 2,
+            "store": "store",
+            "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/Veyrona Decision Systems Monthly IS-BS-CF.xlsx",
+            "sheet": "Income Statement",
+            "row": 7,
+            "label": "Revenue",
+            "cells": "W7",
+            "period": "2026-06",
+            "upstream": [
+              {
+                "store": "source",
+                "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/June_2026_Monthly_Package_2026-07-25.xlsx",
+                "sheet": "Income Statement"
+              }
+            ]
+          }
+        ],
+        "calc": "June 2026 AR aging snapshot: total 26,793,751.51 = the sum of the Total column across counterparty rows 5-16 (no TOTAL row found); bucket amounts = per-bucket columns summed across 12 counterparty rows (rows 5-16); those rows sum to 26,793,751.51, which reconciles to the grand total, so every share below divides by a total its parts add up to; pct_over_90 = >90 bucket 7,040,622.32 / total; dso_days 40.35 = total / monthly revenue ('Revenue' = 19,921,004.84 for June 2026, model 'Income Statement' row 7 cell W7) * 30 (calendar days in June 2026)"
+      },
+      "prior": {
+        "month": "May 2026",
+        "as_of": null,
+        "total": 24419506.25,
+        "pct_over_90": 0.231442,
+        "bucket_distribution": {
+          "current": {
+            "amount": 5113487.0,
+            "pct_of_total": 0.209402
+          },
+          "1-30": {
+            "amount": 0.0,
+            "pct_of_total": 0.0
+          },
+          "31-60": {
+            "amount": 7249833.34,
+            "pct_of_total": 0.296887
+          },
+          "61-90": {
+            "amount": 6404482.85,
+            "pct_of_total": 0.262269
+          },
+          ">90": {
+            "amount": 5651703.06,
+            "pct_of_total": 0.231442
+          }
+        },
+        "top5_concentration": [
+          {
+            "name": "Northstar Grid Services",
+            "amount": 3274569.38,
+            "pct_of_total": 0.134096,
+            "source_ref": [
+              {
+                "file": 1,
+                "store": "source",
+                "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Supporting Schedules/May 2026/AP_AR_Aging_May_2026.xlsx",
+                "sheet": "AR Detail",
+                "row": 5
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 5 in the May 2026 AR aging export; pct_of_total = amount / AR aging grand total 24,419,506.25"
+          },
+          {
+            "name": "Cobalt Risk Partners",
+            "amount": 2957669.43,
+            "pct_of_total": 0.121119,
+            "source_ref": [
+              {
+                "file": 1,
+                "store": "source",
+                "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Supporting Schedules/May 2026/AP_AR_Aging_May_2026.xlsx",
+                "sheet": "AR Detail",
+                "row": 6
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 6 in the May 2026 AR aging export; pct_of_total = amount / AR aging grand total 24,419,506.25"
+          },
+          {
+            "name": "Arcwell Transit",
+            "amount": 2742239.47,
+            "pct_of_total": 0.112297,
+            "source_ref": [
+              {
+                "file": 1,
+                "store": "source",
+                "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Supporting Schedules/May 2026/AP_AR_Aging_May_2026.xlsx",
+                "sheet": "AR Detail",
+                "row": 7
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 7 in the May 2026 AR aging export; pct_of_total = amount / AR aging grand total 24,419,506.25"
+          },
+          {
+            "name": "Harborline Utilities",
+            "amount": 2511704.11,
+            "pct_of_total": 0.102856,
+            "source_ref": [
+              {
+                "file": 1,
+                "store": "source",
+                "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Supporting Schedules/May 2026/AP_AR_Aging_May_2026.xlsx",
+                "sheet": "AR Detail",
+                "row": 8
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 8 in the May 2026 AR aging export; pct_of_total = amount / AR aging grand total 24,419,506.25"
+          },
+          {
+            "name": "Meridian Process Controls",
+            "amount": 2410216.15,
+            "pct_of_total": 0.0987,
+            "source_ref": [
+              {
+                "file": 1,
+                "store": "source",
+                "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Supporting Schedules/May 2026/AP_AR_Aging_May_2026.xlsx",
+                "sheet": "AR Detail",
+                "row": 9
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 9 in the May 2026 AR aging export; pct_of_total = amount / AR aging grand total 24,419,506.25"
+          }
+        ],
+        "dso_days": 40.92,
+        "days_basis": 31,
+        "n_counterparties": 12,
+        "rows_reconciliation": {
+          "grand_total": 24419506.25,
+          "counterparty_rows_total": 24419506.25,
+          "difference": 0.0,
+          "reconciles": true,
+          "n_counterparties": 12,
+          "rolled_up_rows": []
+        },
+        "source_ref": [
+          {
+            "file": 1,
+            "store": "source",
+            "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Supporting Schedules/May 2026/AP_AR_Aging_May_2026.xlsx",
+            "sheet": "AR Detail",
+            "row": "5-16"
+          },
+          {
+            "file": 2,
+            "store": "store",
+            "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/Veyrona Decision Systems Monthly IS-BS-CF.xlsx",
+            "sheet": "Income Statement",
+            "row": 7,
+            "label": "Revenue",
+            "cells": "V7",
+            "period": "2026-05",
+            "upstream": [
+              {
+                "store": "source",
+                "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx",
+                "sheet": "Income Statement"
+              }
+            ]
+          }
+        ],
+        "calc": "May 2026 AR aging snapshot: total 24,419,506.25 = the sum of the Total column across counterparty rows 5-16 (no TOTAL row found); bucket amounts = per-bucket columns summed across 12 counterparty rows (rows 5-16); those rows sum to 24,419,506.25, which reconciles to the grand total, so every share below divides by a total its parts add up to; pct_over_90 = >90 bucket 5,651,703.06 / total; dso_days 40.92 = total / monthly revenue ('Revenue' = 18,499,625.95 for May 2026, model 'Income Statement' row 7 cell V7) * 31 (calendar days in May 2026)"
+      },
+      "trend": {
+        "total_change": 2374245.26,
+        "dso_days_prior": 40.92,
+        "dso_days_latest": 40.35,
+        "note": "Single-month aging snapshots; DSO/DPO use one month of flow and are volatile month to month. Each month's days metric uses that month's calendar days.",
+        "source_ref": [
+          {
+            "file": 0,
+            "store": "source",
+            "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Supporting Schedules/June 2026/AP_AR_Aging_June_2026.xlsx",
+            "sheet": "AR Detail",
+            "row": "5-16"
+          },
+          {
+            "file": 1,
+            "store": "source",
+            "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Supporting Schedules/May 2026/AP_AR_Aging_May_2026.xlsx",
+            "sheet": "AR Detail",
+            "row": "5-16"
+          }
+        ],
+        "calc": "total_change = June 2026 AR aging total 26,793,751.51 (from the sum of the Total column across counterparty rows 5-16 (no TOTAL row found)) - May 2026 total 24,419,506.25 (from the sum of the Total column across counterparty rows 5-16 (no TOTAL row found)); dso_days_latest/_prior repeated from this side's latest/prior records"
+      },
+      "tie_out": {
+        "what": "A/R aging total vs BS 'Accounts Receivable'",
+        "aging_total": 26793751.51,
+        "balance_sheet": 26793751.51,
+        "difference": 0.0,
+        "ties": true,
+        "source_ref": [
+          {
+            "file": 0,
+            "store": "source",
+            "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Supporting Schedules/June 2026/AP_AR_Aging_June_2026.xlsx",
+            "sheet": "AR Detail",
+            "row": "5-16"
+          },
+          {
+            "file": 2,
+            "store": "store",
+            "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/Veyrona Decision Systems Monthly IS-BS-CF.xlsx",
+            "sheet": "Balance Sheet",
+            "row": 8,
+            "label": "Accounts Receivable",
+            "cells": "W8",
+            "period": "2026-06",
+            "upstream": [
+              {
+                "store": "source",
+                "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/June_2026_Monthly_Package_2026-07-25.xlsx",
+                "sheet": "Balance Sheet"
+              }
+            ]
+          }
+        ],
+        "calc": "difference 0.00 = aging total 26,793,751.51 (from the sum of the Total column across counterparty rows 5-16 (no TOTAL row found)) - balance-sheet 'Accounts Receivable' 26,793,751.51 (model 'Balance Sheet' row 8 cell W8, June 2026); ties when |difference| <= 1.00"
+      }
+    },
+    {
+      "side": "AP",
+      "latest": {
+        "month": "June 2026",
+        "as_of": null,
+        "total": 10757342.61,
+        "pct_over_90": 0.265842,
+        "bucket_distribution": {
+          "current": {
+            "amount": 2361992.4,
+            "pct_of_total": 0.21957
+          },
+          "1-30": {
+            "amount": 0.0,
+            "pct_of_total": 0.0
+          },
+          "31-60": {
+            "amount": 2237363.52,
+            "pct_of_total": 0.207985
+          },
+          "61-90": {
+            "amount": 3298237.78,
+            "pct_of_total": 0.306603
+          },
+          ">90": {
+            "amount": 2859748.91,
+            "pct_of_total": 0.265842
+          }
+        },
+        "top5_concentration": [
+          {
+            "name": "Nimbus Cloud Hosting",
+            "amount": 1992238.77,
+            "pct_of_total": 0.185198,
+            "source_ref": [
+              {
+                "file": 0,
+                "store": "source",
+                "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Supporting Schedules/June 2026/AP_AR_Aging_June_2026.xlsx",
+                "sheet": "AP Detail",
+                "row": 5
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 5 in the June 2026 AP aging export; pct_of_total = amount / AP aging grand total 10,757,342.61"
+          },
+          {
+            "name": "Orchid Data Exchange",
+            "amount": 1865178.78,
+            "pct_of_total": 0.173387,
+            "source_ref": [
+              {
+                "file": 0,
+                "store": "source",
+                "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Supporting Schedules/June 2026/AP_AR_Aging_June_2026.xlsx",
+                "sheet": "AP Detail",
+                "row": 6
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 6 in the June 2026 AP aging export; pct_of_total = amount / AP aging grand total 10,757,342.61"
+          },
+          {
+            "name": "Caldera Software",
+            "amount": 1536447.49,
+            "pct_of_total": 0.142828,
+            "source_ref": [
+              {
+                "file": 0,
+                "store": "source",
+                "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Supporting Schedules/June 2026/AP_AR_Aging_June_2026.xlsx",
+                "sheet": "AP Detail",
+                "row": 7
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 7 in the June 2026 AP aging export; pct_of_total = amount / AP aging grand total 10,757,342.61"
+          },
+          {
+            "name": "Beacon Talent Group",
+            "amount": 1465650.87,
+            "pct_of_total": 0.136247,
+            "source_ref": [
+              {
+                "file": 0,
+                "store": "source",
+                "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Supporting Schedules/June 2026/AP_AR_Aging_June_2026.xlsx",
+                "sheet": "AP Detail",
+                "row": 8
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 8 in the June 2026 AP aging export; pct_of_total = amount / AP aging grand total 10,757,342.61"
+          },
+          {
+            "name": "Juniper Research Services",
+            "amount": 1305999.01,
+            "pct_of_total": 0.121405,
+            "source_ref": [
+              {
+                "file": 0,
+                "store": "source",
+                "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Supporting Schedules/June 2026/AP_AR_Aging_June_2026.xlsx",
+                "sheet": "AP Detail",
+                "row": 9
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 9 in the June 2026 AP aging export; pct_of_total = amount / AP aging grand total 10,757,342.61"
+          }
+        ],
+        "dpo_days": 30.0,
+        "days_basis": 30,
+        "n_counterparties": 8,
+        "rows_reconciliation": {
+          "grand_total": 10757342.61,
+          "counterparty_rows_total": 10757342.61,
+          "difference": 0.0,
+          "reconciles": true,
+          "n_counterparties": 8,
+          "rolled_up_rows": []
+        },
+        "source_ref": [
+          {
+            "file": 0,
+            "store": "source",
+            "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Supporting Schedules/June 2026/AP_AR_Aging_June_2026.xlsx",
+            "sheet": "AP Detail",
+            "row": "5-12"
+          },
+          {
+            "file": 2,
+            "store": "store",
+            "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/Veyrona Decision Systems Monthly IS-BS-CF.xlsx",
+            "sheet": "Income Statement",
+            "row": 8,
+            "label": "Cost of Revenue",
+            "cells": "W8",
+            "period": "2026-06",
+            "upstream": [
+              {
+                "store": "source",
+                "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/June_2026_Monthly_Package_2026-07-25.xlsx",
+                "sheet": "Income Statement"
+              }
+            ]
+          }
+        ],
+        "calc": "June 2026 AP aging snapshot: total 10,757,342.61 = the sum of the Total column across counterparty rows 5-12 (no TOTAL row found); bucket amounts = per-bucket columns summed across 8 counterparty rows (rows 5-12); those rows sum to 10,757,342.61, which reconciles to the grand total, so every share below divides by a total its parts add up to; pct_over_90 = >90 bucket 2,859,748.91 / total; dpo_days 30.00 = total / the monthly DPO basis ('Cost of Revenue' = 10,757,342.61 for June 2026, model 'Income Statement' row 8 cell W8) * 30 (calendar days in June 2026)",
+        "dpo_basis": "DPO denominator = configured model line 'Cost of Revenue' (operating_cogs) = 10757342.61."
+      },
+      "prior": {
+        "month": "May 2026",
+        "as_of": null,
+        "total": 10655784.55,
+        "pct_over_90": 0.23423,
+        "bucket_distribution": {
+          "current": {
+            "amount": 2130734.03,
+            "pct_of_total": 0.19996
+          },
+          "1-30": {
+            "amount": 0.0,
+            "pct_of_total": 0.0
+          },
+          "31-60": {
+            "amount": 3187157.89,
+            "pct_of_total": 0.299101
+          },
+          "61-90": {
+            "amount": 2841992.07,
+            "pct_of_total": 0.266709
+          },
+          ">90": {
+            "amount": 2495900.56,
+            "pct_of_total": 0.23423
+          }
+        },
+        "top5_concentration": [
+          {
+            "name": "Nimbus Cloud Hosting",
+            "amount": 1901961.11,
+            "pct_of_total": 0.178491,
+            "source_ref": [
+              {
+                "file": 1,
+                "store": "source",
+                "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Supporting Schedules/May 2026/AP_AR_Aging_May_2026.xlsx",
+                "sheet": "AP Detail",
+                "row": 5
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 5 in the May 2026 AP aging export; pct_of_total = amount / AP aging grand total 10,655,784.55"
+          },
+          {
+            "name": "Orchid Data Exchange",
+            "amount": 1824019.12,
+            "pct_of_total": 0.171176,
+            "source_ref": [
+              {
+                "file": 1,
+                "store": "source",
+                "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Supporting Schedules/May 2026/AP_AR_Aging_May_2026.xlsx",
+                "sheet": "AP Detail",
+                "row": 6
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 6 in the May 2026 AP aging export; pct_of_total = amount / AP aging grand total 10,655,784.55"
+          },
+          {
+            "name": "Caldera Software",
+            "amount": 1614419.16,
+            "pct_of_total": 0.151506,
+            "source_ref": [
+              {
+                "file": 1,
+                "store": "source",
+                "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Supporting Schedules/May 2026/AP_AR_Aging_May_2026.xlsx",
+                "sheet": "AP Detail",
+                "row": 7
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 7 in the May 2026 AP aging export; pct_of_total = amount / AP aging grand total 10,655,784.55"
+          },
+          {
+            "name": "Beacon Talent Group",
+            "amount": 1443290.03,
+            "pct_of_total": 0.135447,
+            "source_ref": [
+              {
+                "file": 1,
+                "store": "source",
+                "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Supporting Schedules/May 2026/AP_AR_Aging_May_2026.xlsx",
+                "sheet": "AP Detail",
+                "row": 8
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 8 in the May 2026 AP aging export; pct_of_total = amount / AP aging grand total 10,655,784.55"
+          },
+          {
+            "name": "Juniper Research Services",
+            "amount": 1285196.78,
+            "pct_of_total": 0.12061,
+            "source_ref": [
+              {
+                "file": 1,
+                "store": "source",
+                "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Supporting Schedules/May 2026/AP_AR_Aging_May_2026.xlsx",
+                "sheet": "AP Detail",
+                "row": 9
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 9 in the May 2026 AP aging export; pct_of_total = amount / AP aging grand total 10,655,784.55"
+          }
+        ],
+        "dpo_days": 33.07,
+        "days_basis": 31,
+        "n_counterparties": 8,
+        "rows_reconciliation": {
+          "grand_total": 10655784.55,
+          "counterparty_rows_total": 10655784.55,
+          "difference": 0.0,
+          "reconciles": true,
+          "n_counterparties": 8,
+          "rolled_up_rows": []
+        },
+        "source_ref": [
+          {
+            "file": 1,
+            "store": "source",
+            "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Supporting Schedules/May 2026/AP_AR_Aging_May_2026.xlsx",
+            "sheet": "AP Detail",
+            "row": "5-12"
+          },
+          {
+            "file": 2,
+            "store": "store",
+            "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/Veyrona Decision Systems Monthly IS-BS-CF.xlsx",
+            "sheet": "Income Statement",
+            "row": 8,
+            "label": "Cost of Revenue",
+            "cells": "V8",
+            "period": "2026-05",
+            "upstream": [
+              {
+                "store": "source",
+                "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx",
+                "sheet": "Income Statement"
+              }
+            ]
+          }
+        ],
+        "calc": "May 2026 AP aging snapshot: total 10,655,784.55 = the sum of the Total column across counterparty rows 5-12 (no TOTAL row found); bucket amounts = per-bucket columns summed across 8 counterparty rows (rows 5-12); those rows sum to 10,655,784.55, which reconciles to the grand total, so every share below divides by a total its parts add up to; pct_over_90 = >90 bucket 2,495,900.56 / total; dpo_days 33.07 = total / the monthly DPO basis ('Cost of Revenue' = 9,989,798.01 for May 2026, model 'Income Statement' row 8 cell V8) * 31 (calendar days in May 2026)"
+      },
+      "trend": {
+        "total_change": 101558.06,
+        "dpo_days_prior": 33.07,
+        "dpo_days_latest": 30.0,
+        "note": "Single-month aging snapshots; DSO/DPO use one month of flow and are volatile month to month. Each month's days metric uses that month's calendar days.",
+        "source_ref": [
+          {
+            "file": 0,
+            "store": "source",
+            "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Supporting Schedules/June 2026/AP_AR_Aging_June_2026.xlsx",
+            "sheet": "AP Detail",
+            "row": "5-12"
+          },
+          {
+            "file": 1,
+            "store": "source",
+            "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Supporting Schedules/May 2026/AP_AR_Aging_May_2026.xlsx",
+            "sheet": "AP Detail",
+            "row": "5-12"
+          }
+        ],
+        "calc": "total_change = June 2026 AP aging total 10,757,342.61 (from the sum of the Total column across counterparty rows 5-12 (no TOTAL row found)) - May 2026 total 10,655,784.55 (from the sum of the Total column across counterparty rows 5-12 (no TOTAL row found)); dpo_days_latest/_prior repeated from this side's latest/prior records"
+      },
+      "tie_out": {
+        "what": "A/P aging total vs BS 'Accounts Payable'",
+        "aging_total": 10757342.61,
+        "balance_sheet": 10757342.61,
+        "difference": 0.0,
+        "ties": true,
+        "source_ref": [
+          {
+            "file": 0,
+            "store": "source",
+            "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Supporting Schedules/June 2026/AP_AR_Aging_June_2026.xlsx",
+            "sheet": "AP Detail",
+            "row": "5-12"
+          },
+          {
+            "file": 2,
+            "store": "store",
+            "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/Veyrona Decision Systems Monthly IS-BS-CF.xlsx",
+            "sheet": "Balance Sheet",
+            "row": 10,
+            "label": "Accounts Payable",
+            "cells": "W10",
+            "period": "2026-06",
+            "upstream": [
+              {
+                "store": "source",
+                "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/June_2026_Monthly_Package_2026-07-25.xlsx",
+                "sheet": "Balance Sheet"
+              }
+            ]
+          }
+        ],
+        "calc": "difference 0.00 = aging total 10,757,342.61 (from the sum of the Total column across counterparty rows 5-12 (no TOTAL row found)) - balance-sheet 'Accounts Payable' 10,757,342.61 (model 'Balance Sheet' row 10 cell W10, June 2026); ties when |difference| <= 1.00"
+      }
+    }
+  ],
+  "exceptions": [
+    {
+      "type": "aging_export_shape",
+      "what": "aging export is invoice/transaction-level, not the pivoted bucket-per-column shape the parser handles by default",
+      "detail": "This borrower's A/R and A/P aging exports carry one row per open invoice (Customer/Vendor, Aging bucket, Invoice reference, Amount, Status), with the aging bucket as a per-row value rather than a pivoted column, and no Total column at all -- unlike the bucket-per-column + Total-row shapes the parser was written against. The engine was extended (module-analyst worker, run run-20260916-094426) with a long-format branch that groups rows by counterparty and pivots each row's own bucket value; the grand total is the sum of the counterparty rows (there is no explicit Total row in this export -- the workbook's own tie-out lives on a separate Checks tab, not read by this module as the total). Reproduced sides: A/R latest (AR Detail, source:Veyrona Decision Systems/5_Loan Monitoring/Supporting Schedules/June 2026/AP_AR_Aging_June_2026.xlsx); A/P latest (AP Detail, source:Veyrona Decision Systems/5_Loan Monitoring/Supporting Schedules/June 2026/AP_AR_Aging_June_2026.xlsx); A/R prior (AR Detail, source:Veyrona Decision Systems/5_Loan Monitoring/Supporting Schedules/May 2026/AP_AR_Aging_May_2026.xlsx); A/P prior (AP Detail, source:Veyrona Decision Systems/5_Loan Monitoring/Supporting Schedules/May 2026/AP_AR_Aging_May_2026.xlsx). Every side ties exactly to the balance sheet below, so the reconstruction is verified, not assumed."
+    },
+    {
+      "type": "combined_aging_workbook",
+      "what": "A/R and A/P share one workbook per month rather than separate exports",
+      "detail": "This borrower delivers one workbook per month holding both sides as separate tabs (A/R tab(s): ['AR Detail']; A/P tab(s): ['AP Detail']; both alongside a Checks tab), not the separate-file-per-side shape the module normally expects. The same path was passed for --ar-latest/--ap-latest (and --ar-prior/--ap-prior); the engine was extended to pick the matching tab by side (module-analyst worker, run run-20260916-094426) instead of always reading the workbook's first sheet."
+    },
+    {
+      "type": "reporting_format_check",
+      "what": "whether the aging export's own format/granularity changed around a credit-agreement amendment date",
+      "detail": "Cross-checked the A/R and A/P aging export's own format across the borrower's full reporting history in Supporting Schedules/<Month YYYY>/AP_AR_Aging_*.xlsx (Sep 2024 through Jun 2026, 22 monthly files, spot-checked Sep 2024, Dec 2025, Jan 2026, Feb 2026, May 2026, Jun 2026 in detail): every month carries the identical shape -- three tabs (AR Detail / AP Detail / Checks), the same 5 columns (Customer or Vendor / Aging bucket / Invoice reference / Amount / Status), the same 12 AR rows (11 named customers + one Other-customers rollup) and 8 AP rows (7 named vendors + one Other-vendors rollup), and the same Checks tab shape (Control/Difference, AR tie and AP tie both 0). The Second Amendment (executed 2026-01-20, effective 2026-01-31) added an unquantified enhanced receivables-aging delivery requirement; the exports immediately before (Dec 2025) and after (Jan 2026, Feb 2026) that date, and every month since, are byte-for-byte identical in shape to Sep 2024. No structural or granularity change in this export coincides with the Second Amendment's effective date -- if the amendment's enhanced-reporting requirement was satisfied, it was satisfied through some channel other than a change to this file (e.g. cadence, a side letter, or content not visible in this workbook), which is worth confirming with the borrower/relationship team rather than assuming from the file alone."
+    }
+  ],
+  "engine": "ap-ar-aging v5 (config-driven, borrower-agnostic) + per-figure source refs/calc + rows-vs-TOTAL reconciliation",
+  "borrower": "Veyrona Decision Systems, LLC",
+  "latest_month": "June 2026",
+  "prior_month": "May 2026",
+  "note": "DSO/DPO are single-month and volatile. DPO uses configured basis 'operating_cogs' (model line 'Cost of Revenue').",
+  "methodology": "Company-prepared aging exports (unaudited). Balance-sheet AR/AP, revenue, and the configured DPO-basis line are read from the canonical monthly financials model via monitor_lib."
+}

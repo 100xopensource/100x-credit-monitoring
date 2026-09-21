@@ -1,0 +1,247 @@
+{
+  "borrower_name": "Asteron Care Partners, LLC",
+  "fund": "",
+  "last_reviewed": {
+    "date": "2026-09-15",
+    "trigger": "monthly"
+  },
+  "static": {
+    "vertical": "Multi-site outpatient healthcare services",
+    "archetype": "services-project",
+    "archetype_provenance": "inferred \u2014 unconfirmed",
+    "_archetype_note": "JUDGMENT CALL: none of the three named archetypes is a clean fit for a multi-site fee-for-service healthcare operator. 'consumer-inventory' clearly does not fit (no inventory, not consumer/D2C). 'asset-heavy-industrial' does not fit either -- there is no order book/backlog and collateral recovery here is receivables-led, not equipment-led. 'services-project' is the closer of the two remaining options: payroll IS the burn floor (Labor tab), DSO/AR-claims collection is the key working-capital swing factor, and collateral recovery is genuinely receivables-led -- but its 'backlog/bookings/contract concentration' framing is BPO/agency-specific and doesn't describe payer-claims/visit-volume economics. Flagging for the analyst to confirm or to propose a dedicated healthcare-services archetype in monthly-monitor references/archetypes.md.",
+    "business_one_liner": "Operates a 15-site, 5-region outpatient healthcare-services platform, billing a diversified payer mix (Medicare, Commercial, Medicaid, Workers' Compensation, Self-Pay) for patient visits and clinical procedures.",
+    "sponsor_status": "sponsor-backed (sponsor entity not named in the available documents)",
+    "_sponsor_status_note": "The A&R Agreement, Funding Request, and Restructuring IC Memo each refer only to '$8,000,000.00 Sponsor new money' contributed at the March 2026 restructuring close, without ever naming the sponsor. Asteron Care Holdings, Inc. is named only as the corporate guarantor/parent, not identified as the sponsor. Flagged for analyst confirmation of the sponsor's identity.",
+    "deal_team": [],
+    "deal_team_provenance": "",
+    "_deal_team_note": "Left empty -- no individual person is named ANYWHERE in the Asteron deal documents (credit agreements, IC memo, closing evidence, stabilization milestones). Only generic role titles appear (Chief Executive/Financial/Operating Officer, Regional Presidents), with no names attached to any of them -- borrower management or our own deal team alike. Nothing to propose or confirm.",
+    "business_profile": {
+      "description": "Asteron Care Partners operates a multi-site, multi-region outpatient healthcare-services platform (15 clinical sites across five regional operating subsidiaries -- Southeast, Mid-Atlantic, Northeast, Great Lakes, and Central Operations, LLC), billing commercial and government payers on a fee-for-service basis for patient visits and clinical procedures. The company underwent a debt-for-equity restructuring in March 2026 after 2025 volume and cost pressure eroded coverage.",
+      "revenue_model": {
+        "how_they_make_money": "Fee-for-service billing to payers for patient visits and clinical procedures at owned/leased clinical sites",
+        "recurring_vs_transactional": "Transactional/volume-based (per-visit, per-procedure billing) -- not contractually recurring or subscription revenue; no ARR/retention metric is reported in the monthly package.",
+        "pricing_and_contracts": "Not disclosed in the available documents beyond payer-class claims data -- flagged draft.",
+        "channels": [],
+        "_channels_note": "No distinct sales/distribution channel mix is disclosed; all revenue flows through clinical-site visits/procedures billed by payer class (see 'customers' below).",
+        "source": "Successor Reporting/2026/06/ar-ap-support.xlsx (AR Claims); Successor Reporting/2026/06/operating-support.xlsx (Site Operations: Visits, Procedures)",
+        "source_tier": "corroborated"
+      },
+      "end_markets": [
+        {
+          "market": "Commercial-insured patients",
+          "exposure": "~26% of June 2026 AR balance",
+          "demand_drivers": "Employer-sponsored coverage, regional payer contracts"
+        },
+        {
+          "market": "Medicare beneficiaries",
+          "exposure": "~27% of June 2026 AR balance",
+          "demand_drivers": "Medicare fee schedules and beneficiary demand"
+        },
+        {
+          "market": "Medicaid beneficiaries",
+          "exposure": "~23% of June 2026 AR balance",
+          "demand_drivers": "State Medicaid fee schedules and eligibility"
+        },
+        {
+          "market": "Workers' compensation claimants",
+          "exposure": "~16% of June 2026 AR balance",
+          "demand_drivers": "Employer/insurer workplace-injury referrals"
+        }
+      ],
+      "customers": {
+        "profile": "Patients across a diversified payer mix -- Medicare, Commercial, Medicaid, Workers' Compensation, and Self-Pay/Other -- billed through five regional operating subsidiaries",
+        "concentration": "By June 2026 AR balance: Medicare 27.0%, Commercial 26.1%, Medicaid 23.1%, Workers' Compensation 15.7%, Self-Pay/Other 8.1% -- no single payer class exceeds ~27%, i.e. no material payer concentration",
+        "stickiness": "Not a contracted/recurring relationship at the patient level; payer-class mix is diversified across 5 major categories which limits single-payer risk, but overall patient volumes (visits/procedures) are not contractually locked in",
+        "source": "Successor Reporting/2026/06/ar-ap-support.xlsx (AR Claims, computed by monitor-setup)",
+        "source_tier": "corroborated"
+      },
+      "suppliers_and_inputs": {
+        "key_inputs": "Direct clinical labor (employed + agency/contract staff), medical supplies, occupancy/site costs",
+        "concentration": "Agency/contract clinical staffing is concentrated with a small number of named vendors (e.g. Harborline Clinical Staffing is the largest AP vendor category by invoice volume in June 2026); medical-supply spend is concentrated with Cardinal Mesa Clinical Supply per the June 2026 AP Invoices detail",
+        "cost_drivers": "Employed vs agency/contract labor mix (agency hours cost materially more per hour -- Labor tab of operating-support.xlsx), medical supply costs, and site occupancy costs",
+        "source": "Successor Reporting/2026/06/operating-support.xlsx (Labor); Successor Reporting/2026/06/ar-ap-support.xlsx (AP Invoices)",
+        "source_tier": "corroborated"
+      },
+      "geography_footprint": "15 clinical sites across five U.S. regions -- Southeast, Mid-Atlantic, Northeast, Great Lakes, and Central -- each operated by its own regional operating subsidiary; domestic operations only, no foreign exposure disclosed.",
+      "seasonality_cyclicality": "Not disclosed/observable from the available documents -- flagged draft. Outpatient visit/procedure volumes can typically carry mild seasonality (holidays, weather), but no pattern is confirmed in this data set.",
+      "competitive_position": "Not disclosed in the available documents (the Restructuring IC Memo is a one-page transaction-approval memo, not a business/competitive analysis) -- flagged draft.",
+      "ownership": {
+        "structure": "Asteron Care Holdings, Inc. is the corporate parent/guarantor; a financial sponsor holds equity post-restructuring (unnamed -- see sponsor_status note) alongside Series A preferred equity issued to former debtholders in the March 2026 debt-for-equity exchange",
+        "key_holders": "Not itemized beyond the holding-company structure and the debt-for-equity preferred issuance -- flagged draft",
+        "source": "Restructuring IC Memo; Predecessor Close and Successor Opening.xlsx; executed credit agreements",
+        "source_tier": "internal-underwriting"
+      },
+      "management": [],
+      "_management_note": "No individual is named in any available document -- see deal_team note above. Only role titles appear (CEO/CFO/COO/Regional Presidents).",
+      "headcount": "Not disclosed as a company total; June 2026 site-level data shows ~630 employed FTEs across 15 sites (Labor tab, operating-support.xlsx) plus agency/contract staffing averaging ~10% of revenue in agency labor cost",
+      "history": "Predecessor entity financed since at least January 2021 (Predecessor Credit Agreement); no founding year or acquisition history disclosed beyond the facility history in borrower-config paths._restructuring_timeline_note.",
+      "key_operating_kpis": [
+        {
+          "kpi": "Patient visits / procedures by site",
+          "drives": "Revenue",
+          "reported_in_package": "yes -- Site Operations tab"
+        },
+        {
+          "kpi": "Weak-site count (of 15 total)",
+          "drives": "Site-level and consolidated EBITDA",
+          "reported_in_package": "yes -- monthly Status tab and Site Operations"
+        },
+        {
+          "kpi": "Agency/contract labor % of revenue",
+          "drives": "Direct clinical labor cost, margin",
+          "reported_in_package": "yes -- Labor tab and Approved Budget 'Agency ratio' column"
+        },
+        {
+          "kpi": "Employed vacancies by site",
+          "drives": "Reliance on higher-cost agency labor",
+          "reported_in_package": "yes -- Labor tab"
+        }
+      ],
+      "working_capital_profile": "AR is claims-based (payer class x entity x service date, aged Current/31-60/61-90/91-120) and ties exactly to the Balance Sheet; AP is vendor-invoice based (Clinical Supplies, Agency Staffing, Facilities, Technology, Professional Services categories) and also ties exactly. No inventory. DSO/DPO trend and aging-bucket skew are the primary working-capital signals to watch given the AR concentration risk named at restructuring (slower collections)."
+    },
+    "facility": {
+      "instrument": "Senior secured term loan (reinstated exit term debt + new-money term debt, single first-priority lien class)",
+      "commitment_usd": 51000000,
+      "funded_usd": 51000000,
+      "draw_structure": "single advance at restructuring close (no revolver or delayed-draw commitment) -- $44,000,000 reinstated debt (exchanged from predecessor/legacy debt) + $7,000,000 new-money term debt, funded 2026-03-31",
+      "close_date": "2026-03",
+      "maturity_date": "2031-03-31",
+      "interest_rate": "Fixed cash interest: 11.50% through March 2026, stepping down to 10.00% from April 2026 onward; no floating index disclosed. Monthly principal amortization stepped down from 0.70%/month (Predecessor/Legacy) to 0.10%/month beginning April 2026. No PIK disclosed.",
+      "oid": "None disclosed. Debt issuance costs of $1,200,000 were capitalized as a deferred financing asset at close (successor gross debt $51,000,000 vs. provisional successor carrying debt $49,800,000 per the Predecessor Close/Successor Opening workpaper; carrying debt per the June 2026 package is $49,707,152.95 after 3 months' amortization). Debt/equity accounting for the exchange itself (TDR framework, instrument-level 10% modification test) is explicitly PROVISIONAL pending workpapers not yet concluded.",
+      "fees": {
+        "Closing-date fees": "Debt issuance costs of $1,200,000 and restructuring advisory fees of $1,800,000 per the executed Sources & Uses (Restructuring Closing Materials); the executed Fee Letter (effective 2026-03-31) references 'debt issuance and administrative fees per the executed closing statement' but does not itemize dollar amounts in the available text -- sourced instead from the Sources & Uses workbook.",
+        "Prior bridge fee": "$140,000 upfront fee on the $7,000,000 Exit Amendment bridge facility (Dec 2025), superseded/rolled into the March 2026 exit capitalization; recorded as a below-EBITDA expense in the December 2025 Income Statement."
+      },
+      "equity_kicker": "None disclosed as a lender warrant/kicker. The restructuring itself converted $16,910,820.62 of predecessor debt into Series A preferred equity held by former debtholders (debt-for-equity exchange, not a lender warrant), alongside $8,000,000 of new common equity from the (unnamed) sponsor.",
+      "security": "First-priority blanket lien on substantially all assets of the borrower and guarantors (accounts, chattel paper, deposit accounts, equipment, fixtures, general intangibles, instruments, inventory, books/records, proceeds) per the executed Guaranty and Security Agreement (effective 2026-03-31); controlled/concentration deposit accounts; guarantees from Asteron Care Holdings, Inc. and the five regional operating subsidiaries.",
+      "source": "Amended and Restated Credit Agreement (executed 2026-03-20, effective 2026-03-31); Guaranty and Security Agreement (2026-03-31); Fee Letter (2026-03-31); Funding Request (2026-03-31); Closing Officer Certificate (2026-03-20/31); Solvency Certificate (2026-03-31); Restructuring IC Memo; Sources and Uses.xlsx and Predecessor Close and Successor Opening.xlsx (Restructuring Closing Materials). RESTRUCTURING HISTORY -- this is NOT the original deal: see borrower-config.json paths._restructuring_timeline_note for the full Predecessor (2021) -> Legacy (2025 par refinancing) -> Exit Amendment bridge (Dec 2025) -> Amended and Restated Credit Agreement (March 2026, current) timeline. All terms in this 'facility' block describe the CURRENT (post-restructuring) Exit Facility only."
+    },
+    "credit_thesis": [
+      {
+        "pillar": "Reduced funded debt ($51.0M vs. $60.9M pre-restructuring) and reduced monthly amortization (0.10% vs. 0.70% of principal), combined with $8.0M of new sponsor equity and $12.0M of retained successor liquidity, give the company enough runway to execute the stabilization plan without a near-term liquidity event.",
+        "monitored_by": "Cash balance vs. the $10.0M minimum-liquidity control; monthly debt service (Debt and Equity tab)",
+        "status": "intact"
+      },
+      {
+        "pillar": "Site-level and labor remediation (agency-vendor rate-card reset, 8-site remediation plans) restores site profitability and reduces agency-labor dependence enough to return Reported EBITDA to a run-rate that could support FCCR reinstatement by the September 30, 2026 milestone.",
+        "monitored_by": "Weak-site count; agency/contract-labor % of revenue; Reported EBITDA trend (Income Statement / Site Operations support)",
+        "status": "pressured"
+      },
+      {
+        "pillar": "The legacy 1.2000x FCCR covenant, though contractually SUSPENDED through December 31, 2026, remains informationally tracked every period so the lender can assess reinstatement readiness rather than being blind to the credit's true trajectory.",
+        "monitored_by": "Informational TTM FCCR vs. 1.2000x (Covenant Calculation / Compliance Certificate)",
+        "status": "pressured"
+      },
+      {
+        "pillar": "The first-priority blanket collateral package (cash, receivables, PP&E, general intangibles) continues to support recovery even though it is not relied upon as the primary source of repayment.",
+        "monitored_by": "Collateral coverage vs. funded debt (Collateral metrics box)",
+        "status": "intact"
+      }
+    ],
+    "_credit_thesis_note": "The one-page Restructuring IC Memo does not itself enumerate discrete thesis 'pillars' -- these four were constructed by monitor-setup from the memo's stated Decision/rationale and the A&R Agreement's own stabilization mechanics (minimum liquidity, weekly reporting, named milestones), not copied from an explicit pillar list. Flagged for analyst review since there is no earlier underwriting memo (predecessor or legacy facility) to cross-check against -- this IS effectively the only underwriting record for the current facility.",
+    "key_risks_at_uw": [
+      {
+        "risk": "Referral/procedure volume pressure -- patient visit and procedure volumes have not fully recovered to pre-deterioration levels",
+        "early_warning_signal": "Visits/Procedures by site (Site Operations); Revenue vs. the Approved Stabilization Budget"
+      },
+      {
+        "risk": "Agency-labor dependence -- reliance on higher-cost contract/agency clinical staffing pressures margins and signals staffing instability",
+        "early_warning_signal": "Agency-labor cost % of revenue vs. the budget's 'Agency ratio' line; agency hours vs. employed hours (Labor support)"
+      },
+      {
+        "risk": "Weak-site fixed-cost drag -- a meaningful share of sites (8 of 15 as of June 2026) run at negative site-level EBITDA",
+        "early_warning_signal": "Weak-site count and site-level EBITDA (Site Operations support)"
+      },
+      {
+        "risk": "Slower collections / receivables quality -- claims aging can trap cash and signal payer friction",
+        "early_warning_signal": "AR claims aging buckets and DSO (AR Claims support / ap-ar-aging module)"
+      },
+      {
+        "risk": "Provisional restructuring accounting -- TDR framework, instrument-level modification (debt vs. equity, 10% test), CODI, and Section 382 analyses are all still PENDING; the successor balance sheet, gain/loss, and debt carrying value could still change",
+        "early_warning_signal": "'Statement status' / 'Restructuring accounting' fields on each monthly package continuing to read PROVISIONAL beyond a reasonable workpaper-completion window"
+      },
+      {
+        "risk": "Interim goodwill reassessment outstanding -- the Dec 31, 2025 analysis ($1.9M impairment recorded) flagged a required interim reassessment as of March 31, 2026 that had not been completed as of the June 2026 package",
+        "early_warning_signal": "Goodwill balance roll-forward; any subsequent impairment recorded"
+      },
+      {
+        "risk": "Covenant-reinstatement milestone -- the FCCR reinstatement-readiness analysis is due September 30, 2026 (Stabilization Milestone M4); failure to deliver, or an unfavorable analysis, could trigger renewed lender scrutiny/negotiation",
+        "early_warning_signal": "Milestone M4 status; informational FCCR trend"
+      }
+    ]
+  },
+  "our_view": {
+    "watchlist": "on",
+    "trajectory": "improving",
+    "thesis_status": "Post-restructuring operating trends are improving off the trough: June 2026 marks three straight months of rising revenue and Reported EBITDA, weak sites down to 8 (from a peak of 9), and agency-labor dependence down to 10.0% of revenue (from a Q4 2025 peak of 17.6%) -- consistent with pillars 1 and 4 holding and pillar 2 showing real, if partial, progress (graded 'pressured' rather than 'intact' since 8 of 15 sites remain unprofitable and revenue is still ~17% below the approved budget and well below the pre-2025 run-rate). Pillar 3 (covenant reinstatement) is graded 'pressured': the informational FCCR has WORSENED every quarter since the restructuring closed (1.05x at 2025-Q4 -> 0.67x at 2026-Q1 -> 0.37x at 2026-Q2), purely on trailing-twelve-month math still absorbing the 2025 collapse -- it should mechanically improve through year-end as those months roll off, but that has not yet been demonstrated. The September 30, 2026 FCCR reinstatement-readiness milestone (Stabilization Milestone M4, PENDING) is the key near-term test, due in two weeks from this review. Restructuring accounting (TDR framework, instrument-level test, goodwill interim reassessment) remains PROVISIONAL nearly six months after close, which is itself worth escalating if it persists much longer.",
+    "what_would_change_our_mind": "A fourth consecutive month of EBITDA/revenue improvement with weak-site count at or below 8 and agency-labor % holding near or below 10% would support upgrading trajectory further and reconsidering watchlist status. Conversely, a reversal of June's improvement, a missed or unfavorable September 30 FCCR reinstatement-readiness milestone, or the provisional restructuring/goodwill accounting resolving unfavorably (a larger loss, higher carrying debt, or an additional impairment) would move this back toward 'deteriorating' and keep or deepen the watchlist flag.",
+    "_provenance_note": "Auto-drafted by the onboarding assistant from the objective evidence on file (compliance certificates, covenant calculations, monthly packages, stabilization milestones) per the analyst's standing instruction to proceed without per-field confirmation on this onboarding batch. Flagged for the analyst's own read at the next review -- this is a materially more stressed credit than a routine watchlist-off call, given the SUSPENDED-but-WOULD-BREACH covenant and the imminent Sept 30 milestone."
+  },
+  "carry_forward": {
+    "open_requests_to_borrower": [
+      "FCCR reinstatement-readiness analysis (Stabilization Milestone M4), due to the lender 2026-09-30."
+    ],
+    "unresolved_flags": [
+      "FCCR reinstatement at 1.2000x effective 2027-01-01 is this spec's best-supported reading of the suspension text, not a confirmed mechanism -- revisit before year-end, especially once the M4 analysis is delivered.",
+      "EBITDA add-back ($553,353.26/month) inside the borrower's certified 'Covenant EBITDA' is not supported by any agreement text located to date -- excluded from this analysis's EBITDA definition; resolve if a longer-form credit agreement surfaces.",
+      "Restructuring accounting (TDR framework, instrument-level 10% modification test, CODI, Section 382) remains PROVISIONAL through the June 2026 package -- successor balance-sheet figures could still restate.",
+      "Interim goodwill reassessment required as of 2026-03-31 had not been completed as of the June 2026 package."
+    ],
+    "analyst_focus": [
+      {
+        "item": "FCCR reinstatement readiness (Milestone M4 due 2026-09-30) and the informational FCCR trend",
+        "asked_period": "2026-06",
+        "finding": "Informational FCCR worsened again to 0.3682x at June 2026 (from 0.67x in Q1 2026), fourth straight worsening quarter since the Dec 2025 suspension; the covenant remains suspended (not a breach) and M4 is due in about two weeks."
+      },
+      {
+        "item": "EBITDA definition gap ($553,353.26/month unsupported add-back) and Fixed Charges scope gap vs certified figures",
+        "asked_period": "2026-06",
+        "finding": "Confirmed unresolved: no executed document supports the add-back or a broader Fixed Charges definition; both remain excluded from this analysis and flagged for resolution if a longer-form agreement surfaces."
+      },
+      {
+        "item": "Watchlist trajectory: improving operating metrics vs worsening informational FCCR",
+        "asked_period": "2026-06",
+        "finding": "Operating metrics kept improving in June (EBITDA +23.3% MoM, gross margin up to 33.5%, revenue +2.2% MoM) even as the informational FCCR kept worsening -- trajectory 'improving' still holds on the operating side, but the covenant path has not yet turned."
+      }
+    ],
+    "last_period_headline": "June 2026: revenue $13.2M ran 17.4% below the Approved Stabilization Budget while EBITDA $1.5M beat budget by 19.9%; Minimum Liquidity passed at $18.8M vs the $10.0M floor; the informational FCCR (0.3682x, suspended/not tested) continued to worsen ahead of the FCCR reinstatement-readiness milestone due 2026-09-30."
+  },
+  "provenance": {
+    "auto_draftable": [
+      "static.facility",
+      "static.business_one_liner",
+      "static.business_profile",
+      "static.credit_thesis",
+      "static.key_risks_at_uw",
+      "carry_forward"
+    ],
+    "analyst_required": [
+      "our_view.*",
+      "credit_thesis[].status",
+      "ebitda_addbacks.entries[].treatment"
+    ],
+    "_note": "our_view and credit_thesis[].status were auto-decided by the onboarding assistant per the analyst's explicit instruction not to pause for confirmation on this onboarding batch; they still require analyst sign-off at the next review, per provenance.analyst_required above."
+  },
+  "ebitda_addbacks": {
+    "entries": [
+      {
+        "line": "Operating lease / facility rent expense (embedded within 'Occupancy and site costs' and other cost lines; not a separately labeled Income Statement row)",
+        "limb": "Structural component of the credit agreement's Covenant EBITDA / Fixed Charge Coverage Ratio construction -- operating lease expense is excluded from the EBITDA numerator and the SAME rent payment is instead counted as a 'Lease payments' component of Fixed Charges in the denominator (reverse-engineered from the 2026-Q2 Covenant Calculation TTM Detail; the actual agreement limb text was not directly quotable from the fictional clean-room summary and should be confirmed by covenant-setup against the A&R Agreement's own EBITDA and Fixed Charges definitions).",
+        "permitted_by_agreement": "yes",
+        "treatment": "include",
+        "cap_usd": null,
+        "reason": "This is a MECHANICAL, PERMANENT feature of how the agreement defines Covenant EBITDA and Fixed Charges -- not a discretionary or one-time election. It is CONSTANT every month: exactly $553,353.26/month ($6,640,239.12/year), matching the '2025 facility lease expense included above' figure from the Goodwill Impairment Support workpaper. Verified against 12 consecutive months (2025-07 through 2026-06): Covenant EBITDA (per Covenant Calculation TTM Detail) minus Reported EBITDA (per each month's Income Statement) equals exactly $553,353.26 every single month with no exceptions. TTM Reported EBITDA at June 2026 was actually NEGATIVE (-$226,820.42) even though TTM Covenant EBITDA was +$6,413,418.70 (informational FCCR 0.3682x) -- since the same rent dollar is already captured in the Fixed Charges denominator, this construction is not obviously more lenient than treating rent as a normal opex, but it DOES mean 'Covenant EBITDA' materially overstates the company's true, reported operating cash generation on a standalone basis, which matters for how the credit read should be framed.",
+        "source": "Portfolio Monitoring/2026-Q2/Covenant Calculation.xlsx (TTM Detail); Restructuring/Closing Materials/Goodwill Impairment Support.xlsx (Lease Basis Demonstration); Successor Reporting monthly Income Statements 2025-07 through 2026-06 (computed by monitor-setup)",
+        "credit_view": "same",
+        "decided_by": "Onboarding assistant (per analyst's standing instruction not to pause for confirmation on this onboarding batch)",
+        "decided_on": "2026-09-15",
+        "review_after_months": 3
+      }
+    ],
+    "credit_ebitda": {
+      "report_both_in_memo": true
+    },
+    "_sweep_note": "Sweep also checked 'Restructuring advisory expense' (-$1,800,000, March 2026), 'Bridge upfront fee' (-$140,000, December 2025), and 'Goodwill impairment' (-$1,910,453.23, December 2025) -- all three sit BELOW the 'Reported EBITDA' line on this borrower's own Income Statement (between EBITDA and Net Income), so they never reduced Reported EBITDA in the first place and require no addback election. No other restructuring/impairment/write-off/severance/one-time-named line was found above the EBITDA line in any month checked (2024-09 through 2026-06)."
+  }
+}

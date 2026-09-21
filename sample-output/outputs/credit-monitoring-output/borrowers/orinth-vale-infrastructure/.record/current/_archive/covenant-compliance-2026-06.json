@@ -1,0 +1,855 @@
+{
+  "module": "covenant-compliance",
+  "period": "2026-06",
+  "run_id": "run-20260915-094514",
+  "run_id_from": "run",
+  "produced_at": "2026-09-15T09:50:11+00:00",
+  "produced_by": {
+    "engine": "covenant-compliance",
+    "plugin_version": null
+  },
+  "reporting_unit": {
+    "scale": 1.0,
+    "currency": "USD",
+    "verbatim": "USD | internally titled source",
+    "plain": "USD"
+  },
+  "stores": {
+    "store": {
+      "url_base": null
+    },
+    "source": {
+      "url_base": null
+    }
+  },
+  "source_ref_reach": {
+    "cell": 8,
+    "file": 20,
+    "unlocated": 0,
+    "borrower_doc": 28
+  },
+  "source_files": [
+    "store:borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/config/covenant-spec.json",
+    "store:borrowers/orinth-vale-infrastructure/.record/current/_monitor/certified-values-2026-06.json",
+    "store:borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/Orinth Vale Infrastructure Monthly IS-BS-CF.xlsx"
+  ],
+  "results": [
+    {
+      "id": "max_total_leverage",
+      "name": "Maximum Total Leverage Ratio",
+      "primitive": "max_ratio",
+      "test_date": "2025-03-31",
+      "window": "ttm",
+      "required": null,
+      "actual": null,
+      "headroom_abs": null,
+      "headroom_pct": null,
+      "status": "not_evaluable",
+      "reason": "insufficient_history",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/config/covenant-spec.json",
+          "section": "covenants.max_total_leverage",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/01 Legal/Executed/Initial Closing/1.pdf",
+              "page": 9,
+              "section": "FINANCIAL COVENANT",
+              "quote": "Maximum Total Leverage Ratio: 5.50x. The covenant is measured at each quarter end beginning March 31, 2025 using trailing-twelve-month Covenant EBITDA."
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/current/_monitor/certified-values-2026-06.json",
+          "section": "values.max_total_leverage.2025-03-31",
+          "upstream": [
+            {
+              "store": null,
+              "unlocated_reason": "no configured store contains this file",
+              "section": "06 Monitoring/Portfolio Management/2025 Q1/Covenant Calculation.xlsx, 'Summary' tab, row 8",
+              "quote": "Test Date 2025-03-31 | Funded Debt 64,191,275.20 | TTM Covenant EBITDA 19,274,233.70 | Total Leverage Ratio 3.3304 | Maximum 5.5 | Status COMPLIANT"
+            }
+          ]
+        }
+      ],
+      "calc": "not evaluable at 2025-03-31: the model does not reach back far enough to fill this covenant's trailing window (covenants.max_total_leverage); the model starts at 2024-09-30. No pass/breach is asserted. The borrower's certificate reports 3.3304 for this date; it is shown as a cross-check and does not stand in for the model.",
+      "cert_value": 3.3304,
+      "cert_status": "pass",
+      "cert_headroom_abs": 2.1696,
+      "cert_headroom_pct": 0.39447272727272725,
+      "cert_agrees": null,
+      "delta_model_vs_cert": null
+    },
+    {
+      "id": "max_total_leverage",
+      "name": "Maximum Total Leverage Ratio",
+      "primitive": "max_ratio",
+      "test_date": "2025-06-30",
+      "window": "ttm",
+      "required": null,
+      "actual": null,
+      "headroom_abs": null,
+      "headroom_pct": null,
+      "status": "not_evaluable",
+      "reason": "insufficient_history",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/config/covenant-spec.json",
+          "section": "covenants.max_total_leverage",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/01 Legal/Executed/Initial Closing/1.pdf",
+              "page": 9,
+              "section": "FINANCIAL COVENANT",
+              "quote": "Maximum Total Leverage Ratio: 5.50x. The covenant is measured at each quarter end beginning March 31, 2025 using trailing-twelve-month Covenant EBITDA."
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/current/_monitor/certified-values-2026-06.json",
+          "section": "values.max_total_leverage.2025-06-30",
+          "upstream": [
+            {
+              "store": null,
+              "unlocated_reason": "no configured store contains this file",
+              "section": "06 Monitoring/Portfolio Management/2025 Q2/Covenant Calculation.xlsx, 'Summary' tab, row 8",
+              "quote": "Test Date 2025-06-30 | Funded Debt 63,042,751.04 | TTM Covenant EBITDA 21,760,157.12 | Total Leverage Ratio 2.8972 | Maximum 5.5 | Status COMPLIANT"
+            }
+          ]
+        }
+      ],
+      "calc": "not evaluable at 2025-06-30: the model does not reach back far enough to fill this covenant's trailing window (covenants.max_total_leverage); the model starts at 2024-09-30. No pass/breach is asserted. The borrower's certificate reports 2.8972 for this date; it is shown as a cross-check and does not stand in for the model.",
+      "cert_value": 2.8972,
+      "cert_status": "pass",
+      "cert_headroom_abs": 2.6028,
+      "cert_headroom_pct": 0.4732363636363636,
+      "cert_agrees": null,
+      "delta_model_vs_cert": null
+    },
+    {
+      "id": "max_total_leverage",
+      "name": "Maximum Total Leverage Ratio",
+      "primitive": "max_ratio",
+      "test_date": "2025-09-30",
+      "window": "ttm",
+      "required": 5.5,
+      "actual": 2.661236,
+      "headroom_abs": 2.838764,
+      "headroom_pct": 0.516139,
+      "status": "pass",
+      "source": "(model:'Funded Debt')/(model:'EBITDA' (EBITDA bridge)) [ttm]",
+      "source_ref": [
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/Orinth Vale Infrastructure Monthly IS-BS-CF.xlsx",
+          "sheet": "Balance Sheet",
+          "row": 22,
+          "label": "Funded Debt",
+          "cells": "N22",
+          "period": "2025-09",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/09/a.xlsx",
+              "sheet": "Balance Sheet"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/config/covenant-spec.json",
+          "section": "definitions.Funded_Debt",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/01 Legal/Executed/Initial Closing/1.pdf"
+            }
+          ]
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/Orinth Vale Infrastructure Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 10,
+          "label": "EBITDA",
+          "cells": "C10:N10",
+          "period": "2024-10..2025-09",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2024/10/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2024/11/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2024/12/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/01/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/02/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/03/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/04/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/05/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/06/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/07/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/08/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/09/a.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/config/covenant-spec.json",
+          "section": "definitions.Covenant_EBITDA",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/01 Legal/Executed/Initial Closing/1.pdf"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/config/covenant-spec.json",
+          "section": "covenants.max_total_leverage",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/01 Legal/Executed/Initial Closing/1.pdf",
+              "page": 9,
+              "section": "FINANCIAL COVENANT",
+              "quote": "Maximum Total Leverage Ratio: 5.50x. The covenant is measured at each quarter end beginning March 31, 2025 using trailing-twelve-month Covenant EBITDA."
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/current/_monitor/certified-values-2026-06.json",
+          "section": "values.max_total_leverage.2025-09-30",
+          "kind": "certified-transcription",
+          "upstream": [
+            {
+              "store": null,
+              "unlocated_reason": "no configured store contains this file"
+            }
+          ]
+        }
+      ],
+      "calc": "actual 2.66124 = [model:'Funded Debt' at Sep 2025 = 6.19148e+07] / [model:'EBITDA' (EBITDA bridge) summed Oct 2024..Sep 2025 (12 mo) = 2.32654e+07]; test: max_ratio 2.66124 <= 5.5 (threshold per covenant-spec covenants.max_total_leverage)",
+      "cert_value": 2.6612,
+      "cert_status": "pass",
+      "cert_headroom_abs": 2.8388,
+      "cert_headroom_pct": 0.516145,
+      "delta_model_vs_cert": 3.6e-05,
+      "cert_agrees": true,
+      "cert_tolerance_applied": 0.05,
+      "notes": "numerator=61914777, denominator=23265421"
+    },
+    {
+      "id": "max_total_leverage",
+      "name": "Maximum Total Leverage Ratio",
+      "primitive": "max_ratio",
+      "test_date": "2025-12-31",
+      "window": "ttm",
+      "required": 5.5,
+      "actual": 2.50981,
+      "headroom_abs": 2.99019,
+      "headroom_pct": 0.543671,
+      "status": "pass",
+      "source": "(model:'Funded Debt')/(model:'EBITDA' (EBITDA bridge)) [ttm]",
+      "source_ref": [
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/Orinth Vale Infrastructure Monthly IS-BS-CF.xlsx",
+          "sheet": "Balance Sheet",
+          "row": 22,
+          "label": "Funded Debt",
+          "cells": "Q22",
+          "period": "2025-12",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/12/a.xlsx",
+              "sheet": "Balance Sheet"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/config/covenant-spec.json",
+          "section": "definitions.Funded_Debt",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/01 Legal/Executed/Initial Closing/1.pdf"
+            }
+          ]
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/Orinth Vale Infrastructure Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 10,
+          "label": "EBITDA",
+          "cells": "F10:Q10",
+          "period": "2025-01..2025-12",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/01/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/02/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/03/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/04/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/05/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/06/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/07/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/08/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/09/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/10/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/11/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/12/a.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/config/covenant-spec.json",
+          "section": "definitions.Covenant_EBITDA",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/01 Legal/Executed/Initial Closing/1.pdf"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/config/covenant-spec.json",
+          "section": "covenants.max_total_leverage",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/01 Legal/Executed/Initial Closing/1.pdf",
+              "page": 9,
+              "section": "FINANCIAL COVENANT",
+              "quote": "Maximum Total Leverage Ratio: 5.50x. The covenant is measured at each quarter end beginning March 31, 2025 using trailing-twelve-month Covenant EBITDA."
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/current/_monitor/certified-values-2026-06.json",
+          "section": "values.max_total_leverage.2025-12-31",
+          "kind": "certified-transcription",
+          "upstream": [
+            {
+              "store": null,
+              "unlocated_reason": "no configured store contains this file"
+            }
+          ]
+        }
+      ],
+      "calc": "actual 2.50981 = [model:'Funded Debt' at Dec 2025 = 6.0807e+07] / [model:'EBITDA' (EBITDA bridge) summed Jan 2025..Dec 2025 (12 mo) = 2.42277e+07]; test: max_ratio 2.50981 <= 5.5 (threshold per covenant-spec covenants.max_total_leverage)",
+      "cert_value": 2.5098,
+      "cert_status": "pass",
+      "cert_headroom_abs": 2.9902,
+      "cert_headroom_pct": 0.543673,
+      "delta_model_vs_cert": 1e-05,
+      "cert_agrees": true,
+      "cert_tolerance_applied": 0.05,
+      "notes": "numerator=60806984, denominator=24227721"
+    },
+    {
+      "id": "max_total_leverage",
+      "name": "Maximum Total Leverage Ratio",
+      "primitive": "max_ratio",
+      "test_date": "2026-03-31",
+      "window": "ttm",
+      "required": 5.5,
+      "actual": 2.423485,
+      "headroom_abs": 3.076515,
+      "headroom_pct": 0.559366,
+      "status": "pass",
+      "source": "(model:'Funded Debt')/(model:'EBITDA' (EBITDA bridge)) [ttm]",
+      "source_ref": [
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/Orinth Vale Infrastructure Monthly IS-BS-CF.xlsx",
+          "sheet": "Balance Sheet",
+          "row": 22,
+          "label": "Funded Debt",
+          "cells": "T22",
+          "period": "2026-03",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/03/a.xlsx",
+              "sheet": "Balance Sheet"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/config/covenant-spec.json",
+          "section": "definitions.Funded_Debt",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/01 Legal/Executed/Initial Closing/1.pdf"
+            }
+          ]
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/Orinth Vale Infrastructure Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 10,
+          "label": "EBITDA",
+          "cells": "I10:T10",
+          "period": "2025-04..2026-03",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/04/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/05/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/06/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/07/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/08/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/09/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/10/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/11/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/12/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/01/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/02/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/03/a.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/config/covenant-spec.json",
+          "section": "definitions.Covenant_EBITDA",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/01 Legal/Executed/Initial Closing/1.pdf"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/config/covenant-spec.json",
+          "section": "covenants.max_total_leverage",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/01 Legal/Executed/Initial Closing/1.pdf",
+              "page": 9,
+              "section": "FINANCIAL COVENANT",
+              "quote": "Maximum Total Leverage Ratio: 5.50x. The covenant is measured at each quarter end beginning March 31, 2025 using trailing-twelve-month Covenant EBITDA."
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/current/_monitor/certified-values-2026-06.json",
+          "section": "values.max_total_leverage.2026-03-31",
+          "kind": "certified-transcription",
+          "upstream": [
+            {
+              "store": null,
+              "unlocated_reason": "no configured store contains this file"
+            }
+          ]
+        }
+      ],
+      "calc": "actual 2.42349 = [model:'Funded Debt' at Mar 2026 = 5.9719e+07] / [model:'EBITDA' (EBITDA bridge) summed Apr 2025..Mar 2026 (12 mo) = 2.46418e+07]; test: max_ratio 2.42349 <= 5.5 (threshold per covenant-spec covenants.max_total_leverage)",
+      "cert_value": 2.4235,
+      "cert_status": "pass",
+      "cert_headroom_abs": 3.0765,
+      "cert_headroom_pct": 0.559364,
+      "delta_model_vs_cert": -1.5e-05,
+      "cert_agrees": true,
+      "cert_tolerance_applied": 0.05,
+      "notes": "numerator=59719012, denominator=24641788"
+    },
+    {
+      "id": "max_total_leverage",
+      "name": "Maximum Total Leverage Ratio",
+      "primitive": "max_ratio",
+      "test_date": "2026-06-30",
+      "window": "ttm",
+      "required": 5.5,
+      "actual": 2.391066,
+      "headroom_abs": 3.108934,
+      "headroom_pct": 0.565261,
+      "status": "pass",
+      "source": "(model:'Funded Debt')/(model:'EBITDA' (EBITDA bridge)) [ttm]",
+      "source_ref": [
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/Orinth Vale Infrastructure Monthly IS-BS-CF.xlsx",
+          "sheet": "Balance Sheet",
+          "row": 22,
+          "label": "Funded Debt",
+          "cells": "W22",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/06/a.xlsx",
+              "sheet": "Balance Sheet"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/config/covenant-spec.json",
+          "section": "definitions.Funded_Debt",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/01 Legal/Executed/Initial Closing/1.pdf"
+            }
+          ]
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/Orinth Vale Infrastructure Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 10,
+          "label": "EBITDA",
+          "cells": "L10:W10",
+          "period": "2025-07..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/07/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/08/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/09/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/10/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/11/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2025/12/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/01/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/02/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/03/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/04/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/05/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/06/a.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/config/covenant-spec.json",
+          "section": "definitions.Covenant_EBITDA",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/01 Legal/Executed/Initial Closing/1.pdf"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/config/covenant-spec.json",
+          "section": "covenants.max_total_leverage",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/01 Legal/Executed/Initial Closing/1.pdf",
+              "page": 9,
+              "section": "FINANCIAL COVENANT",
+              "quote": "Maximum Total Leverage Ratio: 5.50x. The covenant is measured at each quarter end beginning March 31, 2025 using trailing-twelve-month Covenant EBITDA."
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/current/_monitor/certified-values-2026-06.json",
+          "section": "values.max_total_leverage.2026-06-30",
+          "kind": "certified-transcription",
+          "upstream": [
+            {
+              "store": null,
+              "unlocated_reason": "no configured store contains this file"
+            }
+          ]
+        }
+      ],
+      "calc": "actual 2.39107 = [model:'Funded Debt' at Jun 2026 = 5.86505e+07] / [model:'EBITDA' (EBITDA bridge) summed Jul 2025..Jun 2026 (12 mo) = 2.4529e+07]; test: max_ratio 2.39107 <= 5.5 (threshold per covenant-spec covenants.max_total_leverage)",
+      "cert_value": 2.3911,
+      "cert_status": "pass",
+      "cert_headroom_abs": 3.1089,
+      "cert_headroom_pct": 0.565255,
+      "delta_model_vs_cert": -3.4e-05,
+      "cert_agrees": true,
+      "cert_tolerance_applied": 0.05,
+      "notes": "numerator=58650507, denominator=24529022"
+    }
+  ],
+  "exceptions": [
+    {
+      "covenant": "max_total_leverage",
+      "type": "not_evaluable",
+      "reason": "insufficient_history",
+      "warning": "Covenant 'Maximum Total Leverage Ratio' cannot be computed for its earliest periods \u2014 its ttm window reaches back further than the model's first month. Those periods are reported as not evaluable, not as a pass or breach.",
+      "test_dates": [
+        "2025-03-31",
+        "2025-06-30"
+      ]
+    }
+  ],
+  "engine": "spec-driven v5 (per-figure source refs + calc records; explicit flow/spot basis; certified-vs-model dual columns with per-component delta decomposition; dollar thresholds put on the model's declared unit; ledger-proxy flag on coverage covenants without a debt-service schedule)",
+  "borrower": "Orinth Vale Infrastructure, LLC",
+  "reconciliation_required": false,
+  "reconciliation_blockers": [],
+  "reconciliation_override": false,
+  "spec_agreement_ref": "Executed Credit Agreement (Orinth Vale 2025 Senior Secured Facility) between Orinth Vale Infrastructure, LLC, as Borrower, and Cairn Ridge Private Credit, LP, as Administrative Agent. Issued January 10, 2025; effective/closing January 15, 2025. $65,360,723.38 senior secured term loan, fully funded at closing to refinance legacy debt; maturity January 15, 2030. Single initial-closing agreement -- no amendments found in the deal folder (01 Legal contains only 'Executed/Initial Closing').",
+  "cure_rights": {
+    "max_total_leverage": "NOT QUANTIFIED in the executed document set (see step-7 ambiguity). Events of Default (p.10) lists 'covenant failure after any applicable cure period' as a default trigger -- implying SOME cure mechanism exists -- but no cure-period length, notice procedure, or equity-cure right is stated anywhere in the Credit Agreement or the other 8 executed documents (full-text sweep for 'cure period', 'grace period', 'equity cure', 'equity contribution' returns no hits). Recorded as 'none quantifiable' pending step-7 sign-off; do not assume an equity cure is available."
+  },
+  "model_month_ends": [
+    "2024-09-30",
+    "2024-10-31",
+    "2024-11-30",
+    "2024-12-31",
+    "2025-01-31",
+    "2025-02-28",
+    "2025-03-31",
+    "2025-04-30",
+    "2025-05-31",
+    "2025-06-30",
+    "2025-07-31",
+    "2025-08-31",
+    "2025-09-30",
+    "2025-10-31",
+    "2025-11-30",
+    "2025-12-31",
+    "2026-01-31",
+    "2026-02-28",
+    "2026-03-31",
+    "2026-04-30",
+    "2026-05-31",
+    "2026-06-30"
+  ],
+  "certified_source": "Covenant Calculation.xlsx (06 Monitoring/Portfolio Management/2026 Q2/)",
+  "certified_period": "2026-06",
+  "transcription_notes": [
+    "Current-period certificate (2026-06, a quarter-end): 06 Monitoring/Portfolio Management/2026 Q2/Covenant Calculation.xlsx 'Summary' tab reports Total Leverage Ratio 2.3911x vs Maximum 5.5x, Status COMPLIANT, test date 2026-06-30. This ties exactly to 04 Reporting/Period Archive/2026/06/certificate.html, which independently states the same Funded Debt ($58,650,506.80), Trailing Covenant EBITDA ($24,529,022.34), Total Leverage Ratio (2.3911x) and Status (COMPLIANT) for 2026-06-30 -- the certificate.html's own text confirms 'The covenant status below is reported only when a formal quarter-end test is required', and June 2026 is a quarter-end.",
+    "Per the run's request to report the full historical trend and cross-check every quarter, all 6 certified quarterly test dates (2025-03-31 through 2026-06-30) were transcribed from each quarter's own Covenant Calculation.xlsx, not only the current period's certificate -- one entry per test date, each citing its own quarter's file in 'section'.",
+    "All 6 values are the bare 'Total Leverage Ratio' cell as displayed on each certificate (already rounded to 4 decimals by the borrower's own workbook); Funded Debt and TTM Covenant EBITDA are quoted alongside for context but are not separately certified line items under this covenant's cert_ref beyond what is shown here.",
+    "EXCEPTION (recorded for the orchestrator): the certified-values contract's 'source' field names one certificate file, but the borrower's 6 quarterly workpapers are all identically named 'Covenant Calculation.xlsx' in different '<YYYY Qn>' subfolders. 'source' above is set to the CURRENT period's file (2026 Q2); the engine's upstream-document resolution for that file name may therefore land on whichever same-named file its folder search encounters, so the automatically-resolved 'upstream' hyperlink on the five PRIOR quarters' rows may not point at their own quarter's specific file even though this JSON's own 'section' field correctly names it. Alternative reading: split the 5 historical quarters into their own certified-values files (one per quarter) so each gets an unambiguous 'source' -- not done here since the contract's shape is one certified-values file per module run/period, and the per-date 'section' field carries the correct locator regardless."
+  ],
+  "action_items": [],
+  "methodology": "Company-prepared/unaudited model; EBITDA taken from the model's single pinned EBITDA bridge row (not recomputed). Thresholds and definitions per the standardized covenant-spec; each definition's flow/spot basis is explicit in the spec. cert_* fields are the borrower's own certified actuals transcribed from the compliance certificate -- reported alongside the model reconstruction, never merged with it."
+}

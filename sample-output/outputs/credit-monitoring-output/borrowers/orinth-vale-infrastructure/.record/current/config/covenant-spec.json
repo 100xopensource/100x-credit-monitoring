@@ -1,0 +1,167 @@
+{
+  "borrower": "Orinth Vale Infrastructure, LLC",
+  "agreement": "Executed Credit Agreement (Orinth Vale 2025 Senior Secured Facility) between Orinth Vale Infrastructure, LLC, as Borrower, and Cairn Ridge Private Credit, LP, as Administrative Agent. Issued January 10, 2025; effective/closing January 15, 2025. $65,360,723.38 senior secured term loan, fully funded at closing to refinance legacy debt; maturity January 15, 2030. Single initial-closing agreement -- no amendments found in the deal folder (01 Legal contains only 'Executed/Initial Closing').",
+  "as_of_agreement_date": "2025-01-15",
+  "amendments_reflected": [],
+  "threshold_unit": "dollars",
+  "definitions": {
+    "Covenant_EBITDA": {
+      "verbatim": "Covenant EBITDA means consolidated net income adjusted for interest, taxes, depreciation, and permitted noncash items.",
+      "agreement_ref": {
+        "section": "DEFINITIONS",
+        "page": 2,
+        "quote": "Covenant EBITDA means consolidated net income adjusted for interest, taxes, depreciation, and permitted noncash items."
+      },
+      "basis": "flow",
+      "compute": {
+        "ebitda_bridge": "EBITDA"
+      },
+      "note": "Bound to the model's single native monthly 'EBITDA' Income Statement row (borrower-config.json model_lines.ebitda_bridge). VERIFIED INDEPENDENTLY (not taken on the prior pass's word): the certified quarterly Covenant Calculation.xlsx 'TTM Detail' tab's per-month 'Covenant EBITDA' figures tie EXACTLY, to the cent, to the model's monthly 'EBITDA' row for every month cross-checked -- 2025-01 ($1,705,037.68), 2025-06 ($2,095,934.44), 2025-12 ($1,827,699.79), 2026-01 ($1,922,736.99) and 2026-06 ($2,290,659.16) -- five non-adjacent months spanning both fiscal years. No structural add-back gap exists (consistent with borrower-config's own EBITDA add-back sweep, which found zero restructuring/impairment/severance/one-time lines above or below EBITDA in any month 2024-09 through 2026-06). No deemed-EBITDA schedule: a full-text search of all 9 executed closing documents (Credit Agreement, Guaranty & Security Agreement, Officer Certificate, Solvency Certificate, Information Certificate, Closing Funding Request, Fee Letter, IP Security Agreement, Certificate of Liability Insurance) for 'deemed', 'shall be deemed', 'stipulated' and 'agreed EBITDA' returns zero hits -- consistent with this being a straightforward refinancing (not an LBO/acquisition financing) with no pre-close target EBITDA to fix by table. DATA-AVAILABILITY NOTE for build-monitoring-model (not a deemed schedule, but load-bearing for the same reason a deemed schedule is): the certified TTM Detail tabs for the FIRST TWO test dates draw on monthly Covenant EBITDA back to 2024-04 (Q1 2025 test) and 2024-07 (Q2 2025 test), both of which predate the Period Archive's earliest month (2024-09) by 5 and 2 months respectively. Those pre-archive months are genuine organic historical actuals (not a contractual override -- the agreement states no such table), sourced by the certifier from records outside 04 Reporting/Period Archive. Until that earlier monthly history is loaded into the model, the model side of the covenant-compliance module cannot independently reconstruct TTM EBITDA for 2025-03-31 or 2025-06-30 and will read 'not evaluable' for those two dates even though the certificate itself reports a compliant ratio -- every test date from 2025-09-30 onward is fully covered by Period Archive's own monthly columns."
+    },
+    "Funded_Debt": {
+      "verbatim": "Total Leverage Ratio means funded debt divided by trailing-twelve-month Covenant EBITDA.",
+      "agreement_ref": {
+        "section": "DEFINITIONS",
+        "page": 2,
+        "quote": "Total Leverage Ratio means funded debt divided by trailing-twelve-month Covenant EBITDA."
+      },
+      "basis": "spot",
+      "compute": {
+        "model_line": "Funded Debt"
+      },
+      "note": "AMBIGUITY (see step-7 list): 'funded debt' is used repeatedly (Definitions p.2; Facility and Payments p.3, '0.60% of beginning funded debt') but, unlike 'Covenant EBITDA' and 'Total Leverage Ratio', is never itself given a standalone defined-term treatment (no enumerated inclusions/exclusions -- e.g. capital leases, letters of credit, guarantees of third-party debt). The facility is a single fully-funded term loan with no revolver/DDTL and the Negative Covenants section (p.8) only generically 'limits additional debt' with no basket schedule in the extracted text, so the best-supported reading is Funded Debt = the outstanding principal balance of this Term Loan, bound to the model's native 'Funded Debt' balance-sheet line (borrower-config.json model_lines.total_debt). VERIFIED: ties exactly to the certified Covenant Calculation.xlsx 'Funded Debt' line at all 6 quarters checked (2025 Q1 through 2026 Q2: $64,191,275.20 / $63,042,751.04 / $61,914,776.51 / $60,806,983.95 / $59,719,012.26 / $58,650,506.80)."
+    }
+  },
+  "covenants": [
+    {
+      "id": "max_total_leverage",
+      "name": "Maximum Total Leverage Ratio",
+      "primitive": "max_ratio",
+      "numerator": {
+        "ref": "Funded_Debt"
+      },
+      "denominator": {
+        "ref": "Covenant_EBITDA"
+      },
+      "window": "ttm",
+      "threshold": 5.5,
+      "frequency": "quarterly",
+      "first_test_date": "2025-03-31",
+      "cure_rights": "NOT QUANTIFIED in the executed document set (see step-7 ambiguity). Events of Default (p.10) lists 'covenant failure after any applicable cure period' as a default trigger -- implying SOME cure mechanism exists -- but no cure-period length, notice procedure, or equity-cure right is stated anywhere in the Credit Agreement or the other 8 executed documents (full-text sweep for 'cure period', 'grace period', 'equity cure', 'equity contribution' returns no hits). Recorded as 'none quantifiable' pending step-7 sign-off; do not assume an equity cure is available.",
+      "agreement_ref": {
+        "section": "FINANCIAL COVENANT",
+        "page": 9,
+        "quote": "Maximum Total Leverage Ratio: 5.50x. The covenant is measured at each quarter end beginning March 31, 2025 using trailing-twelve-month Covenant EBITDA."
+      },
+      "cert_ref": "Covenant Calculation.xlsx (06 Monitoring/Portfolio Management/<YYYY Qn>/), 'Summary' tab, lines 'Funded Debt', 'TTM Covenant EBITDA', 'Total Leverage Ratio', 'Maximum', 'Status'; mirrored informationally (Status reads 'NOT TESTED' at non-quarter-ends, the real verdict at quarter-ends) on 04 Reporting/Period Archive/<YYYY>/<MM>/certificate.html.",
+      "threshold_unit": "unitless",
+      "at_risk_band": 0.1
+    },
+    {
+      "id": "reporting_monthly_package",
+      "name": "Monthly reporting package delivery",
+      "type": "reporting",
+      "verbatim": "Monthly financial statements, cash flow, AP and AR support, and channel detail are due within 30 days.",
+      "agreement_ref": {
+        "section": "REPORTING",
+        "page": 12,
+        "quote": "Monthly financial statements, cash flow, AP and AR support, and channel detail are due within 30 days."
+      }
+    },
+    {
+      "id": "reporting_quarterly_certificate",
+      "name": "Quarterly compliance certificate and covenant calculation delivery",
+      "type": "reporting",
+      "verbatim": "Quarterly compliance certificates and covenant calculations are due within 45 days.",
+      "agreement_ref": {
+        "section": "REPORTING",
+        "page": 12,
+        "quote": "Quarterly compliance certificates and covenant calculations are due within 45 days; annual statements are due within 90 days."
+      }
+    },
+    {
+      "id": "reporting_annual_statements",
+      "name": "Annual financial statements delivery",
+      "type": "reporting",
+      "verbatim": "Annual statements are due within 90 days.",
+      "agreement_ref": {
+        "section": "REPORTING",
+        "page": 12,
+        "quote": "Quarterly compliance certificates and covenant calculations are due within 45 days; annual statements are due within 90 days."
+      }
+    },
+    {
+      "id": "neg_covenants_general",
+      "name": "General negative covenants",
+      "type": "negative",
+      "verbatim": "Limit additional debt, liens, restricted payments, investments, asset sales, and affiliate transactions. Do not merge, dissolve, change the fiscal year, or materially change the business except as expressly permitted. Maintain all deposit accounts under required control arrangements.",
+      "agreement_ref": {
+        "section": "NEGATIVE COVENANTS",
+        "page": 8,
+        "quote": "Limit additional debt, liens, restricted payments, investments, asset sales, and affiliate transactions."
+      },
+      "note": "No specific dollar baskets, percentage caps, or enumerated permitted-debt/permitted-lien exceptions are stated anywhere in the extracted text -- unlike a typical facility's Indebtedness/Investments/Restricted Payments covenants, which usually carry a numeric general basket. Recorded as reference-only (no primitive shape fits an unquantified categorical restriction). Step-7 question: does a more detailed negative-covenant schedule (baskets, carve-outs) exist outside the 9 executed documents reviewed, or does this facility genuinely rely on case-by-case Agent consent with no basket at all?"
+    },
+    {
+      "id": "aff_covenants_general",
+      "name": "General affirmative covenants",
+      "type": "affirmative",
+      "verbatim": "Maintain existence, properties, books, insurance, and compliance with law. Pay taxes and obligations when due and preserve first-priority collateral liens. Permit reasonable inspections and promptly notify the Agent of defaults and material events.",
+      "agreement_ref": {
+        "section": "AFFIRMATIVE COVENANTS",
+        "page": 7,
+        "quote": "Maintain existence, properties, books, insurance, and compliance with law."
+      }
+    }
+  ],
+  "accounting_basis": {
+    "stated": false,
+    "note": "No accounting-basis or 'historic accounting practices' / named-Model clause found anywhere in the Credit Agreement -- not in a preamble above the FINANCIAL COVENANT section (p.9), not in the DEFINITIONS section (p.2), and not elsewhere. The closest text is a general representation ('Financial statements fairly present financial condition in all material respects', REPRESENTATIONS p.6), which is a rep about the statements' fairness, not a clause binding covenant calculation to a specific named document or accounting convention. Confirmed by a full-text sweep of all 9 executed documents for 'GAAP', 'historic accounting practices', 'the Model', 'consistently applied' (no hits beyond the Covenant EBITDA definition's own 'consistent' phrasing is absent too -- the EBITDA definition itself does not even invoke GAAP by name)."
+  },
+  "step7_signoff": {
+    "decided_on": "2026-09-15",
+    "decided_by": "onboarding session (auto-decided per analyst's standing instruction not to pause for confirmation on this onboarding batch; every decision below is flagged here for the analyst's own review)",
+    "decisions": [
+      {
+        "id": "day_count_convention",
+        "question": "The agreement states no day-count convention; the certified interest figures are identical regardless of month length (a flat annual-rate/12 convention), not a real day-count method. Which convention should the spec and debt-service schedule use?",
+        "options_considered": ["Accept as parsed: actual/360, both endpoints counted (market default for a SOFR+margin facility)", "Adopt a flat annual/12 convention to match the certified figures exactly"],
+        "decision": "Accept as parsed: keep actual/360 as the documented contractual assumption, but read the borrower's own certified cash-interest figures (not the generated schedule) into the covenant-support rows during build-monitoring-model, per the same pattern already used for Nemeris and Asteron",
+        "rationale": "No agreement text states a day-count method, so a market-default assumption is the best-supported reading absent a longer-form agreement. But since the certified exhibits demonstrably use a different (flat) convention, relying on the generated schedule's dollar figures for actual monthly interest would be wrong from month one -- the certified figures are the correct source for the covenant-support rows themselves."
+      },
+      {
+        "id": "amortization_base_approximation",
+        "question": "Accept the engine's flat, original-principal-base amortization schedule, knowing the true schedule is declining-balance and diverges starting month 2?",
+        "options_considered": ["Accept as parsed: use the flat approximation, but read certified scheduled-principal figures for the covenant-support rows", "Hold the debt-service schedule entirely and read only certified exhibits"],
+        "decision": "Accept as parsed: same treatment as Nemeris -- generated schedule kept as an approximation, certified Covenant Calculation exhibits used as the governing source for actual monthly principal paid and outstanding balance",
+        "rationale": "Fully quantified, documented engine limitation (v1 has no declining-balance amortization base), not a data error. The certified figures tie exactly to the model at all 6 quarters checked."
+      },
+      {
+        "id": "funded_debt_scope",
+        "question": "Does 'Funded Debt' (used but never formally defined as inclusive/exclusive of leases, LCs, guarantees) mean only the outstanding Term Loan principal balance?",
+        "options_considered": ["Accept as parsed: Funded Debt = outstanding Term Loan principal balance only", "Broaden to include any future capital leases or guarantees, even though none currently exist"],
+        "decision": "Accept as parsed: Funded Debt = outstanding Term Loan principal balance",
+        "rationale": "This is a single fully-funded term loan with no revolver, DDTL, leases, or guarantees currently on the balance sheet, and the reading ties exactly to the certified 'Funded Debt' line at all 6 quarters checked. Revisit if a future amendment or a new debt instrument (capital lease, guarantee, LC) appears on the balance sheet -- the agreement's silence on scope means a new instrument's treatment would need a fresh read of the text at that time."
+      },
+      {
+        "id": "cure_rights",
+        "question": "Events of Default references a cure period for covenant failure, but no cure-period length or equity-cure mechanism is stated anywhere in the 9 executed documents. How should this be recorded?",
+        "options_considered": ["Accept as parsed: record as 'none quantifiable', do not assume an equity cure is available", "Assume a market-standard cure period (e.g. 10 or 30 business days) absent explicit text"],
+        "decision": "Accept as parsed: 'none quantifiable', no equity cure assumed",
+        "rationale": "Inventing a cure period or equity-cure right the text does not state would overstate the borrower's flexibility in a covenant-breach scenario -- the conservative reading is the safer one for a lender-side monitoring tool. This is currently moot given 2.39x actual vs 5.50x threshold, but should be revisited if leverage approaches the cap."
+      },
+      {
+        "id": "negative_covenant_baskets",
+        "question": "The negative covenants section states restrictions categorically with no dollar baskets or carve-outs anywhere in the extracted text -- unusual for a facility this size. Does a fuller schedule exist outside the 9 executed documents reviewed?",
+        "options_considered": ["Accept as parsed: record as stated (no baskets found), flag as an open item", "Assume standard market baskets exist but were simply not captured"],
+        "decision": "Accept as parsed: record as stated, flagged as an open item for the analyst to confirm whether a side letter or schedule exists outside the reviewed document set",
+        "rationale": "No agreement text supports inventing basket amounts. This does not affect any currently computed figure -- it only means the negative covenants are captured as reference-only categorical restrictions rather than quantified tests, consistent with the primitive contract (no primitive fits an unquantified restriction)."
+      }
+    ],
+    "open_items_for_analyst": [
+      "negative_covenant_baskets (confirm whether a fuller negative-covenant schedule exists outside the 9 reviewed documents)",
+      "day_count_convention (confirm against a longer-form agreement if one exists; currently immaterial to the compliance determination since the certified figures are used directly)",
+      "SOFR observation ($0.046293) is back-solved from the certified interest figure under the flat-annual/12 assumption, not sourced from a published rate notice -- replace with actual observed prints if a rate-notice document becomes available."
+    ]
+  }
+}

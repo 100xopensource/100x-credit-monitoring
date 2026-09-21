@@ -1,0 +1,1051 @@
+{
+  "module": "budget-vs-actual",
+  "period": "2026-06",
+  "run_id": "run-20260915-071646",
+  "run_id_from": "run",
+  "produced_at": "2026-09-15T07:30:04+00:00",
+  "produced_by": {
+    "engine": "budget-vs-actual",
+    "plugin_version": "1.0.0"
+  },
+  "reporting_unit": {
+    "scale": 1.0,
+    "currency": "USD",
+    "verbatim": "Fictional clean-room borrower evidence | USD unless noted",
+    "plain": "USD"
+  },
+  "stores": {
+    "store": {
+      "url_base": null
+    },
+    "source": {
+      "url_base": null
+    }
+  },
+  "source_ref_reach": {
+    "cell": 22,
+    "file": 12,
+    "unlocated": 0,
+    "borrower_doc": 22
+  },
+  "source_files": [
+    "store:borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/Asteron Care Partners Monthly IS-BS-CF.xlsx",
+    "store:borrowers/asteron-care-partners/_model/Approved Stabilization Budget (transposed for budget-map).xlsx",
+    "store:borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/config/budget-map.json"
+  ],
+  "results": [
+    {
+      "metric": "Revenue",
+      "scope": "latest",
+      "actual": 13164599.73,
+      "budget": 15939567.0,
+      "var_abs": -2774967.27,
+      "var_pct": -0.1741,
+      "favorable": false,
+      "material": true,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/Asteron Care Partners Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 7,
+          "label": "Revenue",
+          "cells": "W7",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/2026/06/monthly.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/_model/Approved Stabilization Budget (transposed for budget-map).xlsx",
+          "sheet": "Budget (transposed)",
+          "row": 4,
+          "cells": "D4",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/config/budget-map.json",
+          "section": "metric_rows.revenue",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/Planning/Approved Budget.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -2,774,967.27 = actual 13,164,599.73 (model 'Revenue' (Income Statement W7), Jun 2026) - budget 15,939,567.00 (budget 'Budget (transposed)' row 4, Jun 2026); var_pct -17.4% = variance / |budget|"
+    },
+    {
+      "metric": "Revenue",
+      "scope": "YTD",
+      "actual": 38694877.56,
+      "budget": 46632267.0,
+      "var_abs": -7937389.44,
+      "var_pct": -0.1702,
+      "favorable": false,
+      "material": true,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/Asteron Care Partners Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 7,
+          "label": "Revenue",
+          "cells": "U7:W7",
+          "period": "2026-04..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/Archive/2026-04/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/Archive/2026-05/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/2026/06/monthly.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/_model/Approved Stabilization Budget (transposed for budget-map).xlsx",
+          "sheet": "Budget (transposed)",
+          "row": 4,
+          "cells": "B4:D4",
+          "period": "2026-04..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/config/budget-map.json",
+          "section": "metric_rows.revenue",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/Planning/Approved Budget.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -7,937,389.44 = actual 38,694,877.56 (model 'Revenue' (Income Statement U7:W7), Apr 2026..Jun 2026 summed (3 mo)) - budget 46,632,267.00 (budget 'Budget (transposed)' row 4, Apr 2026..Jun 2026 summed (3 mo)); var_pct -17.0% = variance / |budget|"
+    },
+    {
+      "metric": "Gross Profit (as-reported)",
+      "scope": "latest",
+      "actual": 4410295.39,
+      "budget": 1291104.93,
+      "var_abs": 3119190.46,
+      "var_pct": 2.4159,
+      "favorable": true,
+      "material": true,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/Asteron Care Partners Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 13,
+          "label": "Gross Profit",
+          "cells": "W13",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/2026/06/monthly.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/_model/Approved Stabilization Budget (transposed for budget-map).xlsx",
+          "sheet": "Budget (transposed)",
+          "row": 5,
+          "cells": "D5",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/config/budget-map.json",
+          "section": "metric_rows.gross_profit",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/Planning/Approved Budget.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance 3,119,190.46 = actual 4,410,295.39 (model 'Gross Profit' (Income Statement W13), Jun 2026) - budget 1,291,104.93 (budget 'Budget (transposed)' row 5, Jun 2026); var_pct 241.6% = variance / |budget|"
+    },
+    {
+      "metric": "Gross Profit (as-reported)",
+      "scope": "YTD",
+      "actual": 12365599.92,
+      "budget": 3639685.53,
+      "var_abs": 8725914.39,
+      "var_pct": 2.3974,
+      "favorable": true,
+      "material": true,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/Asteron Care Partners Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 13,
+          "label": "Gross Profit",
+          "cells": "U13:W13",
+          "period": "2026-04..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/Archive/2026-04/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/Archive/2026-05/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/2026/06/monthly.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/_model/Approved Stabilization Budget (transposed for budget-map).xlsx",
+          "sheet": "Budget (transposed)",
+          "row": 5,
+          "cells": "B5:D5",
+          "period": "2026-04..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/config/budget-map.json",
+          "section": "metric_rows.gross_profit",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/Planning/Approved Budget.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance 8,725,914.39 = actual 12,365,599.92 (model 'Gross Profit' (Income Statement U13:W13), Apr 2026..Jun 2026 summed (3 mo)) - budget 3,639,685.53 (budget 'Budget (transposed)' row 5, Apr 2026..Jun 2026 summed (3 mo)); var_pct 239.7% = variance / |budget|"
+    },
+    {
+      "metric": "Gross Margin %",
+      "scope": "latest",
+      "unit": "pct",
+      "actual": 0.335,
+      "budget": 0.081,
+      "var_abs": 0.254,
+      "var_pct": null,
+      "favorable": true,
+      "material": false,
+      "note": "margin points (actual - budget)",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/Asteron Care Partners Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 13,
+          "label": "Gross Profit",
+          "cells": "W13",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/2026/06/monthly.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/Asteron Care Partners Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 7,
+          "label": "Revenue",
+          "cells": "W7",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/2026/06/monthly.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/_model/Approved Stabilization Budget (transposed for budget-map).xlsx",
+          "sheet": "Budget (transposed)",
+          "row": 5,
+          "cells": "D5",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/config/budget-map.json",
+          "section": "metric_rows.gross_profit",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/Planning/Approved Budget.xlsx"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/_model/Approved Stabilization Budget (transposed for budget-map).xlsx",
+          "sheet": "Budget (transposed)",
+          "row": 4,
+          "cells": "D4",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/config/budget-map.json",
+          "section": "metric_rows.revenue",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/Planning/Approved Budget.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "actual margin 33.50% = gross profit 4,410,295.39 / revenue 13,164,599.73 (model, Jun 2026); budget margin 8.10% = 1,291,104.93 / 15,939,567.00 (budget 'Budget (transposed)'); var_abs = margin points (actual - budget)"
+    },
+    {
+      "metric": "Gross Margin % (as-reported)",
+      "scope": "YTD",
+      "unit": "pct",
+      "actual": 0.3196,
+      "budget": 0.0781,
+      "var_abs": 0.2415,
+      "var_pct": null,
+      "favorable": true,
+      "material": false,
+      "note": "margin points; as-reported",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/Asteron Care Partners Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 13,
+          "label": "Gross Profit",
+          "cells": "U13:W13",
+          "period": "2026-04..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/Archive/2026-04/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/Archive/2026-05/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/2026/06/monthly.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/Asteron Care Partners Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 7,
+          "label": "Revenue",
+          "cells": "U7:W7",
+          "period": "2026-04..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/Archive/2026-04/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/Archive/2026-05/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/2026/06/monthly.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/_model/Approved Stabilization Budget (transposed for budget-map).xlsx",
+          "sheet": "Budget (transposed)",
+          "row": 5,
+          "cells": "B5:D5",
+          "period": "2026-04..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/config/budget-map.json",
+          "section": "metric_rows.gross_profit",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/Planning/Approved Budget.xlsx"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/_model/Approved Stabilization Budget (transposed for budget-map).xlsx",
+          "sheet": "Budget (transposed)",
+          "row": 4,
+          "cells": "B4:D4",
+          "period": "2026-04..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/config/budget-map.json",
+          "section": "metric_rows.revenue",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/Planning/Approved Budget.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "actual margin 31.96% = gross profit 12,365,599.92 / revenue 38,694,877.56 (model, Apr 2026..Jun 2026 summed (3 mo)); budget margin 7.81% = 3,639,685.53 / 46,632,267.00 (budget 'Budget (transposed)'); var_abs = margin points (actual - budget)"
+    },
+    {
+      "metric": "EBITDA (as-reported)",
+      "scope": "latest",
+      "actual": 1547741.28,
+      "budget": 1291104.93,
+      "var_abs": 256636.35,
+      "var_pct": 0.1988,
+      "favorable": true,
+      "material": true,
+      "note": "Actual EBITDA is read from the model's EBITDA bridge row 'Reported EBITDA' (single, system-wide definition), not recomputed -- so it equals what covenant-compliance reads.",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/Asteron Care Partners Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 16,
+          "label": "Reported EBITDA",
+          "cells": "W16",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/2026/06/monthly.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/_model/Approved Stabilization Budget (transposed for budget-map).xlsx",
+          "label": "net_income",
+          "sheet": "Budget (transposed)",
+          "row": 5,
+          "cells": "D5",
+          "period": "2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/_model/Approved Stabilization Budget (transposed for budget-map).xlsx",
+          "label": "interest_expense",
+          "sheet": "Budget (transposed)",
+          "row": 6,
+          "cells": "D6",
+          "period": "2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/_model/Approved Stabilization Budget (transposed for budget-map).xlsx",
+          "label": "taxes",
+          "sheet": "Budget (transposed)",
+          "row": 6,
+          "cells": "D6",
+          "period": "2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/_model/Approved Stabilization Budget (transposed for budget-map).xlsx",
+          "label": "depreciation_amortization",
+          "sheet": "Budget (transposed)",
+          "row": 6,
+          "cells": "D6",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/config/budget-map.json",
+          "section": "metric_rows",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/Planning/Approved Budget.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance 256,636.35 = actual 1,547,741.28 (model 'Reported EBITDA' (Income Statement W16), Jun 2026) - budget 1,291,104.93 (budget EBITDA = net_income + interest_expense + taxes + depreciation_amortization per budget-map metric_rows, sheet 'Budget (transposed)', Jun 2026); var_pct 19.9% = variance / |budget|"
+    },
+    {
+      "metric": "EBITDA (as-reported)",
+      "scope": "YTD",
+      "actual": 3898520.93,
+      "budget": 3639685.53,
+      "var_abs": 258835.4,
+      "var_pct": 0.0711,
+      "favorable": true,
+      "material": false,
+      "note": "Actual EBITDA read from the model's EBITDA bridge row (single definition shared with covenant-compliance), not recomputed.",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/Asteron Care Partners Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 16,
+          "label": "Reported EBITDA",
+          "cells": "U16:W16",
+          "period": "2026-04..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/Archive/2026-04/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/Archive/2026-05/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/2026/06/monthly.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/_model/Approved Stabilization Budget (transposed for budget-map).xlsx",
+          "label": "net_income",
+          "sheet": "Budget (transposed)",
+          "row": 5,
+          "cells": "B5:D5",
+          "period": "2026-04..2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/_model/Approved Stabilization Budget (transposed for budget-map).xlsx",
+          "label": "interest_expense",
+          "sheet": "Budget (transposed)",
+          "row": 6,
+          "cells": "B6:D6",
+          "period": "2026-04..2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/_model/Approved Stabilization Budget (transposed for budget-map).xlsx",
+          "label": "taxes",
+          "sheet": "Budget (transposed)",
+          "row": 6,
+          "cells": "B6:D6",
+          "period": "2026-04..2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/_model/Approved Stabilization Budget (transposed for budget-map).xlsx",
+          "label": "depreciation_amortization",
+          "sheet": "Budget (transposed)",
+          "row": 6,
+          "cells": "B6:D6",
+          "period": "2026-04..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/config/budget-map.json",
+          "section": "metric_rows",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/Planning/Approved Budget.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance 258,835.40 = actual 3,898,520.93 (model 'Reported EBITDA' (Income Statement U16:W16), Apr 2026..Jun 2026 summed (3 mo)) - budget 3,639,685.53 (budget EBITDA = net_income + interest_expense + taxes + depreciation_amortization per budget-map metric_rows, sheet 'Budget (transposed)', Apr 2026..Jun 2026 summed (3 mo)); var_pct 7.1% = variance / |budget|"
+    },
+    {
+      "metric": "Total Opex (normalized)",
+      "scope": "latest",
+      "actual": -2862554.11,
+      "budget": 0,
+      "var_abs": -2862554.11,
+      "var_pct": null,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/Asteron Care Partners Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 14,
+          "label": "Occupancy and site costs",
+          "cells": "W14",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/2026/06/monthly.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/Asteron Care Partners Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 15,
+          "label": "Corporate and administrative costs",
+          "cells": "W15",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/2026/06/monthly.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/config/budget-map.json",
+          "section": "opex_groups",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/Planning/Approved Budget.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -2,862,554.11 = actual -2,862,554.11 (sum of the 2 configured opex-group model rows [Occupancy & Site Costs, Corporate & Administrative], Jun 2026) - budget 0.00 (sum of the budget-map opex_groups rows, budget 'Budget (transposed)', Jun 2026)"
+    },
+    {
+      "metric": "Total Opex (normalized)",
+      "scope": "YTD",
+      "actual": -8467078.99,
+      "budget": 0,
+      "var_abs": -8467078.99,
+      "var_pct": null,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/Asteron Care Partners Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 14,
+          "label": "Occupancy and site costs",
+          "cells": "U14:W14",
+          "period": "2026-04..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/Archive/2026-04/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/Archive/2026-05/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/2026/06/monthly.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/Asteron Care Partners Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 15,
+          "label": "Corporate and administrative costs",
+          "cells": "U15:W15",
+          "period": "2026-04..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/Archive/2026-04/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/Archive/2026-05/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/2026/06/monthly.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/config/budget-map.json",
+          "section": "opex_groups",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/Planning/Approved Budget.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -8,467,078.99 = actual -8,467,078.99 (sum of the 2 configured opex-group model rows [Occupancy & Site Costs, Corporate & Administrative], Apr 2026..Jun 2026 summed (3 mo)) - budget 0.00 (sum of the budget-map opex_groups rows, budget 'Budget (transposed)', Apr 2026..Jun 2026 summed (3 mo))"
+    },
+    {
+      "metric": "Opex: Occupancy & Site Costs",
+      "scope": "latest",
+      "actual": -1557912.45,
+      "budget": null,
+      "var_abs": null,
+      "var_pct": null,
+      "favorable": null,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/Asteron Care Partners Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 14,
+          "label": "Occupancy and site costs",
+          "cells": "W14",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/2026/06/monthly.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/config/budget-map.json",
+          "section": "opex_groups.Occupancy & Site Costs",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/Planning/Approved Budget.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance n/a = actual -1,557,912.45 (model 'Occupancy and site costs' (Income Statement W14), Jun 2026) - budget n/a (no budget-map entry (opex_groups.Occupancy & Site Costs); budget not available)"
+    },
+    {
+      "metric": "Opex: Occupancy & Site Costs",
+      "scope": "YTD",
+      "actual": -4632193.39,
+      "budget": null,
+      "var_abs": null,
+      "var_pct": null,
+      "favorable": null,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/Asteron Care Partners Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 14,
+          "label": "Occupancy and site costs",
+          "cells": "U14:W14",
+          "period": "2026-04..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/Archive/2026-04/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/Archive/2026-05/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/2026/06/monthly.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/config/budget-map.json",
+          "section": "opex_groups.Occupancy & Site Costs",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/Planning/Approved Budget.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance n/a = actual -4,632,193.39 (model 'Occupancy and site costs' (Income Statement U14:W14), Apr 2026..Jun 2026 summed (3 mo)) - budget n/a (no budget-map entry (opex_groups.Occupancy & Site Costs); budget not available)"
+    },
+    {
+      "metric": "Opex: Corporate & Administrative",
+      "scope": "latest",
+      "actual": -1304641.66,
+      "budget": null,
+      "var_abs": null,
+      "var_pct": null,
+      "favorable": null,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/Asteron Care Partners Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 15,
+          "label": "Corporate and administrative costs",
+          "cells": "W15",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/2026/06/monthly.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/config/budget-map.json",
+          "section": "opex_groups.Corporate & Administrative",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/Planning/Approved Budget.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance n/a = actual -1,304,641.66 (model 'Corporate and administrative costs' (Income Statement W15), Jun 2026) - budget n/a (no budget-map entry (opex_groups.Corporate & Administrative); budget not available)"
+    },
+    {
+      "metric": "Opex: Corporate & Administrative",
+      "scope": "YTD",
+      "actual": -3834885.6,
+      "budget": null,
+      "var_abs": null,
+      "var_pct": null,
+      "favorable": null,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/Asteron Care Partners Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 15,
+          "label": "Corporate and administrative costs",
+          "cells": "U15:W15",
+          "period": "2026-04..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/Archive/2026-04/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/Archive/2026-05/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/2026/06/monthly.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/config/budget-map.json",
+          "section": "opex_groups.Corporate & Administrative",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Asteron Care Partners/Successor Reporting/Planning/Approved Budget.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance n/a = actual -3,834,885.60 (model 'Corporate and administrative costs' (Income Statement U15:W15), Apr 2026..Jun 2026 summed (3 mo)) - budget n/a (no budget-map entry (opex_groups.Corporate & Administrative); budget not available)"
+    }
+  ],
+  "exceptions": [
+    {
+      "metric": "Revenue",
+      "scope": "latest",
+      "actual": 13164599.73,
+      "budget": 15939567.0,
+      "var_abs": -2774967.27,
+      "var_pct": -0.1741,
+      "favorable": false,
+      "rule": "|var%|>=10% AND |var$|>=$50,000"
+    },
+    {
+      "metric": "Revenue",
+      "scope": "YTD",
+      "actual": 38694877.56,
+      "budget": 46632267.0,
+      "var_abs": -7937389.44,
+      "var_pct": -0.1702,
+      "favorable": false,
+      "rule": "|var%|>=10% AND |var$|>=$50,000"
+    },
+    {
+      "metric": "Gross Profit (as-reported)",
+      "scope": "latest",
+      "actual": 4410295.39,
+      "budget": 1291104.93,
+      "var_abs": 3119190.46,
+      "var_pct": 2.4159,
+      "favorable": true,
+      "rule": "|var%|>=10% AND |var$|>=$50,000"
+    },
+    {
+      "metric": "Gross Profit (as-reported)",
+      "scope": "YTD",
+      "actual": 12365599.92,
+      "budget": 3639685.53,
+      "var_abs": 8725914.39,
+      "var_pct": 2.3974,
+      "favorable": true,
+      "rule": "|var%|>=10% AND |var$|>=$50,000"
+    },
+    {
+      "metric": "EBITDA (as-reported)",
+      "scope": "latest",
+      "actual": 1547741.28,
+      "budget": 1291104.93,
+      "var_abs": 256636.35,
+      "var_pct": 0.1988,
+      "favorable": true,
+      "rule": "|var%|>=10% AND |var$|>=$50,000"
+    },
+    {
+      "type": "judgment_call",
+      "field": "ytd_start",
+      "saw": "The engine's default YTD window is calendar-year (Jan 2026 start), but the pinned Approved Stabilization Budget (budget-map.json period_columns) only covers 2026-04 through 2026-12 -- it was approved 2026-03-20 as part of the March 31, 2026 exit capitalization and supersedes the pre-restructuring 'FY2025 Approved Budget.xlsx' for Jan-Mar. The default window produced a hard skip ('there is no budgeted Jan 2026 to compare the actuals against').",
+      "reading_taken": "Ran budget-vs-actual with --ytd-start \"Apr 2026\", so 'YTD' in this output means April 2026 (post-restructuring/stabilization-budget inception) through June 2026 (3 months), not calendar Jan-Jun. Both actual and budget sides are summed over this same 3-month window, so the YTD comparison is like-for-like.",
+      "alternative": "The alternative reading is to treat the borrower as having no comparable YTD budget at all for 2026-06 and skip the YTD scope entirely (reporting only the 'latest' month), since no single budget spans the full calendar year across the restructuring. That would have dropped every YTD row in this output (Revenue YTD, Gross Profit YTD, EBITDA YTD, Total Opex YTD) rather than reporting them on the since-emergence window."
+    }
+  ],
+  "engine": "data-driven budget-map v4 (config-driven, borrower-agnostic) + per-figure source refs/calc",
+  "borrower": "Asteron Care Partners, LLC",
+  "latest_month": "Jun 2026",
+  "ytd_months": [
+    "Apr 2026",
+    "May 2026",
+    "Jun 2026"
+  ],
+  "materiality_rule": "|var%| >= 10% AND |var$| >= $50,000",
+  "budget_source": {
+    "file": "store:borrowers/asteron-care-partners/_model/Approved Stabilization Budget (transposed for budget-map).xlsx",
+    "sheet": "Budget (transposed)",
+    "basis": "management-prepared / unaudited"
+  },
+  "comparability_notes": [
+    "Financing cost (model line 'Debt issuance cost amortization'): -60,000 YTD. Confirm whether it sits above or below the EBITDA bridge per the credit agreement's definition.",
+    "Actual EBITDA is sourced from the model's single EBITDA bridge row 'Reported EBITDA' -- the SAME row covenant-compliance reads -- so the two modules report identical actual EBITDA (one system-wide definition). Budget EBITDA is computed with the identical bridge formula (Net Income + Interest Expense + Financing Cost if enabled and present + Income Taxes + D&A - Interest Income) so it is like-for-like. The financing-cost add-back is ENABLED via ebitda.addback_financing_cost in borrower-config.",
+    "Restructuring accounting is PROVISIONAL across every monthly package through June 2026 (TDR framework, instrument-level 10% modification test, CODI, Section 382, and goodwill interim reassessment all remain open per each month's 'Status' tab) -- successor Balance Sheet, gain/loss, and debt carrying-value figures could still restate once the workpapers are concluded.",
+    "Weak-site count peaked at 9 (of 15 total sites) from 2025-Q3 through 2026-Q1 and improved to 8 by June 2026; agency/contract-labor cost as a % of revenue peaked at 17.6% in Q4 2025 and improved to 10.0% by June 2026 (Site Operations / Labor tabs of 'operating-support.xlsx').",
+    "See paths._ebitda_definition_gap_note for the constant $553,353.26/month operating-lease add-back embedded in the credit agreement's Covenant EBITDA (vs the model's own 'Reported EBITDA' row) -- covenant-setup should confirm this against the A&R Agreement's actual EBITDA/Fixed Charges definitions.",
+    "NOT A REAL SIGNAL -- 'Gross Profit (as-reported)' / 'Gross Margin %' vs budget: per budget-map.json's own _workaround_note, this Approved Stabilization Budget only plans Revenue and EBITDA; both 'net_income' and 'gross_profit' in metric_rows point at the SAME row 5 (the budget's real EBITDA figure, ~8% of revenue), because the budget has no separate gross-profit/COGS breakout. The 'budget' column on every Gross Profit / Gross Margin % line above is therefore the budget's EBITDA figure wearing a gross-profit label, not a planned gross margin -- the resulting 'favorable' variance (actual ~32-34% margin vs a ~8% EBITDA-margin proxy) is a structural artifact of the budget-map, not a real over-performance on gross margin, and should not be read as one.",
+    "NOT A REAL SIGNAL -- 'Total Opex (normalized)' vs budget ($0): the same budget has no opex_groups breakout either (goes straight from Revenue to EBITDA), so budget-map.json omits opex_groups entirely and the engine sums an empty budget-side map to $0. The resulting 'favorable' Total Opex variance (actual opex vs a $0 budget) is an artifact of the missing budget breakout, not a real opex-vs-plan comparison; the two 'Opex: <group>' line items correctly show budget=null/n/a for the same reason. Revenue and EBITDA (as-reported) are this budget's only two planned, analyst-approved figures and are the reliable comparisons here."
+  ],
+  "comparability_items_ytd": [],
+  "financing_cost_ytd": -60000.0,
+  "methodology": "Actuals from the company-prepared/unaudited monthly financials model (read via monitor_lib). Budget is management-prepared/unaudited, extracted via budget-map.json. ACTUAL EBITDA is read from the model's single EBITDA bridge row (the same definition covenant-compliance uses); budget EBITDA mirrors that bridge formula for like-for-like comparison."
+}

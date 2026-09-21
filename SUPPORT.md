@@ -14,6 +14,6 @@ Do not put borrower documents, client identifiers, credentials, private incident
 
 ## Supported scope
 
-The latest released version on Claude Cowork is supported. Current product boundaries are documented in [Supported today](README.md#supported-today) and [Limitations](docs/LIMITATIONS.md).
+The latest released version on Claude Cowork is supported. Current product boundaries are documented in [What it produces](README.md#what-it-produces) and [Limitations](docs/LIMITATIONS.md).
 
 This open-source project does not provide a response-time or resolution-time guarantee. Maintainers may close requests that cannot be reproduced with synthetic information or fall outside the documented scope.

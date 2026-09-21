@@ -1,0 +1,54 @@
+{
+  "schema": "credit-monitoring-run-ledger/v1",
+  "schema_version": 1,
+  "run_id": "run-20260915-071646",
+  "period": "2026-06",
+  "status": "finished",
+  "started_at": "2026-09-15T07:16:46+00:00",
+  "base": {
+    "from": "seed"
+  },
+  "packages_seen": [],
+  "analyst_focus": [
+    "FCCR reinstatement readiness (Milestone M4 due 2026-09-30) and the informational FCCR trend",
+    "EBITDA definition gap (53,353.26/month unsupported add-back) and Fixed Charges scope gap vs certified figures",
+    "Watchlist trajectory: improving operating metrics vs worsening informational FCCR"
+  ],
+  "steps": {
+    "config": "done",
+    "model": "done",
+    "modules": {
+      "covenant-compliance": "done",
+      "budget-vs-actual": "done",
+      "ap-ar-aging": "skipped",
+      "three-statement-analysis": "done"
+    },
+    "coverage": "done",
+    "memo": "done",
+    "write_back": "done"
+  },
+  "delivery_base": {
+    ".record/changelog.jsonl": null,
+    ".record/current/config/_history/debt-service-schedule--engine-6032c8a78502.json": "sha256:c0376b87eb7083438a292aa0ca483077c10c710ac546ba9d2adffb4c99a0546a",
+    ".record/current/config/borrower-config.json": "sha256:f8852af0c5cc47b9c6e220dc773e03f00afac1d2812e2e5d2b40fee6c2a35151",
+    ".record/current/config/budget-map.json": "sha256:d757b4643a72cef31aa526b0d257dd8a52e615e36ac807446bc01002fad604ba",
+    ".record/current/config/collateral-map.json": "sha256:bb70d798d2b1d4df107bd3a6533f66e501d7c240e3e00a272a7c52702a866967",
+    ".record/current/config/covenant-spec.json": "sha256:796b3bcd54b3d4079d78c82e6594294b04d0667b67ceb8a71435bc62b18e2db8",
+    ".record/current/config/deal-context.json": "sha256:5ec74a1c8b543d271aca91605b8e6c8a7ea469828bc419592bae1345e764fbde",
+    ".record/current/config/debt-service-schedule.json": "sha256:d57ec738c9f3ebe3df4402e4f09432da10bf8d854e6e3cb690fe32b884533657",
+    ".record/current/config/debt-service-schedule.md": "sha256:e27f324b030db940859676113a8a222fcb9166c96105f2a50f92c94b4e09d593",
+    ".record/current/config/debt-service-spec.json": "sha256:e4cb7a6e36a7baa5a0f2877eb4f4e9fc45eddb90990cdc35ca17d1a669e50b91",
+    ".record/edit-intake.json": null,
+    ".record/manifest.json": null,
+    ".record/published.json": null
+  },
+  "inputs": {
+    "config": "config",
+    "model": "Asteron Care Partners Monthly IS-BS-CF.xlsx",
+    "sidecars": [
+      "source-map.json",
+      "restatements.json"
+    ],
+    "execution_config": "execution-config.json"
+  }
+}

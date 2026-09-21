@@ -1,0 +1,104 @@
+{
+  "sample_version": "2026-06-v1",
+  "review_period": "2026-06",
+  "fictional_data": true,
+  "borrowers": [
+    "asteron-care-partners",
+    "nemeris-field-systems",
+    "orinth-vale-infrastructure",
+    "selvara-industrial-services",
+    "talvorn-technical-services",
+    "veyrona-decision-systems"
+  ],
+  "source_dataset": {
+    "repository": "https://github.com/100xopensource/100x-credit-monitoring-synthetic-dataset",
+    "supplied_metadata_release": "v1.0.0",
+    "artifact_count": 755,
+    "tree_sha256": "39fff6ff473a434c92297400c21d5d9b52aca28db7c552a06bd05a2fb151d775",
+    "fingerprint_method": "SHA-256 of UTF-8 lines sorted lexicographically by relative POSIX path under dataset/Current Portfolio: <file SHA-256><two spaces><path><LF>; excludes .DS_Store",
+    "supplied_zip_sha256": "3774edbfaa72322dae12b85a7a248b0a2c9bca8d2b5614cb4dbe22f02b50ae4a",
+    "supplied_release_manifest_sha256": "5df4279e9e9c2162e3924ac732ee02da05b859bb9472f44879a07db31f51fef6",
+    "release_candidate_comparison": "755/755 source documents byte-identical to the prepared dataset candidate labelled v1.1.0; metadata versions differ"
+  },
+  "plugin_provenance": {
+    "supplied_bundle_version": "1.0.0",
+    "supplied_bundle_sha256": "e90942c861e788ae6b705f628978ef75d0f0a91f03801eb004b36a71571b3a33",
+    "note": "Bundle supplied alongside the outputs; run manifests also report 1.0.0. Exact generation revision was not recorded."
+  },
+  "dashboard_sha256": "6f1182d4f6bd9b71096794e32b2c29c7d63d612b72a1354bdd312a2217f964c3",
+  "payload_file_count": 462,
+  "payload_sha256": "ce89ae817615142e7d09a010b722f24d91b4185ef105ff787c3bd1805f1e8944",
+  "payload_scope": "portfolio-monitor.html and all files under outputs; same fingerprint method as source_dataset",
+  "excluded": [
+    ".DS_Store",
+    "artifacts/portfolio/hosted-artifact.json",
+    "borrowers/*/.record/store.lock",
+    "borrowers/nemeris-field-systems/_model/compact1_view.json.bak"
+  ],
+  "verification": {
+    "archived_run_manifests_verified": 6,
+    "embedded_files_matching": 19,
+    "relocated_store_prepare": {
+      "exit_code": 1,
+      "result": "credit-monitoring-output is not empty and is not a valid monitoring store."
+    },
+    "relocated_context": [
+      {
+        "borrower": "asteron-care-partners",
+        "setup_complete": true,
+        "journey_state": "first_review_pending",
+        "unpublished_result_readable": true,
+        "selected_result": false,
+        "lifecycle_warnings": [],
+        "finalization_warnings": []
+      },
+      {
+        "borrower": "nemeris-field-systems",
+        "setup_complete": true,
+        "journey_state": "first_review_pending",
+        "unpublished_result_readable": true,
+        "selected_result": false,
+        "lifecycle_warnings": [],
+        "finalization_warnings": []
+      },
+      {
+        "borrower": "orinth-vale-infrastructure",
+        "setup_complete": true,
+        "journey_state": "first_review_pending",
+        "unpublished_result_readable": true,
+        "selected_result": false,
+        "lifecycle_warnings": [],
+        "finalization_warnings": []
+      },
+      {
+        "borrower": "selvara-industrial-services",
+        "setup_complete": true,
+        "journey_state": "first_review_pending",
+        "unpublished_result_readable": true,
+        "selected_result": false,
+        "lifecycle_warnings": [],
+        "finalization_warnings": []
+      },
+      {
+        "borrower": "talvorn-technical-services",
+        "setup_complete": true,
+        "journey_state": "first_review_pending",
+        "unpublished_result_readable": true,
+        "selected_result": false,
+        "lifecycle_warnings": [],
+        "finalization_warnings": []
+      },
+      {
+        "borrower": "veyrona-decision-systems",
+        "setup_complete": true,
+        "journey_state": "first_review_pending",
+        "unpublished_result_readable": true,
+        "selected_result": false,
+        "lifecycle_warnings": [],
+        "finalization_warnings": []
+      }
+    ],
+    "working_copy_note": "Each .record/current lacks the memo listed in its record-level manifest. Delivered and archived memos match. Preserved without repair.",
+    "continuation_scope": "Results-folder preparation FAILED with this candidate. Direct read-only lookup located six archived results; no Cowork continuation or monthly review executed."
+  }
+}

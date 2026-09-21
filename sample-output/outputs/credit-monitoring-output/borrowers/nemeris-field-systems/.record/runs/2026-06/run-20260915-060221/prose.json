@@ -1,0 +1,130 @@
+{
+ "AGING_READ": "No customer-level accounts-receivable aging is delivered for this borrower; only inventory aging is provided each month. Days Sales Outstanding ran 40.2 days at June 2026, in a narrow 40-42 day range across the trailing five months, so no deterioration is visible at the DSO level, though receivables cannot be checked by aging bucket.",
+ "BS_OBSERVATIONS": "<li>The senior secured term loan balance has declined for 26 consecutive months, $4.00M cumulative, entirely on contractual amortization; no delayed-draw funding or PIK has occurred.</li><li>Cash has risen for 26 consecutive months, funding a members' equity increase of $5.00M over the last six months.</li><li>This borrower's balance sheet carries no current-asset or current-liability subtotal, so current ratio and working-capital ratios cannot be computed; DSO (40.2 days), DPO (29.5 days) and DIO (40.5 days) are all trending modestly higher over the trailing five months but remain well inside the 60-day (DPO) and 120-day (DIO) thresholds.</li><li>No customer-level accounts-receivable aging is delivered for this borrower, so receivables quality is tracked through DSO only.</li>",
+ "CAPSTRUCTURE_NOTES": {
+  "our_instrument": "Adjusted Term SOFR + 6.25% (2.00% floor), maturing January 15, 2030, first-priority blanket lien.",
+  "total_capitalization": "Funded debt plus equity at book, unaudited and company-prepared.",
+  "total_equity": "Book value, rising on retained operating cash flow; not a market figure.",
+  "total_funded_debt": "The Closing Date Term Loan outstanding balance; the delayed-draw commitment above remains undrawn."
+ },
+ "CF_OBSERVATIONS": "<li>Operating cash flow YTD was $1.71M against $7.0M of YTD EBITDA; working capital and other operating uses absorbed $5.29M YTD, so roughly a quarter of EBITDA converted to operating cash this year.</li><li>YTD operating cash flow of $1.71M covered the $868K of scheduled debt service and $280K of capital expenditures, with $560K left over, matching the YTD net change in cash reported on the statement.</li>",
+ "COLLATERAL_COVERAGE_CLOSING": "Coverage held above 1.5x on an all-pledged-assets basis and above 0.75x on a liquid-only basis in June 2026, both computed against the $23.6M of secured debt outstanding.",
+ "COLLATERAL_READ": "The lien covers cash, receivables, inventory, equipment and capitalized software with no goodwill in the pool, so the all-pledged-assets and liquid-only cuts above are the full picture for this borrower.",
+ "COVENANT_DELTAS": {
+  "max_net_leverage": "Our reconstruction and the corrected compliance certificate agree to within 0.002% (1.31902x vs 1.3190x); the certificate's original July 25 submission differed because it included a $110,000 EBITDA add-back the lender rejected as unsupported, since corrected."
+ },
+ "COVENANT_OVERALL": "The Maximum Net Leverage Ratio is the only tested financial covenant in this agreement and passed at 1.32x against a 5.00x cap at June 30, 2026, matching the corrected compliance certificate.",
+ "DATA_QUALITY_NOTES": "<li>The credit agreement amortizes 0.60% of each month's own declining principal balance; the generated debt-service schedule instead assumes a flat monthly installment off the original funded amount, so this review reads scheduled principal and Net Debt directly off the borrower's own certified Debt & Liquidity schedule rather than that generated schedule.</li><li>The interest-rate assumption behind the projected cash-interest figures is a placeholder (a pinned 4.33% SOFR level at closing); no actual rate-notice figure is on file, so that figure is indicative only.</li><li>The borrower's management accounts report only through EBITDA, with no net income, interest expense, tax or depreciation line anywhere in the package; ratios that need those lines are left off rather than estimated.</li><li>No customer-level accounts-receivable aging is delivered for this borrower; only an inventory aging file is provided each month.</li>",
+ "DEAL_COMPANY_PROFILE": "Nemeris Field Systems, LLC supplies ruggedized field equipment, diagnostics, replacement components and recurring maintenance services to utility contractors and industrial maintenance organizations, per the underwriting memo. The business mixes project-driven equipment shipments -- recognized on dispatch or customer acceptance -- with recurring preventive-maintenance and calibration revenue; channel mix runs utility contractors 34%, industrial maintenance 27%, rental and distribution 22%, and field-service plans 17%.",
+ "DEAL_LEVERAGE_CONTEXT": "Total funded debt of $23.6M against $8.7M of book equity puts leverage at 1.32x trailing EBITDA, well inside the <a class=\"jumpname\" href=\"#sec-covenant\">5.00x maximum Net Leverage covenant <span class=\"arw\">&#8599;</span></a>.",
+ "DEAL_SECURITY_SOURCING": "Hold-at-close par of $26.3M is sourced to the executed Credit Agreement; the split of the loan across fund vehicles, its fair value and enterprise value are not on file, so loan-to-EV cannot be computed this period.",
+ "DEAL_TRANSACTION": "The $35.0M senior secured facility (a $26.3M closing-date term loan and an $8.7M delayed-draw commitment) refinanced Nemeris's existing funded debt, per the executed Credit Agreement and the underwriting memo. Northlake Example Credit Partners, LP acts as Administrative and Collateral Agent; no other lenders are named in the loan documents reviewed. Use of proceeds beyond the refinancing and pro forma leverage at close are not on file. Security is a first-priority blanket lien on substantially all personal property, with guarantees from Nemeris Holdings, LLC and Nemeris Service Operations, LLC.",
+ "DOCUMENT_NOTES": {
+  "budget.plan": "The Board-approved operating budget for FY2025 and H1 2026, used for the budget-vs-actual comparison in this review.",
+  "loan_documentation.credit_agreement": "The executed Credit Agreement governing the facility's economics, covenants and collateral; amended once in January 2026 for reporting-delivery mechanics only.",
+  "monthly_reporting.compliance_certificate": "The Q2 2026 quarterly compliance certificate and covenant calculation, corrected July 29, 2026 after a lender query on an unsupported EBITDA add-back.",
+  "monthly_reporting.monthly-financial-package-2026-06-xlsx": "The borrower's June 2026 monthly financial package, the source for this month's income statement, balance sheet, cash flow and debt schedule figures.",
+  "underwriting.ic_uw_memo": "The Final Investment Committee memorandum approving the facility, the source for the credit thesis, key risks and business profile in this review.",
+  "working_analysis.archived_outputs": "This review's covenant-compliance, budget-vs-actual and three-statement-analysis engine outputs, archived with full source references for every figure.",
+  "working_analysis.model": "The consolidated monthly income statement, balance sheet and cash flow workbook this review reads from, built from 27 months of the borrower's own monthly financial packages."
+ },
+ "FLAGS": "<li>Q2 2026 covenant certificate: the borrower's original July 25 submission included a $110,000 add-back for prospective, unfilled territory-manager-position savings in Covenant EBITDA; the lender queried it as unsupported on July 28, 2026, and the borrower's corrected calculation (July 29, 2026) removed it, moving Net Leverage from 1.3086x to 1.3190x. Status remained COMPLIANT under both the original and corrected calculations.</li>",
+ "FORWARD_STRESS": "No forward-stress scenario was confirmed with the analyst this period; at 74% covenant headroom and no pressured thesis pillar on file, an unchanged run-rate and the approved plan both clear the 5.00x cap by a wide margin through the next test date.",
+ "IS_OBSERVATIONS": "<li>EBITDA margin ran 11.7%-13.4% across the last six quarters, ending Q2 2026 at 13.4%, in line with the 11.5% FY2024 underwriting-case margin and showing no deterioration.</li><li>Cost of Revenue rose for three consecutive months into June 2026 ($212,077 cumulative) while gross margin held near 45%, consistent with cost pass-through rather than margin compression.</li><li>Five of six revenue components (Ruggedized Tool Systems, Diagnostic Units, Replacement Components, Preventive Maintenance Plans, Calibration Services) grew every month for six consecutive months, consistent with the underwriting case's mixed product-and-service thesis.</li><li>EBITDA of $1.24M in June is $686K (35.6%) behind the $1.92M budget, the largest percentage miss against budget of any P&L line this month.</li>",
+ "LIQUIDITY_READ": "<li>Cash of $5.3M has risen every month for 26 consecutive months, funded by operating cash flow after debt service and capital expenditures, with no delayed-draw borrowing.</li><li>This facility carries no cash floor or minimum-cash covenant, so months-to-floor is not a meaningful measure while cash continues to build.</li>",
+ "OPEN_QUESTIONS": "No analyst-focus item from this run needs a follow-up beyond what Covenants and Outlook already answer. The Q2 2026 EBITDA add-back correction (Flags & follow-ups, item 1) is closed on the borrower's side; no further borrower response is outstanding.",
+ "REVENUE_QUALITY_NOTES": "The revenue-quality module was not run for this borrower: revenue is equipment-shipment and project-driven rather than recurring or subscription-based, and the underwriting case explicitly excludes unsupported annual-recurring-revenue claims, so retention and ARR-bridge metrics do not apply here.",
+ "SUMMARY_COLLATERAL": "The pledged pool -- cash, receivables, inventory, equipment and capitalized software -- totaled $37.5M at June 2026, covering the $23.6M of secured debt 1.59x on an all-pledged-assets basis and 0.77x on a liquid-only basis (cash plus receivables). No budget comparison is on file for these balance-sheet components this period.",
+ "SUMMARY_COVENANTS": "The Net Leverage Ratio was 1.32x at June 30, 2026 against a 5.00x maximum, 3.68x of headroom (74% of the covenant), matching the corrected compliance certificate to within 0.002%.",
+ "SUMMARY_LIQUIDITY": "Cash was $5.3M at June 2026, up $99K (1.9%) from May and up $1.1M (26.3%) from a year earlier; this facility carries no minimum-cash covenant and no cash floor is set. The build came from operating cash generation, not new borrowing: no delayed-draw funding has occurred, and the term loan balance fell $142K in the month on scheduled amortization. Cash has risen every month for 26 consecutive months.",
+ "SUMMARY_OUTLOOK": "The underwriting case named equipment-shipment timing as the primary watch item for this credit, consistent with the $1.5M revenue miss against budget in June. The next covenant test is September 30, 2026; at 74% headroom, a large deterioration would be needed to approach the 5.00x cap before then. No open requests to the borrower are on file this period.",
+ "SUMMARY_UPDATE": "Q2 2026 net revenue was $28.5M, up 0.8% from $28.3M in Q2 2025; EBITDA was $3.8M (13.4% margin) versus $3.7M (13.3%) a year earlier. Year to date, revenue of $55.6M is $7.5M (11.8%) behind the $63.0M approved budget, and EBITDA of $7.0M is $3.1M (30.6%) behind the $10.1M budget. Five of the borrower's six revenue components grew on a trailing basis this half. The gap against budget tracks equipment-shipment timing, the underwriting's own named risk for this credit.",
+ "_contract": {
+  "deep_links": "a reference to another section is written <a class=\"jumpname\" href=\"#sec-covenant\">Covenant detail <span class=\"arw\">&#8599;</span></a> \u2014 same markup, any section id below",
+  "flags_must_name": {
+   "items": [
+    {
+     "or_its_amount": "any figure within 1% of 110,000",
+     "write_one_of": [
+      "COMPLIANT"
+     ]
+    }
+   ],
+   "rule": "the FLAGS box covers every open item; the gate looks for each item's identifying token (or its dollar amount) in your prose"
+  },
+  "how": "Fill every key; values are HTML. Leave a box \"\" when the month gives it nothing, and say so in your report. Keys opening with \"_\" (this note) are ignored by the renderer.",
+  "keyed_boxes": {
+   "CAPSTRUCTURE_NOTES": "per row id: the instrument's pricing or terms in one clause",
+   "COVENANT_DELTAS": "per covenant id: one clause on WHY the certified figure and ours differ \u2014 the component that carries the gap, named. Our reconstruction governs; do not write that the borrower's basis governs, whichever way the gap runs",
+   "DOCUMENT_NOTES": "per document id: what the document is and what it settles, one sentence"
+  },
+  "language": "lead with the fact and its figure; the banned words and patterns are in references/report-structure.md under the language contract",
+  "list_boxes": {
+   "boxes": [
+    "BS_OBSERVATIONS",
+    "CF_OBSERVATIONS",
+    "DATA_QUALITY_NOTES",
+    "FLAGS",
+    "IS_OBSERVATIONS",
+    "LIQUIDITY_READ"
+   ],
+   "value": "a string of <li>\u2026</li> items and nothing outside them"
+  },
+  "paragraph_boxes": {
+   "boxes": [
+    "AGING_READ",
+    "OPEN_QUESTIONS",
+    "REVENUE_QUALITY_NOTES"
+   ],
+   "value": "one or two short paragraphs"
+  },
+  "section_ids": [
+   "sec-bs",
+   "sec-capstructure",
+   "sec-cf",
+   "sec-company",
+   "sec-covenant",
+   "sec-covstrip",
+   "sec-data",
+   "sec-files",
+   "sec-flags",
+   "sec-is",
+   "sec-security",
+   "sec-snapshot",
+   "sec-stress",
+   "sec-summary",
+   "sec-terms",
+   "sec-transaction",
+   "sec-trend"
+  ],
+  "sentence_boxes": {
+   "boxes": [
+    "COLLATERAL_COVERAGE_CLOSING",
+    "COLLATERAL_READ",
+    "COVENANT_OVERALL",
+    "DEAL_COMPANY_PROFILE",
+    "DEAL_LEVERAGE_CONTEXT",
+    "DEAL_SECURITY_SOURCING",
+    "DEAL_TRANSACTION",
+    "FORWARD_STRESS",
+    "SUMMARY_COLLATERAL",
+    "SUMMARY_COVENANTS",
+    "SUMMARY_LIQUIDITY",
+    "SUMMARY_OUTLOOK",
+    "SUMMARY_UPDATE"
+   ],
+   "value": "sentences that sit inside an existing paragraph \u2014 inline tags like <b> only, no <p> or <ul>"
+  },
+  "summary_blocks": {
+   "SUMMARY_COLLATERAL": "pledged components and their total, coverage against funded debt, and the prior-year or plan comparison where one is on file",
+   "SUMMARY_COVENANTS": "one sentence when everything passes with room; otherwise the failing or governing leg, the certified-vs-model gap, and the nearest tight test with what clearing it takes",
+   "SUMMARY_LIQUIDITY": "period-end cash against the floor, where the cash came from (earned, borrowed, working capital), months of runway when burning, and the expected direction with its basis",
+   "SUMMARY_OUTLOOK": "the forward indicators on file (backlog, order book, seasonality), the governing question for the credit, and the open asks \u2014 never a concern manufactured to fill the space",
+   "SUMMARY_UPDATE": "revenue and EBITDA vs Budget and prior year \u2014 the period first, the cumulative line second \u2014 then the driver: which segment or brand moved, mix or margin, at the finest level the package reports",
+   "bad_news": "a miss, a breach or a stretch is written in its home block with the same syntax as a beat \u2014 there is no separate red-flags list, and a fired concern must not be left out of its block",
+   "cadence": "the renderer titles the first block from the period: a March/June/September/December period reads 'Quarterly update' and its prose covers the quarter and the year so far; any other month reads 'Monthly update' and covers the month and the year so far",
+   "numbers": "round to $X.XM / $XXXK in these five blocks; full precision lives in the tables, where every figure is click-traceable",
+   "what": "the executive summary is the analyst's one-pager for the deal team: five labelled prose blocks, each 2-5 sentences, written the way a portfolio review reads \u2014 the figure, its comparator (vs Budget, vs prior year), then the driver. The template owns the labels; write only the prose."
+  }
+ }
+}

@@ -1,0 +1,55 @@
+{
+  "borrower": "Orinth Vale Infrastructure, LLC",
+  "borrower_key": "orinth-vale-infrastructure",
+  "model_output_path": "store:borrowers/orinth-vale-infrastructure/_model/Orinth Vale Infrastructure Monthly IS-BS-CF.xlsx",
+  "last_build": "2026-09-15",
+  "months_covered": {
+    "first": "2024-09",
+    "last": "2026-06",
+    "count": 22
+  },
+  "reporting_packages": {
+    "folder": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive",
+    "file_pattern": "<YYYY>/<MM>/a.xlsx (one subfolder per month, one data column per file -- NOT a rolling multi-month package)",
+    "core_statement_sheets": ["Income Statement", "Balance Sheet", "Cash Flow", "Debt & Covenant"],
+    "ab_c_mapping": "a.xlsx = full authoritative 4-tab workbook (Income Statement, Balance Sheet, Cash Flow, Debt & Covenant) despite the generic filename; b.xlsx = AR/AP aging (bucketed, used by ap-ar-aging, not this model); c.xlsx = Channel Detail (revenue by 4 service lines, supplemental, not part of the IS). Re-verified independently across ALL 22 months (not a sample) on this build: identical sheet set and identical row-label sequence in every month, zero drift.",
+    "excluded_files": {
+      "04 Reporting/2026/Q2/June Close/ (qtd-view.xls + monthly-detail.xlsx)": "convenience re-export; June 2026 figures tie exactly to Period Archive/2026/06/a.xlsx -- confirmed again on this build, excluded per borrower-config."
+    },
+    "hidden_columns": false,
+    "encryption": "none observed",
+    "format": "xlsx (not SpreadsheetML XML)"
+  },
+  "sign_conventions": {
+    "repayments_and_debt_service_positive": "Debt & Covenant tab's 'Repayments' and 'Cash Interest' are stored as POSITIVE dollar amounts (unlike some other borrowers in this fund where scheduled principal is stored negative). No sign flip needed when populating the covenant-support rows.",
+    "accumulated_depreciation_negative": "Balance Sheet 'Accumulated Depreciation' is stored negative; Net Property and Equipment = Gross Property and Equipment + Accumulated Depreciation (direct addition, no sign flip).",
+    "no_contra_revenue": "Single 'Revenue' line, no returns/discounts/allowances lines present."
+  },
+  "ebitda_bridge": {
+    "source": "covenant-spec.json#/definitions/Covenant_EBITDA (compute.ebitda_bridge = 'EBITDA')",
+    "provisional": false,
+    "model_row": "Income Statement!'EBITDA' = Revenue - Costs - Operating Expenses (live formula); ties exactly to Net Income + Interest Expense + Income Tax Expense + Depreciation and Amortization every month (the full bridge), and to the certified quarterly Covenant Calculation.xlsx TTM Detail at all 6 quarters checked.",
+    "deemed_schedule": "none -- full-text search of all 9 executed closing documents found zero 'deemed'/'stipulated'/'agreed EBITDA' hits; this is a refinancing, not an LBO/acquisition financing."
+  },
+  "covenant_support": {
+    "debt_service_schedule_path": "store:borrowers/orinth-vale-infrastructure/.record/current/config/debt-service-schedule.json",
+    "debt_service_schedule_usable_for_covenant_support": false,
+    "why_schedule_not_used": "debt-service-spec.json documents two engine limitations that make the generated schedule's own cash-interest and scheduled-principal dollar figures diverge from the borrower's certified monthly figures: (1) amortization_base uses a flat original-principal base, not the agreement's declining-balance 0.60%-of-beginning-debt mechanic (gap widens every month from month 2 onward); (2) the assumed actual/360 day-count does not reproduce the certified figures even in ordinary non-stub months (the borrower's certified interest is a flat monthly-equivalent rate, not day-count-sensitive). Both were re-confirmed on this build.",
+    "cash_interest_expense_source": "each month's own reporting package a.xlsx, 'Debt & Covenant' tab, 'Cash Interest' row -- monthly-native (delivered every month, not just quarter-end), verified to reconcile with the 0.60%-of-beginning-debt formula and to tie exactly to the certified quarterly Covenant Calculation.xlsx at all 6 quarters checked (via the TTM Covenant EBITDA / Total Leverage Ratio figures on the same tab, which DO tie).",
+    "scheduled_debt_principal_payments_source": "same tab's 'Repayments' row, same reasoning.",
+    "deviation_from_build_brief": "The build brief expected these two figures from the quarterly Covenant Calculation.xlsx (06 Monitoring/Portfolio Management/<YYYY Qn>/), interpolating between quarters. Independent verification found that file (Summary + TTM Detail tabs, all 6 quarters) carries ONLY Funded Debt / TTM Covenant EBITDA / Total Leverage Ratio / Maximum / Status -- no cash-interest or scheduled-principal line exists there to interpolate (this facility has no Fixed-Charges/coverage covenant, so the certificate was never built to carry one). Used the monthly-native Debt & Covenant tab in a.xlsx instead -- no interpolation or hold-flat convention needed since it is delivered every month.",
+    "pre_facility_months_are_zero": "Sep-Dec 2024 predate the credit agreement's Jan 15, 2025 closing; both covenant-support rows are 0 for those months (a contractual fact, not a blank) even though a predecessor/legacy debt balance and its own amortization appear in the Balance Sheet / Debt & Covenant roll-forward for that period.",
+    "no_current_fccr_covenant": "This facility's only financial covenant (Maximum Total Leverage Ratio) is a leverage test, not a Fixed-Charges/coverage test, so no covenant-spec definition currently reads these two rows -- captured for a future amendment per debt-service-spec.json's own note."
+  },
+  "materiality_threshold": {
+    "absolute": 25000,
+    "relative_pct": 0.01,
+    "rule": "greater of $25,000 or 1% of the line"
+  },
+  "restatement_history": "Zero restatements found across all 22 months / 4 source tabs on this first build (see restatements.json, empty). Single source per month (no overlapping consolidated/by-month file); the only other candidate file (June Close convenience export) ties exactly and was excluded.",
+  "known_gaps": {
+    "pre_archive_ttm_history": "covenant-spec.json flags that certified TTM tests for 2025-03-31 and 2025-06-30 need monthly Covenant EBITDA back to 2024-04 and 2024-07 respectively, both before this model's earliest month (2024-09). Not sourced into this model per the build brief's own instruction; downstream TTM reads may show 'insufficient history' for test dates before 2025-09-30 -- expected, not a build defect.",
+    "no_current_subtotal_on_bs": "Balance Sheet has no current/non-current section split at all (flatter than even Nemeris's section-headers-only structure) and no Total Current Assets/Liabilities subtotal rows; none invented, consistent with borrower-config's analysis_lines._omitted_note."
+  },
+  "duplicate_label_warning": "None -- validate_model.py found zero duplicate row labels on any statement sheet."
+}

@@ -4,6 +4,12 @@
 
 This installed package turns borrower reporting and loan documents into a structured financial workbook and a review-ready monitoring memo. It helps organize evidence and analysis; the credit analyst remains responsible for reviewing every result and making every credit decision.
 
+## See the completed sample first
+
+[View the live dashboard](https://100xpartners.ai/credit-monitoring/) or [download the completed sample](https://github.com/100xopensource/100x-credit-monitoring/tree/main/sample-output). The sample includes six fictional borrowers' June 2026 workbooks, memos, dashboard, and supporting saved records. Viewing does not start a review.
+
+Continuation is not verified: the current candidate rejects this saved store during results-folder setup. Use the standalone reports or the sample guide's fresh-run instructions with a separate empty results folder.
+
 ## Run it
 
 1. Start a new chat with the Credit Monitoring plugin enabled and say **“credit monitoring.”**

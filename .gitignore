@@ -4,3 +4,4 @@ __pycache__/
 *.py[cod]
 *.log
 credit-monitoring-output/
+!sample-output/outputs/credit-monitoring-output/

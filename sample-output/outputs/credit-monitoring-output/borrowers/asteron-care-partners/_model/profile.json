@@ -1,0 +1,68 @@
+{
+  "borrower": "Asteron Care Partners, LLC",
+  "borrower_key": "asteron-care-partners",
+  "model_output_path": "store:borrowers/asteron-care-partners/_model/Asteron Care Partners Monthly IS-BS-CF.xlsx",
+  "last_build": "2026-09-15",
+  "months_covered": {
+    "first": "2024-09",
+    "last": "2026-06",
+    "count": 22
+  },
+  "reporting_packages": {
+    "folder": "source:Asteron Care Partners/Successor Reporting",
+    "file_pattern": "monthly.xlsx (one subfolder per month; Archive/<YYYY-MM>/ for Sep 2024-May 2026, <YYYY>/<MM>/ for Jun 2026 onward -- no 'Archive' segment for the current month)",
+    "core_statement_sheets": ["Income Statement", "Balance Sheet", "Cash Flow", "Debt and Equity"],
+    "other_tabs_per_month": ["Status", "Budget versus Actual", "Trial Balance", "Covenant"],
+    "other_files_per_month": ["ar-ap-support.xlsx", "operating-support.xlsx"],
+    "one_off_files": {
+      "2026-06": "certificate.pdf and PM Update.pdf now bundled directly in the monthly folder (previously only in the separate quarterly Portfolio Monitoring folder)."
+    },
+    "hidden_columns": false,
+    "each_package_is_single_month_snapshot": true,
+    "no_consolidated_by_month_or_ytd_file_exists": "Confirmed by directory listing of the entire Successor Reporting tree: every month has exactly one monthly.xlsx, no multi-month/hidden-column consolidated file anywhere. Each ISO month is therefore sourced to that month's own package (see source-map.json), unlike borrowers whose latest package already spans the full history.",
+    "encryption": "none observed",
+    "format": "xlsx (not SpreadsheetML XML)",
+    "row_labels_identical_across_all_22_months": true
+  },
+  "sign_conventions": {
+    "cost_lines_stored_negative": "Direct clinical labor, Contract labor, Medical supplies, Other patient service costs, Occupancy and site costs, Corporate and administrative costs, Depreciation, Cash interest, Debt issuance cost amortization, Restructuring advisory expense, Income tax expense, Bridge upfront fee, Goodwill impairment are all stored NEGATIVE (already-signed expenses); subtotal/bridge formulas simply SUM/ADD them.",
+    "debt_equity_rollforward_signs": "Scheduled principal and Debt converted to preferred are stored negative (balance reductions); Draws and Legacy facility funding are stored positive (balance increases). Ending gross debt = SUM(Beginning + all five roll-forward lines) ties exactly every month."
+  },
+  "model_lines_derived_rows": {
+    "cost_of_patient_services": "= SUM(Direct clinical labor, Contract labor, Medical supplies, Other patient service costs) -- inserted, does not exist verbatim in source. Formula (black), not hardcoded.",
+    "gross_profit": "= Revenue + Cost of Patient Services -- inserted, does not exist verbatim in source. Formula (black).",
+    "verification": "Re-verified independently against June 2026 to the penny (Revenue 13,164,599.73 + Cost of Patient Services (8,754,304.34) = Gross Profit 4,410,295.39; Gross Profit - Occupancy 1,557,912.45 - Corporate 1,304,641.66 = 1,547,741.28 = Reported EBITDA) and checked to foot for all 22 months with zero exceptions."
+  },
+  "ebitda_bridge": {
+    "source": "covenant-spec.json#/definitions/EBITDA (compute.ebitda_bridge = 'Reported EBITDA')",
+    "provisional": false,
+    "model_row": "Income Statement!'Reported EBITDA' = Gross Profit + Occupancy and site costs + Corporate and administrative costs (live formula)",
+    "excluded_addback": "The constant $553,353.26/month gap to the borrower's own certified 'Covenant EBITDA' is DELIBERATELY EXCLUDED per covenant-spec.json step7_signoff (no executed document supports the add-back in words). Do not fold it in on a future refresh without a fresh analyst decision.",
+    "deemed_schedule": "none in covenant-spec.json#/definitions/EBITDA"
+  },
+  "covenant_support": {
+    "debt_service_schedule_path": "store:borrowers/asteron-care-partners/.record/current/config/debt-service-schedule.json",
+    "override_in_effect": "CERTIFICATE OVERRIDE per covenant-spec.json step7_signoff 'amortization_day_count_approximation': both covenant-support rows (Facility Cash Interest Expense, Facility Scheduled Debt Principal Payments) are populated for ALL 22 months from the certified Portfolio Monitoring/<quarter>/Covenant Calculation.xlsx TTM Detail exhibits, not from debt-service-schedule.json. Six overlapping quarterly certificates (2025-Q1 through 2026-Q2) span 2024-04 through 2026-06 continuously with zero gaps/conflicts -- the generated schedule was not used as a fallback for any month.",
+    "recheck_on_refresh": "As new months are appended (Jul 2026 onward), check whether a certificate covers the new month before defaulting to the generated schedule; the covenant Calculation.xlsx exhibits are issued quarterly with a ~1-quarter lag, so the most recent 1-2 months of any refresh may need the generated schedule as a genuine fallback for the first time.",
+    "pre_facility_months": "None -- debt service (predecessor, legacy, bridge, or A&R facility in turn) existed continuously across the full Sep 2024-Jun 2026 model range; no month is contractually zero for lack of a facility.",
+    "non_facility_debt": "None disclosed anywhere in the deal folder for this borrower (no vehicle loans, SBA notes, etc.); nothing added to the principal row beyond the certified facility figure."
+  },
+  "materiality_threshold": {
+    "absolute": 25000,
+    "relative_pct": 0.01,
+    "rule": "greater of $25,000 or 1% of the line"
+  },
+  "restatement_history": "Zero restatements found across all 22 months / 3 source tabs on this first build (see restatements.json, empty). No consolidated/by-month/YTD file or original/corrected file pair exists anywhere in the Asteron deal folder -- each month is reported exactly once, by exactly one file.",
+  "known_gaps": {
+    "no_current_noncurrent_subtotal_or_inventory_on_bs": "Balance Sheet carries a flat asset/liability list with no Total Current Assets/Liabilities subtotal and no inventory line; none invented, per borrower-config.json analysis_lines._omitted_note. current_ratio/working-capital/DIO ratios suppressed downstream.",
+    "cash_flow_summary_level_only": "Borrower's Cash Flow tab is a 5-line summary (Beginning cash, CFO, CFI, CFF, Ending cash) with no line-item detail or Net-Income-to-CFO reconciliation disclosed; used as-reported, not derived. A 'Memo: Net income' row is carried for reference only, not as a tie-out.",
+    "successor_bs_still_provisional": "TDR framework, instrument-level 10% modification test, CODI, Section 382, and goodwill interim reassessment all remain PENDING as of the Jun 2026 package per every month's own Status tab (Apr 2026 onward); successor Balance Sheet, gain/loss, and debt carrying-value figures could still restate on a future refresh."
+  },
+  "supplementary_bs_detail": {
+    "debt_equity_rollforward": "Balance Sheet sheet, rows below the Balance Check row, reproduces the borrower's own 'Debt and Equity' tab in full (Beginning gross debt through Carrying debt) -- verified to foot exactly and to tie to 'Funded debt, carrying amount' every month, all 22 months.",
+    "validate_model_warning_accepted": "validate_model.py's derived-cash-flow classifier (used only as a build-integrity probe, not as this model's actual Cash Flow Statement -- Asteron's CF is as-reported) cannot classify several Debt & Equity Roll-Forward component labels (draws, legacy facility funding, pp&e/net, predecessor payoff, scheduled principal, unamortized debt issuance costs) because they sit in a supplementary block below the core Balance Sheet lines. Non-blocking warning, expected on every refresh; does not affect the as-reported Cash Flow Statement sheet actually used downstream."
+  },
+  "judgment_calls": {
+    "fy_ytd_column_treatment_on_balance_sheet": "assembling-rules.md's 'Include FY / YTD total columns (SUM formulas)' bullet is read as applying literally to flow statements (IS, CF) and flow-type BS memo rows (Debt & Equity roll-forward flows, covenant-support rows), while true balance/stock BS rows use period-end (or, for 'Beginning gross debt'/'Beginning cash', period-start) SPOT references rather than sums -- summing a balance across months has no meaning. This matches the prior canonical build in this plugin (Nemeris Field Systems) exactly. Alternative reading (literal SUM of every BS row) would produce a nonsensical multi-month sum of point-in-time balances."
+  }
+}

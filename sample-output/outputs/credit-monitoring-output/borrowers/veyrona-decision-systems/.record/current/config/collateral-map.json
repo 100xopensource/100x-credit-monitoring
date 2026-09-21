@@ -1,0 +1,39 @@
+{
+  "borrower": "Veyrona Decision Systems, LLC",
+  "lien_type": "blanket",
+  "security_summary": "Senior secured; first-priority blanket lien on substantially all assets of BOTH the Borrower (Veyrona Decision Systems, LLC) and its parent guarantor (Veyron Holdings, LLC, which is itself a co-Grantor, not merely a guarantor) -- accounts, contract rights, chattel paper, deposit accounts, equipment, general intangibles, intellectual property, investment property (incl. pledged equity), books and records, and proceeds. Guaranty.pdf separately confirms Veyron Holdings, LLC's guaranty is FULL, UNCONDITIONAL, and UNCAPPED (payment and performance, not merely collection -- no dollar cap or carve-out found). No inventory is pledged or exists (Security_Agreement.pdf's collateral schedule has no inventory category, consistent with a decision-intelligence/data-services business with no physical goods). Source: Security_Agreement.pdf and Guaranty.pdf, both effective 2025-01-15.",
+  "funded_debt_source": {
+    "covenant_spec_ref": "covenant-spec.json#/definitions/Indebtedness",
+    "model_rows": [
+      "Funded Debt"
+    ],
+    "_note": "covenant-setup has not yet run for this borrower (out of scope for monitor-setup); model_rows points at the Balance Sheet's single, genuinely-rolled-up 'Funded Debt' row as the practical denominator until covenant-spec.json's own Indebtedness/Net Debt definition is built."
+  },
+  "pledged_components": [
+    {
+      "label": "Cash",
+      "model_line": "Cash",
+      "tier": "liquid"
+    },
+    {
+      "label": "Accounts receivable (net)",
+      "model_line": "Accounts Receivable",
+      "tier": "liquid"
+    },
+    {
+      "label": "Contract assets (unbilled implementation revenue)",
+      "model_line": "Contract Asset",
+      "tier": "liquid"
+    }
+  ],
+  "_pledged_components_note": "GENUINE MODEL GAP: the Security Agreement also pledges equipment, intellectual property, and investment property (pledged equity) -- but the monthly monitoring model's Balance Sheet carries NO PP&E, Intangibles, or Goodwill dollar line anywhere (only Cash, Accounts Receivable, Contract Asset, Accounts Payable, Accrued Cost, Funded Debt, Retained Earnings Effect -- verified identical every month checked). Those legally-pledged categories therefore cannot be tracked month-over-month in the Collateral box and are EXCLUDED from pledged_components rather than mapped to a nonexistent or unrelated row -- coverage below is necessarily a LIQUID-ASSET-ONLY read, not full collateral coverage. This is a disclosed input gap, not a misconfiguration.",
+  "coverage_cuts": {
+    "All pledged assets (model-tracked)": [
+      "liquid"
+    ],
+    "Liquid only (cash + A/R + contract assets)": [
+      "liquid"
+    ]
+  },
+  "_coverage_cuts_note": "Both cuts are currently IDENTICAL because 'liquid' is the only tier this model can populate (see _pledged_components_note) -- kept as two named cuts for schema consistency with other borrowers and to make clear that a true ex-goodwill or all-assets cut would require the model to carry PP&E/IP balances, which it does not."
+}

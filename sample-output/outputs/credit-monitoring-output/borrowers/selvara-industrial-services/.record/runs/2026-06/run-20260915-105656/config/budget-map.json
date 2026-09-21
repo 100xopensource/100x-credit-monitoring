@@ -1,0 +1,26 @@
+{
+  "borrower": "Selvara Industrial Services, LLC",
+  "file": "store:borrowers/selvara-industrial-services/_model/Selvara Industrial Services H1 2026 Budget (transposed for budget-map).xlsx",
+  "sheet": "Budget (transposed)",
+  "_orientation_workaround_note": "ORIENTATION WORKAROUND (judgment call, flagged for the analyst -- same issue Orinth Vale hit): the real approved budget (source:Selvara Industrial Services/Misc - Finance/Budget Support/H1 2026 Approved Budget.xlsx, 'Monthly Budget' tab) is laid out PERIODS-AS-ROWS / METRICS-AS-COLUMNS (one row per month: Period, Revenue, Budget EBITDA, Ending debt, Principal rate). The budget-vs-actual engine reads a FIXED cell(row=metric_rows[metric], column=period_columns[period]) address, i.e. METRICS-AS-ROWS / PERIODS-AS-COLUMNS -- the opposite orientation. Since the real workbook cannot be reshaped in place (it is the read-only, lender-approved source document), monitor-setup built a byte-verified TRANSPOSED COPY at the 'file' path above (borrowers/selvara-industrial-services/_model/), reshaping the SAME 6 months x 2 real Monthly-Budget metrics (Revenue, Budget EBITDA) into metrics-as-rows/periods-as-columns with NO value changes -- every figure was read back and compared to the source workbook and matched exactly (2026-01: 13,471,609.69 / 2,518,961.40 ... 2026-06: 15,170,486.49 / 2,912,754.69, all six months verified). paths.budget_path in borrower-config still points at the ORIGINAL source workbook (the authoritative approved document); this 'file' here is the reshaped copy the engine actually reads.",
+  "_metric_coverage_note": "METRIC-COVERAGE GAP, more severe than Orinth Vale's: this budget is built ONLY to Revenue and Budget EBITDA -- it has no Gross Profit, Cost of Revenue, Operating Expenses, Interest Expense, Taxes, or Depreciation & Amortization row at all (Orinth Vale's budget at least had a 'Costs' row enabling a real Gross Profit = Revenue-minus-Costs construction; Selvara's does not). Row 4 ('Zero Proxy (verified blank)') of the transposed workbook is a VERIFIED-BLANK row (confirmed None across all 6 period columns) used as a zero proxy for interest_expense/taxes/depreciation_amortization, and row 5 (the real 'Budget EBITDA' figures) is pointed to by 'net_income' below -- exactly the same zero-proxy construction used for Nemeris and Orinth Vale -- so the engine's fixed Net Income + Interest + Taxes + D&A bridge reconstructs to EXACTLY the real Budget EBITDA for every period (Budget EBITDA + 0 + 0 + 0 = Budget EBITDA). 'net_income' in this map is REALLY 'Budget EBITDA' -- do not read it as a true net-income budget. gross_profit is NOT populated (unlike Orinth Vale) because there is no Costs/COGS row in this budget to construct it from -- and the actuals side is equally without a gross_profit figure (see borrower-config model_lines._gap_note), so this is a symmetric gap, not a one-sided mismatch. Only Revenue and Reported-vs-Budget EBITDA can be compared for this borrower.",
+  "period_columns": {
+    "2026-01-31": 2,
+    "2026-02-28": 3,
+    "2026-03-31": 4,
+    "2026-04-30": 5,
+    "2026-05-31": 6,
+    "2026-06-30": 7
+  },
+  "metric_rows": {
+    "revenue": 3,
+    "net_income": 5,
+    "interest_expense": 4,
+    "taxes": 4,
+    "depreciation_amortization": 4
+  },
+  "balance_sheet_rows": {},
+  "_balance_sheet_rows_note": "Intentionally empty -- the approved budget carries no balance-sheet section at all (only Revenue, Budget EBITDA, Ending debt, Principal rate on the source's 'Monthly Budget' tab), and the actuals model has no Balance Sheet tab either (see borrower-config analysis_lines._omitted_note -- only a 'Working Capital' tab and a blended 'Cash Flow' tab exist). The Collateral box's 'vs Budget' column will render '—' for every pledged component.",
+  "opex_groups": {},
+  "_opex_groups_note": "Intentionally empty -- see borrower-config.json opex_groups._comment. Neither the actuals monthly package nor this budget carries any opex line or category at all (not even a single lumped line), unlike every other borrower onboarded so far."
+}

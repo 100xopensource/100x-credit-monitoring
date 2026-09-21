@@ -1,0 +1,2588 @@
+{
+  "module": "debt-service-schedule",
+  "period": "2026-06",
+  "run_id": "engine-c7c1d3a2cf94",
+  "run_id_from": "engine",
+  "produced_at": "2026-09-15T09:26:49+00:00",
+  "produced_by": {
+    "engine": "debt-service-schedule",
+    "plugin_version": "1.0.0"
+  },
+  "reporting_unit": {
+    "scale": 1.0,
+    "currency": "USD",
+    "verbatim": "contractual dollars (agreement figures)",
+    "plain": "USD"
+  },
+  "stores": {},
+  "source_ref_reach": {
+    "cell": 0,
+    "file": 0,
+    "unlocated": 185,
+    "borrower_doc": 0
+  },
+  "source_files": [
+    "debt-service-spec.json"
+  ],
+  "results": [
+    {
+      "month": "2025-01",
+      "accrual_start": "2025-01-15",
+      "accrual_end": "2025-01-31",
+      "days": 17,
+      "beginning_balance": 65360723.38,
+      "fundings": 65360723.38,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "observed",
+      "cash_interest_accrued": 335787.27,
+      "pik_accrued": 0.0,
+      "payment_date": null,
+      "interest_paid": 0.0,
+      "principal_paid": 0.0,
+      "fees_paid": 0.0,
+      "cash_paid_total": 0.0,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 0.0,
+      "month_end_balance": 65360723.38,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 335,787.27 = 65,360,723.38 x 10.8793% x 17/360 (2025-01-15..2025-01-31, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement])"
+    },
+    {
+      "month": "2025-02",
+      "accrual_start": "2025-02-01",
+      "accrual_end": "2025-02-28",
+      "days": 28,
+      "beginning_balance": 64968559.04,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 549743.01,
+      "pik_accrued": 0.0,
+      "payment_date": "2025-02-01",
+      "interest_paid": 335787.27,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 727951.61,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 64968559.04,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 549,743.01 = 64,968,559.04 x 10.8793% x 28/360 (2025-02-01..2025-02-28, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2025-02-01: prior-month cash interest 335,787.27 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2025-03",
+      "accrual_start": "2025-03-01",
+      "accrual_end": "2025-03-31",
+      "days": 31,
+      "beginning_balance": 64576394.7,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 604970.14,
+      "pik_accrued": 0.0,
+      "payment_date": "2025-03-01",
+      "interest_paid": 549743.01,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 941907.35,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 64576394.7,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 604,970.14 = 64,576,394.70 x 10.8793% x 31/360 (2025-03-01..2025-03-31, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2025-03-01: prior-month cash interest 549,743.01 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2025-04",
+      "accrual_start": "2025-04-01",
+      "accrual_end": "2025-04-30",
+      "days": 30,
+      "beginning_balance": 64184230.36,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 581899.58,
+      "pik_accrued": 0.0,
+      "payment_date": "2025-04-01",
+      "interest_paid": 604970.14,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 997134.48,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 64184230.36,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 581,899.58 = 64,184,230.36 x 10.8793% x 30/360 (2025-04-01..2025-04-30, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2025-04-01: prior-month cash interest 604,970.14 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2025-05",
+      "accrual_start": "2025-05-01",
+      "accrual_end": "2025-05-31",
+      "days": 31,
+      "beginning_balance": 63792066.02,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 597622.33,
+      "pik_accrued": 0.0,
+      "payment_date": "2025-05-01",
+      "interest_paid": 581899.58,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 974063.92,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 63792066.02,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 597,622.33 = 63,792,066.02 x 10.8793% x 31/360 (2025-05-01..2025-05-31, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2025-05-01: prior-month cash interest 581,899.58 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2025-06",
+      "accrual_start": "2025-06-01",
+      "accrual_end": "2025-06-30",
+      "days": 30,
+      "beginning_balance": 63399901.68,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 574788.79,
+      "pik_accrued": 0.0,
+      "payment_date": "2025-06-01",
+      "interest_paid": 597622.33,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 989786.67,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 63399901.68,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 574,788.79 = 63,399,901.68 x 10.8793% x 30/360 (2025-06-01..2025-06-30, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2025-06-01: prior-month cash interest 597,622.33 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2025-07",
+      "accrual_start": "2025-07-01",
+      "accrual_end": "2025-07-31",
+      "days": 31,
+      "beginning_balance": 63007737.34,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 590274.51,
+      "pik_accrued": 0.0,
+      "payment_date": "2025-07-01",
+      "interest_paid": 574788.79,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 966953.13,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 63007737.34,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 590,274.51 = 63,007,737.34 x 10.8793% x 31/360 (2025-07-01..2025-07-31, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2025-07-01: prior-month cash interest 574,788.79 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2025-08",
+      "accrual_start": "2025-08-01",
+      "accrual_end": "2025-08-31",
+      "days": 31,
+      "beginning_balance": 62615573.0,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 586600.6,
+      "pik_accrued": 0.0,
+      "payment_date": "2025-08-01",
+      "interest_paid": 590274.51,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 982438.85,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 62615573.0,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 586,600.60 = 62,615,573.00 x 10.8793% x 31/360 (2025-08-01..2025-08-31, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2025-08-01: prior-month cash interest 590,274.51 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2025-09",
+      "accrual_start": "2025-09-01",
+      "accrual_end": "2025-09-30",
+      "days": 30,
+      "beginning_balance": 62223408.66,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 564122.61,
+      "pik_accrued": 0.0,
+      "payment_date": "2025-09-01",
+      "interest_paid": 586600.6,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 978764.94,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 62223408.66,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 564,122.61 = 62,223,408.66 x 10.8793% x 30/360 (2025-09-01..2025-09-30, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2025-09-01: prior-month cash interest 586,600.60 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2025-10",
+      "accrual_start": "2025-10-01",
+      "accrual_end": "2025-10-31",
+      "days": 31,
+      "beginning_balance": 61831244.32,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 579252.79,
+      "pik_accrued": 0.0,
+      "payment_date": "2025-10-01",
+      "interest_paid": 564122.61,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 956286.95,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 61831244.32,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 579,252.79 = 61,831,244.32 x 10.8793% x 31/360 (2025-10-01..2025-10-31, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2025-10-01: prior-month cash interest 564,122.61 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2025-11",
+      "accrual_start": "2025-11-01",
+      "accrual_end": "2025-11-30",
+      "days": 30,
+      "beginning_balance": 61439079.98,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 557011.82,
+      "pik_accrued": 0.0,
+      "payment_date": "2025-11-01",
+      "interest_paid": 579252.79,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 971417.13,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 61439079.98,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 557,011.82 = 61,439,079.98 x 10.8793% x 30/360 (2025-11-01..2025-11-30, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2025-11-01: prior-month cash interest 579,252.79 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2025-12",
+      "accrual_start": "2025-12-01",
+      "accrual_end": "2025-12-31",
+      "days": 31,
+      "beginning_balance": 61046915.64,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 571904.97,
+      "pik_accrued": 0.0,
+      "payment_date": "2025-12-01",
+      "interest_paid": 557011.82,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 949176.16,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 61046915.64,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 571,904.97 = 61,046,915.64 x 10.8793% x 31/360 (2025-12-01..2025-12-31, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2025-12-01: prior-month cash interest 557,011.82 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2026-01",
+      "accrual_start": "2026-01-01",
+      "accrual_end": "2026-01-31",
+      "days": 31,
+      "beginning_balance": 60654751.3,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 568231.06,
+      "pik_accrued": 0.0,
+      "payment_date": "2026-01-01",
+      "interest_paid": 571904.97,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 964069.31,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 60654751.3,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 568,231.06 = 60,654,751.30 x 10.8793% x 31/360 (2026-01-01..2026-01-31, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2026-01-01: prior-month cash interest 571,904.97 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2026-02",
+      "accrual_start": "2026-02-01",
+      "accrual_end": "2026-02-28",
+      "days": 28,
+      "beginning_balance": 60262586.96,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 509922.59,
+      "pik_accrued": 0.0,
+      "payment_date": "2026-02-01",
+      "interest_paid": 568231.06,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 960395.4,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 60262586.96,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 509,922.59 = 60,262,586.96 x 10.8793% x 28/360 (2026-02-01..2026-02-28, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2026-02-01: prior-month cash interest 568,231.06 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2026-03",
+      "accrual_start": "2026-03-01",
+      "accrual_end": "2026-03-31",
+      "days": 31,
+      "beginning_balance": 59870422.62,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 560883.25,
+      "pik_accrued": 0.0,
+      "payment_date": "2026-03-01",
+      "interest_paid": 509922.59,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 902086.93,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 59870422.62,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 560,883.25 = 59,870,422.62 x 10.8793% x 31/360 (2026-03-01..2026-03-31, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2026-03-01: prior-month cash interest 509,922.59 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2026-04",
+      "accrual_start": "2026-04-01",
+      "accrual_end": "2026-04-30",
+      "days": 30,
+      "beginning_balance": 59478258.28,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 539234.85,
+      "pik_accrued": 0.0,
+      "payment_date": "2026-04-01",
+      "interest_paid": 560883.25,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 953047.59,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 59478258.28,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 539,234.85 = 59,478,258.28 x 10.8793% x 30/360 (2026-04-01..2026-04-30, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2026-04-01: prior-month cash interest 560,883.25 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2026-05",
+      "accrual_start": "2026-05-01",
+      "accrual_end": "2026-05-31",
+      "days": 31,
+      "beginning_balance": 59086093.94,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 553535.43,
+      "pik_accrued": 0.0,
+      "payment_date": "2026-05-01",
+      "interest_paid": 539234.85,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 931399.19,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 59086093.94,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 553,535.43 = 59,086,093.94 x 10.8793% x 31/360 (2026-05-01..2026-05-31, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2026-05-01: prior-month cash interest 539,234.85 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2026-06",
+      "accrual_start": "2026-06-01",
+      "accrual_end": "2026-06-30",
+      "days": 30,
+      "beginning_balance": 58693929.6,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 532124.06,
+      "pik_accrued": 0.0,
+      "payment_date": "2026-06-01",
+      "interest_paid": 553535.43,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 945699.77,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 58693929.6,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 532,124.06 = 58,693,929.60 x 10.8793% x 30/360 (2026-06-01..2026-06-30, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2026-06-01: prior-month cash interest 553,535.43 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2026-07",
+      "accrual_start": "2026-07-01",
+      "accrual_end": "2026-07-31",
+      "days": 31,
+      "beginning_balance": 58301765.26,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 546187.62,
+      "pik_accrued": 0.0,
+      "payment_date": "2026-07-01",
+      "interest_paid": 532124.06,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 924288.4,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 58301765.26,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 546,187.62 = 58,301,765.26 x 10.8793% x 31/360 (2026-07-01..2026-07-31, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2026-07-01: prior-month cash interest 532,124.06 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2026-08",
+      "accrual_start": "2026-08-01",
+      "accrual_end": "2026-08-31",
+      "days": 31,
+      "beginning_balance": 57909600.92,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 542513.71,
+      "pik_accrued": 0.0,
+      "payment_date": "2026-08-01",
+      "interest_paid": 546187.62,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 938351.96,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 57909600.92,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 542,513.71 = 57,909,600.92 x 10.8793% x 31/360 (2026-08-01..2026-08-31, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2026-08-01: prior-month cash interest 546,187.62 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2026-09",
+      "accrual_start": "2026-09-01",
+      "accrual_end": "2026-09-30",
+      "days": 30,
+      "beginning_balance": 57517436.58,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 521457.87,
+      "pik_accrued": 0.0,
+      "payment_date": "2026-09-01",
+      "interest_paid": 542513.71,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 934678.05,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 57517436.58,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 521,457.87 = 57,517,436.58 x 10.8793% x 30/360 (2026-09-01..2026-09-30, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2026-09-01: prior-month cash interest 542,513.71 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2026-10",
+      "accrual_start": "2026-10-01",
+      "accrual_end": "2026-10-31",
+      "days": 31,
+      "beginning_balance": 57125272.24,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 535165.89,
+      "pik_accrued": 0.0,
+      "payment_date": "2026-10-01",
+      "interest_paid": 521457.87,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 913622.21,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 57125272.24,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 535,165.89 = 57,125,272.24 x 10.8793% x 31/360 (2026-10-01..2026-10-31, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2026-10-01: prior-month cash interest 521,457.87 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2026-11",
+      "accrual_start": "2026-11-01",
+      "accrual_end": "2026-11-30",
+      "days": 30,
+      "beginning_balance": 56733107.9,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 514347.08,
+      "pik_accrued": 0.0,
+      "payment_date": "2026-11-01",
+      "interest_paid": 535165.89,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 927330.23,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 56733107.9,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 514,347.08 = 56,733,107.90 x 10.8793% x 30/360 (2026-11-01..2026-11-30, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2026-11-01: prior-month cash interest 535,165.89 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2026-12",
+      "accrual_start": "2026-12-01",
+      "accrual_end": "2026-12-31",
+      "days": 31,
+      "beginning_balance": 56340943.56,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 527818.08,
+      "pik_accrued": 0.0,
+      "payment_date": "2026-12-01",
+      "interest_paid": 514347.08,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 906511.42,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 56340943.56,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 527,818.08 = 56,340,943.56 x 10.8793% x 31/360 (2026-12-01..2026-12-31, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2026-12-01: prior-month cash interest 514,347.08 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2027-01",
+      "accrual_start": "2027-01-01",
+      "accrual_end": "2027-01-31",
+      "days": 31,
+      "beginning_balance": 55948779.22,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 524144.17,
+      "pik_accrued": 0.0,
+      "payment_date": "2027-01-01",
+      "interest_paid": 527818.08,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 919982.42,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 55948779.22,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 524,144.17 = 55,948,779.22 x 10.8793% x 31/360 (2027-01-01..2027-01-31, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2027-01-01: prior-month cash interest 527,818.08 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2027-02",
+      "accrual_start": "2027-02-01",
+      "accrual_end": "2027-02-28",
+      "days": 28,
+      "beginning_balance": 55556614.88,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 470102.17,
+      "pik_accrued": 0.0,
+      "payment_date": "2027-02-01",
+      "interest_paid": 524144.17,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 916308.51,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 55556614.88,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 470,102.17 = 55,556,614.88 x 10.8793% x 28/360 (2027-02-01..2027-02-28, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2027-02-01: prior-month cash interest 524,144.17 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2027-03",
+      "accrual_start": "2027-03-01",
+      "accrual_end": "2027-03-31",
+      "days": 31,
+      "beginning_balance": 55164450.54,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 516796.36,
+      "pik_accrued": 0.0,
+      "payment_date": "2027-03-01",
+      "interest_paid": 470102.17,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 862266.51,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 55164450.54,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 516,796.36 = 55,164,450.54 x 10.8793% x 31/360 (2027-03-01..2027-03-31, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2027-03-01: prior-month cash interest 470,102.17 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2027-04",
+      "accrual_start": "2027-04-01",
+      "accrual_end": "2027-04-30",
+      "days": 30,
+      "beginning_balance": 54772286.2,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 496570.11,
+      "pik_accrued": 0.0,
+      "payment_date": "2027-04-01",
+      "interest_paid": 516796.36,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 908960.7,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 54772286.2,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 496,570.11 = 54,772,286.20 x 10.8793% x 30/360 (2027-04-01..2027-04-30, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2027-04-01: prior-month cash interest 516,796.36 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2027-05",
+      "accrual_start": "2027-05-01",
+      "accrual_end": "2027-05-31",
+      "days": 31,
+      "beginning_balance": 54380121.86,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 509448.54,
+      "pik_accrued": 0.0,
+      "payment_date": "2027-05-01",
+      "interest_paid": 496570.11,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 888734.45,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 54380121.86,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 509,448.54 = 54,380,121.86 x 10.8793% x 31/360 (2027-05-01..2027-05-31, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2027-05-01: prior-month cash interest 496,570.11 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2027-06",
+      "accrual_start": "2027-06-01",
+      "accrual_end": "2027-06-30",
+      "days": 30,
+      "beginning_balance": 53987957.52,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 489459.32,
+      "pik_accrued": 0.0,
+      "payment_date": "2027-06-01",
+      "interest_paid": 509448.54,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 901612.88,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 53987957.52,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 489,459.32 = 53,987,957.52 x 10.8793% x 30/360 (2027-06-01..2027-06-30, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2027-06-01: prior-month cash interest 509,448.54 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2027-07",
+      "accrual_start": "2027-07-01",
+      "accrual_end": "2027-07-31",
+      "days": 31,
+      "beginning_balance": 53595793.18,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 502100.72,
+      "pik_accrued": 0.0,
+      "payment_date": "2027-07-01",
+      "interest_paid": 489459.32,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 881623.66,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 53595793.18,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 502,100.72 = 53,595,793.18 x 10.8793% x 31/360 (2027-07-01..2027-07-31, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2027-07-01: prior-month cash interest 489,459.32 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2027-08",
+      "accrual_start": "2027-08-01",
+      "accrual_end": "2027-08-31",
+      "days": 31,
+      "beginning_balance": 53203628.84,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 498426.82,
+      "pik_accrued": 0.0,
+      "payment_date": "2027-08-01",
+      "interest_paid": 502100.72,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 894265.06,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 53203628.84,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 498,426.82 = 53,203,628.84 x 10.8793% x 31/360 (2027-08-01..2027-08-31, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2027-08-01: prior-month cash interest 502,100.72 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2027-09",
+      "accrual_start": "2027-09-01",
+      "accrual_end": "2027-09-30",
+      "days": 30,
+      "beginning_balance": 52811464.5,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 478793.14,
+      "pik_accrued": 0.0,
+      "payment_date": "2027-09-01",
+      "interest_paid": 498426.82,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 890591.16,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 52811464.5,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 478,793.14 = 52,811,464.50 x 10.8793% x 30/360 (2027-09-01..2027-09-30, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2027-09-01: prior-month cash interest 498,426.82 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2027-10",
+      "accrual_start": "2027-10-01",
+      "accrual_end": "2027-10-31",
+      "days": 31,
+      "beginning_balance": 52419300.16,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 491079.0,
+      "pik_accrued": 0.0,
+      "payment_date": "2027-10-01",
+      "interest_paid": 478793.14,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 870957.48,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 52419300.16,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 491,079.00 = 52,419,300.16 x 10.8793% x 31/360 (2027-10-01..2027-10-31, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2027-10-01: prior-month cash interest 478,793.14 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2027-11",
+      "accrual_start": "2027-11-01",
+      "accrual_end": "2027-11-30",
+      "days": 30,
+      "beginning_balance": 52027135.82,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 471682.35,
+      "pik_accrued": 0.0,
+      "payment_date": "2027-11-01",
+      "interest_paid": 491079.0,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 883243.34,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 52027135.82,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 471,682.35 = 52,027,135.82 x 10.8793% x 30/360 (2027-11-01..2027-11-30, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2027-11-01: prior-month cash interest 491,079.00 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2027-12",
+      "accrual_start": "2027-12-01",
+      "accrual_end": "2027-12-31",
+      "days": 31,
+      "beginning_balance": 51634971.48,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 483731.19,
+      "pik_accrued": 0.0,
+      "payment_date": "2027-12-01",
+      "interest_paid": 471682.35,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 863846.69,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 51634971.48,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 483,731.19 = 51,634,971.48 x 10.8793% x 31/360 (2027-12-01..2027-12-31, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2027-12-01: prior-month cash interest 471,682.35 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2028-01",
+      "accrual_start": "2028-01-01",
+      "accrual_end": "2028-01-31",
+      "days": 31,
+      "beginning_balance": 51242807.14,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 480057.28,
+      "pik_accrued": 0.0,
+      "payment_date": "2028-01-01",
+      "interest_paid": 483731.19,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 875895.53,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 51242807.14,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 480,057.28 = 51,242,807.14 x 10.8793% x 31/360 (2028-01-01..2028-01-31, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2028-01-01: prior-month cash interest 483,731.19 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2028-02",
+      "accrual_start": "2028-02-01",
+      "accrual_end": "2028-02-29",
+      "days": 29,
+      "beginning_balance": 50850642.8,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 445648.96,
+      "pik_accrued": 0.0,
+      "payment_date": "2028-02-01",
+      "interest_paid": 480057.28,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 872221.62,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 50850642.8,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 445,648.96 = 50,850,642.80 x 10.8793% x 29/360 (2028-02-01..2028-02-29, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2028-02-01: prior-month cash interest 480,057.28 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2028-03",
+      "accrual_start": "2028-03-01",
+      "accrual_end": "2028-03-31",
+      "days": 31,
+      "beginning_balance": 50458478.46,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 472709.46,
+      "pik_accrued": 0.0,
+      "payment_date": "2028-03-01",
+      "interest_paid": 445648.96,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 837813.3,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 50458478.46,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 472,709.46 = 50,458,478.46 x 10.8793% x 31/360 (2028-03-01..2028-03-31, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2028-03-01: prior-month cash interest 445,648.96 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2028-04",
+      "accrual_start": "2028-04-01",
+      "accrual_end": "2028-04-30",
+      "days": 30,
+      "beginning_balance": 50066314.12,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 453905.38,
+      "pik_accrued": 0.0,
+      "payment_date": "2028-04-01",
+      "interest_paid": 472709.46,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 864873.8,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 50066314.12,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 453,905.38 = 50,066,314.12 x 10.8793% x 30/360 (2028-04-01..2028-04-30, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2028-04-01: prior-month cash interest 472,709.46 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2028-05",
+      "accrual_start": "2028-05-01",
+      "accrual_end": "2028-05-31",
+      "days": 31,
+      "beginning_balance": 49674149.78,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 465361.65,
+      "pik_accrued": 0.0,
+      "payment_date": "2028-05-01",
+      "interest_paid": 453905.38,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 846069.72,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 49674149.78,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 465,361.65 = 49,674,149.78 x 10.8793% x 31/360 (2028-05-01..2028-05-31, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2028-05-01: prior-month cash interest 453,905.38 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2028-06",
+      "accrual_start": "2028-06-01",
+      "accrual_end": "2028-06-30",
+      "days": 30,
+      "beginning_balance": 49281985.44,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 446794.59,
+      "pik_accrued": 0.0,
+      "payment_date": "2028-06-01",
+      "interest_paid": 465361.65,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 857525.99,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 49281985.44,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 446,794.59 = 49,281,985.44 x 10.8793% x 30/360 (2028-06-01..2028-06-30, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2028-06-01: prior-month cash interest 465,361.65 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2028-07",
+      "accrual_start": "2028-07-01",
+      "accrual_end": "2028-07-31",
+      "days": 31,
+      "beginning_balance": 48889821.1,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 458013.83,
+      "pik_accrued": 0.0,
+      "payment_date": "2028-07-01",
+      "interest_paid": 446794.59,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 838958.93,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 48889821.1,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 458,013.83 = 48,889,821.10 x 10.8793% x 31/360 (2028-07-01..2028-07-31, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2028-07-01: prior-month cash interest 446,794.59 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2028-08",
+      "accrual_start": "2028-08-01",
+      "accrual_end": "2028-08-31",
+      "days": 31,
+      "beginning_balance": 48497656.76,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 454339.92,
+      "pik_accrued": 0.0,
+      "payment_date": "2028-08-01",
+      "interest_paid": 458013.83,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 850178.17,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 48497656.76,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 454,339.92 = 48,497,656.76 x 10.8793% x 31/360 (2028-08-01..2028-08-31, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2028-08-01: prior-month cash interest 458,013.83 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2028-09",
+      "accrual_start": "2028-09-01",
+      "accrual_end": "2028-09-30",
+      "days": 30,
+      "beginning_balance": 48105492.42,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 436128.4,
+      "pik_accrued": 0.0,
+      "payment_date": "2028-09-01",
+      "interest_paid": 454339.92,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 846504.26,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 48105492.42,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 436,128.40 = 48,105,492.42 x 10.8793% x 30/360 (2028-09-01..2028-09-30, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2028-09-01: prior-month cash interest 454,339.92 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2028-10",
+      "accrual_start": "2028-10-01",
+      "accrual_end": "2028-10-31",
+      "days": 31,
+      "beginning_balance": 47713328.08,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 446992.11,
+      "pik_accrued": 0.0,
+      "payment_date": "2028-10-01",
+      "interest_paid": 436128.4,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 828292.74,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 47713328.08,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 446,992.11 = 47,713,328.08 x 10.8793% x 31/360 (2028-10-01..2028-10-31, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2028-10-01: prior-month cash interest 436,128.40 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2028-11",
+      "accrual_start": "2028-11-01",
+      "accrual_end": "2028-11-30",
+      "days": 30,
+      "beginning_balance": 47321163.74,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 429017.61,
+      "pik_accrued": 0.0,
+      "payment_date": "2028-11-01",
+      "interest_paid": 446992.11,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 839156.45,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 47321163.74,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 429,017.61 = 47,321,163.74 x 10.8793% x 30/360 (2028-11-01..2028-11-30, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2028-11-01: prior-month cash interest 446,992.11 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2028-12",
+      "accrual_start": "2028-12-01",
+      "accrual_end": "2028-12-31",
+      "days": 31,
+      "beginning_balance": 46928999.4,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 439644.29,
+      "pik_accrued": 0.0,
+      "payment_date": "2028-12-01",
+      "interest_paid": 429017.61,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 821181.95,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 46928999.4,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 439,644.29 = 46,928,999.40 x 10.8793% x 31/360 (2028-12-01..2028-12-31, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2028-12-01: prior-month cash interest 429,017.61 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2029-01",
+      "accrual_start": "2029-01-01",
+      "accrual_end": "2029-01-31",
+      "days": 31,
+      "beginning_balance": 46536835.06,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 435970.39,
+      "pik_accrued": 0.0,
+      "payment_date": "2029-01-01",
+      "interest_paid": 439644.29,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 831808.63,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 46536835.06,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 435,970.39 = 46,536,835.06 x 10.8793% x 31/360 (2029-01-01..2029-01-31, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2029-01-01: prior-month cash interest 439,644.29 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2029-02",
+      "accrual_start": "2029-02-01",
+      "accrual_end": "2029-02-28",
+      "days": 28,
+      "beginning_balance": 46144670.72,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 390461.33,
+      "pik_accrued": 0.0,
+      "payment_date": "2029-02-01",
+      "interest_paid": 435970.39,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 828134.73,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 46144670.72,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 390,461.33 = 46,144,670.72 x 10.8793% x 28/360 (2029-02-01..2029-02-28, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2029-02-01: prior-month cash interest 435,970.39 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2029-03",
+      "accrual_start": "2029-03-01",
+      "accrual_end": "2029-03-31",
+      "days": 31,
+      "beginning_balance": 45752506.38,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 428622.57,
+      "pik_accrued": 0.0,
+      "payment_date": "2029-03-01",
+      "interest_paid": 390461.33,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 782625.67,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 45752506.38,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 428,622.57 = 45,752,506.38 x 10.8793% x 31/360 (2029-03-01..2029-03-31, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2029-03-01: prior-month cash interest 390,461.33 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2029-04",
+      "accrual_start": "2029-04-01",
+      "accrual_end": "2029-04-30",
+      "days": 30,
+      "beginning_balance": 45360342.04,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 411240.64,
+      "pik_accrued": 0.0,
+      "payment_date": "2029-04-01",
+      "interest_paid": 428622.57,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 820786.91,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 45360342.04,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 411,240.64 = 45,360,342.04 x 10.8793% x 30/360 (2029-04-01..2029-04-30, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2029-04-01: prior-month cash interest 428,622.57 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2029-05",
+      "accrual_start": "2029-05-01",
+      "accrual_end": "2029-05-31",
+      "days": 31,
+      "beginning_balance": 44968177.7,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 421274.75,
+      "pik_accrued": 0.0,
+      "payment_date": "2029-05-01",
+      "interest_paid": 411240.64,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 803404.98,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 44968177.7,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 421,274.75 = 44,968,177.70 x 10.8793% x 31/360 (2029-05-01..2029-05-31, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2029-05-01: prior-month cash interest 411,240.64 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2029-06",
+      "accrual_start": "2029-06-01",
+      "accrual_end": "2029-06-30",
+      "days": 30,
+      "beginning_balance": 44576013.36,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 404129.85,
+      "pik_accrued": 0.0,
+      "payment_date": "2029-06-01",
+      "interest_paid": 421274.75,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 813439.09,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 44576013.36,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 404,129.85 = 44,576,013.36 x 10.8793% x 30/360 (2029-06-01..2029-06-30, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2029-06-01: prior-month cash interest 421,274.75 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2029-07",
+      "accrual_start": "2029-07-01",
+      "accrual_end": "2029-07-31",
+      "days": 31,
+      "beginning_balance": 44183849.02,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 413926.94,
+      "pik_accrued": 0.0,
+      "payment_date": "2029-07-01",
+      "interest_paid": 404129.85,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 796294.19,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 44183849.02,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 413,926.94 = 44,183,849.02 x 10.8793% x 31/360 (2029-07-01..2029-07-31, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2029-07-01: prior-month cash interest 404,129.85 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2029-08",
+      "accrual_start": "2029-08-01",
+      "accrual_end": "2029-08-31",
+      "days": 31,
+      "beginning_balance": 43791684.68,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 410253.03,
+      "pik_accrued": 0.0,
+      "payment_date": "2029-08-01",
+      "interest_paid": 413926.94,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 806091.28,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 43791684.68,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 410,253.03 = 43,791,684.68 x 10.8793% x 31/360 (2029-08-01..2029-08-31, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2029-08-01: prior-month cash interest 413,926.94 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2029-09",
+      "accrual_start": "2029-09-01",
+      "accrual_end": "2029-09-30",
+      "days": 30,
+      "beginning_balance": 43399520.34,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 393463.67,
+      "pik_accrued": 0.0,
+      "payment_date": "2029-09-01",
+      "interest_paid": 410253.03,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 802417.37,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 43399520.34,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 393,463.67 = 43,399,520.34 x 10.8793% x 30/360 (2029-09-01..2029-09-30, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2029-09-01: prior-month cash interest 410,253.03 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2029-10",
+      "accrual_start": "2029-10-01",
+      "accrual_end": "2029-10-31",
+      "days": 31,
+      "beginning_balance": 43007356.0,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 402905.22,
+      "pik_accrued": 0.0,
+      "payment_date": "2029-10-01",
+      "interest_paid": 393463.67,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 785628.01,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 43007356.0,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 402,905.22 = 43,007,356.00 x 10.8793% x 31/360 (2029-10-01..2029-10-31, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2029-10-01: prior-month cash interest 393,463.67 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2029-11",
+      "accrual_start": "2029-11-01",
+      "accrual_end": "2029-11-30",
+      "days": 30,
+      "beginning_balance": 42615191.66,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 386352.88,
+      "pik_accrued": 0.0,
+      "payment_date": "2029-11-01",
+      "interest_paid": 402905.22,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 795069.56,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 42615191.66,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 386,352.88 = 42,615,191.66 x 10.8793% x 30/360 (2029-11-01..2029-11-30, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2029-11-01: prior-month cash interest 402,905.22 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2029-12",
+      "accrual_start": "2029-12-01",
+      "accrual_end": "2029-12-31",
+      "days": 31,
+      "beginning_balance": 42223027.32,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 395557.4,
+      "pik_accrued": 0.0,
+      "payment_date": "2029-12-01",
+      "interest_paid": 386352.88,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 778517.22,
+      "scheduled_principal_accrued": 392164.34,
+      "scheduled_principal_paid": 392164.34,
+      "month_end_balance": 42223027.32,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 395,557.40 = 42,223,027.32 x 10.8793% x 31/360 (2029-12-01..2029-12-31, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2029-12-01: prior-month cash interest 386,352.88 + principal 392,164.34 + fees 0.00"
+    },
+    {
+      "month": "2030-01",
+      "accrual_start": "2030-01-01",
+      "accrual_end": "2030-01-15",
+      "days": 15,
+      "beginning_balance": 41830862.98,
+      "fundings": 0.0,
+      "pik_capitalized": 0.0,
+      "cash_rate": 0.108793,
+      "pik_rate": null,
+      "rate_basis": "held_flat",
+      "cash_interest_accrued": 189621.04,
+      "pik_accrued": 0.0,
+      "payment_date": "2030-01-01",
+      "interest_paid": 395557.4,
+      "principal_paid": 392164.34,
+      "fees_paid": 0.0,
+      "cash_paid_total": 42808205.76,
+      "scheduled_principal_accrued": 41830862.98,
+      "scheduled_principal_paid": 42223027.32,
+      "month_end_balance": 41830862.98,
+      "source_ref": [
+        {
+          "file": 0,
+          "section": "cash_interest"
+        },
+        {
+          "file": 0,
+          "section": "observations"
+        },
+        {
+          "file": 0,
+          "section": "amortization"
+        }
+      ],
+      "calc": "cash interest 189,621.04 = 41,830,862.98 x 10.8793% x 15/360 (2030-01-01..2030-01-15, both endpoints counted; SOFR 4.6293% + margin 6.2500% [flat margin, all periods -- no leverage-based (or any other) pricing grid is stated anywhere in this agreement] \u2014 rate held flat beyond the last pinned observation); paid 2030-01-01: prior-month cash interest 395,557.40 + principal 392,164.34 + fees 0.00; balloon 41,830,862.98 = remaining principal incl. the stub's accrued PIK, due 2030-01-15 with the stub cash interest and maturity fees",
+      "balloon": 41830862.98,
+      "balloon_date": "2030-01-15"
+    }
+  ],
+  "exceptions": [
+    {
+      "type": "assumption",
+      "warning": "SOFR is held flat beyond the last pinned observation (2025-01-15) from 2025-02 onward \u2014 re-pin observations.index_rates and re-run when the index moves"
+    },
+    {
+      "type": "ambiguity",
+      "warning": "The Credit Agreement states NO day-count convention at all -- unlike a typical facility's 'actual days elapsed over a 360-day year' language, INTEREST AND FEES (p.4) says only 'Interest accrues at SOFR plus 6.25%, subject to a 2.00% SOFR floor. Interest is payable monthly in arrears.' actual/360 with both endpoints counted is recorded here as an ASSUMPTION (the market-standard convention for a SOFR facility, and debt_service.py's supported default), not a stated term. MATERIAL FINDING, larger than the usual stub-day ambiguity: the borrower's own certified monthly Debt & Covenant figures do NOT use any actual-day-count convention at all -- Cash Interest / Beginning Debt is IDENTICAL to 10 significant digits (0.906605097613...%) in every month checked (2025-01 through 2025-06), regardless of whether the month has 28, 30 or 31 days, which is only possible if the certified figures apply a flat (index+margin)/12 monthly-equivalent rate rather than any actual/360 or actual/365 calculation. No single pinned index rate can make this engine's actual/360 accrual reproduce the certified dollar amounts across months of different lengths. This means the generated schedule's cash-interest figures will NOT tie to the certified schedule even in ordinary, non-stub months -- a materially larger and more persistent gap than the funding/maturity-stub question this field is normally used to flag. Step-7 question: should the generated (actual/360) schedule stand as the CONTRACTUAL read notwithstanding the mismatch, or should the certified Debt & Covenant tab's flat-monthly convention be treated as the operative one (the engine has no 30/360-flat-monthly mode, so that would mean sourcing the cash-interest covenant-support figures from the certificate directly rather than from this generated schedule)?"
+    }
+  ],
+  "engine": "debt-service v1 (decimal cents; monthly accrual, both-endpoint day counts, PIK capitalizing monthly_first, grid steps from pinned observations; life-of-loan identity asserted)",
+  "borrower": "Orinth Vale Infrastructure, LLC",
+  "facility": "Orinth Vale 2025 Senior Secured Facility (Term Loan)",
+  "maturity_date": "2030-01-15",
+  "assumptions": [
+    "SOFR is held flat beyond the last pinned observation (2025-01-15) from 2025-02 onward \u2014 re-pin observations.index_rates and re-run when the index moves"
+  ],
+  "totals": {
+    "total_funded": 65360723.38,
+    "total_pik_accrued": 0.0,
+    "total_cash_interest_accrued": 29590126.99,
+    "total_scheduled_principal_paid": 23529860.4,
+    "balloon": 41830862.98,
+    "total_principal_repaid": 65360723.38,
+    "total_fees": 0.0,
+    "identity": "total principal repaid = total funded + total capitalized PIK",
+    "source_ref": [
+      {
+        "file": 0,
+        "section": "tranches"
+      }
+    ],
+    "calc": "life of loan: repaid 65,360,723.38 = funded 65,360,723.38 + capitalized PIK 0.00 (asserted to the cent); cash interest 29,590,126.99; fees 0.00"
+  },
+  "covenant_support": {
+    "attribution": "accrued",
+    "rows": {
+      "cash_interest": "Cash Interest Expense",
+      "scheduled_principal": "Scheduled Debt Principal Payments"
+    },
+    "stated_in": "dollars",
+    "monthly": {
+      "2025-01": {
+        "cash_interest": 335787.27,
+        "scheduled_principal": 392164.34
+      },
+      "2025-02": {
+        "cash_interest": 549743.01,
+        "scheduled_principal": 392164.34
+      },
+      "2025-03": {
+        "cash_interest": 604970.14,
+        "scheduled_principal": 392164.34
+      },
+      "2025-04": {
+        "cash_interest": 581899.58,
+        "scheduled_principal": 392164.34
+      },
+      "2025-05": {
+        "cash_interest": 597622.33,
+        "scheduled_principal": 392164.34
+      },
+      "2025-06": {
+        "cash_interest": 574788.79,
+        "scheduled_principal": 392164.34
+      },
+      "2025-07": {
+        "cash_interest": 590274.51,
+        "scheduled_principal": 392164.34
+      },
+      "2025-08": {
+        "cash_interest": 586600.6,
+        "scheduled_principal": 392164.34
+      },
+      "2025-09": {
+        "cash_interest": 564122.61,
+        "scheduled_principal": 392164.34
+      },
+      "2025-10": {
+        "cash_interest": 579252.79,
+        "scheduled_principal": 392164.34
+      },
+      "2025-11": {
+        "cash_interest": 557011.82,
+        "scheduled_principal": 392164.34
+      },
+      "2025-12": {
+        "cash_interest": 571904.97,
+        "scheduled_principal": 392164.34
+      },
+      "2026-01": {
+        "cash_interest": 568231.06,
+        "scheduled_principal": 392164.34
+      },
+      "2026-02": {
+        "cash_interest": 509922.59,
+        "scheduled_principal": 392164.34
+      },
+      "2026-03": {
+        "cash_interest": 560883.25,
+        "scheduled_principal": 392164.34
+      },
+      "2026-04": {
+        "cash_interest": 539234.85,
+        "scheduled_principal": 392164.34
+      },
+      "2026-05": {
+        "cash_interest": 553535.43,
+        "scheduled_principal": 392164.34
+      },
+      "2026-06": {
+        "cash_interest": 532124.06,
+        "scheduled_principal": 392164.34
+      },
+      "2026-07": {
+        "cash_interest": 546187.62,
+        "scheduled_principal": 392164.34
+      },
+      "2026-08": {
+        "cash_interest": 542513.71,
+        "scheduled_principal": 392164.34
+      },
+      "2026-09": {
+        "cash_interest": 521457.87,
+        "scheduled_principal": 392164.34
+      },
+      "2026-10": {
+        "cash_interest": 535165.89,
+        "scheduled_principal": 392164.34
+      },
+      "2026-11": {
+        "cash_interest": 514347.08,
+        "scheduled_principal": 392164.34
+      },
+      "2026-12": {
+        "cash_interest": 527818.08,
+        "scheduled_principal": 392164.34
+      },
+      "2027-01": {
+        "cash_interest": 524144.17,
+        "scheduled_principal": 392164.34
+      },
+      "2027-02": {
+        "cash_interest": 470102.17,
+        "scheduled_principal": 392164.34
+      },
+      "2027-03": {
+        "cash_interest": 516796.36,
+        "scheduled_principal": 392164.34
+      },
+      "2027-04": {
+        "cash_interest": 496570.11,
+        "scheduled_principal": 392164.34
+      },
+      "2027-05": {
+        "cash_interest": 509448.54,
+        "scheduled_principal": 392164.34
+      },
+      "2027-06": {
+        "cash_interest": 489459.32,
+        "scheduled_principal": 392164.34
+      },
+      "2027-07": {
+        "cash_interest": 502100.72,
+        "scheduled_principal": 392164.34
+      },
+      "2027-08": {
+        "cash_interest": 498426.82,
+        "scheduled_principal": 392164.34
+      },
+      "2027-09": {
+        "cash_interest": 478793.14,
+        "scheduled_principal": 392164.34
+      },
+      "2027-10": {
+        "cash_interest": 491079.0,
+        "scheduled_principal": 392164.34
+      },
+      "2027-11": {
+        "cash_interest": 471682.35,
+        "scheduled_principal": 392164.34
+      },
+      "2027-12": {
+        "cash_interest": 483731.19,
+        "scheduled_principal": 392164.34
+      },
+      "2028-01": {
+        "cash_interest": 480057.28,
+        "scheduled_principal": 392164.34
+      },
+      "2028-02": {
+        "cash_interest": 445648.96,
+        "scheduled_principal": 392164.34
+      },
+      "2028-03": {
+        "cash_interest": 472709.46,
+        "scheduled_principal": 392164.34
+      },
+      "2028-04": {
+        "cash_interest": 453905.38,
+        "scheduled_principal": 392164.34
+      },
+      "2028-05": {
+        "cash_interest": 465361.65,
+        "scheduled_principal": 392164.34
+      },
+      "2028-06": {
+        "cash_interest": 446794.59,
+        "scheduled_principal": 392164.34
+      },
+      "2028-07": {
+        "cash_interest": 458013.83,
+        "scheduled_principal": 392164.34
+      },
+      "2028-08": {
+        "cash_interest": 454339.92,
+        "scheduled_principal": 392164.34
+      },
+      "2028-09": {
+        "cash_interest": 436128.4,
+        "scheduled_principal": 392164.34
+      },
+      "2028-10": {
+        "cash_interest": 446992.11,
+        "scheduled_principal": 392164.34
+      },
+      "2028-11": {
+        "cash_interest": 429017.61,
+        "scheduled_principal": 392164.34
+      },
+      "2028-12": {
+        "cash_interest": 439644.29,
+        "scheduled_principal": 392164.34
+      },
+      "2029-01": {
+        "cash_interest": 435970.39,
+        "scheduled_principal": 392164.34
+      },
+      "2029-02": {
+        "cash_interest": 390461.33,
+        "scheduled_principal": 392164.34
+      },
+      "2029-03": {
+        "cash_interest": 428622.57,
+        "scheduled_principal": 392164.34
+      },
+      "2029-04": {
+        "cash_interest": 411240.64,
+        "scheduled_principal": 392164.34
+      },
+      "2029-05": {
+        "cash_interest": 421274.75,
+        "scheduled_principal": 392164.34
+      },
+      "2029-06": {
+        "cash_interest": 404129.85,
+        "scheduled_principal": 392164.34
+      },
+      "2029-07": {
+        "cash_interest": 413926.94,
+        "scheduled_principal": 392164.34
+      },
+      "2029-08": {
+        "cash_interest": 410253.03,
+        "scheduled_principal": 392164.34
+      },
+      "2029-09": {
+        "cash_interest": 393463.67,
+        "scheduled_principal": 392164.34
+      },
+      "2029-10": {
+        "cash_interest": 402905.22,
+        "scheduled_principal": 392164.34
+      },
+      "2029-11": {
+        "cash_interest": 386352.88,
+        "scheduled_principal": 392164.34
+      },
+      "2029-12": {
+        "cash_interest": 395557.4,
+        "scheduled_principal": 392164.34
+      },
+      "2030-01": {
+        "cash_interest": 189621.04,
+        "scheduled_principal": 41830862.98
+      }
+    },
+    "source_ref": [
+      {
+        "file": 0,
+        "section": "covenant_support_rows"
+      }
+    ],
+    "calc": "per-month covenant-support values on the 'accrued' attribution: cash_interest = the month's accrued facility cash interest; scheduled_principal = the installment that services the month (due on the next payment date), plus the balloon in the maturity month. Dollars; build-monitoring-model converts onto the model's unit."
+  },
+  "figure_collections": [
+    "totals",
+    "covenant_support"
+  ],
+  "methodology": "Contractual schedule generated from the validated debt-service-spec (terms per the executed agreement; rates and grid steps per the spec's pinned observations, index held flat beyond the last observation). Decimal arithmetic quantized to the cent per accrual; the life-of-loan identity is asserted before writing. No figure here comes from a ledger."
+}

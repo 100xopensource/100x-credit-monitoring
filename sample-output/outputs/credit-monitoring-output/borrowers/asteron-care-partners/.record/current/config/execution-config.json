@@ -1,0 +1,143 @@
+{
+  "borrower_name": "Asteron Care Partners, LLC",
+  "fund": "",
+  "timezone": "America/New_York",
+  "paths": {
+    "reporting_packages_folder": "source:Asteron Care Partners/Successor Reporting",
+    "compliance_certificate_folder": "source:Asteron Care Partners/Portfolio Monitoring",
+    "model_output_path": "store:borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/Asteron Care Partners Monthly IS-BS-CF.xlsx",
+    "monitor_output_folder": "store:borrowers/asteron-care-partners/.record/current",
+    "credit_agreement_path": "source:Asteron Care Partners/Exit Facility/Executed/Amended and Restated Credit Agreement.pdf",
+    "ic_uw_memo_path": "source:Asteron Care Partners/Restructuring/Closing Materials/IC Memo.pdf",
+    "covenant_spec_path": "store:borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/config/covenant-spec.json",
+    "debt_service_spec_path": "store:borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/config/debt-service-spec.json",
+    "debt_service_schedule_path": "store:borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/config/debt-service-schedule.json",
+    "deal_context_path": "store:borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/config/deal-context.json",
+    "budget_path": "source:Asteron Care Partners/Successor Reporting/Planning/Approved Budget.xlsx",
+    "budget_version_note": "Approved Budget.xlsx, 'Approved Budget' tab -- the 'Approved Stabilization Budget', approved 2026-03-20 by the Asteron Restructuring Committee and Administrative Agent, covering 2026-04 through 2026-12. This SUPERSEDES the prior 'FY2025 Approved Budget.xlsx' (Board-approved 2024-12-18, covering Jan-Dec 2025 only, pre-restructuring) which is retained in the same Planning folder for history but is not the pinned budget going forward.",
+    "budget_map_path": "store:borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/config/budget-map.json",
+    "collateral_map_path": "store:borrowers/asteron-care-partners/.record/runs/2026-06/run-20260915-071646/config/collateral-map.json",
+    "_restructuring_timeline_note": "RESTRUCTURING HISTORY (read from Predecessor/Legacy/Exit Amendment/A&R agreements + Restructuring IC Memo): Predecessor Credit Agreement effective 2021-01-15 (11.50% cash interest + 0.70%/mo principal, Asteron Care Holdings guarantors) was refinanced AT PAR into the Legacy Credit Agreement effective 2025-01-15 (same $57,834,030.22 balance, same economics, same agent Cairn Ridge Private Credit, LP; 1.2000x quarterly FCCR covenant). 2025 credit deterioration (referral/procedure pressure, agency-labor dependence, weak-site fixed costs, slower collections) pushed FCCR from 1.73x (Q1 2025) to informationally sub-1.0x by Q4 2025. A Dec 5, 2025 Exit Amendment provided a $7,000,000 bridge (11.50% cash, $140,000 upfront fee, matures Mar 31 2026) and SUSPENDED the FCCR test (informational only) through Dec 31, 2026. The Restructuring IC Memo approved a March 31, 2026 exit capitalization: $60,910,820.62 of predecessor/legacy debt exchanged into $44,000,000 reinstated debt + $16,910,820.62 Series A preferred equity, plus $7,000,000 new-money term debt and $8,000,000 sponsor new common equity (successor gross debt $51,000,000). The Amended and Restated Credit Agreement (executed 2026-03-20, effective 2026-03-31) is the CURRENT/EXIT facility and supersedes the Exit Amendment and Legacy Credit Agreement; it governs every 2026 monthly package from March 2026 forward ('Operative document' field on each month's Status tab). The legacy 1.2000x FCCR test remains SUSPENDED (informational only, not waived) through Dec 31, 2026 with a 'FCCR reinstatement-readiness analysis' due to the lender 2026-09-30 (Stabilization Milestone M4, PENDING as of the June 2026 package). Restructuring accounting (TDR framework, instrument-level 10% test, CODI, Section 382, gain/loss) is explicitly PROVISIONAL in every monthly package through June 2026 -- successor balance sheet figures could still restate.",
+    "_reporting_folder_structure_note": "'Successor Reporting' is the single continuously-used MONTHLY financial-reporting folder despite its name: it holds monthly packages (Income Statement/Balance Sheet/Cash Flow/Debt and Equity/Budget vs Actual/Trial Balance/Covenant tabs in each 'monthly.xlsx', plus 'ar-ap-support.xlsx' and 'operating-support.xlsx') from 2024-09 through the present, covering BOTH the pre-restructuring (predecessor/legacy) and post-restructuring (successor) periods -- each month's own 'Status' tab names which credit agreement is 'Operative' for that month. Folder nesting changes partway through: 2024-09 through 2026-05 sit under 'Archive/<YYYY-MM>/'; the current month (2026-06) sits under '<YYYY>/<MM>/' with no 'Archive' segment, AND -- new as of this month -- also bundles its own 'certificate.pdf' and 'PM Update.pdf' directly alongside the financials (previously these lived only in the separate quarterly 'Portfolio Monitoring' folder). 'Portfolio Monitoring' (2025-Q1 through 2026-Q2) is the QUARTERLY compliance-certificate / covenant-calculation / lender-update archive, distinct from the monthly financial package -- see paths.compliance_certificate_folder. Whoever runs build-monitoring-model / covenant-compliance next should recurse BOTH 'Archive/<YYYY-MM>' and '<YYYY>/<MM>' folder shapes under Successor Reporting.",
+    "_model_lines_construction_note": "JUDGMENT CALL (flagged for build-monitoring-model, which monitor-setup does NOT run): this borrower's monthly Income Statement has NO 'Gross Profit' or 'Cost of Revenue' subtotal -- it goes straight from Revenue and four granular direct-cost lines (Direct clinical labor, Contract labor, Medical supplies, Other patient service costs) to 'Reported EBITDA'. To make budget-vs-actual and three-statement-analysis usable (both HARD-REQUIRE model_lines.gross_profit), monitor-setup is pre-defining two DERIVED subtotal rows that build-monitoring-model must add to the canonical model's Income Statement, computed exactly as: 'Cost of Patient Services' = Direct clinical labor + Contract labor + Medical supplies + Other patient service costs (sum of the four, already negative); 'Gross Profit' = Revenue + Cost of Patient Services (i.e. Revenue less the direct-cost sum). Verified against June 2026: Revenue 13,164,599.73 + (-8,754,304.34) = Gross Profit 4,410,295.39; Gross Profit - Occupancy and site costs (1,557,912.45) - Corporate and administrative costs (1,304,641.66) = 1,547,741.28 = Reported EBITDA, tying exactly. These two rows do not exist verbatim in the source workbook and must be inserted by build-monitoring-model between the source cost lines and the 'Reported EBITDA' row for model_lines.gross_profit / model_lines.operating_cogs below to resolve.",
+    "_ebitda_definition_gap_note": "The credit agreement's Covenant EBITDA (used in every Compliance Certificate / Covenant Calculation) is NOT the same figure as this borrower's own 'Reported EBITDA' model row. Reverse-engineered from the 2026-Q2 Covenant Calculation TTM Detail vs the monthly packages: Covenant EBITDA = Reported EBITDA + a CONSTANT $553,353.26/month ($6,640,239.12/year) operating-lease/rent add-back -- exactly the '2025 facility lease expense included above' figure from the Goodwill Impairment Support workbook. This is a structural feature of the agreement's FCCR construction (rent excluded from the EBITDA numerator, and the SAME rent payment appears as a line item inside 'Fixed charges' in the denominator instead -- TTM Detail 'Lease payments' column), not a one-time or discretionary addback. TTM Reported EBITDA at June 2026 was actually NEGATIVE (-$226,820.42) even though TTM Covenant EBITDA was +$6,413,418.70 -- see deal-context.json ebitda_addbacks for the full writeup. covenant-setup should confirm this construction against the A&R Agreement's actual EBITDA and Fixed Charges definitions when it parses the agreement (not yet run)."
+  },
+  "modules": [
+    "covenant-compliance",
+    "budget-vs-actual",
+    "ap-ar-aging",
+    "three-statement-analysis"
+  ],
+  "module_inputs": {
+    "_comment": "revenue-quality excluded: this is a fee-for-service multi-site healthcare-services business billed per patient visit/procedure to a diversified payer mix (Medicare 27%, Commercial 26%, Medicaid 23%, Workers' Comp 16%, Self-Pay 8% of June 2026 AR balance) -- not recurring/subscription revenue, no ARR/retention concept applies. ap-ar-aging INCLUDED: 'ar-ap-support.xlsx' is delivered every month with claim-level AR aging (by payer class, entity, bucket) and invoice-level AP aging (by vendor/category, bucket); June 2026 AR total ($20,896,429.14) and AP total ($5,433,050.66) tie EXACTLY to the Balance Sheet Accounts receivable / Accounts payable rows."
+  },
+  "model": {
+    "entity": "consolidated",
+    "scale": 1,
+    "currency": "USD",
+    "unit_verbatim": "Fictional clean-room borrower evidence | USD unless noted",
+    "as_of": "2026-06",
+    "_scale_verification": "Sanity-checked against June 2026 revenue: model reads 13,164,599.73, i.e. $13,164,599.73 (whole dollars, scale=1) -- consistent with FY2024 annual revenue of $175,089,753.64 (~$14.6M/month) for a 15-site multi-region healthcare platform, and with the budget's own June 2026 figure ($15,939,567.00) on the same unit. No '$ in thousands' caption anywhere in the workbooks; all values are already whole dollars."
+  },
+  "model_lines": {
+    "revenue": "Revenue",
+    "gross_profit": "Gross Profit",
+    "operating_cogs": "Cost of Patient Services",
+    "ebitda_bridge": "Reported EBITDA",
+    "net_income": "Net income",
+    "interest_expense": "Cash interest",
+    "taxes": "Income tax expense",
+    "depreciation_amortization": "Depreciation",
+    "financing_cost": "Debt issuance cost amortization",
+    "accounts_receivable": "Accounts receivable",
+    "accounts_payable": "Accounts payable",
+    "pre_financing_subtotal": "Reported EBITDA",
+    "revenue_components": [],
+    "total_debt": "Funded debt, carrying amount",
+    "_gap_note": "'Gross Profit' and 'Cost of Patient Services' are DERIVED subtotals that do not exist verbatim in the source monthly package -- see paths._model_lines_construction_note above for the exact construction build-monitoring-model must apply. Every other row label here is VERBATIM from the borrower's own monthly Income Statement / Balance Sheet (Successor Reporting/2026/06/monthly.xlsx), confirmed present in every Archive month checked (2024-09 through 2026-06). 'Debt issuance cost amortization' (financing_cost) closes the actuals EBITDA bridge exactly: Net income 84,810.69 + Cash interest 424,150.43 + Income tax expense 0 + Depreciation 1,018,780.16 + Debt issuance cost amortization 20,000.00 = 1,547,741.28 = Reported EBITDA (June 2026, verified)."
+  },
+  "opex_groups": {
+    "Occupancy & Site Costs": "Occupancy and site costs",
+    "Corporate & Administrative": "Corporate and administrative costs"
+  },
+  "comparability_items": [],
+  "ebitda": {
+    "addback_financing_cost": true
+  },
+  "aging": {
+    "file_format": "auto",
+    "dpo_basis": "operating_cogs",
+    "amount_scale": 1,
+    "tie_tolerance": 1.0,
+    "top_n": 5
+  },
+  "analysis_notes": [
+    "Restructuring accounting is PROVISIONAL across every monthly package through June 2026 (TDR framework, instrument-level 10% modification test, CODI, Section 382, and goodwill interim reassessment all remain open per each month's 'Status' tab) -- successor Balance Sheet, gain/loss, and debt carrying-value figures could still restate once the workpapers are concluded.",
+    "Weak-site count peaked at 9 (of 15 total sites) from 2025-Q3 through 2026-Q1 and improved to 8 by June 2026; agency/contract-labor cost as a % of revenue peaked at 17.6% in Q4 2025 and improved to 10.0% by June 2026 (Site Operations / Labor tabs of 'operating-support.xlsx').",
+    "See paths._ebitda_definition_gap_note for the constant $553,353.26/month operating-lease add-back embedded in the credit agreement's Covenant EBITDA (vs the model's own 'Reported EBITDA' row) -- covenant-setup should confirm this against the A&R Agreement's actual EBITDA/Fixed Charges definitions."
+  ],
+  "analysis": {
+    "basis_breaks": [
+      {
+        "effective": "Apr 2026",
+        "reason": "Successor (post-restructuring) reporting basis begins with the March 31, 2026 Amended and Restated Credit Agreement / exit capitalization (carryover accounting; TDR/instrument-level workpapers still PROVISIONAL). Months before March 2026 are on the predecessor/legacy debt and equity structure -- not like-for-like with April 2026 forward on debt service, equity, or the informational FCCR's governing document."
+      }
+    ],
+    "business_model": "services",
+    "cash_floor": null,
+    "fiscal_year_start_month": 1,
+    "trend_window": 3,
+    "line_read": {
+      "materiality_floor": null,
+      "run_min_months": 3,
+      "frozen_min_months": 3,
+      "big_move_pct": 0.25,
+      "share_shift_ppt": 5.0
+    },
+    "drift": {
+      "min_months": 6,
+      "min_same_sign_share": 0.7,
+      "min_total_pct": 0.15
+    },
+    "trend": {
+      "window": 4,
+      "trend_min_months": 3,
+      "trend_max_months": 5,
+      "run_end_tolerance": 2,
+      "k_vol": 1.5,
+      "ratio_rel": 0.2,
+      "wc_driver_pct": 0.1,
+      "wc_rev_pct": 0.1,
+      "reclass_net_frac": 0.2,
+      "reclass_min_pct": 0.25
+    },
+    "seasonality": {
+      "low_months": [],
+      "peak_months": []
+    },
+    "thresholds": {
+      "gross_margin_floor": 0.2,
+      "one_time_reliance_ppt": 0.05,
+      "dpo_days_high": 60,
+      "dio_days_high": 120,
+      "current_ratio_low": 1.0,
+      "revenue_drop_vs_trailing": 0.2,
+      "liquidity_months_to_floor": 3.0
+    }
+  },
+  "analysis_lines": {
+    "cash": "Cash",
+    "accounts_receivable": "Accounts receivable",
+    "total_assets": "Total assets",
+    "accounts_payable": "Accounts payable",
+    "total_debt": "Funded debt, carrying amount",
+    "total_equity": "Total equity",
+    "operating_cf": "Cash from operations",
+    "investing_cf": "Cash from investing",
+    "financing_cf": "Cash from financing",
+    "_omitted_note": "inventory omitted -- no inventory line on this borrower's Balance Sheet (healthcare-services business; DIO/CCC ratios will be suppressed with a disclosed reason). total_current_assets/total_current_liabilities omitted -- the Balance Sheet carries no current/non-current subtotal split (a flat asset/liability list); current_ratio/working_capital ratios will be suppressed. net_change_cash omitted -- no labeled row exists (only 'Beginning cash'/'Ending cash'); it is fully recoverable as operating_cf + investing_cf + financing_cf (verified equal to Ending-Beginning cash in June 2026: 692,217.27 - 236,962.80 - 50,898.05 = 404,356.42 = 18,817,443.79 - 18,413,087.37)."
+  },
+  "shared_definitions": {
+    "ebitda_definition_ref": "covenant-spec.json#/definitions/EBITDA"
+  }
+}

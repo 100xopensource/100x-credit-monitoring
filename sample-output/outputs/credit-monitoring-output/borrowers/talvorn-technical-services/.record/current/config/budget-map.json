@@ -1,0 +1,54 @@
+{
+  "borrower": "Talvorn Technical Services, LLC",
+  "file": "store:borrowers/talvorn-technical-services/_model/Talvorn Technical Services H1 2026 Budget (consolidated for budget-map).xlsx",
+  "sheet": "Budget (consolidated)",
+  "_construction_note": "DERIVED CONSOLIDATION WORKBOOK (judgment call, analogous to Selvara's/Orinth Vale's orientation-workaround transposes, but for a different reason here): the real approved budget (source:Talvorn Technical Services/Planning/Approved/Approved Budget.xlsx) IS already laid out metrics-as-rows/periods-as-columns on its 'Consolidated' tab (the orientation the budget-vs-actual engine needs), so no transpose was required. The actual problem is METRIC LOCATION, not orientation: Revenue and Gross Profit are not native single rows anywhere (each is a SUM of 4 of the 12 borrower-native accounts on 'Consolidated', per the Board-approved Department to GL Mapping), and Net Income / Cash Interest / Cash Taxes / Depreciation live as native rows on three OTHER tabs ('Cash Bridge', 'Contractual Debt', 'Cash Assumptions' respectively) -- but the engine reads metric_rows/opex_groups/balance_sheet_rows from ONE sheet only. monitor-setup built a byte-verified consolidation copy at the 'file' path above (borrowers/talvorn-technical-services/_model/), copying all needed native rows from all four source tabs onto one sheet with NO value changes, verified by reading every value back and confirming Revenue-minus-COGS-minus-Opex reconstructs to the native 'Budget EBITDA' row exactly for all 6 months (e.g. 2026-06: Revenue 14,776,294.89 - Cost of Revenue 7,416,979.24 - Operating Expenses 3,793,226.14 = 3,566,089.51 = Budget EBITDA, exact). paths.budget_path in borrower-config still points at the ORIGINAL source workbook (the authoritative approved document); this 'file' here is the derived copy the engine actually reads. 'revenue' and 'gross_profit' below use the {add, subtract} row-list shape (same mechanism Orinth Vale used for its own gross_profit construction) rather than a single fixed cell, since each is a sum of multiple native rows.",
+  "_metric_coverage_note": "NO GAP -- unlike every other borrower onboarded this batch, this budget is built all the way down through a real Net Income (native, 'Cash Bridge' tab), Cash Interest ('Contractual Debt' tab), Cash Taxes and Depreciation (both 'Cash Assumptions' tab) -- no zero-proxy rows were needed anywhere in this map.",
+  "period_columns": {
+    "2026-01-31": 2,
+    "2026-02-28": 3,
+    "2026-03-31": 4,
+    "2026-04-30": 5,
+    "2026-05-31": 6,
+    "2026-06-30": 7
+  },
+  "_period_coverage_note": "Only 2026-01 through 2026-06 (6 months) -- this is the ENTIRE approved budget horizon (see borrower-config paths.budget_version_note: there is no prior-year approved budget in this deal folder, unlike Selvara/Orinth Vale). budget-vs-actual will only produce output for these 6 months out of the 22-month reporting history; earlier months will read 'no approved budget for this period', not a data error.",
+  "metric_rows": {
+    "revenue": {
+      "add": [
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    "gross_profit": {
+      "add": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "subtract": [
+        7,
+        8,
+        9,
+        10
+      ]
+    },
+    "net_income": 19,
+    "interest_expense": 16,
+    "taxes": 17,
+    "depreciation_amortization": 18
+  },
+  "opex_groups": {
+    "Growth and Bid Support": 11,
+    "Branch Overhead": 12,
+    "Product Engineering": 13,
+    "General and Administrative": 14
+  },
+  "balance_sheet_rows": {
+    "Equipment (net)": 20
+  },
+  "_balance_sheet_rows_note": "Only 'Equipment (net)' is planned (row 20, 'Ending Net PPE' from the source's 'Cash Assumptions' tab), matching collateral-map.json's 'Equipment (net)' pledged component exactly. 'Accounts receivable' is deliberately OMITTED here even though it IS a collateral-map pledged component: the approved budget only plans a single BLENDED 'Ending Net Working Capital' figure (Cash Assumptions tab), not AR and AP separately, so there is no clean, non-arbitrary way to split a standalone AR budget out of it. The Collateral box's 'vs Budget' column will render '\u2014' for Accounts receivable but a real budgeted figure for Equipment (net)."
+}

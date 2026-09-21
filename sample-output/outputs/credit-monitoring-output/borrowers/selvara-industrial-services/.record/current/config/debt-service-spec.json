@@ -1,0 +1,148 @@
+{
+  "borrower": "Selvara Industrial Services, LLC",
+  "agreement": "Selvara 2025 Senior Secured Credit Facility -- Executed Credit Agreement, issued 2025-01-10, effective 2025-01-15, between Selvara Industrial Services, LLC (Borrower) and Northstar Ridge Credit Partners, LP (Administrative Agent), maturing 2030-01-15; as amended by the Executed First Amendment (issued 2025-10-01, effective 2025-10-05, amortization step-up only).",
+  "as_of_agreement_date": "2025-01-15",
+  "amendments_reflected": [
+    {
+      "date": "2025-10-05",
+      "instrument": "Executed First Amendment",
+      "summary": "Required monthly principal amortization stepped up from 0.20% to 2.00% of beginning funded debt, beginning with the October 2025 payment period. The amendment's own text confirms the 1.2000x minimum FCCR, TTM measurement window and quarterly Test Dates are unchanged, and no cash-interest rate, margin, index, day-count, or fee term is mentioned anywhere in its one-page text -- consistent with none of those terms being stated anywhere in the original agreement either (see cash_interest and day_count ambiguities below)."
+    }
+  ],
+
+  "facility": {
+    "name": "Selvara 2025 Senior Secured Credit Facility (Term Loan)",
+    "maturity_date": "2030-01-15",
+    "agreement_ref": {
+      "section": "EXECUTED CREDIT AGREEMENT",
+      "page": 1,
+      "quote": "Issued January 10, 2025; effective January 15, 2025; maturity January 15, 2030."
+    }
+  },
+
+  "tranches": [
+    {
+      "id": "term_loan",
+      "fundings": [
+        {
+          "date": "2025-01-15",
+          "amount": 122814287.29,
+          "agreement_ref": {
+            "section": "EXECUTED CREDIT AGREEMENT / Closing Capitalization",
+            "page": 1,
+            "quote": "Closing funded debt is $122,814,287.29"
+          }
+        }
+      ]
+    }
+  ],
+
+  "amortization_base": {
+    "definition_verbatim": "Required monthly principal equals 0.20% of beginning funded debt [amended to 2.00% of beginning funded debt beginning with the October 2025 payment period].",
+    "agreement_ref": {
+      "section": "AMORTIZATION",
+      "page": 1,
+      "quote": "Required monthly principal equals 0.20% of beginning funded debt."
+    },
+    "engine_limitation_note": "ENGINE LIMITATION -- READ BEFORE RELYING ON THE GENERATED SCHEDULE'S scheduled_principal FIGURES. The agreement's own wording ('X% of BEGINNING funded debt') and the borrower's own certified monthly Debt Roll-Forward tabs (every Archive month 2024-09 through 2026-05, the June 2026 package, and every quarterly Covenant_Calculation TTM Build) all confirm this is a DECLINING-BALANCE (self-amortizing) mechanic, verified to the penny in every month checked: e.g. required principal of $245,137.32 in 2025-02 = exactly 0.20% x that month's OWN beginning debt of $122,568,658.72 (already reduced by January's payment) -- NOT 0.20% of the original $122,814,287.29 (which would be a flat $245,628.57 every month). The same pattern continues seamlessly through the First Amendment's 2.00% step: October 2025's required principal of $2,412,424.66 = exactly 2.00% x October's own (declining) beginning debt of $120,621,233.10. debt_service.py v1's amortization_base concept instead computes the base as 'the aggregate original principal of all fundings dated strictly before the payment date' -- fixed at $122,814,287.29 for the life of this single up-front-funded tranche (no draws ever occur) -- which produces a FLAT monthly installment under each rate ($245,628.57/month pre-Amendment, $2,456,285.75/month post-Amendment) instead of the true shrinking one. By construction the engine's flat figure ties the certified figure ONLY for the very first installment of the whole loan (January 2025: engine and certificate both show $245,628.57, because January's own beginning balance still equals the original, un-amortized principal) -- VERIFIED BY RUNNING THE GENERATOR (--as-of 2026-06): every installment after that, including the very first one under the amended 2.00% rate (October 2025: engine $2,456,285.75 = 2.00% x the fixed original $122,814,287.29, vs. certified $2,412,424.66 = 2.00% x October's own already-declined beginning balance of $120,621,233.10), runs ABOVE the true declining-balance amount, because nine months of amortization had already shrunk the true balance below the original principal before the amendment even took effect. The gap compounds for the rest of the loan's life. This is an engine capability gap (no declining-balance amortization base supported in v1), not a data-entry error. Step-7 question: accept the flat (engine) approximation and reconcile scheduled_principal to the certificates by hand each quarter, or have the covenant-support 'scheduled_principal' row sourced directly from the borrower's own native 'Required principal' Cash-Flow-tab line instead (which, for this borrower specifically, is verified to already equal the true contractual declining-balance amount to the penny every month checked, since Selvara carries no debt besides this one facility)."
+  },
+
+  "cash_interest": {
+    "index": null,
+    "floor": 0,
+    "margin_grid": [
+      {
+        "above": null,
+        "rate": 0.1025511360,
+        "when": "flat fixed rate, all periods -- NOT a rate stated anywhere in the executed documents; see the note below on how this figure was derived"
+      }
+    ],
+    "adjustment": "None found in any executed document -- treated as a single fixed rate for the life of the facility.",
+    "first_payment_date": "2025-02-01",
+    "payment_day": 1,
+    "agreement_ref": {
+      "section": "FIXED CHARGE COVERAGE RATIO",
+      "page": 1,
+      "quote": "FCCR equals trailing-twelve-month Covenant EBITDA divided by trailing-twelve-month cash interest, required principal, and lease payments."
+    },
+    "rate_not_stated_note": "MATERIAL GAP, flagged for step 7. No interest rate, margin, index (e.g. SOFR/Prime), floor, or day-count convention appears ANYWHERE in the executed document set -- confirmed by a full-text sweep of original_agreement.pdf, amendment_1.pdf, waiver_1.pdf, fee-letter.pdf, guaranty-and-security.pdf, information-certificate.pdf, closing-officer-certificate.pdf, funding-request.pdf, the IC Memo, and the Management Presentation for 'rate', 'interest' (beyond the FCCR formula's own mention of the word), 'index', 'SOFR', 'prime', 'margin', 'floor', 'basis point' and 'day count' -- none of these documents states a number. original_agreement.pdf reads as a short EXCERPT (only FCCR terms, amortization terms, and an execution block) rather than a full multi-section credit agreement; if a longer-form document exists outside this data room it should be checked before this rate is treated as conclusive. The rate above (10.25511360% fixed, annualized) is NOT a contractual figure -- it is REVERSE-ENGINEERED as an assumption from the borrower's own certified monthly reporting: (Cash interest / Beginning debt) x 12, computed across 17 non-adjacent months from 2025-01 through 2026-05 (Archive monthly.xlsx, 'Debt Roll-Forward' and 'Cash Flow' tabs), converging to 0.102551136 to 9-10 significant figures in every month regardless of whether the loan balance was still at the original 0.20%/month amortization rate or the amended 2.00%/month rate -- confirming the First Amendment changed only amortization, not the cash-interest rate, consistent with its own 'UNCHANGED TERMS' language. This is the same derivation technique used for this borrower's other stressed-credit siblings in this portfolio where the agreement is silent on rate (see day_count.ambiguities for why the underlying convention this implies is NOT one the engine can natively reproduce)."
+  },
+
+  "amortization": {
+    "start_date": "2025-02-01",
+    "annual_pct_of_base_grid": [
+      {
+        "above": 0,
+        "rate": 0.24,
+        "when": "Executed First Amendment, effective 2025-10-05: required monthly principal becomes 2.00% of beginning funded debt (24.00% annualized) beginning with the October 2025 payment period"
+      },
+      {
+        "above": null,
+        "rate": 0.024,
+        "when": "Original Agreement (through the September 2025 payment): required monthly principal equals 0.20% of beginning funded debt (2.40% annualized)"
+      }
+    ],
+    "payments_per_year": 12,
+    "balloon_at_maturity": true,
+    "fixed_charges_attribution": "accrued",
+    "agreement_ref": {
+      "section": "AMORTIZATION / AMORTIZATION CHANGE",
+      "page": 1,
+      "quote": "Required monthly principal becomes 2.00% of beginning funded debt beginning with the October 2025 payment period."
+    },
+    "grid_encoding_note": "MODELING TECHNIQUE, not a contractual term: the 0.20% -> 2.00% step is a pure CALENDAR-DATE change (the First Amendment's effective date, 2025-10-05), not a step tied to any certified financial ratio. debt_service.py v1's grid mechanism only selects a step by an OBSERVED METRIC VALUE (via grid_state), so a synthetic binary 'grid_metric' (0 = pre-Amendment, 1 = post-Amendment) is used purely as a date marker to trigger the step at the right payment date -- see grid_metric and observations.grid_state below. This is an implementation device to get the engine to reproduce a date-triggered amendment, not a real covenant-linked pricing grid; the agreement carries no leverage-based or other metric-linked amortization or pricing grid."
+  },
+
+  "day_count": {
+    "convention": "actual/360",
+    "count_both_endpoints": true,
+    "verbatim": "Not stated anywhere in the executed documents made available -- see ambiguities below.",
+    "agreement_ref": {
+      "section": "FIXED CHARGE COVERAGE RATIO",
+      "page": 1,
+      "quote": "FCCR equals trailing-twelve-month Covenant EBITDA divided by trailing-twelve-month cash interest, required principal, and lease payments."
+    },
+    "ambiguities": [
+      "NO day-count convention is stated anywhere in original_agreement.pdf, amendment_1.pdf, waiver_1.pdf, or any other executed document in the deal folder (confirmed by full-text sweep). actual/360 with both endpoints counted is recorded here purely as the engine's supported default / market-standard assumption, NOT a stated term.",
+      "MATERIAL, larger than the usual stub-day question: the borrower's own certified monthly Cash Flow / Debt Roll-Forward figures show (Cash interest / Beginning debt) x 12 converging to the SAME ~10.2551136% annualized rate to 9-10 significant figures in EVERY month checked (2025-01 through 2026-05), regardless of whether that month has 28, 29, 30, or 31 calendar days (e.g. February 2025 (28 days), March 2025 (31 days) and April 2025 (30 days) all imply the identical rate to 9 significant figures). This is only possible if the certified figures are computed on a FLAT (annual rate)/12 monthly-equivalent basis (a 30/360 bond-basis-style convention) with NO variation for actual days elapsed -- not on any real actual/360 or actual/365 day count. debt_service.py v1 supports only 'actual/360' or 'actual/365' with REAL calendar-day counting, and has no flat/30-360-bond-basis mode. EXPECT the generated schedule's cash-interest figures to NOT tie to the certified monthly figures in ANY ordinary (non-stub) month -- the direction and size of the gap will vary with the number of days in each calendar month (larger in 31-day months, smaller in 28-day months, versus the certified figure's flat treatment).",
+      "FUNDING-MONTH STUB (January 2025): the borrower's own certified reporting books a FULL month of accrued interest ($1,049,562.06) and a full month of required principal for January 2025 despite the mid-month (January 15) Closing Date, with no visible proration for the resulting stub period. The engine, by contrast, computes January's accrual only from the actual funding date (2025-01-15) forward (17 days inclusive of both endpoints, out of 31) -- layered on top of the flat-vs-actual-day-count gap above, not a substitute for it.",
+      "VERIFIED BY RUNNING THE GENERATOR (--as-of 2026-06): generated cash_interest_accrued is $594,751.83 for 2025-01 (17-day stub) against the certified $1,049,562.06 (full month) -- a ~43% shortfall in the stub month alone, exactly as predicted above. In ordinary (non-stub) months the direction of the gap flips with month length, also exactly as predicted: $977,632.07 generated for 2025-02 (28 days) vs. certified $1,047,462.93 (engine LOWER, because 28/360 < the certified figure's implicit 30/360), but $1,080,209.27 generated for 2025-03 (31 days) vs. certified $1,045,368.01 (engine HIGHER, because 31/360 > 30/360). No single generated month in the schedule ties the certified figure to the cent; treat the generated cash-interest row as a reasonable annual-run-rate approximation only, not a month-by-month substitute for the certified figures.",
+      "Recommend obtaining the full executed credit agreement (if one exists beyond this data room's one-page excerpt of original_agreement.pdf) to confirm the true day-count convention, rate, margin/index, and funding-month proration language before relying on this generated schedule for anything beyond an approximation."
+    ]
+  },
+
+  "grid_metric": {
+    "name": "Amendment Step Indicator (synthetic date marker -- NOT a certified financial ratio)",
+    "cert_ref": "N/A -- not a covenant metric; keyed only to the Executed First Amendment's stated effective date",
+    "agreement_ref": {
+      "section": "AMORTIZATION CHANGE",
+      "page": 1,
+      "quote": "Required monthly principal becomes 2.00% of beginning funded debt beginning with the October 2025 payment period."
+    }
+  },
+
+  "fees": [],
+  "_fees_not_modeled_note": "The executed Fee Letter (Deal Docs/Executed/Initial Closing/fee-letter.pdf) states only: 'Upfront, agency, and unused commitment fees are payable under agreed timing' -- CONFIDENTIALITY -- 'Fee terms are confidential except for required legal and professional disclosures.' No rate, no dollar amount, and no specific timing is disclosed anywhere in the one-page executed Fee Letter, the Credit Agreement, the Amendment, the IC Memo, or the Management Presentation. The Closing Capitalization model separately shows a lump 'Closing fees' of $4,000,000.00 (Sources and Uses / Closing Capitalization workbooks) paid at close from proceeds, consistent with an upfront/origination-type fee, but with no breakdown into the named upfront/agency/unused-commitment components and no ongoing (annual, monitoring, unused-commitment) rate disclosed. Because none of these fees' amounts or rates are stated, none is modeled in the 'fees' array above -- modeling a rate or amount that is not actually in the documents would be worse than omitting it. Flagged as an ambiguity/open item: confirm the fee letter's actual confidential fee schedule if it becomes available, and add it here (the $4,000,000.00 closing fee, if it is the upfront/agency/documentation fee referenced, would be 'fixed_charges_treatment': 'excluded' either way -- it is not part of the agreement's own three-part FCCR fixed-charges formula, which lists only cash interest, required principal, and lease payments).",
+
+  "observations": {
+    "index_rates": [],
+    "grid_state": [
+      {
+        "effective": "2025-01-15",
+        "value": 0,
+        "source": "Original Agreement AMORTIZATION clause (0.20%/month of beginning funded debt) -- Closing Date, before the Executed First Amendment"
+      },
+      {
+        "effective": "2025-10-05",
+        "value": 1,
+        "source": "Executed First Amendment AMORTIZATION CHANGE clause, effective 2025-10-05: required monthly principal becomes 2.00% of beginning funded debt beginning with the October 2025 payment period"
+      }
+    ]
+  },
+
+  "covenant_support_rows": {
+    "cash_interest": "Cash Interest Expense",
+    "scheduled_principal": "Scheduled Debt Principal Payments"
+  },
+  "_covenant_support_rows_note": "These two labels are exactly what covenant-spec.json's 'Fixed_Charges' definition sums (together with the native 'Lease payments' line) to build the agreement's own three-part TTM Fixed Charges (cash interest + required principal + lease payments). Given the amortization_base and cash_interest/day_count engine-limitation findings above, NEITHER generated row should be assumed to tie to the borrower's own certified 'Cash interest' / 'Required principal' Cash-Flow-tab figures -- see those notes for the expected direction and growing magnitude of the drift, and the step-7 question of whether to source these two covenant-support rows from this generated schedule or directly from the borrower's own native lines (which, for this specific borrower, are independently verified to already equal the true facility economics to the penny, since Selvara carries no debt besides this one facility)."
+}

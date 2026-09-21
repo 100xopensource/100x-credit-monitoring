@@ -1,0 +1,142 @@
+{
+  "borrower_name": "Orinth Vale Infrastructure, LLC",
+  "fund": "",
+  "timezone": "America/New_York",
+  "paths": {
+    "reporting_packages_folder": "source:Orinth Vale Infrastructure/04 Reporting/Period Archive",
+    "compliance_certificate_folder": "source:Orinth Vale Infrastructure/06 Monitoring/Portfolio Management",
+    "model_output_path": "store:borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/Orinth Vale Infrastructure Monthly IS-BS-CF.xlsx",
+    "monitor_output_folder": "store:borrowers/orinth-vale-infrastructure/.record/current",
+    "credit_agreement_path": "store:borrowers/orinth-vale-infrastructure/_docs/1_Credit_Agreement.pdf",
+    "ic_uw_memo_path": "source:Orinth Vale Infrastructure/02 Underwriting/memo.pdf",
+    "covenant_spec_path": "store:borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/config/covenant-spec.json",
+    "debt_service_spec_path": "store:borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/config/debt-service-spec.json",
+    "debt_service_schedule_path": "store:borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/config/debt-service-schedule.json",
+    "deal_context_path": "store:borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/config/deal-context.json",
+    "budget_path": "source:Orinth Vale Infrastructure/03 Budgets/Approved/budget-h1.xlsx",
+    "budget_version_note": "budget-h1.xlsx, 'Monthly Plan' tab -- the 'Orinth Vale Infrastructure H1 2026 Budget', approved 2025-12-18 by the Orinth Vale Board Finance Committee, effective 2026-01-01, covering 2026-01 through 2026-06 (exactly the current monitoring window through the latest reporting month). SUPERSEDES 'budget.xlsx' (the 'FY2025 Approved Budget', approved 2024-12-18, covering 2025-01 through 2025-12 only), which is retained in the same 03 Budgets/Approved folder for history but is not the pinned budget for the current period. 'assumptions.xlsx' ('H1 2026 Planning Assumptions', same approval date and period, same Approved folder) is a narrative COMPANION document -- it states qualitative revenue/cost/debt assumptions ('Backlog conversion...', '0.60% monthly amortization; no draws or PIK') but carries NO monthly numeric plan at all (just a 2-column assumption/basis table), so it cannot itself serve as budget_path. 'Working/template-reference-only.xlsx' is a non-authoritative blank planning template (its own Instructions tab: 'Non-authoritative blank planning workbook'; all monthly figures are 0 for placeholder 2027 periods) and was excluded as a decoy after opening and confirming it carries no real data.",
+    "budget_map_path": "store:borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/config/budget-map.json",
+    "collateral_map_path": "store:borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/config/collateral-map.json",
+    "_legal_docs_identification_note": "01 Legal/Executed/Initial Closing/ holds 9 generically-named PDFs (1.pdf-9.pdf); each was opened and identified by content (all effective/executed 2025-01-15, all part of the 'Orinth Vale 2025 Senior Secured Facility'): 1.pdf = EXECUTED CREDIT AGREEMENT (the credit_agreement_path used above -- $65,360,723.38 term loan, SOFR+6.25% w/ 2.00% floor, 5.50x max Total Leverage Ratio, 0.60%/month amortization, maturity 2030-01-15). 2.pdf = EXECUTED GUARANTY AND SECURITY AGREEMENT (collateral grant -- see collateral-map.json). 3.pdf = EXECUTED OFFICER CERTIFICATE (board resolutions/incumbency: Mara Sellen CFO, Elias Thorn CEO). 4.pdf = EXECUTED SOLVENCY CERTIFICATE. 5.pdf = EXECUTED INFORMATION CERTIFICATE (legal name/EIN, deposit accounts at Cairn National Bank, equipment yards in Albany/Syracuse/Buffalo). 6.pdf = EXECUTED CLOSING FUNDING REQUEST (the disbursement letter -- funds $65,360,723.38 to payoff legacy debt, no remaining borrowing capacity). 7.pdf = EXECUTED FEE LETTER (MANDATORY read per discrepancy-sweep protocol: Origination $1,960,821.70 + Structuring $650,000.00 + Documentation/diligence $239,178.30 + Agency setup $150,000.00 = $3,000,000.00 total closing fees, paid from sponsor equity, does NOT increase funded debt -- confirmed no additive/layered economics beyond this single schedule). 8.pdf = EXECUTED INTELLECTUAL PROPERTY SECURITY AGREEMENT (separate IP lien -- ORINTH VALE trademark application, VALEGRID service mark application, domains). 9.pdf = CERTIFICATE OF LIABILITY INSURANCE. covenant-setup (not run in this task) should read 1.pdf as the primary spec source and 2.pdf/8.pdf for the collateral definitions.",
+    "_reporting_duplicate_location_note": "JUDGMENT CALL: '04 Reporting/2026/Q2/June Close/' (qtd-view.xls + monthly-detail.xlsx) looked like a possible alternate June 2026 reporting source but is NOT authoritative and was excluded from reporting_packages_folder. Both files there are lightweight SUMMARY exports containing only Period/Revenue/Costs/EBITDA/Debt (qtd-view.xls is SpreadsheetML XML mis-named .xls, with April/May rows marked ss:Hidden and June as the live row; monthly-detail.xlsx is the same 3-month Apr-Jun table) -- their June 2026 figures (Revenue 13,161,734.09; Costs 7,253,431.66; EBITDA 2,290,659.16; Debt 58,650,506.80) tie EXACTLY to 'Period Archive/2026/06/a.xlsx', confirming they are a convenience re-export of the SAME underlying data, not an independent or more-current source. They lack the Balance Sheet, Cash Flow, Debt & Covenant detail, Gross Profit/D&A/interest/tax/net-income breakout, and AR/AP aging that Period Archive carries and that three-statement-analysis/covenant-compliance/ap-ar-aging all require, so 'Period Archive/<YYYY>/<MM>' was chosen as reporting_packages_folder and 'June Close' was excluded entirely.",
+    "_ab_c_mapping_note": "Each month's 'Period Archive/<YYYY>/<MM>/' folder holds a.xlsx, b.xlsx, c.xlsx, certificate.html -- but UNLIKE the other borrowers in this fund, the letters here are NOT three separate financial statements. Verified consistent across 6 non-adjacent months (2024-09, 2025-01, 2025-06, 2025-12, 2026-01, 2026-06 -- covering both years and both halves): a.xlsx = the FULL authoritative workbook with all four statements as separate tabs (Income Statement, Balance Sheet, Cash Flow, Debt & Covenant) -- this is the sole source for model_lines/analysis_lines below. b.xlsx = Accounts Receivable Aging + Accounts Payable Aging (two tabs, bucketed Current/31-60/61-90/90+ with a representative-project/vendor label per bucket) -- see module_inputs note on ap-ar-aging. c.xlsx = Channel Detail (revenue by the 4 service lines: Municipal Projects, Utility Networks, Industrial Sites, Maintenance Services) -- supplemental business-mix color, not part of the IS itself, so model_lines.revenue_components is left empty (see model_lines._revenue_components_note). No letter-drift was found in any month checked.",
+    "_compliance_certificate_note": "Verified '04 Reporting/Period Archive/<YYYY>/<MM>/certificate.html' (a monthly CFO reporting-cover certificate) and '06 Monitoring/Portfolio Management/<quarter>/' (Covenant Calculation.xlsx + update.pdf) are COMPLEMENTARY, not duplicates, and not conflicting. certificate.html is delivered every month and always shows the running Funded Debt / TTM Covenant EBITDA / Total Leverage Ratio figures, but its own text states 'The covenant status below is reported only when a formal quarter-end test is required' -- at quarter-ends the Status reads the real compliance verdict ('COMPLIANT' at 2026-06-30, ties exactly to Portfolio Management's figures), at non-quarter-end months it reads 'NOT TESTED' (verified on 2026-05, the credit agreement's own Financial Covenant clause confirms testing is quarterly: 'measured at each quarter end'). Portfolio Management's Covenant Calculation.xlsx additionally carries the full 12-month TTM Covenant EBITDA build-up (a workpaper the monthly certificate does not show) and update.pdf adds narrative (budget variance, liquidity, risks/actions) the certificate does not carry. compliance_certificate_folder is pointed at Portfolio Management (the fuller, contractually-quarterly source); covenant-compliance falls back to reporting_packages_folder's certificate.html for any non-quarter-end month per the standard fallback behavior, which correctly reads 'NOT TESTED' for those months rather than a missing certificate.",
+    "_budget_orientation_note": "The pinned budget-h1.xlsx 'Monthly Plan' sheet is laid out PERIODS-AS-ROWS / METRICS-AS-COLUMNS (one row per month). The budget-vs-actual engine requires the opposite (fixed cell = metric_rows[metric] x period_columns[period], i.e. METRICS-AS-ROWS / PERIODS-AS-COLUMNS). Rather than reshape the read-only lender-approved source, monitor-setup built a byte-verified TRANSPOSED COPY at store:borrowers/orinth-vale-infrastructure/_model/Orinth Vale Infrastructure H1 2026 Budget (transposed for budget-map).xlsx, reshaping the same 6 months x 5 metrics (plus Ending Cash from the 'Cash & Liquidity' tab) with no value changes -- every figure was read back and matched exactly against the source. budget_path above still points at the ORIGINAL source workbook (the authoritative approved document); budget-map.json's 'file' points at the transposed copy the engine actually reads."
+  },
+  "modules": [
+    "covenant-compliance",
+    "budget-vs-actual",
+    "ap-ar-aging",
+    "three-statement-analysis"
+  ],
+  "module_inputs": {
+    "_comment": "revenue-quality excluded: revenue is unit-rate / milestone / recurring-maintenance BILLED FIELD-SERVICES work (municipal, utility, industrial, maintenance programs) with no ARR/subscription/retention concept -- the IC memo frames revenue around backlog conversion and project mobilization, not recurring bookings. ap-ar-aging INCLUDED: 'b.xlsx' is delivered every month with bucketed AR aging (Current/31-60/61-90/90+ by representative project) and bucketed AP aging (same buckets, by vendor/cost category) -- a THIRD pattern distinct from both other onboarded borrowers (Nemeris has none; Asteron's is transaction-level and needed reshaping): Orinth Vale's is already a clean pre-bucketed summary, directly usable with no reshaping. Verified June 2026 AR aging total ($18,094,752.03) ties EXACTLY to the Balance Sheet 'Accounts Receivable' row; AP aging total ($8,704,117.99) ties EXACTLY to the Balance Sheet 'Accounts Payable and Accruals' subtotal (Trade Accounts Payable + Accrued Expenses + Other Current Liabilities combined) rather than to 'Trade Accounts Payable' alone -- this is why model_lines.accounts_payable below is mapped to the combined row, not the narrower one, so ap-ar-aging's balance-sheet tie-out resolves correctly."
+  },
+  "model": {
+    "entity": "consolidated",
+    "scale": 1,
+    "currency": "USD",
+    "unit_verbatim": "USD | internally titled source",
+    "as_of": "2026-06",
+    "_scale_verification": "Sanity-checked against June 2026 revenue: model reads 13,161,734.09, i.e. $13,161,734.09 (whole dollars, scale=1). Cross-checked against the Final IC Memo's FY2024 figure ($126,493,731.90) which ties exactly to 05 Annual Financials/2024/is.xlsx Revenue, and against the executed Credit Agreement's pro forma opening leverage math (Commitment $65,360,723.38 / FY2024 Reported EBITDA $17,534,489.88 = 3.7276x, matching the IC memo's stated 'Pro forma opening Total Leverage Ratio: 3.7276x' exactly) -- all internally consistent at whole-dollar scale with no '$ in thousands' caption anywhere in the workbooks."
+  },
+  "model_lines": {
+    "revenue": "Revenue",
+    "gross_profit": "Gross Profit",
+    "operating_cogs": "Costs",
+    "ebitda_bridge": "EBITDA",
+    "net_income": "Net Income",
+    "interest_expense": "Interest Expense",
+    "taxes": "Income Tax Expense",
+    "depreciation_amortization": "Depreciation and Amortization",
+    "financing_cost": "",
+    "accounts_receivable": "Accounts Receivable",
+    "accounts_payable": "Accounts Payable and Accruals",
+    "pre_financing_subtotal": "Operating Income",
+    "revenue_components": [],
+    "total_debt": "Funded Debt",
+    "_gap_note": "No derivation needed -- unlike the other two onboarded borrowers, every row here (including Gross Profit and Costs/COGS) is a NATIVE, verbatim row on this borrower's own monthly Income Statement (Period Archive/2026/06/a.xlsx). Verified tie-outs for June 2026: Revenue 13,161,734.09 - Costs 7,253,431.66 = Gross Profit 5,908,302.43 (exact); Revenue - Costs - Operating Expenses 3,617,643.27 = EBITDA 2,290,659.16 (exact); EBITDA - Depreciation and Amortization 157,940.81 = Operating Income 2,132,718.35 (exact); Operating Income - Interest Expense 584,938.12 = Income Before Taxes 1,547,780.23 (exact); Income Before Taxes - Income Tax Expense 171,799.44 = Net Income 1,375,980.79 (exact); and the full bridge Net Income 1,375,980.79 + Interest Expense 584,938.12 + Income Tax Expense 171,799.44 + D&A 157,940.81 = EBITDA 2,290,659.16 (exact) -- so 'financing_cost' is intentionally left BLANK: this borrower's 'Interest Expense' row ALREADY equals 'Cash Interest' (534,938.12) + 'Deferred Financing Fee Amortization' (50,000.00), so mapping financing_cost separately (as Asteron required) would double-count the deferred-fee amortization in any bridge that adds interest_expense and financing_cost together. ebitda.addback_financing_cost is set to false for the same reason.",
+    "_revenue_components_note": "'Channel Detail' (the monthly c.xlsx: Municipal Projects / Utility Networks / Industrial Sites / Maintenance Services) is a SEPARATE supplemental file, not a set of Income Statement leaf rows under 'Revenue' -- the IS itself has a single 'Revenue' line with no channel breakdown. revenue_components is therefore left empty rather than pointed at rows that do not exist on the IS; revenue-quality is excluded anyway (see module_inputs note) so this has no downstream effect this cycle."
+  },
+  "opex_groups": {
+    "Operating Expenses": "Operating Expenses",
+    "_comment": "This borrower's Income Statement (and its approved budget) carries OpEx as a single lump-sum line with no sub-category breakdown anywhere in the deal folder (confirmed against 02 Underwriting/model.xlsx and 03 Budgets/Approved/budget-h1.xlsx, both of which also carry only one 'Operating Expenses' line) -- so there is exactly one opex group, matching the budget's own granularity 1:1."
+  },
+  "comparability_items": [],
+  "ebitda": {
+    "addback_financing_cost": false
+  },
+  "aging": {
+    "file_format": "auto",
+    "dpo_basis": "operating_cogs",
+    "amount_scale": 1,
+    "tie_tolerance": 1.0,
+    "top_n": 5
+  },
+  "analysis_notes": [
+    "Reporting basis note: no restatement or basis change found across the full history checked (2024-09 through 2026-06); a/b/c letter mapping and all row labels are stable throughout.",
+    "Budget (H1 2026 Monthly Plan) is only built down to 'Budget EBITDA' -- it does not budget interest, taxes, D&A or net income separately (see budget-map.json for the zero-proxy construction), even though the ACTUALS model does break these out natively. This is a budget-granularity gap, not an actuals gap.",
+    "EBITDA add-back sweep (for the ebitda_addbacks register in deal-context.json) found no restructuring/impairment/write-off/severance/transaction-cost/settlement/one-time/miscellaneous line anywhere above or below the EBITDA line, in any month 2024-09 through 2026-06, the FY2022-2024 annual statements, or the underwriting model -- this borrower's TTM Covenant EBITDA (Debt & Covenant tab) ties EXACTLY to the sum of the 12 trailing monthly 'EBITDA' Income Statement rows with zero gap, unlike Asteron's lease add-back structure. ebitda_addbacks.entries is therefore empty."
+  ],
+  "analysis": {
+    "basis_breaks": [],
+    "business_model": "services",
+    "cash_floor": null,
+    "fiscal_year_start_month": 1,
+    "trend_window": 3,
+    "line_read": {
+      "materiality_floor": null,
+      "run_min_months": 3,
+      "frozen_min_months": 3,
+      "big_move_pct": 0.25,
+      "share_shift_ppt": 5.0
+    },
+    "drift": {
+      "min_months": 6,
+      "min_same_sign_share": 0.7,
+      "min_total_pct": 0.15
+    },
+    "trend": {
+      "window": 4,
+      "trend_min_months": 3,
+      "trend_max_months": 5,
+      "run_end_tolerance": 2,
+      "k_vol": 1.5,
+      "ratio_rel": 0.2,
+      "wc_driver_pct": 0.1,
+      "wc_rev_pct": 0.1,
+      "reclass_net_frac": 0.2,
+      "reclass_min_pct": 0.25
+    },
+    "seasonality": {
+      "low_months": [],
+      "peak_months": []
+    },
+    "thresholds": {
+      "gross_margin_floor": 0.2,
+      "one_time_reliance_ppt": 0.05,
+      "dpo_days_high": 60,
+      "dio_days_high": 120,
+      "current_ratio_low": 1.0,
+      "revenue_drop_vs_trailing": 0.2,
+      "liquidity_months_to_floor": 3.0
+    }
+  },
+  "analysis_lines": {
+    "cash": "Cash",
+    "accounts_receivable": "Accounts Receivable",
+    "inventory": "Inventory",
+    "total_assets": "Total Assets",
+    "accounts_payable": "Accounts Payable and Accruals",
+    "total_debt": "Funded Debt",
+    "total_equity": "Equity",
+    "operating_cf": "Net Cash from Operating Activities",
+    "investing_cf": "Net Cash from Investing Activities",
+    "financing_cf": "Net Cash from Financing Activities",
+    "net_change_cash": "Cash Flow Change",
+    "_omitted_note": "total_current_assets/total_current_liabilities omitted -- this borrower's Balance Sheet has no current/non-current subtotal split (a flat asset/liability list, same shape as Nemeris); current_ratio/working_capital ratios will be suppressed with a disclosed reason. net_change_cash IS available natively as 'Cash Flow Change' (verified equal to Ending Cash - Beginning Cash and to operating_cf+investing_cf+financing_cf for June 2026: 185,513.13 - 236,911.21 - 354,027.20 = -405,425.28 = 36,445,185.51 - 36,850,610.79)."
+  },
+  "shared_definitions": {
+    "ebitda_definition_ref": "covenant-spec.json#/definitions/EBITDA"
+  }
+}

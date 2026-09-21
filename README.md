@@ -11,6 +11,7 @@
 
 > Built by 100x Partners — [100xpartners.ai](https://100xpartners.ai)
 
+
 [![Validate](https://github.com/100xopensource/100x-credit-monitoring/actions/workflows/validate.yml/badge.svg)](https://github.com/100xopensource/100x-credit-monitoring/actions/workflows/validate.yml)
 [![Latest release](https://img.shields.io/github/v/release/100xopensource/100x-credit-monitoring)](https://github.com/100xopensource/100x-credit-monitoring/releases/latest)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
@@ -20,6 +21,14 @@
 Turn borrower reporting and loan documents into a structured financial workbook and a review-ready monitoring memo. The plugin helps organize evidence and analysis; the credit analyst remains responsible for reviewing every result and making every credit decision.
 
 ![Synthetic example showing a monitoring memo beside a three-borrower portfolio dashboard](docs/assets/credit-monitoring-hero.svg)
+
+## See a completed review first
+
+Explore six fictional borrowers' June 2026 workbooks, memos, and portfolio dashboard before running anything. **No plugin installation is needed to view the files.** These are downloadable outputs, separate from the illustrative screenshots below.
+
+**[View live sample](https://100xpartners.ai/credit-monitoring/)** · **[Download sample results](sample-output/README.md#1-view-sample-results)** · **[Continue from the sample — compatibility notes](sample-output/README.md#2-continue-from-the-sample)** · **[Run the sample yourself](sample-output/README.md#3-run-the-sample-yourself)**
+
+The [sample guide](sample-output/README.md) includes the complete ZIP and dashboard download. Saved-store continuation is blocked by the current candidate's folder validator; the reports remain independently viewable. Running a fresh review takes the normal time.
 
 ## What it produces
 
@@ -54,7 +63,7 @@ Nothing else to install.
 
 Start a new chat and say **"credit monitoring"**. Then either:
 
-- **Try the sample data first.** Download the [synthetic dataset](https://github.com/100xopensource/100x-credit-monitoring-synthetic-dataset) — fictional borrowers, no real company data — and point Claude at one of its borrower folders.
+- **Explore the completed sample first.** Follow [View sample results](sample-output/README.md) for the dashboard and actual workbooks/memos. No review starts just to view them. The same guide explains saved-state limitations and running the [source dataset](https://github.com/100xopensource/100x-credit-monitoring-synthetic-dataset) from scratch.
 - **Use your own borrower.** Say **"Run credit monitoring for [borrower name]"** and point Claude at that borrower's folder.
 
 Claude asks for the read-only borrower source folder first, then a separate writable results folder. A first setup can take an hour or more for document-heavy borrowers; Claude reports progress and supports pause and resume.
@@ -87,6 +96,7 @@ Full walkthrough in [Getting started](docs/GETTING_STARTED.md#optional-portfolio
 plugins/credit-monitoring/        the plugin itself: skills, agents, references
 credit-monitoring.plugin          the packaged plugin, shipped with each release
 docs/                             getting started, how it works, limitations
+sample-output/                    completed example, dashboard, reports and saved state
 ```
 
 ## Workflow

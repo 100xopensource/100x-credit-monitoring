@@ -1,0 +1,71 @@
+{
+  "_comment": "credit monitoring borrower registry. run-monitor reads this ONE file to decide instantly whether a borrower is set up.",
+  "borrowers": [
+    {
+      "borrower_key": "asteron-care-partners",
+      "name": "Asteron Care Partners, LLC",
+      "folder": "asteron-care-partners",
+      "borrower_name": "Asteron Care Partners, LLC",
+      "aliases": [
+        "Asteron Care Partners, LLC"
+      ],
+      "config_file": "borrowers/asteron-care-partners/.record/current/config/borrower-config.json",
+      "onboarded": "2026-09-15"
+    },
+    {
+      "borrower_key": "nemeris-field-systems",
+      "name": "Nemeris Field Systems, LLC",
+      "folder": "nemeris-field-systems",
+      "borrower_name": "Nemeris Field Systems, LLC",
+      "aliases": [
+        "Nemeris Field Systems, LLC"
+      ],
+      "config_file": "borrowers/nemeris-field-systems/.record/current/config/borrower-config.json",
+      "onboarded": "2026-09-15"
+    },
+    {
+      "borrower_key": "orinth-vale-infrastructure",
+      "name": "Orinth Vale Infrastructure, LLC",
+      "folder": "orinth-vale-infrastructure",
+      "borrower_name": "Orinth Vale Infrastructure, LLC",
+      "aliases": [
+        "Orinth Vale Infrastructure, LLC"
+      ],
+      "config_file": "borrowers/orinth-vale-infrastructure/.record/current/config/borrower-config.json",
+      "onboarded": "2026-09-15"
+    },
+    {
+      "borrower_key": "selvara-industrial-services",
+      "name": "Selvara Industrial Services, LLC",
+      "folder": "selvara-industrial-services",
+      "borrower_name": "Selvara Industrial Services, LLC",
+      "aliases": [
+        "Selvara Industrial Services, LLC"
+      ],
+      "config_file": "borrowers/selvara-industrial-services/.record/current/config/borrower-config.json",
+      "onboarded": "2026-09-15"
+    },
+    {
+      "borrower_key": "talvorn-technical-services",
+      "name": "Talvorn Technical Services, LLC",
+      "folder": "talvorn-technical-services",
+      "borrower_name": "Talvorn Technical Services, LLC",
+      "aliases": [
+        "Talvorn Technical Services, LLC"
+      ],
+      "config_file": "borrowers/talvorn-technical-services/.record/current/config/borrower-config.json",
+      "onboarded": "2026-09-16"
+    },
+    {
+      "borrower_key": "veyrona-decision-systems",
+      "name": "Veyrona Decision Systems, LLC",
+      "folder": "veyrona-decision-systems",
+      "borrower_name": "Veyrona Decision Systems, LLC",
+      "aliases": [
+        "Veyrona Decision Systems, LLC"
+      ],
+      "config_file": "borrowers/veyrona-decision-systems/.record/current/config/borrower-config.json",
+      "onboarded": "2026-09-16"
+    }
+  ]
+}
