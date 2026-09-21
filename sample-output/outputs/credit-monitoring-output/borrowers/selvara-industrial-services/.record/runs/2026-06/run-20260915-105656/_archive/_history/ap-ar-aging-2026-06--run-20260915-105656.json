@@ -1,0 +1,710 @@
+{
+  "module": "ap-ar-aging",
+  "period": "2026-06",
+  "run_id": "run-20260915-105656",
+  "run_id_from": "run",
+  "produced_at": "2026-09-15T11:04:59+00:00",
+  "produced_by": {
+    "engine": "ap-ar-aging",
+    "plugin_version": "1.0.0"
+  },
+  "reporting_unit": {
+    "scale": 1.0,
+    "currency": "USD",
+    "verbatim": "Fictional clean-room borrower evidence | USD unless noted",
+    "plain": "USD"
+  },
+  "stores": {
+    "source": {
+      "url_base": null
+    },
+    "store": {
+      "url_base": null
+    }
+  },
+  "source_ref_reach": {
+    "cell": 34,
+    "file": 0,
+    "unlocated": 0,
+    "borrower_doc": 4
+  },
+  "source_files": [
+    "source:Selvara Industrial Services/Monthly/Current/2026-06/June_2026_AR-AP_Detail.xlsx",
+    "source:Selvara Industrial Services/Monthly/Archive/2026-05/ap-ar-aging.xlsx",
+    "store:borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx"
+  ],
+  "results": [
+    {
+      "side": "AR",
+      "latest": {
+        "month": "Jun 2026",
+        "as_of": null,
+        "total": 19744595.81,
+        "pct_over_90": 0.03,
+        "bucket_distribution": {
+          "current": {
+            "amount": 13623771.11,
+            "pct_of_total": 0.69
+          },
+          "1-30": {
+            "amount": 0.0,
+            "pct_of_total": 0.0
+          },
+          "31-60": {
+            "amount": 3948919.16,
+            "pct_of_total": 0.2
+          },
+          "61-90": {
+            "amount": 1579567.66,
+            "pct_of_total": 0.08
+          },
+          ">90": {
+            "amount": 592337.87,
+            "pct_of_total": 0.03
+          }
+        },
+        "top5_concentration": [
+          {
+            "name": "Aster Refining",
+            "amount": 3554027.25,
+            "pct_of_total": 0.18,
+            "source_ref": [
+              {
+                "file": 0,
+                "store": "source",
+                "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_AR-AP_Detail.xlsx",
+                "sheet": "AR Detail",
+                "row": 5
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 5 in the Jun 2026 AR aging export; pct_of_total = amount / AR aging grand total 19,744,595.81"
+          },
+          {
+            "name": "Caldera Chemical",
+            "amount": 2961689.37,
+            "pct_of_total": 0.15,
+            "source_ref": [
+              {
+                "file": 0,
+                "store": "source",
+                "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_AR-AP_Detail.xlsx",
+                "sheet": "AR Detail",
+                "row": 6
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 6 in the Jun 2026 AR aging export; pct_of_total = amount / AR aging grand total 19,744,595.81"
+          },
+          {
+            "name": "Ironbridge Utilities",
+            "amount": 2369351.5,
+            "pct_of_total": 0.12,
+            "source_ref": [
+              {
+                "file": 0,
+                "store": "source",
+                "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_AR-AP_Detail.xlsx",
+                "sheet": "AR Detail",
+                "row": 7
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 7 in the Jun 2026 AR aging export; pct_of_total = amount / AR aging grand total 19,744,595.81"
+          },
+          {
+            "name": "Mercer Pulp",
+            "amount": 2171905.54,
+            "pct_of_total": 0.11,
+            "source_ref": [
+              {
+                "file": 0,
+                "store": "source",
+                "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_AR-AP_Detail.xlsx",
+                "sheet": "AR Detail",
+                "row": 8
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 8 in the Jun 2026 AR aging export; pct_of_total = amount / AR aging grand total 19,744,595.81"
+          },
+          {
+            "name": "Northline Steel",
+            "amount": 1777013.62,
+            "pct_of_total": 0.09,
+            "source_ref": [
+              {
+                "file": 0,
+                "store": "source",
+                "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_AR-AP_Detail.xlsx",
+                "sheet": "AR Detail",
+                "row": 9
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 9 in the Jun 2026 AR aging export; pct_of_total = amount / AR aging grand total 19,744,595.81"
+          }
+        ],
+        "dso_days": 40.41,
+        "days_basis": 30,
+        "n_counterparties": 12,
+        "rows_reconciliation": {
+          "grand_total": 19744595.81,
+          "counterparty_rows_total": 19744595.81,
+          "difference": 0.0,
+          "reconciles": true,
+          "n_counterparties": 12,
+          "rolled_up_rows": []
+        },
+        "source_ref": [
+          {
+            "file": 0,
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_AR-AP_Detail.xlsx",
+            "sheet": "AR Detail",
+            "row": "5-16"
+          },
+          {
+            "file": 2,
+            "store": "store",
+            "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+            "sheet": "Income Statement",
+            "row": 7,
+            "label": "Revenue",
+            "cells": "W7",
+            "period": "2026-06",
+            "upstream": [
+              {
+                "store": "source",
+                "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+                "sheet": "Income Statement"
+              }
+            ]
+          }
+        ],
+        "calc": "Jun 2026 AR aging snapshot: total 19,744,595.81 = the sum of the Total column across counterparty rows 5-16 (no TOTAL row found); bucket amounts = per-bucket columns summed across 12 counterparty rows (rows 5-16); those rows sum to 19,744,595.81, which reconciles to the grand total, so every share below divides by a total its parts add up to; pct_over_90 = >90 bucket 592,337.87 / total; dso_days 40.41 = total / monthly revenue ('Revenue' = 14,657,474.87 for Jun 2026, model 'Income Statement' row 7 cell W7) * 30 (calendar days in Jun 2026)"
+      },
+      "prior": {
+        "month": "May 2026",
+        "as_of": null,
+        "total": 18919796.12,
+        "pct_over_90": 0.03,
+        "bucket_distribution": {
+          "current": {
+            "amount": 13622253.21,
+            "pct_of_total": 0.72
+          },
+          "1-30": {
+            "amount": 0.0,
+            "pct_of_total": 0.0
+          },
+          "31-60": {
+            "amount": 3405563.3,
+            "pct_of_total": 0.18
+          },
+          "61-90": {
+            "amount": 1324385.73,
+            "pct_of_total": 0.07
+          },
+          ">90": {
+            "amount": 567593.88,
+            "pct_of_total": 0.03
+          }
+        },
+        "top5_concentration": [
+          {
+            "name": "Aster Refining",
+            "amount": 3405563.3,
+            "pct_of_total": 0.18,
+            "source_ref": [
+              {
+                "file": 1,
+                "store": "source",
+                "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/ap-ar-aging.xlsx",
+                "sheet": "AR Detail",
+                "row": 5
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 5 in the May 2026 AR aging export; pct_of_total = amount / AR aging grand total 18,919,796.12"
+          },
+          {
+            "name": "Caldera Chemical",
+            "amount": 2837969.42,
+            "pct_of_total": 0.15,
+            "source_ref": [
+              {
+                "file": 1,
+                "store": "source",
+                "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/ap-ar-aging.xlsx",
+                "sheet": "AR Detail",
+                "row": 6
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 6 in the May 2026 AR aging export; pct_of_total = amount / AR aging grand total 18,919,796.12"
+          },
+          {
+            "name": "Ironbridge Utilities",
+            "amount": 2270375.53,
+            "pct_of_total": 0.12,
+            "source_ref": [
+              {
+                "file": 1,
+                "store": "source",
+                "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/ap-ar-aging.xlsx",
+                "sheet": "AR Detail",
+                "row": 7
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 7 in the May 2026 AR aging export; pct_of_total = amount / AR aging grand total 18,919,796.12"
+          },
+          {
+            "name": "Mercer Pulp",
+            "amount": 2081177.57,
+            "pct_of_total": 0.11,
+            "source_ref": [
+              {
+                "file": 1,
+                "store": "source",
+                "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/ap-ar-aging.xlsx",
+                "sheet": "AR Detail",
+                "row": 8
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 8 in the May 2026 AR aging export; pct_of_total = amount / AR aging grand total 18,919,796.12"
+          },
+          {
+            "name": "Northline Steel",
+            "amount": 1702781.65,
+            "pct_of_total": 0.09,
+            "source_ref": [
+              {
+                "file": 1,
+                "store": "source",
+                "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/ap-ar-aging.xlsx",
+                "sheet": "AR Detail",
+                "row": 9
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 9 in the May 2026 AR aging export; pct_of_total = amount / AR aging grand total 18,919,796.12"
+          }
+        ],
+        "dso_days": 41.55,
+        "days_basis": 31,
+        "n_counterparties": 12,
+        "rows_reconciliation": {
+          "grand_total": 18919796.12,
+          "counterparty_rows_total": 18919796.12,
+          "difference": 0.0,
+          "reconciles": true,
+          "n_counterparties": 12,
+          "rolled_up_rows": []
+        },
+        "source_ref": [
+          {
+            "file": 1,
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/ap-ar-aging.xlsx",
+            "sheet": "AR Detail",
+            "row": "5-16"
+          },
+          {
+            "file": 2,
+            "store": "store",
+            "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+            "sheet": "Income Statement",
+            "row": 7,
+            "label": "Revenue",
+            "cells": "V7",
+            "period": "2026-05",
+            "upstream": [
+              {
+                "store": "source",
+                "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+                "sheet": "Income Statement"
+              }
+            ]
+          }
+        ],
+        "calc": "May 2026 AR aging snapshot: total 18,919,796.12 = the sum of the Total column across counterparty rows 5-16 (no TOTAL row found); bucket amounts = per-bucket columns summed across 12 counterparty rows (rows 5-16); those rows sum to 18,919,796.12, which reconciles to the grand total, so every share below divides by a total its parts add up to; pct_over_90 = >90 bucket 567,593.88 / total; dso_days 41.55 = total / monthly revenue ('Revenue' = 14,115,739.46 for May 2026, model 'Income Statement' row 7 cell V7) * 31 (calendar days in May 2026)"
+      },
+      "trend": {
+        "total_change": 824799.69,
+        "dso_days_prior": 41.55,
+        "dso_days_latest": 40.41,
+        "note": "Single-month aging snapshots; DSO/DPO use one month of flow and are volatile month to month. Each month's days metric uses that month's calendar days.",
+        "source_ref": [
+          {
+            "file": 0,
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_AR-AP_Detail.xlsx",
+            "sheet": "AR Detail",
+            "row": "5-16"
+          },
+          {
+            "file": 1,
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/ap-ar-aging.xlsx",
+            "sheet": "AR Detail",
+            "row": "5-16"
+          }
+        ],
+        "calc": "total_change = Jun 2026 AR aging total 19,744,595.81 (from the sum of the Total column across counterparty rows 5-16 (no TOTAL row found)) - May 2026 total 18,919,796.12 (from the sum of the Total column across counterparty rows 5-16 (no TOTAL row found)); dso_days_latest/_prior repeated from this side's latest/prior records"
+      },
+      "tie_out": {
+        "what": "A/R aging total vs BS 'Accounts receivable'",
+        "aging_total": 19744595.81,
+        "balance_sheet": 19744595.81,
+        "difference": 0.0,
+        "ties": true,
+        "source_ref": [
+          {
+            "file": 0,
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_AR-AP_Detail.xlsx",
+            "sheet": "AR Detail",
+            "row": "5-16"
+          },
+          {
+            "file": 2,
+            "store": "store",
+            "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+            "sheet": "Balance Sheet",
+            "row": 7,
+            "label": "Accounts receivable",
+            "cells": "W7",
+            "period": "2026-06",
+            "upstream": [
+              {
+                "store": "source",
+                "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+                "sheet": "Working Capital"
+              }
+            ]
+          }
+        ],
+        "calc": "difference 0.00 = aging total 19,744,595.81 (from the sum of the Total column across counterparty rows 5-16 (no TOTAL row found)) - balance-sheet 'Accounts receivable' 19,744,595.81 (model 'Balance Sheet' row 7 cell W7, Jun 2026); ties when |difference| <= 1.00"
+      }
+    },
+    {
+      "side": "AP",
+      "latest": {
+        "month": "Jun 2026",
+        "as_of": null,
+        "total": 9760119.37,
+        "pct_over_90": 0.0,
+        "bucket_distribution": {
+          "current": {
+            "amount": 7222488.33,
+            "pct_of_total": 0.74
+          },
+          "1-30": {
+            "amount": 0.0,
+            "pct_of_total": 0.0
+          },
+          "31-60": {
+            "amount": 1854422.68,
+            "pct_of_total": 0.19
+          },
+          "61-90": {
+            "amount": 683208.36,
+            "pct_of_total": 0.07
+          },
+          ">90": {
+            "amount": 0.0,
+            "pct_of_total": 0.0
+          }
+        },
+        "top5_concentration": [
+          {
+            "name": "Atlas Access",
+            "amount": 1952023.87,
+            "pct_of_total": 0.2,
+            "source_ref": [
+              {
+                "file": 0,
+                "store": "source",
+                "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_AR-AP_Detail.xlsx",
+                "sheet": "AP Detail",
+                "row": 5
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 5 in the Jun 2026 AP aging export; pct_of_total = amount / AP aging grand total 9,760,119.37"
+          },
+          {
+            "name": "Blueforge Safety",
+            "amount": 1659220.29,
+            "pct_of_total": 0.17,
+            "source_ref": [
+              {
+                "file": 0,
+                "store": "source",
+                "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_AR-AP_Detail.xlsx",
+                "sheet": "AP Detail",
+                "row": 6
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 6 in the Jun 2026 AP aging export; pct_of_total = amount / AP aging grand total 9,760,119.37"
+          },
+          {
+            "name": "Canyon NDT",
+            "amount": 1464017.91,
+            "pct_of_total": 0.15,
+            "source_ref": [
+              {
+                "file": 0,
+                "store": "source",
+                "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_AR-AP_Detail.xlsx",
+                "sheet": "AP Detail",
+                "row": 7
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 7 in the Jun 2026 AP aging export; pct_of_total = amount / AP aging grand total 9,760,119.37"
+          },
+          {
+            "name": "Delta Scaffold",
+            "amount": 1268815.52,
+            "pct_of_total": 0.13,
+            "source_ref": [
+              {
+                "file": 0,
+                "store": "source",
+                "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_AR-AP_Detail.xlsx",
+                "sheet": "AP Detail",
+                "row": 8
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 8 in the Jun 2026 AP aging export; pct_of_total = amount / AP aging grand total 9,760,119.37"
+          },
+          {
+            "name": "Everline Controls",
+            "amount": 1073613.13,
+            "pct_of_total": 0.11,
+            "source_ref": [
+              {
+                "file": 0,
+                "store": "source",
+                "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_AR-AP_Detail.xlsx",
+                "sheet": "AP Detail",
+                "row": 9
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 9 in the Jun 2026 AP aging export; pct_of_total = amount / AP aging grand total 9,760,119.37"
+          }
+        ],
+        "dpo_days": null,
+        "days_basis": 30,
+        "n_counterparties": 8,
+        "rows_reconciliation": {
+          "grand_total": 9760119.37,
+          "counterparty_rows_total": 9760119.37,
+          "difference": 0.0,
+          "reconciles": true,
+          "n_counterparties": 8,
+          "rolled_up_rows": []
+        },
+        "source_ref": [
+          {
+            "file": 0,
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_AR-AP_Detail.xlsx",
+            "sheet": "AP Detail",
+            "row": "5-12"
+          }
+        ],
+        "calc": "Jun 2026 AP aging snapshot: total 9,760,119.37 = the sum of the Total column across counterparty rows 5-12 (no TOTAL row found); bucket amounts = per-bucket columns summed across 8 counterparty rows (rows 5-12); those rows sum to 9,760,119.37, which reconciles to the grand total, so every share below divides by a total its parts add up to; pct_over_90 = >90 bucket 0.00 / total; dpo_days unavailable (the monthly DPO basis 'None' missing or non-positive for Jun 2026)",
+        "dpo_basis": "DPO not computable: aging.dpo_basis is configured as 'operating_cogs', but model_lines.operating_cogs is blank in borrower-config -- no COGS/opex line is mapped for this borrower to use as the DPO denominator. AR-side DSO, aging buckets and concentration are unaffected; only DPO is suppressed."
+      },
+      "prior": {
+        "month": "May 2026",
+        "as_of": null,
+        "total": 9375674.15,
+        "pct_over_90": 0.0,
+        "bucket_distribution": {
+          "current": {
+            "amount": 7313025.84,
+            "pct_of_total": 0.78
+          },
+          "1-30": {
+            "amount": 0.0,
+            "pct_of_total": 0.0
+          },
+          "31-60": {
+            "amount": 1500107.86,
+            "pct_of_total": 0.16
+          },
+          "61-90": {
+            "amount": 562540.45,
+            "pct_of_total": 0.06
+          },
+          ">90": {
+            "amount": 0.0,
+            "pct_of_total": 0.0
+          }
+        },
+        "top5_concentration": [
+          {
+            "name": "Atlas Access",
+            "amount": 1875134.83,
+            "pct_of_total": 0.2,
+            "source_ref": [
+              {
+                "file": 1,
+                "store": "source",
+                "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/ap-ar-aging.xlsx",
+                "sheet": "AP Detail",
+                "row": 5
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 5 in the May 2026 AP aging export; pct_of_total = amount / AP aging grand total 9,375,674.15"
+          },
+          {
+            "name": "Blueforge Safety",
+            "amount": 1593864.61,
+            "pct_of_total": 0.17,
+            "source_ref": [
+              {
+                "file": 1,
+                "store": "source",
+                "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/ap-ar-aging.xlsx",
+                "sheet": "AP Detail",
+                "row": 6
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 6 in the May 2026 AP aging export; pct_of_total = amount / AP aging grand total 9,375,674.15"
+          },
+          {
+            "name": "Canyon NDT",
+            "amount": 1406351.12,
+            "pct_of_total": 0.15,
+            "source_ref": [
+              {
+                "file": 1,
+                "store": "source",
+                "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/ap-ar-aging.xlsx",
+                "sheet": "AP Detail",
+                "row": 7
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 7 in the May 2026 AP aging export; pct_of_total = amount / AP aging grand total 9,375,674.15"
+          },
+          {
+            "name": "Delta Scaffold",
+            "amount": 1218837.64,
+            "pct_of_total": 0.13,
+            "source_ref": [
+              {
+                "file": 1,
+                "store": "source",
+                "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/ap-ar-aging.xlsx",
+                "sheet": "AP Detail",
+                "row": 8
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 8 in the May 2026 AP aging export; pct_of_total = amount / AP aging grand total 9,375,674.15"
+          },
+          {
+            "name": "Everline Controls",
+            "amount": 1031324.16,
+            "pct_of_total": 0.11,
+            "source_ref": [
+              {
+                "file": 1,
+                "store": "source",
+                "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/ap-ar-aging.xlsx",
+                "sheet": "AP Detail",
+                "row": 9
+              }
+            ],
+            "calc": "amount = Total column of this counterparty's row 9 in the May 2026 AP aging export; pct_of_total = amount / AP aging grand total 9,375,674.15"
+          }
+        ],
+        "dpo_days": null,
+        "days_basis": 31,
+        "n_counterparties": 8,
+        "rows_reconciliation": {
+          "grand_total": 9375674.15,
+          "counterparty_rows_total": 9375674.15,
+          "difference": 0.0,
+          "reconciles": true,
+          "n_counterparties": 8,
+          "rolled_up_rows": []
+        },
+        "source_ref": [
+          {
+            "file": 1,
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/ap-ar-aging.xlsx",
+            "sheet": "AP Detail",
+            "row": "5-12"
+          }
+        ],
+        "calc": "May 2026 AP aging snapshot: total 9,375,674.15 = the sum of the Total column across counterparty rows 5-12 (no TOTAL row found); bucket amounts = per-bucket columns summed across 8 counterparty rows (rows 5-12); those rows sum to 9,375,674.15, which reconciles to the grand total, so every share below divides by a total its parts add up to; pct_over_90 = >90 bucket 0.00 / total; dpo_days unavailable (the monthly DPO basis 'None' missing or non-positive for May 2026)"
+      },
+      "trend": {
+        "total_change": 384445.22,
+        "dpo_days_prior": null,
+        "dpo_days_latest": null,
+        "note": "Single-month aging snapshots; DSO/DPO use one month of flow and are volatile month to month. Each month's days metric uses that month's calendar days.",
+        "source_ref": [
+          {
+            "file": 0,
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_AR-AP_Detail.xlsx",
+            "sheet": "AP Detail",
+            "row": "5-12"
+          },
+          {
+            "file": 1,
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/ap-ar-aging.xlsx",
+            "sheet": "AP Detail",
+            "row": "5-12"
+          }
+        ],
+        "calc": "total_change = Jun 2026 AP aging total 9,760,119.37 (from the sum of the Total column across counterparty rows 5-12 (no TOTAL row found)) - May 2026 total 9,375,674.15 (from the sum of the Total column across counterparty rows 5-12 (no TOTAL row found)); dpo_days_latest/_prior repeated from this side's latest/prior records"
+      },
+      "tie_out": {
+        "what": "A/P aging total vs BS 'Accounts payable'",
+        "aging_total": 9760119.37,
+        "balance_sheet": 9760119.37,
+        "difference": 0.0,
+        "ties": true,
+        "source_ref": [
+          {
+            "file": 0,
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_AR-AP_Detail.xlsx",
+            "sheet": "AP Detail",
+            "row": "5-12"
+          },
+          {
+            "file": 2,
+            "store": "store",
+            "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+            "sheet": "Balance Sheet",
+            "row": 8,
+            "label": "Accounts payable",
+            "cells": "W8",
+            "period": "2026-06",
+            "upstream": [
+              {
+                "store": "source",
+                "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+                "sheet": "Working Capital"
+              }
+            ]
+          }
+        ],
+        "calc": "difference 0.00 = aging total 9,760,119.37 (from the sum of the Total column across counterparty rows 5-12 (no TOTAL row found)) - balance-sheet 'Accounts payable' 9,760,119.37 (model 'Balance Sheet' row 8 cell W8, Jun 2026); ties when |difference| <= 1.00"
+      }
+    }
+  ],
+  "exceptions": [
+    {
+      "type": "dpo_basis_unmapped",
+      "what": "DPO (days payable outstanding) not computable this run",
+      "detail": "aging.dpo_basis is configured as 'operating_cogs', but model_lines.operating_cogs is blank in borrower-config -- there is no COGS/opex line in this borrower's monthly package to use as the DPO denominator. AR-side DSO, aging buckets and concentration compute normally; only DPO is suppressed."
+    }
+  ],
+  "engine": "ap-ar-aging v5 (config-driven, borrower-agnostic) + per-figure source refs/calc + rows-vs-TOTAL reconciliation",
+  "borrower": "Selvara Industrial Services, LLC",
+  "latest_month": "Jun 2026",
+  "prior_month": "May 2026",
+  "note": "DSO/DPO are single-month and volatile. DPO is suppressed this run: aging.dpo_basis is configured as 'operating_cogs', but no model_lines mapping exists for it, so there is no COGS/opex line to divide A/P by. AR-side DSO, aging buckets and concentration compute normally.",
+  "methodology": "Company-prepared aging exports (unaudited). Balance-sheet AR/AP, revenue, and the configured DPO-basis line are read from the canonical monthly financials model via monitor_lib."
+}

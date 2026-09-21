@@ -1,0 +1,4743 @@
+{
+  "module": "three-statement-analysis",
+  "period": "2026-06",
+  "run_id": "run-20260915-105656",
+  "run_id_from": "run",
+  "produced_at": "2026-09-15T11:00:01+00:00",
+  "produced_by": {
+    "engine": "three-statement-analysis",
+    "plugin_version": null
+  },
+  "reporting_unit": {
+    "scale": 1.0,
+    "currency": "USD",
+    "verbatim": "Fictional clean-room borrower evidence | USD unless noted",
+    "plain": "USD"
+  },
+  "stores": {
+    "store": {
+      "url_base": null
+    },
+    "source": {
+      "url_base": null
+    }
+  },
+  "source_ref_reach": {
+    "cell": 43,
+    "file": 4,
+    "unlocated": 0,
+    "borrower_doc": 45
+  },
+  "source_files": [
+    "store:borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+    "store:borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/config/execution-config.json"
+  ],
+  "results": [
+    {
+      "section": "income",
+      "metric": "revenue",
+      "latest": 14657474.87,
+      "unit": "usd",
+      "prior": 14115739.46,
+      "mom_pct": 0.038378,
+      "ytd": 82652909.95,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 7,
+          "label": "Revenue",
+          "cells": "F7:W7",
+          "period": "2025-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-01/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-02/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-03/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-04/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-05/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-06/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-07/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-08/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-09/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-10/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-11/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-12/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/consolidated-revised.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        }
+      ],
+      "calc": "latest = revenue row at Jun 2026; prior = May 2026; ytd = sum Jan 2026..Jun 2026; prior_ytd = sum Jan 2025..Jun 2025",
+      "prior_ytd": 75801101.19,
+      "prior_ytd_same_basis": true
+    },
+    {
+      "section": "income",
+      "metric": "gross_profit",
+      "latest": null,
+      "unit": "usd",
+      "prior": null
+    },
+    {
+      "section": "income",
+      "metric": "gross_margin",
+      "latest": null,
+      "unit": "ratio",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 7,
+          "label": "Revenue",
+          "cells": "R7:W7",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/consolidated-revised.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        }
+      ],
+      "calc": "gross_margin = gross_profit / revenue at Jun 2026; ytd = sum(gross_profit Jan 2026..Jun 2026) / sum(revenue Jan 2026..Jun 2026)"
+    },
+    {
+      "section": "income",
+      "metric": "ebitda",
+      "latest": 2696995.08,
+      "unit": "usd",
+      "prior": 2588973.9,
+      "mom_pct": 0.041724,
+      "ytd": 15306943.73,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 8,
+          "label": "Reported EBITDA",
+          "cells": "R8:W8",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/consolidated-revised.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        }
+      ],
+      "calc": "latest = the model's pinned EBITDA bridge row at Jun 2026 (never recomputed); prior = May 2026; ytd = sum Jan 2026..Jun 2026"
+    },
+    {
+      "section": "income",
+      "metric": "ebitda_margin",
+      "latest": 0.184001,
+      "unit": "ratio",
+      "ytd": 0.185195,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 8,
+          "label": "Reported EBITDA",
+          "cells": "R8:W8",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/consolidated-revised.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 7,
+          "label": "Revenue",
+          "cells": "R7:W7",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/consolidated-revised.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        }
+      ],
+      "calc": "ebitda_margin = EBITDA bridge row / revenue at Jun 2026; ytd over Jan 2026..Jun 2026"
+    },
+    {
+      "section": "income",
+      "metric": "total_opex",
+      "latest": 0.0,
+      "unit": "usd",
+      "prior": 0.0,
+      "ytd": 0.0,
+      "source_ref": [
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/config/execution-config.json",
+          "section": "opex_groups"
+        }
+      ],
+      "calc": "no opex group rows resolved; sum is 0 by construction"
+    },
+    {
+      "section": "income",
+      "metric": "opex_to_revenue",
+      "latest": 0.0,
+      "unit": "ratio",
+      "ytd": 0.0,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 7,
+          "label": "Revenue",
+          "cells": "R7:W7",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/consolidated-revised.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/config/execution-config.json",
+          "section": "opex_groups"
+        }
+      ],
+      "calc": "opex_to_revenue = total_opex / revenue at Jun 2026; ytd over Jan 2026..Jun 2026"
+    },
+    {
+      "section": "income",
+      "metric": "net_income",
+      "latest": null,
+      "unit": "usd",
+      "prior": null
+    },
+    {
+      "section": "balance_sheet",
+      "metric": "cash",
+      "latest": 9693438.63,
+      "unit": "usd",
+      "prior": 11304193.71,
+      "mom_pct": -0.142492,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Cash Flow Statement",
+          "row": 19,
+          "label": "Ending cash",
+          "cells": "V19:W19",
+          "period": "2026-05..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+              "sheet": "Cash Flow"
+            }
+          ]
+        }
+      ],
+      "calc": "spot balance at Jun 2026; prior = May 2026"
+    },
+    {
+      "section": "balance_sheet",
+      "metric": "accounts_receivable",
+      "latest": 19744595.81,
+      "unit": "usd",
+      "prior": 18919796.12,
+      "mom_pct": 0.043595,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Balance Sheet",
+          "row": 7,
+          "label": "Accounts receivable",
+          "cells": "V7:W7",
+          "period": "2026-05..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+              "sheet": "Working Capital"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+              "sheet": "Working Capital"
+            }
+          ]
+        }
+      ],
+      "calc": "spot balance at Jun 2026; prior = May 2026"
+    },
+    {
+      "section": "balance_sheet",
+      "metric": "accounts_payable",
+      "latest": 9760119.37,
+      "unit": "usd",
+      "prior": 9375674.15,
+      "mom_pct": 0.041005,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Balance Sheet",
+          "row": 8,
+          "label": "Accounts payable",
+          "cells": "V8:W8",
+          "period": "2026-05..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+              "sheet": "Working Capital"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+              "sheet": "Working Capital"
+            }
+          ]
+        }
+      ],
+      "calc": "spot balance at Jun 2026; prior = May 2026"
+    },
+    {
+      "section": "balance_sheet",
+      "metric": "total_debt",
+      "latest": 100567683.15,
+      "unit": "usd",
+      "prior": 102620084.85,
+      "mom_pct": -0.02,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Balance Sheet",
+          "row": 16,
+          "label": "Ending debt",
+          "cells": "V16:W16",
+          "period": "2026-05..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+              "sheet": "Working Capital"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+              "sheet": "Working Capital"
+            }
+          ]
+        }
+      ],
+      "calc": "spot balance at Jun 2026; prior = May 2026"
+    },
+    {
+      "section": "cash_flow",
+      "metric": "operating_cf",
+      "latest": 734796.12,
+      "unit": "usd",
+      "prior": 1303642.75,
+      "mom_pct": -0.436352,
+      "ytd": 6709056.74,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Cash Flow Statement",
+          "row": 21,
+          "label": "Operating Cash Flow (derived)",
+          "cells": "R21:W21",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-03/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+              "sheet": "Cash Flow"
+            }
+          ]
+        }
+      ],
+      "calc": "latest = CF row at Jun 2026; prior = May 2026; ytd = sum Jan 2026..Jun 2026"
+    },
+    {
+      "section": "cash_flow",
+      "metric": "investing_cf",
+      "latest": -293149.5,
+      "unit": "usd",
+      "prior": -282314.79,
+      "mom_pct": -0.038378,
+      "ytd": -1653058.21,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Cash Flow Statement",
+          "row": 10,
+          "label": "Capital expenditures",
+          "cells": "R10:W10",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-03/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+              "sheet": "Cash Flow"
+            }
+          ]
+        }
+      ],
+      "calc": "latest = CF row at Jun 2026; prior = May 2026; ytd = sum Jan 2026..Jun 2026"
+    },
+    {
+      "section": "cash_flow",
+      "metric": "financing_cf",
+      "latest": -2052401.7,
+      "unit": "usd",
+      "prior": -2094287.45,
+      "mom_pct": 0.02,
+      "ytd": -12960056.47,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Cash Flow Statement",
+          "row": 22,
+          "label": "Financing Cash Flow (derived)",
+          "cells": "R22:W22",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-03/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+              "sheet": "Cash Flow"
+            }
+          ]
+        }
+      ],
+      "calc": "latest = CF row at Jun 2026; prior = May 2026; ytd = sum Jan 2026..Jun 2026"
+    },
+    {
+      "section": "cash_flow",
+      "metric": "net_change_cash",
+      "latest": -1610755.08,
+      "unit": "usd",
+      "prior": -1072959.49,
+      "mom_pct": -0.501226,
+      "ytd": -7904057.94,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Cash Flow Statement",
+          "row": 24,
+          "label": "Memo: Net change in cash (derived: Operating + Investing[Capex] + Financing)",
+          "cells": "R24:W24",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-03/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+              "sheet": "Cash Flow"
+            }
+          ]
+        }
+      ],
+      "calc": "latest = CF row at Jun 2026; prior = May 2026; ytd = sum Jan 2026..Jun 2026"
+    },
+    {
+      "section": "cash_flow",
+      "metric": "free_cash_flow",
+      "latest": 441646.62,
+      "unit": "usd",
+      "prior": null,
+      "ytd": 5055998.53,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Cash Flow Statement",
+          "row": 21,
+          "label": "Operating Cash Flow (derived)",
+          "cells": "R21:W21",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-03/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+              "sheet": "Cash Flow"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Cash Flow Statement",
+          "row": 10,
+          "label": "Capital expenditures",
+          "cells": "R10:W10",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-03/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+              "sheet": "Cash Flow"
+            }
+          ]
+        }
+      ],
+      "calc": "free_cash_flow = operating_cf + investing_cf at Jun 2026; ytd = sums over Jan 2026..Jun 2026"
+    },
+    {
+      "section": "working_capital",
+      "metric": "dso_days",
+      "latest": 40.4,
+      "unit": "days",
+      "prior": null,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Balance Sheet",
+          "row": 7,
+          "label": "Accounts receivable",
+          "cells": "W7",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+              "sheet": "Working Capital"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 7,
+          "label": "Revenue",
+          "cells": "W7",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        }
+      ],
+      "calc": "dso_days = accounts_receivable / revenue x 30 days, at Jun 2026"
+    },
+    {
+      "section": "working_capital",
+      "metric": "dpo_days",
+      "latest": null,
+      "unit": "days",
+      "prior": null,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Balance Sheet",
+          "row": 8,
+          "label": "Accounts payable",
+          "cells": "W8",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+              "sheet": "Working Capital"
+            }
+          ]
+        }
+      ],
+      "calc": "dpo_days = accounts_payable / operating COGS x 30 days, at Jun 2026"
+    },
+    {
+      "section": "leverage",
+      "metric": "ttm_ebitda",
+      "latest": 30065760.56,
+      "unit": "usd",
+      "prior": null,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 8,
+          "label": "Reported EBITDA",
+          "cells": "L8:W8",
+          "period": "2025-07..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-07/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-08/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-09/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-10/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-11/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-12/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/consolidated-revised.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        }
+      ],
+      "calc": "sum of the EBITDA bridge row over the last 12 same-basis months Jul 2025..Jun 2026"
+    },
+    {
+      "section": "leverage",
+      "metric": "total_debt_to_ttm_ebitda",
+      "latest": 3.34,
+      "unit": "x",
+      "prior": null,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Balance Sheet",
+          "row": 16,
+          "label": "Ending debt",
+          "cells": "W16",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+              "sheet": "Working Capital"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 8,
+          "label": "Reported EBITDA",
+          "cells": "L8:W8",
+          "period": "2025-07..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-07/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-08/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-09/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-10/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-11/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-12/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/consolidated-revised.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        }
+      ],
+      "calc": "total_debt at Jun 2026 / TTM EBITDA (sum Jul 2025..Jun 2026)"
+    },
+    {
+      "section": "leverage",
+      "metric": "total_debt_to_ttm_gross_profit",
+      "latest": null,
+      "unit": "x",
+      "prior": null,
+      "note": "n/m (<12 same-basis months or TTM gross profit <= 0)"
+    },
+    {
+      "section": "leverage",
+      "metric": "ttm_ebitda_interest_coverage",
+      "latest": -2.58,
+      "unit": "x",
+      "prior": null,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 8,
+          "label": "Reported EBITDA",
+          "cells": "L8:W8",
+          "period": "2025-07..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-07/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-08/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-09/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-10/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-11/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-12/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/consolidated-revised.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Cash Flow Statement",
+          "row": 12,
+          "label": "Cash interest",
+          "cells": "L12:W12",
+          "period": "2025-07..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-07/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-08/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-09/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-10/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-11/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-12/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-03/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+              "sheet": "Cash Flow"
+            }
+          ]
+        }
+      ],
+      "calc": "TTM EBITDA / TTM interest expense (both summed Jul 2025..Jun 2026)"
+    }
+  ],
+  "exceptions": [
+    {
+      "flag": "bridge_unresolved",
+      "severity": "elevated",
+      "detail": "MoM Net Income bridge components did not tie to the NI delta within $1 (gap=None); pre-financing subtotal source=unavailable. Bridge suppressed as fact."
+    },
+    {
+      "flag": "emerging_trend",
+      "severity": "watch",
+      "detail": "Beginning debt down 5mo to May 2026 (-11,130,260); 0 reversal(s); kind=recent_run"
+    },
+    {
+      "flag": "emerging_trend",
+      "severity": "watch",
+      "detail": "Ending debt down 5mo to May 2026 (-10,907,655); 0 reversal(s); kind=recent_run"
+    },
+    {
+      "flag": "emerging_trend",
+      "severity": "watch",
+      "detail": "Required principal down 5mo to May 2026 (-222,605); 0 reversal(s); kind=recent_run"
+    },
+    {
+      "flag": "emerging_trend",
+      "severity": "watch",
+      "detail": "Scheduled Debt Principal Payments down 5mo to May 2026 (-222,605); 0 reversal(s); kind=recent_run"
+    },
+    {
+      "flag": "emerging_trend",
+      "severity": "watch",
+      "detail": "Revenue up 5mo to May 2026 (+1,160,942); 0 reversal(s); kind=recent_run"
+    },
+    {
+      "flag": "emerging_trend",
+      "severity": "watch",
+      "detail": "Net working capital up 4mo to Jun 2026 (+814,308); 1 reversal(s); kind=emerging_trend"
+    },
+    {
+      "flag": "emerging_trend",
+      "severity": "watch",
+      "detail": "Reported EBITDA up 4mo to Jun 2026 (+390,776); 1 reversal(s); kind=emerging_trend"
+    },
+    {
+      "flag": "emerging_trend",
+      "severity": "watch",
+      "detail": "Accounts payable up 5mo to May 2026 (+834,835); 0 reversal(s); kind=recent_run"
+    },
+    {
+      "flag": "emerging_trend",
+      "severity": "watch",
+      "detail": "Accounts receivable up 5mo to May 2026 (+884,127); 1 reversal(s); kind=recent_run"
+    },
+    {
+      "flag": "emerging_trend",
+      "severity": "watch",
+      "detail": "Cash Interest Expense down 5mo to May 2026 (-95,118); 0 reversal(s); kind=recent_run"
+    }
+  ],
+  "figure_collections": [
+    "opex_composition",
+    "trend",
+    "mom_bridge",
+    "drift",
+    "revenue_mix",
+    "opex_trends",
+    "line_read",
+    "liquidity"
+  ],
+  "engine": "3-statement v4.3 (pure line read; scale-aware materiality floor when not pinned per borrower) + per-figure source refs/calc + unresolved-funded-debt flag",
+  "borrower": "Selvara Industrial Services, LLC",
+  "latest_month": "Jun 2026",
+  "prior_month": "May 2026",
+  "ytd_months": [
+    "Jan 2026",
+    "Feb 2026",
+    "Mar 2026",
+    "Apr 2026",
+    "May 2026",
+    "Jun 2026"
+  ],
+  "prior_ytd_available": true,
+  "lines_not_found": [
+    "gross_profit (not configured in model_lines/analysis_lines)",
+    "inventory",
+    "net_income (not configured in model_lines/analysis_lines)",
+    "operating_cogs (not configured in model_lines/analysis_lines)",
+    "total_assets",
+    "total_current_assets",
+    "total_current_liabilities",
+    "total_equity"
+  ],
+  "opex_composition": {},
+  "headlines": [
+    "Revenue of $14,657,475 \u2014 up 7.8% YoY (vs $13,593,991 in Jun 2025); segment peak $14,953,029 in Nov 2025.",
+    "EBITDA of $2,696,995 \u2014 up 12.7% YoY (vs $2,392,917 in Jun 2025); trailing trend rising (segment trough $1,660,922 in Dec 2024).",
+    "Beginning debt has moved down 21 months in a row (($21,181,649) cumulative) to $102,620,085.",
+    "Ending debt has moved down 21 months in a row (($22,986,447) cumulative) to $100,567,683.",
+    "The month-over-month Net Income bridge did not tie within tolerance and is withheld pending reconciliation (see exceptions)."
+  ],
+  "trend": {
+    "revenue": {
+      "latest": 14657474.87,
+      "prior": 14115739.46,
+      "mom_abs": 541735.41,
+      "mom_pct": 0.038378,
+      "trailing_avg": 13921539.35,
+      "vs_trailing_avg": 735935.52,
+      "direction": "rising",
+      "yoy_abs": 1063484.25,
+      "yoy_pct": 0.078232,
+      "crosses_basis_break": false,
+      "yoy_prior_month": "Jun 2025",
+      "yoy_prior_value": 13593990.62,
+      "peak": {
+        "month": "Nov 2025",
+        "value": 14953029.37,
+        "more_extreme_value_pre_break": false
+      },
+      "trough": {
+        "month": "Dec 2024",
+        "value": 11437823.94,
+        "more_extreme_value_pre_break": false
+      },
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 7,
+          "label": "Revenue",
+          "cells": "B7:W7",
+          "period": "2024-09..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-09/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-10/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-11/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-12/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-01/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-02/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-03/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-04/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-05/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-06/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-07/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-08/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-09/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-10/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-11/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-12/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/consolidated-revised.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        }
+      ],
+      "calc": "latest at Jun 2026, prior at May 2026; trailing-3m same-basis average; direction = sign of the median same-basis MoM delta; YoY vs the same month a year earlier when present; peak/trough over the current same-basis segment"
+    },
+    "ebitda": {
+      "latest": 2696995.08,
+      "prior": 2588973.9,
+      "mom_abs": 108021.18,
+      "mom_pct": 0.041724,
+      "trailing_avg": 2657119.3,
+      "vs_trailing_avg": 39875.78,
+      "direction": "rising",
+      "yoy_abs": 304078.06,
+      "yoy_pct": 0.127074,
+      "crosses_basis_break": false,
+      "yoy_prior_month": "Jun 2025",
+      "yoy_prior_value": 2392917.02,
+      "peak": {
+        "month": "Nov 2025",
+        "value": 2835136.13,
+        "more_extreme_value_pre_break": false
+      },
+      "trough": {
+        "month": "Dec 2024",
+        "value": 1660921.81,
+        "more_extreme_value_pre_break": false
+      },
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 8,
+          "label": "Reported EBITDA",
+          "cells": "B8:W8",
+          "period": "2024-09..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-09/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-10/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-11/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-12/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-01/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-02/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-03/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-04/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-05/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-06/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-07/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-08/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-09/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-10/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-11/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-12/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/consolidated-revised.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        }
+      ],
+      "calc": "latest at Jun 2026, prior at May 2026; trailing-3m same-basis average; direction = sign of the median same-basis MoM delta; YoY vs the same month a year earlier when present; peak/trough over the current same-basis segment"
+    },
+    "net_income": null,
+    "cash": {
+      "latest": 9693438.63,
+      "prior": 11304193.71,
+      "mom_abs": -1610755.08,
+      "mom_pct": -0.142492,
+      "trailing_avg": 12325534.13,
+      "vs_trailing_avg": -2632095.5,
+      "direction": "falling",
+      "yoy_abs": -9379317.09,
+      "yoy_pct": -0.491765,
+      "crosses_basis_break": false,
+      "yoy_prior_month": "Jun 2025",
+      "yoy_prior_value": 19072755.72,
+      "peak": {
+        "month": "Sep 2025",
+        "value": 21547627.6,
+        "more_extreme_value_pre_break": false
+      },
+      "trough": {
+        "month": "Sep 2024",
+        "value": 8869981.82,
+        "more_extreme_value_pre_break": false
+      },
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Cash Flow Statement",
+          "row": 19,
+          "label": "Ending cash",
+          "cells": "B19:W19",
+          "period": "2024-09..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-09/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-10/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-11/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-12/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-01/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-02/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-03/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-04/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-05/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-06/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-07/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-08/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-09/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-10/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-11/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-12/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-03/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+              "sheet": "Cash Flow"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+              "sheet": "Cash Flow"
+            }
+          ]
+        }
+      ],
+      "calc": "latest at Jun 2026, prior at May 2026; trailing-3m same-basis average; direction = sign of the median same-basis MoM delta; YoY vs the same month a year earlier when present; peak/trough over the current same-basis segment"
+    },
+    "gross_margin": null
+  },
+  "mom_bridge": {
+    "status": "unresolved",
+    "pre_financing_subtotal": {
+      "label": null,
+      "source": null
+    },
+    "latest_month": "Jun 2026",
+    "prior_month": "May 2026",
+    "net_income": {
+      "latest": null,
+      "prior": null,
+      "delta": null
+    },
+    "components": [
+      {
+        "driver": "Revenue",
+        "delta": 541735.41,
+        "source_ref": [
+          {
+            "file": 0,
+            "store": "store",
+            "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+            "sheet": "Income Statement",
+            "row": 7,
+            "label": "Revenue",
+            "cells": "V7:W7",
+            "period": "2026-05..2026-06",
+            "upstream": [
+              {
+                "store": "source",
+                "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+                "sheet": "Income Statement"
+              },
+              {
+                "store": "source",
+                "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+                "sheet": "Income Statement"
+              }
+            ]
+          }
+        ],
+        "calc": "MoM revenue delta May 2026..Jun 2026"
+      }
+    ],
+    "line_movers": [],
+    "tie_gap": null,
+    "one_time": {
+      "items": [],
+      "net_ni_delta": 0
+    },
+    "normalized": null,
+    "source_ref": [
+      {
+        "file": 0,
+        "store": "store",
+        "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+        "sheet": "Income Statement",
+        "row": 7,
+        "label": "Revenue",
+        "cells": "V7:W7",
+        "period": "2026-05..2026-06",
+        "upstream": [
+          {
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+            "sheet": "Income Statement"
+          },
+          {
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+            "sheet": "Income Statement"
+          }
+        ]
+      }
+    ],
+    "calc": "MoM Net Income bridge May 2026..Jun 2026: Revenue + (dGP-dRev) + (dPF-dGP) + (dNI-dPF) telescopes to the NI delta; tie enforced within $1 (gap=None); pre-financing subtotal source: unavailable"
+  },
+  "series": {
+    "revenue": [
+      {
+        "m": "Sep 2024",
+        "v": 12605499.85
+      },
+      {
+        "m": "Oct 2024",
+        "v": 12789883.68
+      },
+      {
+        "m": "Nov 2024",
+        "v": 13135790.75
+      },
+      {
+        "m": "Dec 2024",
+        "v": 11437823.94
+      },
+      {
+        "m": "Jan 2025",
+        "v": 12196316.93
+      },
+      {
+        "m": "Feb 2025",
+        "v": 12295356.12
+      },
+      {
+        "m": "Mar 2025",
+        "v": 12414623.26
+      },
+      {
+        "m": "Apr 2025",
+        "v": 12502992.83
+      },
+      {
+        "m": "May 2025",
+        "v": 12797821.43
+      },
+      {
+        "m": "Jun 2025",
+        "v": 13593990.62
+      },
+      {
+        "m": "Jul 2025",
+        "v": 13459063.57
+      },
+      {
+        "m": "Aug 2025",
+        "v": 13155748.43
+      },
+      {
+        "m": "Sep 2025",
+        "v": 13257192.49
+      },
+      {
+        "m": "Oct 2025",
+        "v": 13979176.71
+      },
+      {
+        "m": "Nov 2025",
+        "v": 14953029.37
+      },
+      {
+        "m": "Dec 2025",
+        "v": 12954797.41
+      },
+      {
+        "m": "Jan 2026",
+        "v": 13016048.01
+      },
+      {
+        "m": "Feb 2026",
+        "v": 13214769.01
+      },
+      {
+        "m": "Mar 2026",
+        "v": 13729801.29
+      },
+      {
+        "m": "Apr 2026",
+        "v": 13919077.31
+      },
+      {
+        "m": "May 2026",
+        "v": 14115739.46
+      },
+      {
+        "m": "Jun 2026",
+        "v": 14657474.87
+      }
+    ],
+    "gross_margin": null,
+    "ebitda": [
+      {
+        "m": "Sep 2024",
+        "v": 2199513.6
+      },
+      {
+        "m": "Oct 2024",
+        "v": 2301954.6
+      },
+      {
+        "m": "Nov 2024",
+        "v": 2318831.93
+      },
+      {
+        "m": "Dec 2024",
+        "v": 1660921.81
+      },
+      {
+        "m": "Jan 2025",
+        "v": 1940600.6
+      },
+      {
+        "m": "Feb 2025",
+        "v": 1912990.98
+      },
+      {
+        "m": "Mar 2025",
+        "v": 2011459.59
+      },
+      {
+        "m": "Apr 2025",
+        "v": 2055899.04
+      },
+      {
+        "m": "May 2025",
+        "v": 2060893.15
+      },
+      {
+        "m": "Jun 2025",
+        "v": 2392917.02
+      },
+      {
+        "m": "Jul 2025",
+        "v": 2382133.98
+      },
+      {
+        "m": "Aug 2025",
+        "v": 2492072.87
+      },
+      {
+        "m": "Sep 2025",
+        "v": 2305563.35
+      },
+      {
+        "m": "Oct 2025",
+        "v": 2495150.93
+      },
+      {
+        "m": "Nov 2025",
+        "v": 2835136.13
+      },
+      {
+        "m": "Dec 2025",
+        "v": 2248759.57
+      },
+      {
+        "m": "Jan 2026",
+        "v": 2332371.67
+      },
+      {
+        "m": "Feb 2026",
+        "v": 2306219.07
+      },
+      {
+        "m": "Mar 2026",
+        "v": 2618535.91
+      },
+      {
+        "m": "Apr 2026",
+        "v": 2763848.1
+      },
+      {
+        "m": "May 2026",
+        "v": 2588973.9
+      },
+      {
+        "m": "Jun 2026",
+        "v": 2696995.08
+      }
+    ],
+    "cash": [
+      {
+        "m": "Sep 2024",
+        "v": 8869981.82
+      },
+      {
+        "m": "Oct 2024",
+        "v": 9440990.12
+      },
+      {
+        "m": "Nov 2024",
+        "v": 9588281.99
+      },
+      {
+        "m": "Dec 2024",
+        "v": 11902593.34
+      },
+      {
+        "m": "Jan 2025",
+        "v": 18843648.31
+      },
+      {
+        "m": "Feb 2025",
+        "v": 19089598.34
+      },
+      {
+        "m": "Mar 2025",
+        "v": 19479483.29
+      },
+      {
+        "m": "Apr 2025",
+        "v": 19868595.12
+      },
+      {
+        "m": "May 2025",
+        "v": 19830995.67
+      },
+      {
+        "m": "Jun 2025",
+        "v": 19072755.72
+      },
+      {
+        "m": "Jul 2025",
+        "v": 19809761.14
+      },
+      {
+        "m": "Aug 2025",
+        "v": 20960406.34
+      },
+      {
+        "m": "Sep 2025",
+        "v": 21547627.6
+      },
+      {
+        "m": "Oct 2025",
+        "v": 19014389.66
+      },
+      {
+        "m": "Nov 2025",
+        "v": 16246988.43
+      },
+      {
+        "m": "Dec 2025",
+        "v": 17597496.57
+      },
+      {
+        "m": "Jan 2026",
+        "v": 16470643.92
+      },
+      {
+        "m": "Feb 2026",
+        "v": 14979785.54
+      },
+      {
+        "m": "Mar 2026",
+        "v": 13295255.49
+      },
+      {
+        "m": "Apr 2026",
+        "v": 12377153.2
+      },
+      {
+        "m": "May 2026",
+        "v": 11304193.71
+      },
+      {
+        "m": "Jun 2026",
+        "v": 9693438.63
+      }
+    ],
+    "total_equity": null
+  },
+  "seasonality_low_months": null,
+  "segments": {
+    "breaks": [],
+    "current_basis_start": "Sep 2024",
+    "months_in_segment": 22
+  },
+  "drift": [],
+  "drift_suppressed": {
+    "suppressed": false,
+    "reason": null
+  },
+  "revenue_mix": [
+    {
+      "line": "Reported EBITDA",
+      "latest": 2696995.08,
+      "share": 0.184001,
+      "mom_pct": 0.041724,
+      "yoy_pct": 0.127074,
+      "yoy_crosses_break": false,
+      "direction": "rising",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 8,
+          "label": "Reported EBITDA",
+          "cells": "B8:W8",
+          "period": "2024-09..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-09/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-10/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-11/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-12/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-01/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-02/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-03/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-04/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-05/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-06/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-07/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-08/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-09/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-10/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-11/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-12/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/consolidated-revised.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 7,
+          "label": "Revenue",
+          "cells": "W7",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        }
+      ],
+      "calc": "revenue leaf: latest at Jun 2026; share = leaf / total revenue at Jun 2026; MoM vs prior month; YoY vs same month prior year; direction = sign of median same-basis MoM delta"
+    },
+    {
+      "line": "EBITDA margin",
+      "latest": 0.18,
+      "share": 0.0,
+      "mom_pct": 0.003222,
+      "yoy_pct": 0.045298,
+      "yoy_crosses_break": false,
+      "direction": "rising",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 9,
+          "label": "EBITDA margin",
+          "cells": "B9:W9",
+          "period": "2024-09..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-09/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-10/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-11/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-12/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-01/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-02/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-03/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-04/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-05/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-06/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-07/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-08/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-09/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-10/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-11/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-12/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/consolidated-revised.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 7,
+          "label": "Revenue",
+          "cells": "W7",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        }
+      ],
+      "calc": "revenue leaf: latest at Jun 2026; share = leaf / total revenue at Jun 2026; MoM vs prior month; YoY vs same month prior year; direction = sign of median same-basis MoM delta"
+    }
+  ],
+  "opex_trends": [],
+  "ebitda_addback_register": null,
+  "performance_review": {
+    "Revenue": {
+      "latest": 14657474.87,
+      "mom_pct": 0.038378,
+      "yoy_pct": 0.078232,
+      "yoy_prior_month": "Jun 2025",
+      "ytd": 82652909.95,
+      "prior_ytd": 75801101.19,
+      "ytd_yoy_pct": 0.090392,
+      "ttm": 164411917.93,
+      "prior_ttm": null,
+      "ttm_yoy_pct": null,
+      "ttm_note": "prior-year TTM n/m -- need 24 same-basis months (segment has 22)"
+    },
+    "EBITDA": {
+      "latest": 2696995.08,
+      "mom_pct": 0.041724,
+      "yoy_pct": 0.127074,
+      "yoy_prior_month": "Jun 2025",
+      "ytd": 15306943.73,
+      "prior_ytd": 12374760.38,
+      "ytd_yoy_pct": 0.236949,
+      "ttm": 30065760.56,
+      "prior_ttm": null,
+      "ttm_yoy_pct": null,
+      "ttm_note": "prior-year TTM n/m -- need 24 same-basis months (segment has 22)"
+    }
+  },
+  "balance_sheet_yoy": {
+    "Cash": {
+      "latest": 9693438.63,
+      "prior_year": 19072755.72,
+      "yoy_pct": -0.491765,
+      "prior_month": "Jun 2025"
+    },
+    "Accounts Receivable": {
+      "latest": 19744595.81,
+      "prior_year": 18492358.57,
+      "yoy_pct": 0.067716,
+      "prior_month": "Jun 2025"
+    },
+    "Accounts Payable": {
+      "latest": 9760119.37,
+      "prior_year": 9027497.29,
+      "yoy_pct": 0.081155,
+      "prior_month": "Jun 2025"
+    }
+  },
+  "ratio_trends": {
+    "dso_days": {
+      "series": [
+        38.045,
+        42.11,
+        40.472,
+        41.55,
+        40.412
+      ],
+      "latest": 40.412,
+      "window_start": 38.045,
+      "window_months": 5,
+      "rel_change": 0.0622,
+      "run_months": 2,
+      "direction": "rising",
+      "deteriorating": false
+    },
+    "ebitda_margin": {
+      "series": [
+        0.175,
+        0.191,
+        0.199,
+        0.183,
+        0.184
+      ],
+      "latest": 0.184,
+      "window_start": 0.175,
+      "window_months": 5,
+      "rel_change": 0.0543,
+      "run_months": 1,
+      "direction": "rising",
+      "deteriorating": false
+    }
+  },
+  "working_capital_divergence": null,
+  "reclassifications": null,
+  "emerging_trends": [
+    {
+      "line": "Beginning debt",
+      "sheet": "Balance Sheet",
+      "end_month": "May 2026",
+      "window_months": 5,
+      "cumulative_abs": -11130260,
+      "cumulative_pct": -0.0961,
+      "direction": "down",
+      "reversals": 0,
+      "gate_abs": 369921,
+      "kind": "recent_run"
+    },
+    {
+      "line": "Ending debt",
+      "sheet": "Balance Sheet",
+      "end_month": "May 2026",
+      "window_months": 5,
+      "cumulative_abs": -10907655,
+      "cumulative_pct": -0.0961,
+      "direction": "down",
+      "reversals": 0,
+      "gate_abs": 369921,
+      "kind": "recent_run"
+    },
+    {
+      "line": "Required principal",
+      "sheet": "Balance Sheet",
+      "end_month": "May 2026",
+      "window_months": 5,
+      "cumulative_abs": -222605,
+      "cumulative_pct": -0.0961,
+      "direction": "down",
+      "reversals": 0,
+      "gate_abs": 82206,
+      "kind": "recent_run"
+    },
+    {
+      "line": "Scheduled Debt Principal Payments",
+      "sheet": "Balance Sheet",
+      "end_month": "May 2026",
+      "window_months": 5,
+      "cumulative_abs": -222605,
+      "cumulative_pct": -0.0961,
+      "direction": "down",
+      "reversals": 0,
+      "gate_abs": 82206,
+      "kind": "recent_run"
+    },
+    {
+      "line": "Revenue",
+      "sheet": "Income Statement",
+      "end_month": "May 2026",
+      "window_months": 5,
+      "cumulative_abs": 1160942,
+      "cumulative_pct": 0.0896,
+      "direction": "up",
+      "reversals": 0,
+      "gate_abs": 442243,
+      "kind": "recent_run"
+    },
+    {
+      "line": "Net working capital",
+      "sheet": "Balance Sheet",
+      "end_month": "Jun 2026",
+      "window_months": 4,
+      "cumulative_abs": 814308,
+      "cumulative_pct": 0.0888,
+      "direction": "up",
+      "reversals": 1,
+      "gate_abs": 338657,
+      "kind": "emerging_trend"
+    },
+    {
+      "line": "Reported EBITDA",
+      "sheet": "Income Statement",
+      "end_month": "Jun 2026",
+      "window_months": 4,
+      "cumulative_abs": 390776,
+      "cumulative_pct": 0.1694,
+      "direction": "up",
+      "reversals": 1,
+      "gate_abs": 164908,
+      "kind": "emerging_trend"
+    },
+    {
+      "line": "Accounts payable",
+      "sheet": "Balance Sheet",
+      "end_month": "May 2026",
+      "window_months": 5,
+      "cumulative_abs": 834835,
+      "cumulative_pct": 0.0977,
+      "direction": "up",
+      "reversals": 0,
+      "gate_abs": 425252,
+      "kind": "recent_run"
+    },
+    {
+      "line": "Accounts receivable",
+      "sheet": "Balance Sheet",
+      "end_month": "May 2026",
+      "window_months": 5,
+      "cumulative_abs": 884127,
+      "cumulative_pct": 0.049,
+      "direction": "up",
+      "reversals": 1,
+      "gate_abs": 499903,
+      "kind": "recent_run"
+    },
+    {
+      "line": "Cash Interest Expense",
+      "sheet": "Balance Sheet",
+      "end_month": "May 2026",
+      "window_months": 5,
+      "cumulative_abs": -95118,
+      "cumulative_pct": -0.0961,
+      "direction": "down",
+      "reversals": 0,
+      "gate_abs": 82206,
+      "kind": "recent_run"
+    }
+  ],
+  "trend_signal_params": {
+    "dollar_gate": 82206,
+    "window": 4,
+    "trend_min_months": 3,
+    "trend_max_months": 5,
+    "run_end_tolerance": 2,
+    "k_vol": 1.5,
+    "ratio_rel": 0.2,
+    "wc_driver_pct": 0.1,
+    "wc_rev_pct": 0.1,
+    "reclass_net_frac": 0.2,
+    "reclass_min_pct": 0.25,
+    "note": "scale-aware: gate = max(scale dollar floor, k_vol x series MAD); % values are fallbacks"
+  },
+  "line_read": {
+    "income_statement": {
+      "sheet": "Income Statement",
+      "months_read": 22,
+      "lines": [],
+      "flagged": [],
+      "params": {
+        "materiality_floor": 82205.958965,
+        "floor_basis": "max($10,000, 5bps of trailing-12m annualized revenue $164,411,918) = $82,206",
+        "run_min_months": 3,
+        "frozen_min_months": 3,
+        "big_move_pct": 0.25,
+        "share_shift_ppt": 5.0
+      },
+      "note": "every leaf line read and trended; flags are deterministic rules on an absolute materiality floor -- no statistical gating; lookbacks confined to the current same-basis segment",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "period": "2024-09..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-09/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-10/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-11/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-12/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-01/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-02/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-03/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-04/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-05/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-06/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-07/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-08/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-09/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-10/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-11/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-12/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/consolidated-revised.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        }
+      ],
+      "calc": "full leaf-line sweep of 'Income Statement' Sep 2024..Jun 2026: 0 leaf rows read (subtotal/memo rows excluded); per line: latest, prior, MoM, trailing-3m avg, same-direction run, frozen months, share of 'Revenue'; flags are deterministic rules on materiality floor 82,206"
+    },
+    "balance_sheet": {
+      "sheet": "Balance Sheet",
+      "months_read": 22,
+      "lines": [
+        {
+          "line": "Accounts receivable",
+          "latest": 19744595.81,
+          "prior": 18919796.12,
+          "mom_abs": 824799.69,
+          "mom_pct": 0.043595,
+          "avg_3m": 18782707.14,
+          "run": {
+            "direction": "up",
+            "months": 5,
+            "total": 1939509.87
+          },
+          "frozen_months": null,
+          "last_observed": null,
+          "share": null,
+          "share_shift_since_start": null,
+          "flags": [
+            "monotonic_run"
+          ],
+          "source_ref": [
+            {
+              "file": 0,
+              "store": "store",
+              "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+              "sheet": "Balance Sheet",
+              "row": 7,
+              "label": "Accounts receivable",
+              "cells": "R7:W7",
+              "period": "2026-01..2026-06",
+              "upstream": [
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-03/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+                  "sheet": "Working Capital"
+                }
+              ]
+            }
+          ],
+          "calc": "monotonic_run: up 5 mo in a row Jan 2026..Jun 2026, cumulative +1.93951e+06 (Balance Sheet row 7)"
+        },
+        {
+          "line": "Accounts payable",
+          "latest": 9760119.37,
+          "prior": 9375674.15,
+          "mom_abs": 384445.22,
+          "mom_pct": 0.041005,
+          "avg_3m": 9093485.15,
+          "run": {
+            "direction": "up",
+            "months": 6,
+            "total": 1219280.53
+          },
+          "frozen_months": null,
+          "last_observed": null,
+          "share": null,
+          "share_shift_since_start": null,
+          "flags": [
+            "monotonic_run"
+          ],
+          "source_ref": [
+            {
+              "file": 0,
+              "store": "store",
+              "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+              "sheet": "Balance Sheet",
+              "row": 8,
+              "label": "Accounts payable",
+              "cells": "Q8:W8",
+              "period": "2025-12..2026-06",
+              "upstream": [
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-12/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-03/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+                  "sheet": "Working Capital"
+                }
+              ]
+            }
+          ],
+          "calc": "monotonic_run: up 6 mo in a row Dec 2025..Jun 2026, cumulative +1.21928e+06 (Balance Sheet row 8)"
+        },
+        {
+          "line": "Beginning debt",
+          "latest": 102620084.85,
+          "prior": 104714372.3,
+          "mom_abs": -2094287.45,
+          "mom_pct": -0.02,
+          "avg_3m": 106865937.91,
+          "run": {
+            "direction": "down",
+            "months": 21,
+            "total": -21181649.03
+          },
+          "frozen_months": null,
+          "last_observed": null,
+          "share": null,
+          "share_shift_since_start": null,
+          "flags": [
+            "monotonic_run"
+          ],
+          "source_ref": [
+            {
+              "file": 0,
+              "store": "store",
+              "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+              "sheet": "Balance Sheet",
+              "row": 12,
+              "label": "Beginning debt",
+              "cells": "B12:W12",
+              "period": "2024-09..2026-06",
+              "upstream": [
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-09/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-10/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-11/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-12/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-01/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-02/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-03/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-04/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-05/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-06/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-07/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-08/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-09/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-10/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-11/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-12/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-03/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+                  "sheet": "Working Capital"
+                }
+              ]
+            }
+          ],
+          "calc": "monotonic_run: down 21 mo in a row Sep 2024..Jun 2026, cumulative -2.11816e+07 (Balance Sheet row 12)"
+        },
+        {
+          "line": "Required principal",
+          "latest": 2052401.7,
+          "prior": 2094287.45,
+          "mom_abs": -41885.75,
+          "mom_pct": -0.02,
+          "avg_3m": 2137318.76,
+          "run": {
+            "direction": "down",
+            "months": 8,
+            "total": -360022.96
+          },
+          "frozen_months": null,
+          "last_observed": null,
+          "share": null,
+          "share_shift_since_start": null,
+          "flags": [
+            "monotonic_run"
+          ],
+          "source_ref": [
+            {
+              "file": 0,
+              "store": "store",
+              "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+              "sheet": "Balance Sheet",
+              "row": 13,
+              "label": "Required principal",
+              "cells": "O13:W13",
+              "period": "2025-10..2026-06",
+              "upstream": [
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-10/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-11/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-12/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-03/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+                  "sheet": "Working Capital"
+                }
+              ]
+            }
+          ],
+          "calc": "monotonic_run: down 8 mo in a row Oct 2025..Jun 2026, cumulative -360,023 (Balance Sheet row 13)"
+        },
+        {
+          "line": "Draws",
+          "latest": 0.0,
+          "prior": 0.0,
+          "mom_abs": 0.0,
+          "mom_pct": null,
+          "avg_3m": 0.0,
+          "run": null,
+          "frozen_months": 22,
+          "last_observed": null,
+          "share": null,
+          "share_shift_since_start": null,
+          "flags": null
+        },
+        {
+          "line": "PIK",
+          "latest": 0.0,
+          "prior": 0.0,
+          "mom_abs": 0.0,
+          "mom_pct": null,
+          "avg_3m": 0.0,
+          "run": null,
+          "frozen_months": 22,
+          "last_observed": null,
+          "share": null,
+          "share_shift_since_start": null,
+          "flags": null
+        },
+        {
+          "line": "Ending debt",
+          "latest": 100567683.15,
+          "prior": 102620084.85,
+          "mom_abs": -2052401.7,
+          "mom_pct": -0.02,
+          "avg_3m": 104728619.15,
+          "run": {
+            "direction": "down",
+            "months": 21,
+            "total": -22986447.26
+          },
+          "frozen_months": null,
+          "last_observed": null,
+          "share": null,
+          "share_shift_since_start": null,
+          "flags": [
+            "monotonic_run"
+          ],
+          "source_ref": [
+            {
+              "file": 0,
+              "store": "store",
+              "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+              "sheet": "Balance Sheet",
+              "row": 16,
+              "label": "Ending debt",
+              "cells": "B16:W16",
+              "period": "2024-09..2026-06",
+              "upstream": [
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-09/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-10/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-11/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-12/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-01/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-02/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-03/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-04/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-05/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-06/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-07/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-08/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-09/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-10/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-11/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-12/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-03/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+                  "sheet": "Working Capital"
+                }
+              ]
+            }
+          ],
+          "calc": "monotonic_run: down 21 mo in a row Sep 2024..Jun 2026, cumulative -2.29864e+07 (Balance Sheet row 16)"
+        },
+        {
+          "line": "Cash Interest Expense",
+          "latest": 876983.86,
+          "prior": 894881.49,
+          "mom_abs": -17897.63,
+          "mom_pct": -0.02,
+          "avg_3m": 913268.61,
+          "run": {
+            "direction": "down",
+            "months": 21,
+            "total": -181016.84
+          },
+          "frozen_months": null,
+          "last_observed": null,
+          "share": null,
+          "share_shift_since_start": null,
+          "flags": [
+            "monotonic_run"
+          ],
+          "source_ref": [
+            {
+              "file": 0,
+              "store": "store",
+              "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+              "sheet": "Balance Sheet",
+              "row": 19,
+              "label": "Cash Interest Expense",
+              "cells": "B19:W19",
+              "period": "2024-09..2026-06",
+              "upstream": [
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-09/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-10/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-11/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-12/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-01/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-02/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-03/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-04/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-05/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-06/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-07/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-08/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-09/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-10/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-11/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-12/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-03/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+                  "sheet": "Working Capital"
+                }
+              ]
+            }
+          ],
+          "calc": "monotonic_run: down 21 mo in a row Sep 2024..Jun 2026, cumulative -181,017 (Balance Sheet row 19)"
+        },
+        {
+          "line": "Scheduled Debt Principal Payments",
+          "latest": 2052401.7,
+          "prior": 2094287.45,
+          "mom_abs": -41885.75,
+          "mom_pct": -0.02,
+          "avg_3m": 2137318.76,
+          "run": {
+            "direction": "down",
+            "months": 8,
+            "total": -360022.96
+          },
+          "frozen_months": null,
+          "last_observed": null,
+          "share": null,
+          "share_shift_since_start": null,
+          "flags": [
+            "monotonic_run"
+          ],
+          "source_ref": [
+            {
+              "file": 0,
+              "store": "store",
+              "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+              "sheet": "Balance Sheet",
+              "row": 20,
+              "label": "Scheduled Debt Principal Payments",
+              "cells": "O20:W20",
+              "period": "2025-10..2026-06",
+              "upstream": [
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-10/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-11/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-12/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-03/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+                  "sheet": "Working Capital"
+                }
+              ]
+            }
+          ],
+          "calc": "monotonic_run: down 8 mo in a row Oct 2025..Jun 2026, cumulative -360,023 (Balance Sheet row 20)"
+        }
+      ],
+      "flagged": [
+        {
+          "line": "Beginning debt",
+          "latest": 102620084.85,
+          "prior": 104714372.3,
+          "mom_abs": -2094287.45,
+          "mom_pct": -0.02,
+          "avg_3m": 106865937.91,
+          "run": {
+            "direction": "down",
+            "months": 21,
+            "total": -21181649.03
+          },
+          "frozen_months": null,
+          "last_observed": null,
+          "share": null,
+          "share_shift_since_start": null,
+          "flags": [
+            "monotonic_run"
+          ],
+          "source_ref": [
+            {
+              "file": 0,
+              "store": "store",
+              "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+              "sheet": "Balance Sheet",
+              "row": 12,
+              "label": "Beginning debt",
+              "cells": "B12:W12",
+              "period": "2024-09..2026-06",
+              "upstream": [
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-09/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-10/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-11/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-12/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-01/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-02/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-03/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-04/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-05/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-06/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-07/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-08/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-09/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-10/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-11/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-12/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-03/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+                  "sheet": "Working Capital"
+                }
+              ]
+            }
+          ],
+          "calc": "monotonic_run: down 21 mo in a row Sep 2024..Jun 2026, cumulative -2.11816e+07 (Balance Sheet row 12)"
+        },
+        {
+          "line": "Ending debt",
+          "latest": 100567683.15,
+          "prior": 102620084.85,
+          "mom_abs": -2052401.7,
+          "mom_pct": -0.02,
+          "avg_3m": 104728619.15,
+          "run": {
+            "direction": "down",
+            "months": 21,
+            "total": -22986447.26
+          },
+          "frozen_months": null,
+          "last_observed": null,
+          "share": null,
+          "share_shift_since_start": null,
+          "flags": [
+            "monotonic_run"
+          ],
+          "source_ref": [
+            {
+              "file": 0,
+              "store": "store",
+              "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+              "sheet": "Balance Sheet",
+              "row": 16,
+              "label": "Ending debt",
+              "cells": "B16:W16",
+              "period": "2024-09..2026-06",
+              "upstream": [
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-09/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-10/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-11/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-12/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-01/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-02/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-03/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-04/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-05/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-06/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-07/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-08/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-09/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-10/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-11/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-12/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-03/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+                  "sheet": "Working Capital"
+                }
+              ]
+            }
+          ],
+          "calc": "monotonic_run: down 21 mo in a row Sep 2024..Jun 2026, cumulative -2.29864e+07 (Balance Sheet row 16)"
+        },
+        {
+          "line": "Accounts receivable",
+          "latest": 19744595.81,
+          "prior": 18919796.12,
+          "mom_abs": 824799.69,
+          "mom_pct": 0.043595,
+          "avg_3m": 18782707.14,
+          "run": {
+            "direction": "up",
+            "months": 5,
+            "total": 1939509.87
+          },
+          "frozen_months": null,
+          "last_observed": null,
+          "share": null,
+          "share_shift_since_start": null,
+          "flags": [
+            "monotonic_run"
+          ],
+          "source_ref": [
+            {
+              "file": 0,
+              "store": "store",
+              "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+              "sheet": "Balance Sheet",
+              "row": 7,
+              "label": "Accounts receivable",
+              "cells": "R7:W7",
+              "period": "2026-01..2026-06",
+              "upstream": [
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-03/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+                  "sheet": "Working Capital"
+                }
+              ]
+            }
+          ],
+          "calc": "monotonic_run: up 5 mo in a row Jan 2026..Jun 2026, cumulative +1.93951e+06 (Balance Sheet row 7)"
+        },
+        {
+          "line": "Accounts payable",
+          "latest": 9760119.37,
+          "prior": 9375674.15,
+          "mom_abs": 384445.22,
+          "mom_pct": 0.041005,
+          "avg_3m": 9093485.15,
+          "run": {
+            "direction": "up",
+            "months": 6,
+            "total": 1219280.53
+          },
+          "frozen_months": null,
+          "last_observed": null,
+          "share": null,
+          "share_shift_since_start": null,
+          "flags": [
+            "monotonic_run"
+          ],
+          "source_ref": [
+            {
+              "file": 0,
+              "store": "store",
+              "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+              "sheet": "Balance Sheet",
+              "row": 8,
+              "label": "Accounts payable",
+              "cells": "Q8:W8",
+              "period": "2025-12..2026-06",
+              "upstream": [
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-12/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-03/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+                  "sheet": "Working Capital"
+                }
+              ]
+            }
+          ],
+          "calc": "monotonic_run: up 6 mo in a row Dec 2025..Jun 2026, cumulative +1.21928e+06 (Balance Sheet row 8)"
+        },
+        {
+          "line": "Required principal",
+          "latest": 2052401.7,
+          "prior": 2094287.45,
+          "mom_abs": -41885.75,
+          "mom_pct": -0.02,
+          "avg_3m": 2137318.76,
+          "run": {
+            "direction": "down",
+            "months": 8,
+            "total": -360022.96
+          },
+          "frozen_months": null,
+          "last_observed": null,
+          "share": null,
+          "share_shift_since_start": null,
+          "flags": [
+            "monotonic_run"
+          ],
+          "source_ref": [
+            {
+              "file": 0,
+              "store": "store",
+              "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+              "sheet": "Balance Sheet",
+              "row": 13,
+              "label": "Required principal",
+              "cells": "O13:W13",
+              "period": "2025-10..2026-06",
+              "upstream": [
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-10/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-11/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-12/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-03/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+                  "sheet": "Working Capital"
+                }
+              ]
+            }
+          ],
+          "calc": "monotonic_run: down 8 mo in a row Oct 2025..Jun 2026, cumulative -360,023 (Balance Sheet row 13)"
+        },
+        {
+          "line": "Scheduled Debt Principal Payments",
+          "latest": 2052401.7,
+          "prior": 2094287.45,
+          "mom_abs": -41885.75,
+          "mom_pct": -0.02,
+          "avg_3m": 2137318.76,
+          "run": {
+            "direction": "down",
+            "months": 8,
+            "total": -360022.96
+          },
+          "frozen_months": null,
+          "last_observed": null,
+          "share": null,
+          "share_shift_since_start": null,
+          "flags": [
+            "monotonic_run"
+          ],
+          "source_ref": [
+            {
+              "file": 0,
+              "store": "store",
+              "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+              "sheet": "Balance Sheet",
+              "row": 20,
+              "label": "Scheduled Debt Principal Payments",
+              "cells": "O20:W20",
+              "period": "2025-10..2026-06",
+              "upstream": [
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-10/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-11/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-12/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-03/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+                  "sheet": "Working Capital"
+                }
+              ]
+            }
+          ],
+          "calc": "monotonic_run: down 8 mo in a row Oct 2025..Jun 2026, cumulative -360,023 (Balance Sheet row 20)"
+        },
+        {
+          "line": "Cash Interest Expense",
+          "latest": 876983.86,
+          "prior": 894881.49,
+          "mom_abs": -17897.63,
+          "mom_pct": -0.02,
+          "avg_3m": 913268.61,
+          "run": {
+            "direction": "down",
+            "months": 21,
+            "total": -181016.84
+          },
+          "frozen_months": null,
+          "last_observed": null,
+          "share": null,
+          "share_shift_since_start": null,
+          "flags": [
+            "monotonic_run"
+          ],
+          "source_ref": [
+            {
+              "file": 0,
+              "store": "store",
+              "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+              "sheet": "Balance Sheet",
+              "row": 19,
+              "label": "Cash Interest Expense",
+              "cells": "B19:W19",
+              "period": "2024-09..2026-06",
+              "upstream": [
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-09/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-10/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-11/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-12/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-01/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-02/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-03/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-04/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-05/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-06/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-07/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-08/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-09/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-10/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-11/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-12/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-03/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+                  "sheet": "Working Capital"
+                },
+                {
+                  "store": "source",
+                  "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+                  "sheet": "Working Capital"
+                }
+              ]
+            }
+          ],
+          "calc": "monotonic_run: down 21 mo in a row Sep 2024..Jun 2026, cumulative -181,017 (Balance Sheet row 19)"
+        }
+      ],
+      "params": {
+        "materiality_floor": 82205.958965,
+        "floor_basis": "max($10,000, 5bps of trailing-12m annualized revenue $164,411,918) = $82,206",
+        "run_min_months": 3,
+        "frozen_min_months": 3,
+        "big_move_pct": 0.25,
+        "share_shift_ppt": 5.0
+      },
+      "note": "every leaf line read and trended; flags are deterministic rules on an absolute materiality floor -- no statistical gating; lookbacks confined to the current same-basis segment",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Balance Sheet",
+          "period": "2024-09..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-09/monthly.xlsx",
+              "sheet": "Working Capital"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-10/monthly.xlsx",
+              "sheet": "Working Capital"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-11/monthly.xlsx",
+              "sheet": "Working Capital"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-12/monthly.xlsx",
+              "sheet": "Working Capital"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-01/monthly.xlsx",
+              "sheet": "Working Capital"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-02/monthly.xlsx",
+              "sheet": "Working Capital"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-03/monthly.xlsx",
+              "sheet": "Working Capital"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-04/monthly.xlsx",
+              "sheet": "Working Capital"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-05/monthly.xlsx",
+              "sheet": "Working Capital"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-06/monthly.xlsx",
+              "sheet": "Working Capital"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-07/monthly.xlsx",
+              "sheet": "Working Capital"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-08/monthly.xlsx",
+              "sheet": "Working Capital"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-09/monthly.xlsx",
+              "sheet": "Working Capital"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-10/monthly.xlsx",
+              "sheet": "Working Capital"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-11/monthly.xlsx",
+              "sheet": "Working Capital"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-12/monthly.xlsx",
+              "sheet": "Working Capital"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+              "sheet": "Working Capital"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+              "sheet": "Working Capital"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-03/monthly.xlsx",
+              "sheet": "Working Capital"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+              "sheet": "Working Capital"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+              "sheet": "Working Capital"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+              "sheet": "Working Capital"
+            }
+          ]
+        }
+      ],
+      "calc": "full leaf-line sweep of 'Balance Sheet' Sep 2024..Jun 2026: 9 leaf rows read (subtotal/memo rows excluded); per line: latest, prior, MoM, trailing-3m avg, same-direction run, frozen months; flags are deterministic rules on materiality floor 82,206"
+    }
+  },
+  "liquidity": {
+    "cash": 9693438.63,
+    "burn_1m": 1610755.08,
+    "burn_3m_avg": 1200605.62,
+    "ocf_distortions": [],
+    "cash_floor": null,
+    "floor_source": "none",
+    "months_to_floor_1m": null,
+    "months_to_floor_3m": null,
+    "source_ref": [
+      {
+        "file": 0,
+        "store": "store",
+        "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+        "sheet": "Cash Flow Statement",
+        "row": 19,
+        "label": "Ending cash",
+        "cells": "W19",
+        "period": "2026-06",
+        "upstream": [
+          {
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+            "sheet": "Cash Flow"
+          }
+        ]
+      },
+      {
+        "file": 0,
+        "store": "store",
+        "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+        "sheet": "Cash Flow Statement",
+        "row": 24,
+        "label": "Memo: Net change in cash (derived: Operating + Investing[Capex] + Financing)",
+        "cells": "U24:W24",
+        "period": "2026-04..2026-06",
+        "upstream": [
+          {
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+            "sheet": "Cash Flow"
+          },
+          {
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+            "sheet": "Cash Flow"
+          },
+          {
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+            "sheet": "Cash Flow"
+          }
+        ]
+      },
+      {
+        "file": 0,
+        "store": "store",
+        "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+        "sheet": "Cash Flow Statement",
+        "row": 21,
+        "label": "Operating Cash Flow (derived)",
+        "cells": "B21:W21",
+        "period": "2024-09..2026-06",
+        "upstream": [
+          {
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-09/monthly.xlsx",
+            "sheet": "Cash Flow"
+          },
+          {
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-10/monthly.xlsx",
+            "sheet": "Cash Flow"
+          },
+          {
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-11/monthly.xlsx",
+            "sheet": "Cash Flow"
+          },
+          {
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Archive/2024-12/monthly.xlsx",
+            "sheet": "Cash Flow"
+          },
+          {
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-01/monthly.xlsx",
+            "sheet": "Cash Flow"
+          },
+          {
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-02/monthly.xlsx",
+            "sheet": "Cash Flow"
+          },
+          {
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-03/monthly.xlsx",
+            "sheet": "Cash Flow"
+          },
+          {
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-04/monthly.xlsx",
+            "sheet": "Cash Flow"
+          },
+          {
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-05/monthly.xlsx",
+            "sheet": "Cash Flow"
+          },
+          {
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-06/monthly.xlsx",
+            "sheet": "Cash Flow"
+          },
+          {
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-07/monthly.xlsx",
+            "sheet": "Cash Flow"
+          },
+          {
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-08/monthly.xlsx",
+            "sheet": "Cash Flow"
+          },
+          {
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-09/monthly.xlsx",
+            "sheet": "Cash Flow"
+          },
+          {
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-10/monthly.xlsx",
+            "sheet": "Cash Flow"
+          },
+          {
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-11/monthly.xlsx",
+            "sheet": "Cash Flow"
+          },
+          {
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Archive/2025-12/monthly.xlsx",
+            "sheet": "Cash Flow"
+          },
+          {
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-01/monthly.xlsx",
+            "sheet": "Cash Flow"
+          },
+          {
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-02/monthly.xlsx",
+            "sheet": "Cash Flow"
+          },
+          {
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-03/monthly.xlsx",
+            "sheet": "Cash Flow"
+          },
+          {
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+            "sheet": "Cash Flow"
+          },
+          {
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+            "sheet": "Cash Flow"
+          },
+          {
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+            "sheet": "Cash Flow"
+          }
+        ]
+      },
+      {
+        "file": 0,
+        "store": "store",
+        "path_in_store": "borrowers/selvara-industrial-services/.record/runs/2026-06/run-20260915-105656/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+        "sheet": "Cash Flow Statement",
+        "row": 22,
+        "label": "Financing Cash Flow (derived)",
+        "cells": "U22:W22",
+        "period": "2026-04..2026-06",
+        "upstream": [
+          {
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-04/monthly.xlsx",
+            "sheet": "Cash Flow"
+          },
+          {
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Archive/2026-05/monthly.xlsx",
+            "sheet": "Cash Flow"
+          },
+          {
+            "store": "source",
+            "path_in_store": "Selvara Industrial Services/Monthly/Current/2026-06/June_2026_Monthly_Package.xlsx",
+            "sheet": "Cash Flow"
+          }
+        ]
+      }
+    ],
+    "calc": "cash = spot balance at Jun 2026; burn_1m = -net_change_cash at Jun 2026; burn_3m_avg = -mean(net_change_cash Apr 2026..Jun 2026); no cash floor resolvable (config.analysis.cash_floor or a covenant-spec min-cash covenant); months_to_floor omitted"
+  },
+  "ratios_suppressed": [
+    {
+      "ratio": "dio_days",
+      "reason": "inventory line configured but not found in model"
+    },
+    {
+      "ratio": "cash_conversion_cycle_days",
+      "reason": "depends on dio_days, which is suppressed"
+    },
+    {
+      "ratio": "current_ratio",
+      "reason": "total_current_assets/total_current_liabilities not resolvable in this model (no current/non-current split on the Balance Sheet)"
+    },
+    {
+      "ratio": "working_capital",
+      "reason": "depends on total_current_assets/total_current_liabilities, which are not resolvable"
+    },
+    {
+      "ratio": "total_debt_to_ttm_gross_profit",
+      "reason": "n/m \u2014 TTM gross profit <= 0 or fewer than 12 same-basis months (22)"
+    }
+  ],
+  "funded_debt": null,
+  "context_conditioning": {
+    "deal_context_read": true,
+    "covenant_spec_read": true,
+    "business_model": "services",
+    "applied": [
+      {
+        "decision": "business_model",
+        "value": "services",
+        "source": "config.analysis.business_model"
+      }
+    ]
+  },
+  "methodology": "Company-prepared/unaudited monthly financials model (read via monitor_lib). EBITDA is the model's single pinned bridge row. Normalized metrics strip config.comparability_items. Ratios are spot on latest-month flows; leverage/coverage are TTM within the current same-basis segment when >=12 such months exist. Standouts, drift, trend and the MoM bridge are objective/mechanical and confined to same-basis segments; the line read covers EVERY IS/BS leaf with rule-based flags (no statistical gating); narrative interpretation is left to synthesis."
+}

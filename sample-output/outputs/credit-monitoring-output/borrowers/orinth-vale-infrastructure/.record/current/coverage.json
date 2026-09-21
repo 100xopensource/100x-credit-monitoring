@@ -1,0 +1,85 @@
+{
+  "module": "coverage",
+  "period": "2026-06",
+  "run_id": "run-20260915-094514",
+  "run_id_from": "run",
+  "produced_at": "2026-09-15T09:56:49+00:00",
+  "produced_by": {
+    "engine": "coverage",
+    "plugin_version": "1.0.0"
+  },
+  "source_files": [],
+  "results": [],
+  "exceptions": [],
+  "borrower": "Orinth Vale Infrastructure, LLC",
+  "modules": [
+    {
+      "module": "covenant-compliance",
+      "state": "reported",
+      "figures": 6,
+      "exceptions": 1,
+      "reason": null,
+      "run_id": "run-20260915-094514",
+      "produced_at": "2026-09-15T09:50:11+00:00",
+      "source_ref_reach": {
+        "cell": 8,
+        "file": 20,
+        "unlocated": 0,
+        "borrower_doc": 28
+      },
+      "archived": "covenant-compliance-2026-06.json"
+    },
+    {
+      "module": "budget-vs-actual",
+      "state": "reported",
+      "figures": 12,
+      "exceptions": 0,
+      "reason": null,
+      "run_id": "run-20260915-094514",
+      "produced_at": "2026-09-15T09:47:55+00:00",
+      "source_ref_reach": {
+        "cell": 24,
+        "file": 8,
+        "unlocated": 0,
+        "borrower_doc": 16
+      },
+      "archived": "budget-vs-actual-2026-06.json"
+    },
+    {
+      "module": "ap-ar-aging",
+      "state": "reported",
+      "figures": 2,
+      "exceptions": 2,
+      "reason": null,
+      "run_id": "run-20260915-094514",
+      "produced_at": "2026-09-15T09:54:51+00:00",
+      "source_ref_reach": {
+        "cell": 20,
+        "file": 0,
+        "unlocated": 0,
+        "borrower_doc": 6
+      },
+      "archived": "ap-ar-aging-2026-06.json"
+    },
+    {
+      "module": "three-statement-analysis",
+      "state": "reported",
+      "figures": 74,
+      "exceptions": 18,
+      "reason": null,
+      "run_id": "run-20260915-094514",
+      "produced_at": "2026-09-15T09:47:46+00:00",
+      "source_ref_reach": {
+        "cell": 107,
+        "file": 5,
+        "unlocated": 0,
+        "borrower_doc": 109
+      },
+      "archived": "three-statement-analysis-2026-06.json"
+    }
+  ],
+  "tally": {
+    "reported": 4
+  },
+  "readable": true
+}

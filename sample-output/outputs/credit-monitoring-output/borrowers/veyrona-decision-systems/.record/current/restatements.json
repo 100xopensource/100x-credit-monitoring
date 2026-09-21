@@ -1,0 +1,110 @@
+[
+  {
+    "build": "2026-09-16",
+    "period": "Mar 2026",
+    "line": "Income Statement: Revenue",
+    "old": 13570373.98,
+    "new": 14062563.71,
+    "source": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx",
+    "material": true
+  },
+  {
+    "build": "2026-09-16",
+    "period": "Mar 2026",
+    "line": "Income Statement: Cost of Revenue",
+    "old": 7328001.95,
+    "new": 7780816.5,
+    "source": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx",
+    "material": true
+  },
+  {
+    "build": "2026-09-16",
+    "period": "Mar 2026",
+    "line": "Income Statement: Reported EBITDA",
+    "old": 3012476.43,
+    "new": 3051851.61,
+    "source": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx",
+    "material": true
+  },
+  {
+    "build": "2026-09-16",
+    "period": "Mar 2026",
+    "line": "Balance Sheet: Contract Asset",
+    "old": 5000000.0,
+    "new": 5492189.73,
+    "source": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx",
+    "material": true
+  },
+  {
+    "build": "2026-09-16",
+    "period": "Mar 2026",
+    "line": "Balance Sheet: Accrued Cost",
+    "old": 2000000.0,
+    "new": 2452814.55,
+    "source": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx",
+    "material": true
+  },
+  {
+    "build": "2026-09-16",
+    "period": "Mar 2026",
+    "line": "Balance Sheet: Retained Earnings Effect",
+    "old": 0.0,
+    "new": 39375.18,
+    "source": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx",
+    "material": true
+  },
+  {
+    "build": "2026-09-16",
+    "period": "Apr 2026",
+    "line": "Balance Sheet: Contract Asset",
+    "old": 5000000.0,
+    "new": 5492189.73,
+    "source": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx",
+    "material": true
+  },
+  {
+    "build": "2026-09-16",
+    "period": "Apr 2026",
+    "line": "Balance Sheet: Accrued Cost",
+    "old": 2000000.0,
+    "new": 2452814.55,
+    "source": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx",
+    "material": true
+  },
+  {
+    "build": "2026-09-16",
+    "period": "Apr 2026",
+    "line": "Balance Sheet: Retained Earnings Effect",
+    "old": 0.0,
+    "new": 39375.18,
+    "source": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx",
+    "material": true
+  },
+  {
+    "build": "2026-09-16",
+    "period": "May 2026",
+    "line": "Balance Sheet: Contract Asset",
+    "old": 5000000.0,
+    "new": 5492189.73,
+    "source": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx",
+    "material": true
+  },
+  {
+    "build": "2026-09-16",
+    "period": "May 2026",
+    "line": "Balance Sheet: Accrued Cost",
+    "old": 2000000.0,
+    "new": 2452814.55,
+    "source": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx",
+    "material": true
+  },
+  {
+    "build": "2026-09-16",
+    "period": "May 2026",
+    "line": "Balance Sheet: Retained Earnings Effect",
+    "old": 0.0,
+    "new": 39375.18,
+    "source": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx",
+    "material": true
+  }
+]

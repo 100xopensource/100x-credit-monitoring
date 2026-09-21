@@ -1,0 +1,823 @@
+{
+  "module": "budget-vs-actual",
+  "period": "2026-06",
+  "run_id": "run-20260916-094426",
+  "run_id_from": "run",
+  "produced_at": "2026-09-16T09:52:27+00:00",
+  "produced_by": {
+    "engine": "budget-vs-actual",
+    "plugin_version": "1.0.0"
+  },
+  "reporting_unit": {
+    "scale": 1.0,
+    "currency": "USD",
+    "verbatim": "Fictional clean-room borrower evidence | USD unless noted",
+    "plain": "USD"
+  },
+  "stores": {
+    "store": {
+      "url_base": null
+    },
+    "source": {
+      "url_base": null
+    }
+  },
+  "source_ref_reach": {
+    "cell": 16,
+    "file": 10,
+    "unlocated": 0,
+    "borrower_doc": 18
+  },
+  "source_files": [
+    "store:borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/Veyrona Decision Systems Monthly IS-BS-CF.xlsx",
+    "store:borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/config/budget-map.json",
+    "store:borrowers/veyrona-decision-systems/_model/Veyrona Decision Systems Budget (transposed).xlsx"
+  ],
+  "results": [
+    {
+      "metric": "Revenue",
+      "scope": "latest",
+      "actual": 19921004.84,
+      "budget": null,
+      "var_abs": null,
+      "var_pct": null,
+      "favorable": null,
+      "material": false,
+      "note": "Budget not available for this metric: the budget-map has no monthly 'revenue' row (metric_rows.'revenue' is absent) -- see the budget-map's own gap note for why (e.g. the approved budget may provide only an annual/H1 aggregate, not a monthly figure).",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/Veyrona Decision Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 7,
+          "label": "Revenue",
+          "cells": "W7",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/June_2026_Monthly_Package_2026-07-25.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/config/budget-map.json",
+          "section": "metric_rows.revenue",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance n/a = actual 19,921,004.84 (model 'Revenue' (Income Statement W7), Jun 2026) - budget n/a (no budget-map entry (metric_rows.revenue); budget not available)"
+    },
+    {
+      "metric": "Revenue",
+      "scope": "YTD",
+      "actual": 104865206.79,
+      "budget": null,
+      "var_abs": null,
+      "var_pct": null,
+      "favorable": null,
+      "material": false,
+      "note": "Budget not available for this metric: the budget-map has no monthly 'revenue' row (metric_rows.'revenue' is absent) -- see the budget-map's own gap note for why (e.g. the approved budget may provide only an annual/H1 aggregate, not a monthly figure).",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/Veyrona Decision Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 7,
+          "label": "Revenue",
+          "cells": "R7:W7",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/01/January_2026_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/02/February_2026_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/June_2026_Monthly_Package_2026-07-25.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/config/budget-map.json",
+          "section": "metric_rows.revenue",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance n/a = actual 104,865,206.79 (model 'Revenue' (Income Statement R7:W7), Jan 2026..Jun 2026 summed (6 mo)) - budget n/a (no budget-map entry (metric_rows.revenue); budget not available)"
+    },
+    {
+      "metric": "Gross Profit (as-reported)",
+      "scope": "latest",
+      "actual": 9163662.23,
+      "budget": null,
+      "var_abs": null,
+      "var_pct": null,
+      "favorable": null,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/Veyrona Decision Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 9,
+          "label": "Gross Profit (derived)",
+          "cells": "W9",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/June_2026_Monthly_Package_2026-07-25.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/config/budget-map.json",
+          "section": "metric_rows.gross_profit",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance n/a = actual 9,163,662.23 (model 'Gross Profit (derived)' (Income Statement W9), Jun 2026) - budget n/a (no budget-map entry (metric_rows.gross_profit); budget not available)"
+    },
+    {
+      "metric": "Gross Profit (as-reported)",
+      "scope": "YTD",
+      "actual": 48050963.04,
+      "budget": null,
+      "var_abs": null,
+      "var_pct": null,
+      "favorable": null,
+      "material": false,
+      "note": "Budget not available for this metric: the budget-map has no monthly 'gross_profit' row (metric_rows.'gross_profit' is absent) -- see the budget-map's own gap note for why (e.g. the approved budget may provide only an annual/H1 aggregate, not a monthly figure).",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/Veyrona Decision Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 9,
+          "label": "Gross Profit (derived)",
+          "cells": "R9:W9",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/01/January_2026_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/02/February_2026_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/June_2026_Monthly_Package_2026-07-25.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/config/budget-map.json",
+          "section": "metric_rows.gross_profit",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance n/a = actual 48,050,963.04 (model 'Gross Profit (derived)' (Income Statement R9:W9), Jan 2026..Jun 2026 summed (6 mo)) - budget n/a (no budget-map entry (metric_rows.gross_profit); budget not available)"
+    },
+    {
+      "metric": "Gross Margin %",
+      "scope": "latest",
+      "unit": "pct",
+      "actual": 0.46,
+      "budget": null,
+      "var_abs": null,
+      "var_pct": null,
+      "favorable": null,
+      "material": false,
+      "note": "margin points (actual - budget)",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/Veyrona Decision Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 9,
+          "label": "Gross Profit (derived)",
+          "cells": "W9",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/June_2026_Monthly_Package_2026-07-25.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/Veyrona Decision Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 7,
+          "label": "Revenue",
+          "cells": "W7",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/June_2026_Monthly_Package_2026-07-25.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/config/budget-map.json",
+          "section": "metric_rows.gross_profit",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/config/budget-map.json",
+          "section": "metric_rows.revenue",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "actual margin 46.00% = gross profit 9,163,662.23 / revenue 19,921,004.84 (model, Jun 2026); budget margin n/a = n/a / n/a (budget 'Budget (transposed)'); var_abs = margin points (actual - budget)"
+    },
+    {
+      "metric": "Gross Margin % (as-reported)",
+      "scope": "YTD",
+      "unit": "pct",
+      "actual": 0.4582,
+      "budget": null,
+      "var_abs": null,
+      "var_pct": null,
+      "favorable": null,
+      "material": false,
+      "note": "margin points; as-reported",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/Veyrona Decision Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 9,
+          "label": "Gross Profit (derived)",
+          "cells": "R9:W9",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/01/January_2026_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/02/February_2026_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/June_2026_Monthly_Package_2026-07-25.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/Veyrona Decision Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 7,
+          "label": "Revenue",
+          "cells": "R7:W7",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/01/January_2026_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/02/February_2026_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/June_2026_Monthly_Package_2026-07-25.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/config/budget-map.json",
+          "section": "metric_rows.gross_profit",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/config/budget-map.json",
+          "section": "metric_rows.revenue",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "actual margin 45.82% = gross profit 48,050,963.04 / revenue 104,865,206.79 (model, Jan 2026..Jun 2026 summed (6 mo)); budget margin n/a = n/a / n/a (budget 'Budget (transposed)'); var_abs = margin points (actual - budget)"
+    },
+    {
+      "metric": "EBITDA (as-reported)",
+      "scope": "latest",
+      "actual": 3087755.75,
+      "budget": 3091833.87,
+      "var_abs": -4078.12,
+      "var_pct": -0.0013,
+      "favorable": false,
+      "material": false,
+      "note": "Actual EBITDA is read from the model's EBITDA bridge row 'Reported EBITDA' (single, system-wide definition), not recomputed -- so it equals what covenant-compliance reads.",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/Veyrona Decision Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 11,
+          "label": "Reported EBITDA",
+          "cells": "W11",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/June_2026_Monthly_Package_2026-07-25.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/_model/Veyrona Decision Systems Budget (transposed).xlsx",
+          "label": "net_income",
+          "sheet": "Budget (transposed)",
+          "row": 5,
+          "cells": "S5",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/_model/Veyrona Decision Systems Budget (transposed).xlsx",
+          "label": "interest_expense",
+          "sheet": "Budget (transposed)",
+          "row": 6,
+          "cells": "S6",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/_model/Veyrona Decision Systems Budget (transposed).xlsx",
+          "label": "taxes",
+          "sheet": "Budget (transposed)",
+          "row": 6,
+          "cells": "S6",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/_model/Veyrona Decision Systems Budget (transposed).xlsx",
+          "label": "depreciation_amortization",
+          "sheet": "Budget (transposed)",
+          "row": 6,
+          "cells": "S6",
+          "period": "2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/config/budget-map.json",
+          "section": "metric_rows",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -4,078.12 = actual 3,087,755.75 (model 'Reported EBITDA' (Income Statement W11), Jun 2026) - budget 3,091,833.87 (budget EBITDA = net_income + interest_expense + taxes + depreciation_amortization per budget-map metric_rows, sheet 'Budget (transposed)', Jun 2026); var_pct -0.1% = variance / |budget|"
+    },
+    {
+      "metric": "EBITDA (as-reported)",
+      "scope": "YTD",
+      "actual": 17054464.91,
+      "budget": 18375501.59,
+      "var_abs": -1321036.68,
+      "var_pct": -0.0719,
+      "favorable": false,
+      "material": false,
+      "note": "Actual EBITDA read from the model's EBITDA bridge row (single definition shared with covenant-compliance), not recomputed.",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/Veyrona Decision Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 11,
+          "label": "Reported EBITDA",
+          "cells": "R11:W11",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/01/January_2026_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/02/February_2026_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/June_2026_Monthly_Package_2026-07-25.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/_model/Veyrona Decision Systems Budget (transposed).xlsx",
+          "label": "net_income",
+          "sheet": "Budget (transposed)",
+          "row": 5,
+          "cells": "N5:S5",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/_model/Veyrona Decision Systems Budget (transposed).xlsx",
+          "label": "interest_expense",
+          "sheet": "Budget (transposed)",
+          "row": 6,
+          "cells": "N6:S6",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/_model/Veyrona Decision Systems Budget (transposed).xlsx",
+          "label": "taxes",
+          "sheet": "Budget (transposed)",
+          "row": 6,
+          "cells": "N6:S6",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/_model/Veyrona Decision Systems Budget (transposed).xlsx",
+          "label": "depreciation_amortization",
+          "sheet": "Budget (transposed)",
+          "row": 6,
+          "cells": "N6:S6",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/config/budget-map.json",
+          "section": "metric_rows",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -1,321,036.68 = actual 17,054,464.91 (model 'Reported EBITDA' (Income Statement R11:W11), Jan 2026..Jun 2026 summed (6 mo)) - budget 18,375,501.59 (budget EBITDA = net_income + interest_expense + taxes + depreciation_amortization per budget-map metric_rows, sheet 'Budget (transposed)', Jan 2026..Jun 2026 summed (6 mo)); var_pct -7.2% = variance / |budget|"
+    },
+    {
+      "metric": "Total Opex (normalized)",
+      "scope": "latest",
+      "actual": 6075906.48,
+      "budget": null,
+      "var_abs": null,
+      "var_pct": null,
+      "favorable": null,
+      "material": false,
+      "note": "Budget not available: the budget-map's opex_groups section has no configured rows for this borrower -- see the budget-map's own gap note for why.",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/Veyrona Decision Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 10,
+          "label": "Operating Expenses",
+          "cells": "W10",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/June_2026_Monthly_Package_2026-07-25.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/config/budget-map.json",
+          "section": "opex_groups",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance n/a = actual 6,075,906.48 (sum of the 1 configured opex-group model rows [Operating Expenses], Jun 2026) - budget n/a (sum of the budget-map opex_groups rows, budget 'Budget (transposed)', Jun 2026)"
+    },
+    {
+      "metric": "Total Opex (normalized)",
+      "scope": "YTD",
+      "actual": 30996498.13,
+      "budget": null,
+      "var_abs": null,
+      "var_pct": null,
+      "favorable": null,
+      "material": false,
+      "note": "Budget not available: the budget-map's opex_groups section has no configured rows for this borrower -- see the budget-map's own gap note for why.",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/Veyrona Decision Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 10,
+          "label": "Operating Expenses",
+          "cells": "R10:W10",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/01/January_2026_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/02/February_2026_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/June_2026_Monthly_Package_2026-07-25.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/config/budget-map.json",
+          "section": "opex_groups",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance n/a = actual 30,996,498.13 (sum of the 1 configured opex-group model rows [Operating Expenses], Jan 2026..Jun 2026 summed (6 mo)) - budget n/a (sum of the budget-map opex_groups rows, budget 'Budget (transposed)', Jan 2026..Jun 2026 summed (6 mo))"
+    },
+    {
+      "metric": "Opex: Operating Expenses",
+      "scope": "latest",
+      "actual": 6075906.48,
+      "budget": null,
+      "var_abs": null,
+      "var_pct": null,
+      "favorable": null,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/Veyrona Decision Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 10,
+          "label": "Operating Expenses",
+          "cells": "W10",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/June_2026_Monthly_Package_2026-07-25.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/config/budget-map.json",
+          "section": "opex_groups.Operating Expenses",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance n/a = actual 6,075,906.48 (model 'Operating Expenses' (Income Statement W10), Jun 2026) - budget n/a (no budget-map entry (opex_groups.Operating Expenses); budget not available)"
+    },
+    {
+      "metric": "Opex: Operating Expenses",
+      "scope": "YTD",
+      "actual": 30996498.13,
+      "budget": null,
+      "var_abs": null,
+      "var_pct": null,
+      "favorable": null,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/Veyrona Decision Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 10,
+          "label": "Operating Expenses",
+          "cells": "R10:W10",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/01/January_2026_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/02/February_2026_Monthly_Package.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting/2026/Q2/June Close/June_2026_Monthly_Package_2026-07-25.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/veyrona-decision-systems/.record/runs/2026-06/run-20260916-094426/config/budget-map.json",
+          "section": "opex_groups.Operating Expenses",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Veyrona Decision Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance n/a = actual 30,996,498.13 (model 'Operating Expenses' (Income Statement R10:W10), Jan 2026..Jun 2026 summed (6 mo)) - budget n/a (no budget-map entry (opex_groups.Operating Expenses); budget not available)"
+    }
+  ],
+  "exceptions": [],
+  "engine": "data-driven budget-map v4 (config-driven, borrower-agnostic) + per-figure source refs/calc",
+  "borrower": "Veyrona Decision Systems, LLC",
+  "latest_month": "Jun 2026",
+  "ytd_months": [
+    "Jan 2026",
+    "Feb 2026",
+    "Mar 2026",
+    "Apr 2026",
+    "May 2026",
+    "Jun 2026"
+  ],
+  "materiality_rule": "|var%| >= 10% AND |var$| >= $50,000",
+  "budget_source": {
+    "file": "store:borrowers/veyrona-decision-systems/_model/Veyrona Decision Systems Budget (transposed).xlsx",
+    "sheet": "Budget (transposed)",
+    "basis": "management-prepared / unaudited"
+  },
+  "comparability_notes": [
+    "Actual EBITDA is sourced from the model's single EBITDA bridge row 'Reported EBITDA' -- the SAME row covenant-compliance reads -- so the two modules report identical actual EBITDA (one system-wide definition). Budget EBITDA is computed with the identical bridge formula (Net Income + Interest Expense + Financing Cost if enabled and present + Income Taxes + D&A - Interest Income) so it is like-for-like. The financing-cost add-back is DISABLED via ebitda.addback_financing_cost in borrower-config.",
+    "No acquisition/consolidation basis change found across the full history checked (2024-09 through 2026-06) -- analysis.basis_breaks is intentionally empty.",
+    "Budget-side gap: Approved_Budget_FY2025_H1_2026.xlsx's 'Monthly Operating Plan' tab provides ONLY a monthly Budget EBITDA figure (no monthly Revenue/Gross Profit/Opex breakdown exists anywhere in the workbook -- those exist only as two ANNUAL/H1 aggregate points on the 'Approved Plan' tab, which cannot support a monthly period join). budget-map.json therefore omits 'revenue' and 'gross_profit' from metric_rows rather than guessing a monthly split from the annual total -- the EBITDA-level budget-vs-actual comparison is fully supported; the Revenue-variance and Gross-Margin-variance lines will show as unavailable for this borrower, a genuine and disclosed gap (see budget-map.json _gap_note), not a misconfiguration.",
+    "EBITDA add-back sweep (for deal-context.json ebitda_addbacks) found NO restructuring/impairment/write-off/severance/transaction-cost/settlement/one-time/miscellaneous line anywhere in the Original Credit Agreement, any of the three Amendments, the FY2022-2024 Reviewed Financial Statements, the Underwriting Memorandum, or the Management Presentation -- and the Underwriting Memorandum explicitly disclaims addbacks ('no credit given to unsupported pipeline conversion, hypothetical headcount savings, or prospective margin actions'). Reported EBITDA ties exactly to the certified Covenant EBITDA figure at every point checked. ebitda_addbacks.entries is therefore empty. SEPARATE GAP FOR COVENANT-SETUP: the Credit Agreement never actually spells out the EBITDA addback-limb definition text (no '(i) interest, (ii) taxes, (iii) D&A...' language exists anywhere in the executed documents) -- covenant-setup should flag this as a legal-extraction gap rather than assume a standard addback stack."
+  ],
+  "comparability_items_ytd": [],
+  "financing_cost_ytd": null,
+  "methodology": "Actuals from the company-prepared/unaudited monthly financials model (read via monitor_lib). Budget is management-prepared/unaudited, extracted via budget-map.json. ACTUAL EBITDA is read from the model's single EBITDA bridge row (the same definition covenant-compliance uses); budget EBITDA mirrors that bridge formula for like-for-like comparison."
+}

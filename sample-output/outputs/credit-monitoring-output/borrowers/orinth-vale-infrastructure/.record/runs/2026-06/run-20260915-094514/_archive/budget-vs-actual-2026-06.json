@@ -1,0 +1,1032 @@
+{
+  "module": "budget-vs-actual",
+  "period": "2026-06",
+  "run_id": "run-20260915-094514",
+  "run_id_from": "run",
+  "produced_at": "2026-09-15T09:47:55+00:00",
+  "produced_by": {
+    "engine": "budget-vs-actual",
+    "plugin_version": "1.0.0"
+  },
+  "reporting_unit": {
+    "scale": 1.0,
+    "currency": "USD",
+    "verbatim": "USD | internally titled source",
+    "plain": "USD"
+  },
+  "stores": {
+    "store": {
+      "url_base": null
+    },
+    "source": {
+      "url_base": null
+    }
+  },
+  "source_ref_reach": {
+    "cell": 24,
+    "file": 8,
+    "unlocated": 0,
+    "borrower_doc": 16
+  },
+  "source_files": [
+    "store:borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/Orinth Vale Infrastructure Monthly IS-BS-CF.xlsx",
+    "store:borrowers/orinth-vale-infrastructure/_model/Orinth Vale Infrastructure H1 2026 Budget (transposed for budget-map).xlsx",
+    "store:borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/config/budget-map.json"
+  ],
+  "results": [
+    {
+      "metric": "Revenue",
+      "scope": "latest",
+      "actual": 13161734.09,
+      "budget": 13221521.79,
+      "var_abs": -59787.7,
+      "var_pct": -0.0045,
+      "favorable": false,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/Orinth Vale Infrastructure Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 7,
+          "label": "Revenue",
+          "cells": "W7",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/06/a.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/_model/Orinth Vale Infrastructure H1 2026 Budget (transposed for budget-map).xlsx",
+          "sheet": "Budget (transposed)",
+          "row": 4,
+          "cells": "G4",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/config/budget-map.json",
+          "section": "metric_rows.revenue",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/03 Budgets/Approved/budget-h1.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -59,787.70 = actual 13,161,734.09 (model 'Revenue' (Income Statement W7), Jun 2026) - budget 13,221,521.79 (budget 'Budget (transposed)' row 4, Jun 2026); var_pct -0.5% = variance / |budget|"
+    },
+    {
+      "metric": "Revenue",
+      "scope": "YTD",
+      "actual": 73037028.21,
+      "budget": 71947257.14,
+      "var_abs": 1089771.07,
+      "var_pct": 0.0151,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/Orinth Vale Infrastructure Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 7,
+          "label": "Revenue",
+          "cells": "R7:W7",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/01/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/02/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/03/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/04/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/05/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/06/a.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/_model/Orinth Vale Infrastructure H1 2026 Budget (transposed for budget-map).xlsx",
+          "sheet": "Budget (transposed)",
+          "row": 4,
+          "cells": "B4:G4",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/config/budget-map.json",
+          "section": "metric_rows.revenue",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/03 Budgets/Approved/budget-h1.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance 1,089,771.07 = actual 73,037,028.21 (model 'Revenue' (Income Statement R7:W7), Jan 2026..Jun 2026 summed (6 mo)) - budget 71,947,257.14 (budget 'Budget (transposed)' row 4, Jan 2026..Jun 2026 summed (6 mo)); var_pct 1.5% = variance / |budget|"
+    },
+    {
+      "metric": "Gross Profit (as-reported)",
+      "scope": "latest",
+      "actual": 5908302.43,
+      "budget": 6002570.89,
+      "var_abs": -94268.46,
+      "var_pct": -0.0157,
+      "favorable": false,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/Orinth Vale Infrastructure Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 12,
+          "label": "Gross Profit",
+          "cells": "W12",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/06/a.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/_model/Orinth Vale Infrastructure H1 2026 Budget (transposed for budget-map).xlsx",
+          "sheet": "Budget (transposed)",
+          "row": 4,
+          "cells": "G4",
+          "period": "2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/_model/Orinth Vale Infrastructure H1 2026 Budget (transposed for budget-map).xlsx",
+          "sheet": "Budget (transposed)",
+          "row": 5,
+          "cells": "G5",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/config/budget-map.json",
+          "section": "metric_rows.gross_profit",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/03 Budgets/Approved/budget-h1.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -94,268.46 = actual 5,908,302.43 (model 'Gross Profit' (Income Statement W12), Jun 2026) - budget 6,002,570.89 (budget 'Budget (transposed)' rows 4 minus 5, Jun 2026); var_pct -1.6% = variance / |budget|"
+    },
+    {
+      "metric": "Gross Profit (as-reported)",
+      "scope": "YTD",
+      "actual": 32886160.55,
+      "budget": 32119576.71,
+      "var_abs": 766583.84,
+      "var_pct": 0.0239,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/Orinth Vale Infrastructure Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 12,
+          "label": "Gross Profit",
+          "cells": "R12:W12",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/01/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/02/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/03/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/04/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/05/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/06/a.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/_model/Orinth Vale Infrastructure H1 2026 Budget (transposed for budget-map).xlsx",
+          "sheet": "Budget (transposed)",
+          "row": 4,
+          "cells": "B4:G4",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/_model/Orinth Vale Infrastructure H1 2026 Budget (transposed for budget-map).xlsx",
+          "sheet": "Budget (transposed)",
+          "row": 5,
+          "cells": "B5:G5",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/config/budget-map.json",
+          "section": "metric_rows.gross_profit",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/03 Budgets/Approved/budget-h1.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance 766,583.84 = actual 32,886,160.55 (model 'Gross Profit' (Income Statement R12:W12), Jan 2026..Jun 2026 summed (6 mo)) - budget 32,119,576.71 (budget 'Budget (transposed)' rows 4 minus 5, Jan 2026..Jun 2026 summed (6 mo)); var_pct 2.4% = variance / |budget|"
+    },
+    {
+      "metric": "Gross Margin %",
+      "scope": "latest",
+      "unit": "pct",
+      "actual": 0.4489,
+      "budget": 0.454,
+      "var_abs": -0.0051,
+      "var_pct": null,
+      "favorable": false,
+      "material": false,
+      "note": "margin points (actual - budget)",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/Orinth Vale Infrastructure Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 12,
+          "label": "Gross Profit",
+          "cells": "W12",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/06/a.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/Orinth Vale Infrastructure Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 7,
+          "label": "Revenue",
+          "cells": "W7",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/06/a.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/_model/Orinth Vale Infrastructure H1 2026 Budget (transposed for budget-map).xlsx",
+          "sheet": "Budget (transposed)",
+          "row": 4,
+          "cells": "G4",
+          "period": "2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/_model/Orinth Vale Infrastructure H1 2026 Budget (transposed for budget-map).xlsx",
+          "sheet": "Budget (transposed)",
+          "row": 5,
+          "cells": "G5",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/config/budget-map.json",
+          "section": "metric_rows.gross_profit",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/03 Budgets/Approved/budget-h1.xlsx"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/_model/Orinth Vale Infrastructure H1 2026 Budget (transposed for budget-map).xlsx",
+          "sheet": "Budget (transposed)",
+          "row": 4,
+          "cells": "G4",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/config/budget-map.json",
+          "section": "metric_rows.revenue",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/03 Budgets/Approved/budget-h1.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "actual margin 44.89% = gross profit 5,908,302.43 / revenue 13,161,734.09 (model, Jun 2026); budget margin 45.40% = 6,002,570.89 / 13,221,521.79 (budget 'Budget (transposed)'); var_abs = margin points (actual - budget)"
+    },
+    {
+      "metric": "Gross Margin % (as-reported)",
+      "scope": "YTD",
+      "unit": "pct",
+      "actual": 0.4503,
+      "budget": 0.4464,
+      "var_abs": 0.0038,
+      "var_pct": null,
+      "favorable": true,
+      "material": false,
+      "note": "margin points; as-reported",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/Orinth Vale Infrastructure Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 12,
+          "label": "Gross Profit",
+          "cells": "R12:W12",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/01/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/02/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/03/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/04/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/05/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/06/a.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/Orinth Vale Infrastructure Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 7,
+          "label": "Revenue",
+          "cells": "R7:W7",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/01/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/02/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/03/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/04/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/05/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/06/a.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/_model/Orinth Vale Infrastructure H1 2026 Budget (transposed for budget-map).xlsx",
+          "sheet": "Budget (transposed)",
+          "row": 4,
+          "cells": "B4:G4",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/_model/Orinth Vale Infrastructure H1 2026 Budget (transposed for budget-map).xlsx",
+          "sheet": "Budget (transposed)",
+          "row": 5,
+          "cells": "B5:G5",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/config/budget-map.json",
+          "section": "metric_rows.gross_profit",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/03 Budgets/Approved/budget-h1.xlsx"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/_model/Orinth Vale Infrastructure H1 2026 Budget (transposed for budget-map).xlsx",
+          "sheet": "Budget (transposed)",
+          "row": 4,
+          "cells": "B4:G4",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/config/budget-map.json",
+          "section": "metric_rows.revenue",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/03 Budgets/Approved/budget-h1.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "actual margin 45.03% = gross profit 32,886,160.55 / revenue 73,037,028.21 (model, Jan 2026..Jun 2026 summed (6 mo)); budget margin 44.64% = 32,119,576.71 / 71,947,257.14 (budget 'Budget (transposed)'); var_abs = margin points (actual - budget)"
+    },
+    {
+      "metric": "EBITDA (as-reported)",
+      "scope": "latest",
+      "actual": 2290659.16,
+      "budget": 2376557.34,
+      "var_abs": -85898.18,
+      "var_pct": -0.0361,
+      "favorable": false,
+      "material": false,
+      "note": "Actual EBITDA is read from the model's EBITDA bridge row 'EBITDA' (single, system-wide definition), not recomputed -- so it equals what covenant-compliance reads.",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/Orinth Vale Infrastructure Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 10,
+          "label": "EBITDA",
+          "cells": "W10",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/06/a.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/_model/Orinth Vale Infrastructure H1 2026 Budget (transposed for budget-map).xlsx",
+          "label": "net_income",
+          "sheet": "Budget (transposed)",
+          "row": 7,
+          "cells": "G7",
+          "period": "2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/_model/Orinth Vale Infrastructure H1 2026 Budget (transposed for budget-map).xlsx",
+          "label": "interest_expense",
+          "sheet": "Budget (transposed)",
+          "row": 10,
+          "cells": "G10",
+          "period": "2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/_model/Orinth Vale Infrastructure H1 2026 Budget (transposed for budget-map).xlsx",
+          "label": "taxes",
+          "sheet": "Budget (transposed)",
+          "row": 10,
+          "cells": "G10",
+          "period": "2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/_model/Orinth Vale Infrastructure H1 2026 Budget (transposed for budget-map).xlsx",
+          "label": "depreciation_amortization",
+          "sheet": "Budget (transposed)",
+          "row": 10,
+          "cells": "G10",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/config/budget-map.json",
+          "section": "metric_rows",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/03 Budgets/Approved/budget-h1.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -85,898.18 = actual 2,290,659.16 (model 'EBITDA' (Income Statement W10), Jun 2026) - budget 2,376,557.34 (budget EBITDA = net_income + interest_expense + taxes + depreciation_amortization per budget-map metric_rows, sheet 'Budget (transposed)', Jun 2026); var_pct -3.6% = variance / |budget|"
+    },
+    {
+      "metric": "EBITDA (as-reported)",
+      "scope": "YTD",
+      "actual": 12235975.11,
+      "budget": 11621959.21,
+      "var_abs": 614015.9,
+      "var_pct": 0.0528,
+      "favorable": true,
+      "material": false,
+      "note": "Actual EBITDA read from the model's EBITDA bridge row (single definition shared with covenant-compliance), not recomputed.",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/Orinth Vale Infrastructure Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 10,
+          "label": "EBITDA",
+          "cells": "R10:W10",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/01/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/02/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/03/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/04/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/05/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/06/a.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/_model/Orinth Vale Infrastructure H1 2026 Budget (transposed for budget-map).xlsx",
+          "label": "net_income",
+          "sheet": "Budget (transposed)",
+          "row": 7,
+          "cells": "B7:G7",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/_model/Orinth Vale Infrastructure H1 2026 Budget (transposed for budget-map).xlsx",
+          "label": "interest_expense",
+          "sheet": "Budget (transposed)",
+          "row": 10,
+          "cells": "B10:G10",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/_model/Orinth Vale Infrastructure H1 2026 Budget (transposed for budget-map).xlsx",
+          "label": "taxes",
+          "sheet": "Budget (transposed)",
+          "row": 10,
+          "cells": "B10:G10",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/_model/Orinth Vale Infrastructure H1 2026 Budget (transposed for budget-map).xlsx",
+          "label": "depreciation_amortization",
+          "sheet": "Budget (transposed)",
+          "row": 10,
+          "cells": "B10:G10",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/config/budget-map.json",
+          "section": "metric_rows",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/03 Budgets/Approved/budget-h1.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance 614,015.90 = actual 12,235,975.11 (model 'EBITDA' (Income Statement R10:W10), Jan 2026..Jun 2026 summed (6 mo)) - budget 11,621,959.21 (budget EBITDA = net_income + interest_expense + taxes + depreciation_amortization per budget-map metric_rows, sheet 'Budget (transposed)', Jan 2026..Jun 2026 summed (6 mo)); var_pct 5.3% = variance / |budget|"
+    },
+    {
+      "metric": "Total Opex (normalized)",
+      "scope": "latest",
+      "actual": 3617643.27,
+      "budget": 3626013.55,
+      "var_abs": -8370.28,
+      "var_pct": -0.0023,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/Orinth Vale Infrastructure Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 9,
+          "label": "Operating Expenses",
+          "cells": "W9",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/06/a.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/_model/Orinth Vale Infrastructure H1 2026 Budget (transposed for budget-map).xlsx",
+          "sheet": "Budget (transposed)",
+          "row": 6,
+          "cells": "G6",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/config/budget-map.json",
+          "section": "opex_groups.Operating Expenses",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/03 Budgets/Approved/budget-h1.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -8,370.28 = actual 3,617,643.27 (sum of the 1 configured opex-group model rows [Operating Expenses], Jun 2026) - budget 3,626,013.55 (sum of the budget-map opex_groups rows, budget 'Budget (transposed)', Jun 2026); var_pct -0.2% = variance / |budget|"
+    },
+    {
+      "metric": "Total Opex (normalized)",
+      "scope": "YTD",
+      "actual": 20650185.44,
+      "budget": 20497617.5,
+      "var_abs": 152567.94,
+      "var_pct": 0.0074,
+      "favorable": false,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/Orinth Vale Infrastructure Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 9,
+          "label": "Operating Expenses",
+          "cells": "R9:W9",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/01/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/02/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/03/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/04/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/05/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/06/a.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/_model/Orinth Vale Infrastructure H1 2026 Budget (transposed for budget-map).xlsx",
+          "sheet": "Budget (transposed)",
+          "row": 6,
+          "cells": "B6:G6",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/config/budget-map.json",
+          "section": "opex_groups.Operating Expenses",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/03 Budgets/Approved/budget-h1.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance 152,567.94 = actual 20,650,185.44 (sum of the 1 configured opex-group model rows [Operating Expenses], Jan 2026..Jun 2026 summed (6 mo)) - budget 20,497,617.50 (sum of the budget-map opex_groups rows, budget 'Budget (transposed)', Jan 2026..Jun 2026 summed (6 mo)); var_pct 0.7% = variance / |budget|"
+    },
+    {
+      "metric": "Opex: Operating Expenses",
+      "scope": "latest",
+      "actual": 3617643.27,
+      "budget": 3626013.55,
+      "var_abs": -8370.28,
+      "var_pct": -0.0023,
+      "favorable": true,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/Orinth Vale Infrastructure Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 9,
+          "label": "Operating Expenses",
+          "cells": "W9",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/06/a.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/_model/Orinth Vale Infrastructure H1 2026 Budget (transposed for budget-map).xlsx",
+          "sheet": "Budget (transposed)",
+          "row": 6,
+          "cells": "G6",
+          "period": "2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/config/budget-map.json",
+          "section": "opex_groups.Operating Expenses",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/03 Budgets/Approved/budget-h1.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance -8,370.28 = actual 3,617,643.27 (model 'Operating Expenses' (Income Statement W9), Jun 2026) - budget 3,626,013.55 (budget 'Budget (transposed)' row 6, Jun 2026); var_pct -0.2% = variance / |budget|"
+    },
+    {
+      "metric": "Opex: Operating Expenses",
+      "scope": "YTD",
+      "actual": 20650185.44,
+      "budget": 20497617.5,
+      "var_abs": 152567.94,
+      "var_pct": 0.0074,
+      "favorable": false,
+      "material": false,
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/Orinth Vale Infrastructure Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 9,
+          "label": "Operating Expenses",
+          "cells": "R9:W9",
+          "period": "2026-01..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/01/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/02/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/03/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/04/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/05/a.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/06/a.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/_model/Orinth Vale Infrastructure H1 2026 Budget (transposed for budget-map).xlsx",
+          "sheet": "Budget (transposed)",
+          "row": 6,
+          "cells": "B6:G6",
+          "period": "2026-01..2026-06"
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/config/budget-map.json",
+          "section": "opex_groups.Operating Expenses",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Orinth Vale Infrastructure/03 Budgets/Approved/budget-h1.xlsx"
+            }
+          ]
+        }
+      ],
+      "calc": "variance 152,567.94 = actual 20,650,185.44 (model 'Operating Expenses' (Income Statement R9:W9), Jan 2026..Jun 2026 summed (6 mo)) - budget 20,497,617.50 (budget 'Budget (transposed)' row 6, Jan 2026..Jun 2026 summed (6 mo)); var_pct 0.7% = variance / |budget|"
+    }
+  ],
+  "exceptions": [],
+  "engine": "data-driven budget-map v4 (config-driven, borrower-agnostic) + per-figure source refs/calc",
+  "borrower": "Orinth Vale Infrastructure, LLC",
+  "latest_month": "Jun 2026",
+  "ytd_months": [
+    "Jan 2026",
+    "Feb 2026",
+    "Mar 2026",
+    "Apr 2026",
+    "May 2026",
+    "Jun 2026"
+  ],
+  "materiality_rule": "|var%| >= 10% AND |var$| >= $50,000",
+  "budget_source": {
+    "file": "store:borrowers/orinth-vale-infrastructure/_model/Orinth Vale Infrastructure H1 2026 Budget (transposed for budget-map).xlsx",
+    "sheet": "Budget (transposed)",
+    "basis": "management-prepared / unaudited"
+  },
+  "comparability_notes": [
+    "Actual EBITDA is sourced from the model's single EBITDA bridge row 'EBITDA' -- the SAME row covenant-compliance reads -- so the two modules report identical actual EBITDA (one system-wide definition). Budget EBITDA is computed with the identical bridge formula (Net Income + Interest Expense + Financing Cost if enabled and present + Income Taxes + D&A - Interest Income) so it is like-for-like. The financing-cost add-back is DISABLED via ebitda.addback_financing_cost in borrower-config.",
+    "Reporting basis note: no restatement or basis change found across the full history checked (2024-09 through 2026-06); a/b/c letter mapping and all row labels are stable throughout.",
+    "Budget (H1 2026 Monthly Plan) is only built down to 'Budget EBITDA' -- it does not budget interest, taxes, D&A or net income separately (see budget-map.json for the zero-proxy construction), even though the ACTUALS model does break these out natively. This is a budget-granularity gap, not an actuals gap.",
+    "EBITDA add-back sweep (for the ebitda_addbacks register in deal-context.json) found no restructuring/impairment/write-off/severance/transaction-cost/settlement/one-time/miscellaneous line anywhere above or below the EBITDA line, in any month 2024-09 through 2026-06, the FY2022-2024 annual statements, or the underwriting model -- this borrower's TTM Covenant EBITDA (Debt & Covenant tab) ties EXACTLY to the sum of the 12 trailing monthly 'EBITDA' Income Statement rows with zero gap, unlike Asteron's lease add-back structure. ebitda_addbacks.entries is therefore empty."
+  ],
+  "comparability_items_ytd": [],
+  "financing_cost_ytd": null,
+  "methodology": "Actuals from the company-prepared/unaudited monthly financials model (read via monitor_lib). Budget is management-prepared/unaudited, extracted via budget-map.json. ACTUAL EBITDA is read from the model's single EBITDA bridge row (the same definition covenant-compliance uses); budget EBITDA mirrors that bridge formula for like-for-like comparison."
+}

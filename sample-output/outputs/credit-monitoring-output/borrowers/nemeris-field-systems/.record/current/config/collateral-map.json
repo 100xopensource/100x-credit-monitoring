@@ -1,0 +1,24 @@
+{
+  "borrower": "Nemeris Field Systems, LLC",
+  "lien_type": "blanket",
+  "security_summary": "Senior secured; first-priority blanket lien on substantially all personal property of the Borrower and Guarantors (accounts, inventory, equipment, deposit accounts, general intangibles/IP, equity of domestic subsidiaries), subject to customary exclusions. Source: executed Security Agreement and Credit Agreement, Initial Closing.",
+
+  "funded_debt_source": {
+    "covenant_spec_ref": "covenant-spec.json#/definitions/Funded_Debt",
+    "model_rows": ["Senior secured term loan"]
+  },
+
+  "pledged_components": [
+    {"label": "Cash (controlled accounts)", "model_line": "Cash and cash equivalents", "tier": "liquid"},
+    {"label": "Accounts receivable", "model_line": "Accounts receivable", "tier": "liquid"},
+    {"label": "Inventory", "model_line": "Inventory", "tier": "tangible_ip"},
+    {"label": "Property and field equipment, net", "model_line": "Property and field equipment, net", "tier": "tangible_ip"},
+    {"label": "Capitalized software and other assets", "model_line": "Capitalized software and other assets", "tier": "tangible_ip"}
+  ],
+  "_no_goodwill_note": "Borrower's Balance Sheet carries no goodwill line, so no goodwill-tier component or 'ex-goodwill' cut is defined.",
+
+  "coverage_cuts": {
+    "All pledged assets": ["liquid", "tangible_ip"],
+    "Liquid (cash + A/R)": ["liquid"]
+  }
+}

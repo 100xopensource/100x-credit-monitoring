@@ -1,0 +1,287 @@
+{
+  "model_file": "store:borrowers/asteron-care-partners/_model/Asteron Care Partners Monthly IS-BS-CF.xlsx",
+  "columns": {
+    "Income Statement": {
+      "2024-09": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2024-09/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2024-10": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2024-10/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2024-11": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2024-11/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2024-12": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2024-12/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-01": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2025-01/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-02": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2025-02/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-03": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2025-03/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-04": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2025-04/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-05": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2025-05/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-06": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2025-06/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-07": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2025-07/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-08": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2025-08/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-09": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2025-09/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-10": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2025-10/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-11": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2025-11/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2025-12": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2025-12/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2026-01": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2026-01/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2026-02": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2026-02/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2026-03": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2026-03/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2026-04": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2026-04/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2026-05": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2026-05/monthly.xlsx",
+        "sheet": "Income Statement"
+      },
+      "2026-06": {
+        "file": "source:Asteron Care Partners/Successor Reporting/2026/06/monthly.xlsx",
+        "sheet": "Income Statement"
+      }
+    },
+    "Balance Sheet": {
+      "2024-09": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2024-09/monthly.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2024-10": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2024-10/monthly.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2024-11": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2024-11/monthly.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2024-12": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2024-12/monthly.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-01": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2025-01/monthly.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-02": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2025-02/monthly.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-03": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2025-03/monthly.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-04": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2025-04/monthly.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-05": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2025-05/monthly.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-06": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2025-06/monthly.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-07": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2025-07/monthly.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-08": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2025-08/monthly.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-09": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2025-09/monthly.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-10": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2025-10/monthly.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-11": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2025-11/monthly.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2025-12": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2025-12/monthly.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2026-01": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2026-01/monthly.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2026-02": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2026-02/monthly.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2026-03": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2026-03/monthly.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2026-04": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2026-04/monthly.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2026-05": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2026-05/monthly.xlsx",
+        "sheet": "Balance Sheet"
+      },
+      "2026-06": {
+        "file": "source:Asteron Care Partners/Successor Reporting/2026/06/monthly.xlsx",
+        "sheet": "Balance Sheet"
+      }
+    },
+    "Cash Flow Statement": {
+      "2024-09": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2024-09/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2024-10": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2024-10/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2024-11": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2024-11/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2024-12": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2024-12/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-01": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2025-01/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-02": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2025-02/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-03": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2025-03/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-04": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2025-04/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-05": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2025-05/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-06": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2025-06/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-07": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2025-07/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-08": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2025-08/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-09": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2025-09/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-10": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2025-10/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-11": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2025-11/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2025-12": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2025-12/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2026-01": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2026-01/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2026-02": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2026-02/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2026-03": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2026-03/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2026-04": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2026-04/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2026-05": {
+        "file": "source:Asteron Care Partners/Successor Reporting/Archive/2026-05/monthly.xlsx",
+        "sheet": "Cash Flow"
+      },
+      "2026-06": {
+        "file": "source:Asteron Care Partners/Successor Reporting/2026/06/monthly.xlsx",
+        "sheet": "Cash Flow"
+      }
+    }
+  },
+  "_debt_service_rows": {
+    "Facility Cash Interest Expense": {
+      "source": "CERTIFICATE OVERRIDE per covenant-spec.json step7_signoff decision 'amortization_day_count_approximation': all 22 months (2024-09 through 2026-06) sourced from the borrower's own CERTIFIED Portfolio Monitoring/<quarter>/Covenant Calculation.xlsx 'TTM Detail' exhibit ('Cash interest' column), NOT from debt-service-schedule.json. Six overlapping quarterly certificates (2025-Q1 through 2026-Q2) together span 2024-04 through 2026-06 continuously with zero gaps and zero cross-quarter conflicts, so the generated schedule was never needed as a fallback for any month in this model's range.",
+      "reference": "store:borrowers/asteron-care-partners/.record/current/config/debt-service-spec.json#/covenant_support_rows/cash_interest (row-label binding); actual monthly figures from source:Asteron Care Partners/Portfolio Monitoring/<quarter>/Covenant Calculation.xlsx#TTM Detail",
+      "note": "Facility cash interest accrued per month, per the borrower's own certified compliance exhibit -- preferred over the generated debt-service-schedule.json per step7_signoff, which documents the generated schedule's flat/approximate day-count and amortization-base engine limitation (does not reproduce certified figures even within its own 2026-03+ modeled range)."
+    },
+    "Facility Scheduled Debt Principal Payments": {
+      "source": "CERTIFICATE OVERRIDE per covenant-spec.json step7_signoff decision 'amortization_day_count_approximation': all 22 months sourced from the same certified Covenant Calculation.xlsx TTM Detail exhibit ('Principal' column). No non-facility scheduled debt (vehicle loans, SBA notes, etc.) is disclosed anywhere in the deal folder for this borrower, so nothing is added beyond the certified facility figure.",
+      "reference": "store:borrowers/asteron-care-partners/.record/current/config/debt-service-spec.json#/covenant_support_rows/scheduled_principal (row-label binding); actual monthly figures from source:Asteron Care Partners/Portfolio Monitoring/<quarter>/Covenant Calculation.xlsx#TTM Detail",
+      "note": "Facility scheduled amortization on the certified exhibit's own attribution (0.00 for Dec 2025-Mar 2026, the interest-only Exit Amendment bridge period -- a contractual fact, not a blank)."
+    }
+  }
+}

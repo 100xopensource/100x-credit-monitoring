@@ -1,0 +1,129 @@
+{
+  "borrower": "Nemeris Field Systems, LLC",
+  "agreement": "Credit Agreement (Nemeris 2025 Senior Secured Facility), dated January 10, 2025, effective/closing January 15, 2025, between Nemeris Field Systems, LLC (Borrower) and Northlake Example Credit Partners, LP (Administrative Agent); executed Fee Letter dated/effective January 15, 2025; as amended by the First Amendment to Credit Agreement dated January 25, 2026 (reporting-delivery mechanics only -- no change to pricing, amortization, fees or maturity).",
+  "as_of_agreement_date": "2025-01-15",
+  "amendments_reflected": [
+    {
+      "date": "2026-01-31",
+      "instrument": "First Amendment to Credit Agreement",
+      "summary": "Reporting-delivery mechanics only; confirmed by independent read that no pricing, amortization, fee, day-count or maturity term changed."
+    }
+  ],
+
+  "facility": {
+    "name": "Nemeris 2025 Senior Secured Facility",
+    "maturity_date": "2030-01-15",
+    "agreement_ref": {
+      "section": "2.03",
+      "page": 3,
+      "quote": "All remaining principal, interest and other Obligations are due January 15, 2030."
+    }
+  },
+
+  "tranches": [
+    {
+      "id": "term_loan",
+      "fundings": [
+        {
+          "date": "2025-01-15",
+          "amount": 26302782.34,
+          "agreement_ref": {
+            "section": "Article II (Commitments table) / 2.01",
+            "page": 3,
+            "quote": "Closing Date Term Loan  Commitment $26,302,782.34  Closing funding $26,302,782.34  Funded January 15, 2025"
+          }
+        }
+      ],
+      "undrawn_commitment": {
+        "amount": 8697217.66,
+        "availability": "Delayed Draw Availability Period: begins on the Closing Date (2025-01-15) and ends on the earlier of January 15, 2027 and termination of commitments. Draws are limited to approved capital expenditures during the availability period and require an executed borrowing request, evidence of approved capital expenditures, no continuing Default, and continuing accuracy of specified representations. No draw has occurred through 2026-06.",
+        "agreement_ref": {
+          "section": "Article I (defined term 'Delayed Draw Availability Period'); 2.02 (Borrowing procedure); Article II (Commitments table)",
+          "page": 2,
+          "quote": "Delayed Draw Availability Period  The period beginning on the Closing Date and ending on the earlier of January 15, 2027 and termination of commitments."
+        }
+      }
+    }
+  ],
+
+  "amortization_base": {
+    "definition_verbatim": "Beginning after closing, the Borrower pays scheduled monthly principal equal to 0.60% of beginning principal for the applicable month, together with accrued interest.",
+    "agreement_ref": {
+      "section": "2.03",
+      "page": 3,
+      "quote": "Beginning after closing, the Borrower pays scheduled monthly principal equal to 0.60% of beginning principal for the applicable month, together with accrued interest."
+    },
+    "engine_limitation_note": "ENGINE LIMITATION -- READ BEFORE RELYING ON THE GENERATED SCHEDULE'S scheduled_principal FIGURES. The Credit Agreement's own wording ('0.60% of beginning principal FOR THE APPLICABLE MONTH') and the borrower's own monthly Debt & Liquidity schedules (in every Monthly_Financial_Package and every Covenant_Calculation workbook reviewed) both confirm this is a DECLINING-BALANCE (self-amortizing) mechanic: 0.60% is applied to that month's OWN opening balance, so the dollar amortization shrinks every month (e.g. certified Scheduled Principal $152,219.84 in 2025-07 declining to $142,469.36 by 2026-06, each exactly 0.60% of that month's own beginning balance). debt_service.py v1's amortization_base concept instead computes the base as 'the aggregate original principal of all fundings dated strictly before the payment date' -- a value that is FIXED absent a new draw -- which produces a FLAT, level monthly installment (0.60% x $26,302,782.34 = $157,816.69 every month) rather than the true shrinking one. The generated schedule below is therefore NOT expected to tie to the borrower's certified monthly scheduled-principal figures from month 2 onward, and the gap widens every month (by 2026-06 the engine's cumulative scheduled principal paid since first payment, ~$2,840,700, is about $140,000 (~5%) higher than the certified cumulative reduction of ~$2,700,358 over the same 18 months). This is an engine capability gap (no declining-balance amortization base is supported in v1), not a data-entry error -- see the return-level ambiguity for the two paths forward (accept the flat approximation and reconcile scheduled_principal to the certificates by hand each month, or hold this row until the engine supports a declining base).",
+    "analyst_decision": {
+      "decided_on": "2026-09-15",
+      "decided_by": "onboarding session (auto-decided per analyst's standing instruction not to pause for confirmation on this onboarding batch; flagged for the analyst's own review)",
+      "decision": "Do NOT rely on this generated schedule's 'scheduled_principal' / balloon figures for Nemeris. Until debt_service.py supports a true declining-balance amortization base, build-monitoring-model and the covenant/three-statement modules should read the borrower's own certified Debt & Liquidity tab (Beginning Debt / Draws / PIK / Scheduled Principal / Ending Debt) for actual monthly principal paid and outstanding balance -- that tab already ties to every certificate exactly. This generated schedule's cash_interest figures are a reasonable approximation (interest is on a materially similar declining base either way, and the discrepancy compounds much more slowly there), but should also be cross-checked against the certified TTM Covenant EBITDA / Net Debt figures each quarter rather than trusted blind."
+    }
+  },
+
+  "cash_interest": {
+    "index": "Adjusted Term SOFR",
+    "floor": 0.02,
+    "margin_grid": [
+      { "above": null, "rate": 0.0625, "when": "flat margin, all periods -- no leverage-based pricing grid in this agreement" }
+    ],
+    "adjustment": "Per interest period (one- or three-month Available Tenor); floor and adjustment mechanics per the rate notice. Fixed 6.25% margin -- there is no grid step tied to the Net Leverage Ratio or any other metric.",
+    "first_payment_date": "2025-02-01",
+    "payment_day": 1,
+    "agreement_ref": {
+      "section": "3.01",
+      "page": 3,
+      "quote": "Loans bear cash interest at Adjusted Term SOFR plus 6.25%, with a 2.00% SOFR floor. Interest accrues on actual days elapsed over a 360-day year and is payable monthly in arrears."
+    }
+  },
+
+  "amortization": {
+    "start_date": "2025-02-01",
+    "annual_pct_of_base_grid": [
+      { "above": null, "rate": 0.072, "when": "flat 0.60% per month (7.20% per annum) of the base, all periods -- see amortization_base.engine_limitation_note for how the engine's base differs from the agreement's own declining-balance base" }
+    ],
+    "payments_per_year": 12,
+    "balloon_at_maturity": true,
+    "fixed_charges_attribution": "accrued",
+    "agreement_ref": {
+      "section": "2.03",
+      "page": 3,
+      "quote": "Beginning after closing, the Borrower pays scheduled monthly principal equal to 0.60% of beginning principal for the applicable month, together with accrued interest."
+    }
+  },
+
+  "day_count": {
+    "convention": "actual/360",
+    "count_both_endpoints": true,
+    "verbatim": "Interest accrues on actual days elapsed over a 360-day year and is payable monthly in arrears.",
+    "agreement_ref": {
+      "section": "3.01",
+      "page": 3,
+      "quote": "Interest accrues on actual days elapsed over a 360-day year and is payable monthly in arrears."
+    },
+    "ambiguities": [
+      "The Credit Agreement says only 'actual days elapsed over a 360-day year' -- it does not state, in so many words, whether both the first and last day of an accrual period are counted. count_both_endpoints is set to true here because that is the reading that makes a FULL calendar month count its true number of calendar days (e.g. 31 for January), which is the standard actual/360 bank-loan convention and is consistent with 'actual days elapsed'. The reading is untested at the one place it actually matters: the funding-month stub (January 15-31, 2025 -- 17 days inclusive vs. 16 days exclusive) and the maturity stub (through January 15, 2030). Neither stub is large enough to move the Net Leverage Ratio, but it does move the exact cash-interest cent amount in those two months. Recorded for step-7 sign-off; alternative reading is count_both_endpoints: false (16-day / exclusive stub)."
+    ]
+  },
+
+  "fees": [],
+  "_fees_not_modeled_note": "The executed Fee Letter states a 1.50% closing fee (of funded commitments, one-time, at close) and a $75,000 ANNUAL administration fee -- confirmed against the Fee Letter and consistent with the Credit Agreement (Section 3.02: 'Closing, administrative and unused commitment fees are governed by the executed Fee Letter'). Neither is modeled in the 'fees' array above: the engine's fees.when enum supports only 'close_and_payment_dates' (fires at close AND at every MONTHLY payment date for the life of the loan), 'payment_dates' (every month), or 'maturity' (once, at the end) -- there is no 'one-time at close' or 'annual' cadence. Modeling the 1.50% closing fee under 'close_and_payment_dates' would incorrectly repeat ~$394,541.74 every month for 60 months instead of charging it once; modeling the $75,000 annual admin fee the same way would repeat $75,000 every month instead of once a year. Rather than generate a fee schedule that is silently and dramatically wrong, both fees are omitted here and flagged for the analyst / engine owner (see the run's ambiguities list). Neither fee is a covenant Fixed Charge in this agreement in any case -- both would carry fixed_charges_treatment 'excluded' if modeled. ALSO NOTE: the Credit Agreement cross-references the Fee Letter for an 'unused commitment fee' on the undrawn $8,697,217.66 DDTL commitment (Section 3.02), but the executed Fee Letter itself states only the closing fee and the annual administration fee -- no unused/undrawn commitment fee rate appears anywhere in the four-page executed Fee Letter, the Credit Agreement, or the Final IC Memo. This looks like a genuine documentation gap (the CA promises a fee the Fee Letter does not deliver), not an additive reconciling term -- flagged as an ambiguity."
+  ,
+
+  "observations": {
+    "index_rates": [
+      {
+        "date": "2025-01-15",
+        "rate": 0.0433,
+        "source": "ASSUMPTION, not a document in the deal folder: approximate 1-month Term SOFR level at the Closing Date, based on the publicly published SOFR level following the Federal Reserve's December 2024 policy action (target range 4.25%-4.50%). None of the executed documents (Credit Agreement, Fee Letter, First Amendment) or the monitoring package states an actual observed Adjusted Term SOFR print or cites a rate notice -- the Credit Agreement's own definition points to 'the rate notice' (Article I, 'Adjusted Term SOFR') as the source of record, and no rate notice is in the deal folder. This single pinned observation is held FLAT for the whole schedule by the engine (disclosed in the generated output's assumptions), which is very unlikely to be exactly right for 2026 given intervening Fed policy changes -- replace with the Agent's actual rate-notice prints when available."
+      }
+    ],
+    "grid_state": []
+  },
+
+  "covenant_support_rows": {
+    "cash_interest": "Cash Interest Expense",
+    "scheduled_principal": "Scheduled Debt Principal Payments"
+  },
+  "_covenant_support_rows_note": "This agreement's only financial covenant (Net Leverage Ratio, covenant-spec.json id 'max_net_leverage') is a leverage test, not a Fixed-Charges/coverage test, so no covenant-spec definition currently binds to these two row labels. They are captured anyway per Method step 3b so build-monitoring-model can populate a real cash-interest and scheduled-principal view in the model (the borrower's own monthly package has no interest-expense or amortization line at all -- see borrower-config.json model_lines._gap_note). If a future amendment adds an FCCR/interest-coverage covenant, its Fixed_Charges definition should bind to exactly these two labels."
+}

@@ -1,0 +1,198 @@
+{
+  "borrower": "Talvorn Technical Services, LLC",
+  "agreement": "Talvorn 2025 Senior Secured Credit Facility -- Executed Credit Agreement between Talvorn Technical Services, LLC (Borrower) and Blue Mesa Private Credit, LP (Administrative Agent). Issued January 10, 2025; effective January 15, 2025; maturity January 15, 2030. Par refinancing of $104,139,422.73 of legacy (January 2022) principal; no new money, no sponsor equity, single obligor (no guarantors -- 'no unidentified subsidiary guarantor is certified' per the executed Guaranty and Security Agreement). No amendments or waivers exist in the deal folder: a full-text sweep of every executed document in Credit & Legal/Executed (original_agreement.pdf) and Credit & Legal/Executed/Initial Closing/ (fee-letter, guaranty-and-security, ip-security-agreement, funding-request, information-certificate, insurance-certificate, liquidity-certificate, officer-certificate, closing-compliance-certificate) for 'amend' and 'waiv' returns no hits describing a legal amendment or waiver of the credit agreement -- the only 'amend' hit anywhere in the Credit & Legal folder is the Board Finance Committee Mapping Policy's own express disclaimer that it 'does not amend the credit agreement.' No Amendments/ or Waivers/ subfolder exists anywhere in the deal folder structure.",
+  "as_of_agreement_date": "2025-01-15",
+  "amendments_reflected": [],
+  "threshold_unit": "dollars",
+  "definitions": {
+    "Covenant_EBITDA": {
+      "verbatim": "Reported EBITDA means consolidated Net Revenue less Cost of Revenue and Operating Expenses, before depreciation, interest expense and income taxes. Covenant EBITDA equals Reported EBITDA. No EBITDA adjustments are permitted under this agreement; forecasts, synergies and owner contributions are not earnings.",
+      "agreement_ref": {
+        "section": "FINANCIAL COVENANT",
+        "page": 2,
+        "quote": "Covenant EBITDA equals Reported EBITDA. No EBITDA adjustments are permitted under this agreement; forecasts, synergies and owner contributions are not earnings."
+      },
+      "basis": "flow",
+      "compute": {
+        "ebitda_bridge": "Reported EBITDA"
+      },
+      "note": "Verified this is a literal 1:1 binding, not just a stated equivalence: the borrower's own March 2025 monthly package shows Income Statement 'Reported EBITDA' = $1,952,840.78 and the same package's FCCR-support 'TTM Detail' tab shows its 2025-03 'Covenant EBITDA' column = $1,952,840.78 -- identical to the cent, with zero add-back column anywhere on the face of either tab. Bind to the model's single pinned EBITDA bridge row ('Reported EBITDA'); do not recompute or add back anything. CAPTURE AS A NOTE, NOT PART OF THIS DEFINITION, any borrower-proposed add-back that surfaces later (per the Hard Rules, an unsupported add-back never enters this definition). No deemed-EBITDA schedule exists in this agreement -- the EBITDA definition on page 2 gives only the formula above with no per-month override table, and a full-text search of all three pages of original_agreement.pdf and every Initial Closing document for 'deemed', 'shall be deemed', 'stipulated' and 'agreed EBITDA' returns no hits. SEPARATE OPEN ITEM (not a deemed schedule, but adjacent -- flagged in ambiguities for step 7): the first Test Date (2025-03-31) needs a trailing-twelve-month window back to 2024-04, but the borrower's archived 'Finance Uploads/Monthly Close' folder structure (the source build-monitoring-model reads from) begins at 2024-09 -- five months (2024-04 through 2024-08) are missing from the archive proper. The borrower's own FCCR-support 'TTM Detail' tab, embedded inside every monthly package including the earliest ones, nonetheless already carries populated Covenant EBITDA/Cash Interest/Principal/Lease Payments/Fixed Charges figures for those five pre-archive months (e.g. the January 2025 package's TTM Detail tab starts at 2024-02) -- i.e. the borrower's own supplemental schedule, not a contractual deemed table, is what lets the certified ratio compute at the earliest Test Dates. Whether build-monitoring-model's own from-statements reconstruction can reach back that far (and therefore whether the covenant engine's MODEL side evaluates cleanly at the 2025-03-31 and 2025-06-30 Test Dates, versus reading 'insufficient history' while the CERTIFIED side still reports a ratio) is a build-monitoring-model / data-coverage question, not a covenant-spec defect -- flagged for the analyst rather than fabricated around."
+    },
+    "Fixed_Charges": {
+      "verbatim": "Fixed Charges means cash interest plus scheduled principal amortization plus cash lease payments for the same period. Lease costs remain in Operating Expenses and are not added back to EBITDA; the denominator separately includes those same lease payments. This covenant treatment does not create a second cash-flow payment. Cash interest excludes noncash financing-fee amortization. The closing origination fee and par legacy payoff are financing transactions, not recurring Fixed Charges; scheduled monthly principal is counted once.",
+      "agreement_ref": {
+        "section": "FINANCIAL COVENANT",
+        "page": 2,
+        "quote": "Fixed Charges means cash interest plus scheduled principal amortization plus cash lease payments for the same period."
+      },
+      "basis": "flow",
+      "compute": {
+        "formula": {
+          "lines": ["Cash Interest Expense", "Scheduled Debt Principal Payments", "Lease Payments"],
+          "op": "sum"
+        }
+      },
+      "note": "Three components exactly as the agreement's own formula lists them. STANDARD BINDING (per Method step 3b): 'Cash Interest Expense' and 'Scheduled Debt Principal Payments' are the covenant-support rows build-monitoring-model populates from debt-service-schedule.json (this facility's own CONTRACTUAL cash interest and scheduled amortization -- see debt-service-spec.json). VERIFIED, NOT ASSUMED, that the ledger P&L 'Interest Expense' line is NOT the right source: March 2025 Income Statement 'Interest Expense' is $937,036.33, while the same month's Debt Service tab 'Cash Interest' is $919,679.76 -- the $17,356.57 gap equals exactly the Cash Flow tab's 'Financing Fee Amortization' line for the same month, i.e. the P&L line includes noncash amortization of the capitalized origination fee, which the agreement expressly excludes ('Cash interest excludes noncash financing-fee amortization'). 'Lease Payments' (the third component) is NOT present anywhere in the Income Statement, Balance Sheet, or Cash Flow tabs of the borrower's monthly package -- it exists ONLY as its own column in the FCCR-support 'TTM Detail' tab (a repeating 3-value cycle -- $18,653.68 / $20,985.39 / $23,317.10 -- suggesting a quarterly-cadence lease payment; the same three figures recur every three months in every package reviewed, 2025-01 through 2026-06). build-monitoring-model must surface this TTM Detail column as its own 'Lease Payments' model row for this formula to resolve. MATERIAL AMBIGUITY flagged for step 7 (see debt-service-spec.json's amortization_base and day_count ambiguities, quantified there): the generated debt-service-schedule is a KNOWN, QUANTIFIED APPROXIMATION of this facility's true contractual debt service (the true amortization is a DECLINING balance, and the true monthly interest is a flat annual-rate/12 convention, neither of which the v1 engine can natively reproduce), while the borrower's own native Debt Service tab ('Cash Interest' / 'Scheduled Principal' rows) is independently verified EXACT to the penny against the 0.20%-of-beginning-balance and 10.64%/12-of-beginning-balance formulas in every one of 5 months checked (2025-01, 02, 03, 07; 2026-06), and Talvorn carries no debt besides this one facility (no cross-facility contamination risk of the kind the standard 'ledger vs. contract' warning guards against). Sign-off question: bind 'Cash Interest Expense' / 'Scheduled Debt Principal Payments' to the GENERATED schedule per the standard pipeline (as specified here), or to the borrower's own native Debt Service-tab lines directly, which are demonstrably more precise for this specific single-facility borrower."
+    },
+    "Funded_Debt": {
+      "verbatim": "Funded Debt is gross principal, without netting cash or unamortized financing fees.",
+      "agreement_ref": {
+        "section": "FINANCIAL COVENANT",
+        "page": 2,
+        "quote": "Funded Debt is gross principal, without netting cash or unamortized financing fees."
+      },
+      "basis": "spot",
+      "compute": {
+        "model_line": "Funded Debt"
+      },
+      "note": "Not itself a covenant input -- this agreement's only financial covenant is the FCCR (min_coverage); there is no leverage covenant. Captured for the collateral / funded-debt-denominator view requested alongside the security provisions. The Balance Sheet's own 'Funded Debt' line is already reported gross (e.g. March 2025: $103,515,835.03), with 'Unamortized Financing Fees (contra debt)' carried as a SEPARATE line ($989,324.52 in March 2025) rather than netted against it -- consistent with the agreement's own instruction. This 'Funded Debt' balance also ties exactly to the Debt Service tab's own 'Ending Debt' roll-forward figure every month checked (March 2025: both $103,515,835.03)."
+    }
+  },
+  "covenants": [
+    {
+      "id": "min_fccr",
+      "name": "Minimum Fixed Charge Coverage Ratio (FCCR)",
+      "primitive": "min_coverage",
+      "numerator": {
+        "ref": "Covenant_EBITDA"
+      },
+      "denominator": {
+        "ref": "Fixed_Charges"
+      },
+      "window": "ttm",
+      "threshold": 1.2,
+      "threshold_unit": "unitless",
+      "frequency": "quarterly",
+      "first_test_date": "2025-03-31",
+      "cure_rights": "None. The agreement states 'failure of the quarterly FCCR constitutes an event of default' and 'Agent may give written notice and accelerate unpaid obligations following an event of default; no automatic cure or waiver is implied' (page 3, EVENTS OF DEFAULT). No equity-cure, grace period, or other cure mechanism appears anywhere in original_agreement.pdf or any Initial Closing document -- confirmed by a full-text sweep for 'cure' across all executed documents (the only literal substring hits are 'seCUREd'/'proCUREment'-type false positives, not a cure-right clause).",
+      "agreement_ref": {
+        "section": "FINANCIAL COVENANT",
+        "page": 2,
+        "quote": "Minimum Fixed Charge Coverage Ratio: 1.20x."
+      },
+      "cert_ref": "Compliance Certificate -- 'FCCR CALCULATION' section, lines 'Trailing Covenant EBITDA', 'Trailing Fixed Charges', 'Calculated FCCR', 'Minimum FCCR', 'Status' (verified against the 2025-03-31 certificate: Trailing Covenant EBITDA $24,018,414.20 / Trailing Fixed Charges $13,927,419.80 = 1.7245x COMPLIANT, and the 2026-06-30 certificate: $29,160,207.52 / $13,522,846.20 = 2.1564x COMPLIANT -- both certified ratios reproduce exactly from the borrower's own monthly-package TTM Detail tabs for the same periods).",
+      "at_risk_band": 0.1,
+      "note": "Window is TTM ('each test covers exactly twelve consecutive months ending March 31, June 30, September 30 or December 31'), NOT a single month -- the agreement and every certificate reviewed both explicitly mark non-quarter monthly ratios 'NOT TESTED' / monitoring-only (e.g. the January 2025 package's own FCCR tab shows Status 'NOT TESTED' despite computing a ratio). Threshold is FLAT -- no step-down or step-up schedule anywhere in the agreement (contrast with sibling deals in this portfolio whose amortization or FCCR terms step by amendment; Talvorn carries none)."
+    },
+    {
+      "id": "reporting_monthly_package",
+      "name": "Monthly financial package delivery",
+      "type": "reporting",
+      "verbatim": "Monthly consolidated statements, department actuals, aging, and sales support are required. ... Monthly packages are due by the 25th of the following month.",
+      "agreement_ref": {
+        "section": "REPORTING",
+        "page": 3,
+        "quote": "Monthly packages are due by the 25th of the following month; quarterly certificates accompany quarter-end packages."
+      }
+    },
+    {
+      "id": "reporting_quarterly_certificate",
+      "name": "Quarter-end compliance certificate delivery",
+      "type": "reporting",
+      "verbatim": "The authorized officer shall deliver a signed quarter-end certificate with twelve monthly rows identifying Covenant EBITDA, cash interest, scheduled principal and lease payments, reconciled to the consolidated statements and debt schedule.",
+      "agreement_ref": {
+        "section": "REPORTING",
+        "page": 3,
+        "quote": "The authorized officer shall deliver a signed quarter-end certificate with twelve monthly rows identifying Covenant EBITDA, cash interest, scheduled principal and lease payments, reconciled to the consolidated statements and debt schedule."
+      },
+      "note": "Due with the quarter-end monthly package, i.e. by the 25th of the month following each fiscal quarter end, per the same REPORTING section."
+    },
+    {
+      "id": "reporting_default_notice",
+      "name": "Default notice",
+      "type": "reporting",
+      "verbatim": "The Borrower shall give prompt written notice of any default known to its authorized officer, describing the facts and proposed response. Delivery of a certificate does not waive any breach.",
+      "agreement_ref": {
+        "section": "REPORTING",
+        "page": 3,
+        "quote": "The Borrower shall give prompt written notice of any default known to its authorized officer, describing the facts and proposed response."
+      }
+    }
+  ],
+  "accounting_basis": {
+    "stated": false,
+    "clause_verbatim": "",
+    "agreement_ref": {
+      "section": "",
+      "page": 0,
+      "quote": ""
+    },
+    "reference_financials": {
+      "described_as": "",
+      "document": "",
+      "resolved": false,
+      "ebitda_build_note": ""
+    },
+    "note": "No preamble or accounting-basis clause precedes or accompanies the FINANCIAL COVENANT section (page 2) -- the EBITDA and Fixed Charges definitions are given directly and exhaustively within that section itself ('No EBITDA adjustments are permitted under this agreement'), with no reference to GAAP in the abstract, to the Borrower's historic accounting practices, or to a named model/financial-statement package delivered at closing. Full-text sweep of all three pages of original_agreement.pdf, plus every Initial Closing document, for 'GAAP', 'historic account', 'consistently applied', 'the Model', and 'financial statements delivered' returns no hits -- the covenant is fully self-contained and does not lean on an external reference document."
+  },
+  "security_and_collateral_note": {
+    "lien_type": "Specific-asset lien (not a blanket/all-assets lien). The Guaranty and Security Agreement grants security ONLY in 'business receivables, equipment and proceeds' (verbatim, page 1). A separate IP Security Agreement grants security ONLY in 'transferable intellectual property and related proceeds' (verbatim, page 1), specifically 'diagnostic procedures and internally used service systems'; third-party-licensed IP remains subject to its own transfer restrictions.",
+    "excluded_categories": "Inventory, deposit accounts, and general intangibles are NOT mentioned anywhere in either security document -- confirmed by full-text sweep for 'inventory', 'deposit account', and 'general intangib' across both instruments, all returning no hits. Given the GSA and IP Security Agreement otherwise enumerate collateral categories explicitly and exhaustively, and the Balance Sheet separately carries a material 'Inventory and Other Current Assets' line ($9,056,033.19 at March 2025), the absence is read as a deliberate exclusion, not an oversight -- consistent with a narrower, specific-asset (not blanket) lien package.",
+    "priority": "Not stated. Neither security document uses the words 'first priority', 'senior lien', or 'pari passu' anywhere (confirmed by full-text sweep). The facility's own name ('Senior Secured Credit Facility') and the fact that it fully refinanced and extinguished the only pre-existing funded debt at closing (par payoff, no other debt disclosed anywhere in the deal folder) support a first-priority reading in substance, but this is an inference, not a stated term -- flagged as an ambiguity below.",
+    "guarantors": "None. Single-obligor deal -- the Guaranty and Security Agreement states 'no unidentified subsidiary guarantor is certified', and the Information Certificate confirms Talvorn Technical Services, LLC's four reporting departments (Sales, Operations, Product, Corporate) 'are departments, not separate obligors' with no acquisition or change of reporting perimeter contemplated.",
+    "funded_debt_denominator": "Funded Debt = gross principal, without netting cash or unamortized financing fees (agreement's own words, FINANCIAL COVENANT section, page 2) -- see the Funded_Debt definition above. Not used in any covenant here (the sole covenant is FCCR, a coverage ratio), but this is the base a future leverage/collateral-coverage view would use.",
+    "secured_obligations_scope": "Per the Guaranty and Security Agreement: 'Payment obligations comprise funded principal, accrued fixed interest and the agreed closing fee; no incremental commitment is created,' and 'This instrument does not establish collateral values or a borrowing base.' No asset-coverage ratio or borrowing-base test exists anywhere in the documents reviewed."
+  },
+  "step7_signoff": {
+    "decided_on": "2026-09-16",
+    "decided_by": "onboarding session (auto-decided per analyst's standing instruction not to pause for confirmation during this batch onboarding; documented here for prompt analyst review)",
+    "decisions": [
+      {
+        "id": "fixed_charges_component_source",
+        "question": "Should Fixed_Charges' cash-interest and scheduled-principal components bind to the generated (approximate) debt-service-schedule rows per the standard pipeline, or directly to this borrower's own native Debt Service-tab 'Cash Interest' / 'Scheduled Principal' lines, which are independently verified exact to the penny in every month checked?",
+        "options_considered": [
+          "Accept as parsed: bind to the generated covenant-support rows per the standard template convention",
+          "Bind directly to the native Debt Service-tab lines, since they are demonstrably more precise for this specific borrower"
+        ],
+        "decision": "Bind Fixed_Charges' cash_interest and scheduled_principal components directly to the borrower's own native Debt Service-tab 'Cash Interest' and 'Scheduled Principal' lines, NOT the generated debt-service-schedule.",
+        "rationale": "The generated schedule is a known, quantified approximation on two fronts: the true amortization is a declining balance (0.20% of each month's own already-amortized balance) that the v1 engine cannot model with its flat-original-principal base, and the true interest convention is a flat annual-rate/12 figure the engine's day-count options cannot reproduce exactly. The native ledger lines, by contrast, are independently verified exact against both contractual formulas in every one of 5 months checked (2025-01, 02, 03, 07; 2026-06), and Talvorn carries no debt besides this one facility, so there is no cross-facility contamination risk the standard ledger-vs-contract guidance is meant to guard against. This mirrors the same decision already made for Selvara and Orinth Vale in this batch for analogous reasons. build-monitoring-model should populate the covenant-support rows from the native Debt Service tab, not the generated schedule, for this borrower."
+      },
+      {
+        "id": "funding_month_stub_and_daycount",
+        "question": "The generated schedule computes a real 17-day January 2025 funding stub (~$516K) and a flat actual/365 day-count going forward, while the borrower's own ledger books a full month ($923,369.55) for January under a documented 'full-month fee convention' and a flat rate/12 convention thereafter. Accept the generated schedule's mismatch as informational-only, now that the live covenant test reads the native ledger directly?",
+        "options_considered": [
+          "Accept as parsed: keep the generated schedule as a documented approximation for informational/forward-looking purposes only",
+          "Attempt to hand-correct the generated schedule's January stub and day-count to match the borrower's convention"
+        ],
+        "decision": "Accept as parsed: keep the generated schedule as an informational approximation; no hand-correction.",
+        "rationale": "Per the fixed_charges_component_source decision above, the live FCCR test no longer depends on the generated schedule at all -- it reads the native ledger directly. Hand-correcting the schedule to chase a documented, one-time convention difference would add complexity without changing any covenant outcome."
+      },
+      {
+        "id": "origination_fee_not_modeled",
+        "question": "The 1% origination fee ($1,041,394.23, one-time at closing) has no home in debt-service-spec.json's fees[] schema (its 'when' enum has no close-only, one-time option). Accept leaving it out of fees[] entirely?",
+        "options_considered": [
+          "Accept as parsed: omit from fees[], documented in a fees_not_modeled_note",
+          "Force it into the closest available 'when' value despite the mismatch, risking an incorrect recurring fee"
+        ],
+        "decision": "Accept as parsed: omit from fees[], documented in a note.",
+        "rationale": "The agreement itself excludes the closing origination fee and par legacy payoff from Fixed Charges ('financing transactions, not recurring Fixed Charges'), so the fee has no bearing on the covenant test. Forcing it into a recurring-fee slot would risk fabricating a monthly charge the agreement does not impose."
+      },
+      {
+        "id": "lien_priority_language",
+        "question": "Neither security document states 'first priority', 'senior lien', or 'pari passu' verbatim -- is the inferred first-priority reading (from the facility's own naming and the full par payoff of the only pre-existing debt) acceptable?",
+        "options_considered": [
+          "Accept as parsed: first-priority is the best-supported reading",
+          "Record lien priority as unconfirmed/unknown"
+        ],
+        "decision": "Accept as parsed: first-priority.",
+        "rationale": "Standard, sufficient evidence for a first-priority reading in a refinancing context where the only pre-existing debt was fully extinguished at closing; no competing lien is disclosed anywhere in the documents reviewed."
+      },
+      {
+        "id": "first_payment_date_assumption",
+        "question": "The agreement states only 'payable monthly' with no day-of-month specified. Accept the assumed 2025-02-01 / day-1 first payment date used to generate the informational schedule?",
+        "options_considered": [
+          "Accept as parsed: day 1, matching the borrower's calendar-month booking cadence",
+          "Leave the payment date unset"
+        ],
+        "decision": "Accept as parsed: day 1.",
+        "rationale": "Low-stakes assumption consistent with the borrower's own calendar-month reporting cadence; does not affect the live covenant test, which reads the native ledger directly."
+      }
+    ],
+    "open_items_for_analyst": [
+      "This is the cleanest credit onboarded in this batch: FCCR has risen monotonically every quarter since the first test date (1.7245x at 2025-03-31 to 2.1564x at 2026-06-30), zero amendments or waivers exist, and the EBITDA definition permits no add-backs at all -- worth confirming this read holds up as build-monitoring-model and the monthly monitor run their own independent checks.",
+      "The pre-first-test-date TTM window (2024-04 through 2024-08) is not covered by the borrower's archived monthly-package folder (which begins 2024-09), though the borrower's own certificate TTM-support tabs carry the figures for those months. Whether build-monitoring-model's own statement reconstruction can reach back that far, or whether the model side reads 'insufficient history' at the earliest test dates while the certified side still reports a ratio, is a data-coverage question for that stage.",
+      "Lien priority is inferred, not stated -- low priority given no competing lien is disclosed anywhere.",
+      "The Fixed_Charges 'Lease Payments' component exists only as a column in the FCCR-support TTM Detail tab (not on the Income Statement, Balance Sheet, or Cash Flow tabs) -- build-monitoring-model must surface it as its own model row for the Fixed_Charges formula to resolve."
+    ]
+  }
+}

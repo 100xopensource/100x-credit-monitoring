@@ -1,0 +1,12 @@
+{
+  "open_requests_to_borrower": [],
+  "unresolved_flags": [],
+  "analyst_focus": [
+    {
+      "item": "Revenue vs budget shipment-timing risk, Net Leverage cushion, EBITDA add-back discipline after Q2 2026 correction",
+      "asked_period": "2026-06",
+      "finding": "Revenue -13.9% vs budget on shipment timing (named underwriting risk, not a broad decline); leverage 1.32x vs 5.00x cap, 74% headroom; the one Q2 2026 add-back attempt was caught by the lender and corrected, no other adjustments found."
+    }
+  ],
+  "last_period_headline": "2026-06: Net Leverage 1.32x vs 5.00x cap (COMPLIANT, corrected certificate); revenue $9.57M (-13.9% vs budget), YTD -11.8%; EBITDA $1.24M (-35.6% vs budget), YTD -30.6%; Q2 2026 EBITDA add-back dispute ($110K, unsupported prospective savings) resolved COMPLIANT under both submissions."
+}

@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<!-- MEMO TEMPLATE — credit monitoring monthly monitoring report, five fixed tabs. The FORMAT lives here;
+     the FIGURES live in memo-payload.json and the JUDGMENT in prose.json. render_memo.py
+     fills the tokens listed in the manifest below; validate_memo.py refuses a memo that
+     disagrees with its payload. Structure spec: references/report-structure.md. Worked
+     example, for a reviewer to read rather than for an agent to copy:
+     Change this file and re-render; never hand-edit a
+     rendered memo. -->
+<!-- TEMPLATE TOKEN MANIFEST — the one list the renderer, the gate and prose.json
+     all read. A token is written with its name in double braces. Three kinds:
+
+       payload   filled from memo-payload.json by render_memo.py
+       prose     filled from prose.json — the agent's judgment, and nothing else
+       asset     filled by inline_assets.py after the render
+
+     Adding a section to the memo is an entry here plus a payload key; that is what keeps a
+     format revision inside this file.
+
+     name                          kind     what it holds
+     -- header, above the tab bar ------------------------------------------------------
+     TITLE                         payload  <Borrower> — Monitoring Report — <Month YYYY>
+     H1_BORROWER                   payload  borrower legal name + " — Monthly Monitoring Report"
+     SUB_LINE                      payload  period, fund, prepared date; version rides in an HTML comment
+     DEAL_TEAM                     payload  the whole deal-team line element, or "" when the list is empty
+     PILLS                         payload  the house view at a glance, from our_view: the watchlist/trajectory pill; "" when the deal context carries neither
+     -- Overview tab ------------------------------------------------------------------
+     COVENANT_STRIP                payload  one chip per covenant (group chip + indented legs), prior breaches
+     SNAP_PERFORMANCE_TEASER       payload  YTD net revenue vs prior year
+     PERF_DATA                     payload  performance_views as the #perf-data JSON island
+     SNAP_COLLATERAL_TEASER        payload  the senior hard-asset coverage ratio
+     SNAP_COLLATERAL               payload  coverage chips + the pledged-component table
+     COLLATERAL_READ               prose    why nominal coverage over/understates recovery; what the credit is underwritten on; what is excluded
+     SUMMARY_UPDATE_LABEL          payload  "Monthly update", or "Quarterly update" when the period closes a calendar quarter
+     SUMMARY_UPDATE                prose    revenue + EBITDA vs Budget and prior year (period, then cumulative), then the driver — 2–5 sentences
+     SUMMARY_LIQUIDITY             prose    period-end cash vs the floor, where the cash came from, runway when burning, expected direction
+     SUMMARY_COLLATERAL            prose    pledged components + total, coverage vs funded debt, vs prior year/plan where on file
+     SUMMARY_COVENANTS             prose    one sentence when all pass with room; the certified-vs-model gap and the nearest tight test when not
+     SUMMARY_OUTLOOK               prose    forward indicators on file, the governing question for the credit, the open asks
+     TREND_RANGE                   payload  the heading suffix, e.g. (Dec 2024 – Jun 2026)
+     TREND_DATA                    payload  the #trend-data island: months, series, notes, basis_break_index, quarters
+     TREND_CAPTION                 payload  the caption's source line, srclink to the model
+     -- Deal summary tab --------------------------------------------------------------
+     DEAL_COMPANY_PROFILE          prose    one paragraph on what the company does and what drives its numbers, citing the underwriting memo once
+     DEAL_COMPANY_FACTS            payload  the two table.facttable bodies; absent value → "not on file in the deal file" (muted)
+     DEAL_TERMS                    payload  the two Key-terms tables + the financial-covenants summary row that deep-links to Covenants
+     DEAL_TRANSACTION              prose    one paragraph, fixed house order: facility/structure → lenders/agent → use of proceeds → pro-forma leverage at close with its EBITDA basis → security
+     DEAL_TRANSACTION_GAPS         payload  the amber notice naming the elements no source carries, or ""
+     DEAL_TRANSACTION_SOURCES      payload  the sources line
+     DEAL_SECURITY_ASOF            payload  the as-of suffix, e.g. · as of 6/30/2026
+     DEAL_SECURITY_TABLE           payload  the eight fixed columns and the holder + total rows
+     DEAL_SECURITY_SOURCING        prose    which document each holder row restates, why the split is undetermined, why cost is par, what stays an open request, where marks live
+     DEAL_CAPSTRUCTURE             payload  the capital-structure table; each "Pricing / notes" cell from keyed prose CAPSTRUCTURE_NOTES
+     DEAL_LEVERAGE_CONTEXT         prose    one closing coverage/leverage line, deep-linking Covenants
+     -- Covenants tab -----------------------------------------------------------------
+     COVENANT_STRIP_REPEAT         payload  byte-identical to COVENANT_STRIP
+     COVENANT_PREAMBLE             payload  agreement/amendment srclinks, the OR-logic sentence, the certificate signer and date
+     COVENANT_GRID                 payload  Covenant · Test · Certified · Model · Δ/note · Result; financial covenants only; breaches and at-risk first; Δ cell from keyed prose COVENANT_DELTAS
+     COVENANT_OVERALL              prose    the governing verdict sentence for the period, naming the OR mechanics
+     STRESS_FACTS                  payload  the traced facts a stress read rests on: the schedule's next steps, current headroom, the breakeven arithmetic
+     FORWARD_STRESS                prose    the forward read: which leg compliance depends on, the breakeven, what size of move breaks it
+     COVENANT_HISTORY              payload  the collapsed matrix: row per financial covenant × column per test date, pass/at-risk/breach chips, n/e where not evaluable, per-covenant tally line
+     COVENANT_FAROUT               payload  the "not tested within the next 12 months" table, or the fallback sentence when there are none
+     -- Financial performance tab -----------------------------------------------------
+     IS_BASIS                      payload  displayed window, analysis basis, unit, source
+     IS_TABLE                      payload  the income statement table (trailing 5 + YTD)
+     IS_OBSERVATIONS               prose    4–6 <li> reading the YTD path
+     REVENUE_QUALITY               payload  the ARR/retention block, or "" when the module did not run
+     REVENUE_QUALITY_NOTES         prose    2–3 bullets on retention, growth composition, what the YTD path confirms — "" renders nothing
+     CF_BASIS                      payload  as IS_BASIS, plus the derived-indirect statement
+     CF_TABLE                      payload  the cash flow table
+     CF_OBSERVATIONS               prose    3–5 <li>
+     BS_BASIS                      payload  as IS_BASIS, period-end, no YTD
+     BS_TABLE                      payload  the balance sheet table (no YTD column)
+     BS_OBSERVATIONS               prose    4–6 <li>
+     LIQUIDITY                     payload  the liquidity/runway traced figures
+     LIQUIDITY_READ                prose    4–5 <li>: headroom vs floor and the year's trough, the real burn, what holds the balance, months-to-floor with the ask, the structural cushion
+     AGING                         payload  the A/R and A/P aging block, or "" when the module did not run
+     AGING_READ                    prose    what the aging says about collection vs billing — "" renders nothing
+     COLLATERAL_COVERAGE_CLOSING   prose    one line tying pledged assets, the coverage cuts and the funded-debt basis (model vs certified)
+     -- Files & audit tab -------------------------------------------------------------
+     FILES_REGISTRY                payload  the grouped document table; each "What it is" sentence from keyed prose DOCUMENT_NOTES
+     DATA_QUALITY                  payload  the mechanical notes the run itself knows: the four degradation cases, budget absence, restatements, suppressed ratios
+     DATA_QUALITY_NOTES            prose    the judgment notes: capitalization policy, unreconciled deltas, extraction limits
+     OPEN_QUESTIONS                prose    the open questions from the deal notes, each naming who holds the answer — "" renders nothing
+     FLAGS                         prose    numbered open items: bold title, this period's figures, the specific ask
+     FOOTER_SOURCES                payload  the per-deal clause inside the footer sources sentence
+
+     Three prose keys carry no token of their own — the renderer hands them to the producer
+     that builds the table, keyed by the row's payload id: COVENANT_DELTAS (the Δ/note cell
+     in COVENANT_GRID), CAPSTRUCTURE_NOTES (the "Pricing / notes" cell in
+     DEAL_CAPSTRUCTURE), DOCUMENT_NOTES (the "What it is" cell in FILES_REGISTRY).
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Asteron Care Partners, LLC &mdash; Monitoring Report &mdash; June 2026</title>
+<style>
+  :root{
+    /* Portfolio Monitor palette -- canonical source: docs/theme/tokens.css.
+       Near-white reading surface, indigo identity, dark chrome band. The
+       status trio is the original one and is 102 degrees or more off the
+       accent, so a covenant breach cannot read as a brand affordance. */
+    --paper:#FFFFFF; --wash:#F4F3F8; --panel:#FFFFFF; --card:#FFFFFF; --bg:#F6F6F6;
+    --ink:#222222; --ink-2:#3A3A3A; --muted:#5C5C5C; --faint:#8A8A8A;
+    --line:rgba(32,20,95,.11); --line-2:rgba(32,20,95,.18); --hair:rgba(32,20,95,.11);
+    --accent:#7B5CF5; --accent-ink:#5027F1;
+    --accent-soft:#EDE9FB; --accent-bright:#9A82F7;
+    --navy:#170B41; --dark-1:#100830; --dark-2:#170B41; --dark-3:#231363;
+    --dark-ink:#FAF6F5; --dark-ink-2:#CDC6DE;
+    --dark-ink-3:#B9AFCE; --dark-ink-4:#A49BBE;
+    --spot:#F4F3F8; --sel:#DAD2F9;
+    --green:#1f7a4d; --greenbg:#e9f3ed; --amber:#8a5d09; --amberbg:#f8efdc;
+    --red:#b23a2c; --redbg:#f8e9e6;
+    --shadow:0 1px 2px rgba(32,20,95,.06),0 1px 1px rgba(32,20,95,.04);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;
+    font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    color:var(--ink);background:var(--paper);line-height:1.55;font-size:15px;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 22px 64px}
+  b{font-weight:700}
+
+  /* ---------- HEADER ---------- */
+  /* Compact indigo masthead: the dark brand band, wave at its foot, so the report reads
+     green at thumbnail scale, kept to the same tight padding as the white
+     pass -- no hero height, no decorative graphic. The tab bar directly below
+     carries its own pale-green fill and dark-green labels rather than this
+     block's navy, so the two never read as one oversized coloured band
+     (report-structure.md -> Header). */
+  header.top{position:relative;overflow:hidden;background:linear-gradient(150deg,var(--dark-1) 0%,var(--navy) 55%,var(--dark-3) 100%);color:var(--dark-ink);
+    margin:0 -22px 0;padding:20px 30px 40px 30px;border-radius:0}
+  header.top .wavebg{position:absolute;left:0;right:0;bottom:-2px;height:76px;opacity:.9;pointer-events:none}
+  header.top .wavebg svg{display:block;width:100%;height:100%}
+  .brand{position:relative;display:flex;align-items:flex-start;gap:18px}
+  .brandtext{min-width:0;padding-top:0}
+  header.top .eyebrow{font-size:11px;font-weight:700;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--dark-ink-4);margin:0 0 8px}
+  header.top h1{margin:0 0 6px;font-size:21px;line-height:1.28;
+    font-weight:700;letter-spacing:-.01em;color:var(--dark-ink);max-width:56ch}
+  header.top .sub{opacity:1;color:var(--dark-ink-2);font-size:13px;letter-spacing:.01em;font-weight:400}
+  header.top .sub b{font-weight:700;color:var(--dark-ink)}
+  .pills{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px}
+  .pill{display:inline-block;padding:4px 12px;border-radius:3px;font-size:11px;font-weight:700;
+    letter-spacing:.04em;text-transform:uppercase}
+  .pill.view{background:var(--accent-soft);color:var(--accent-ink);border:1px solid var(--line-2)}
+  .pill.watch{background:var(--amber);color:#fff}
+
+  /* ---------- SECTION HEADS ---------- */
+  h2{font-size:13px;margin:40px 0 14px;padding:0;color:var(--ink);border:0;
+    font-weight:700;letter-spacing:.15em;text-transform:uppercase;scroll-margin-top:16px;
+    display:flex;align-items:center;gap:12px}
+  h2::before{content:"";width:22px;height:2px;background:var(--accent);flex:0 0 auto;border-radius:2px}
+  h2 .small.muted{color:var(--faint);letter-spacing:.02em;text-transform:none;font-weight:400}
+  h3{font-size:12.5px;margin:0 0 12px;color:var(--ink-2);text-transform:uppercase;
+    letter-spacing:.11em;font-weight:700}
+
+  /* ---------- CARDS ---------- */
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:6px;
+    padding:20px 22px;margin-bottom:16px;box-shadow:var(--shadow)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  .summary p.sumblock{margin:0 0 12px}
+  .summary p.sumblock:last-child{margin-bottom:0}
+
+  /* ---------- TABLES ---------- */
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin:2px 0}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  thead th{border-bottom:1.5px solid var(--line-2)}
+  th{background:transparent;color:var(--ink-2);font-weight:700;font-size:11.5px;
+    text-transform:uppercase;letter-spacing:.08em}
+  tbody tr:last-child td{border-bottom:none}
+  td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  td.spot,th.spot{background:var(--spot)} td.spot{font-weight:700;color:var(--navy)}
+  th.spot{color:var(--accent-ink)}
+  tr.sub td{color:var(--muted);font-size:12.5px;background:#FBFAFC;border-bottom:1px solid var(--line)}
+  tr.sub td:first-child{padding-left:24px;font-style:italic}
+
+  /* status text + tags */
+  .tag{display:inline-block;padding:2px 9px;border-radius:3px;font-size:11.5px;font-weight:700;
+    letter-spacing:.03em;text-transform:uppercase}
+  .tag.pass{background:var(--greenbg);color:var(--green)}
+  .tag.atrisk{background:var(--amberbg);color:var(--amber)}
+  .tag.breach{background:var(--redbg);color:var(--red)}
+  .g{color:var(--green)} .a{color:var(--amber)} .rd{color:var(--red)}
+  .up{color:var(--green);font-weight:700} .down{color:var(--red);font-weight:700} .neu{color:var(--faint);font-weight:600}
+  .expo table td{padding:7px 11px;border-bottom:1px solid var(--line)}
+  .expo table tr:last-child td{border-bottom:none}
+  .expo table td.muted{width:42%;color:var(--muted)}
+
+  /* ---------- COVENANT CHIPS ---------- */
+  .cov-chips{display:flex;flex-wrap:wrap;gap:10px}
+  a.covchip{display:inline-flex;align-items:center;gap:9px;text-decoration:none;color:var(--ink);
+     border:1px solid var(--line);border-radius:5px;padding:11px 15px;font-size:13px;background:#fff;
+     transition:transform .12s,box-shadow .12s,border-color .12s}
+  a.covchip:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(32,20,95,.10);border-color:var(--line-2)}
+  a.covchip .cdot{width:8px;height:8px;border-radius:50%;flex:0 0 auto}
+  a.covchip b{font-weight:800;letter-spacing:.01em}
+  a.covchip.pass .cdot{background:var(--green)} a.covchip.pass b{color:var(--green)}
+  a.covchip.atrisk .cdot{background:var(--amber)} a.covchip.atrisk b{color:var(--amber)}
+  a.covchip.breach .cdot{background:var(--red)} a.covchip.breach b{color:var(--red)}
+  a.covchip.overall{border-width:1.5px} a.covchip.overall.pass{border-color:var(--green)} a.covchip.overall.atrisk{border-color:var(--amber)} a.covchip.overall.breach{border-color:var(--red)} /* the overall chip carries weight, never a colour of its own: a fixed green here beat .breach on equal specificity and painted a failed either/or group green under its own "Breach" label */
+
+  a.jumpname{color:var(--ink);text-decoration:none;border-bottom:1px solid #E9E8EF;font-weight:600;
+    transition:color .1s,border-color .1s}
+  a.jumpname:hover{color:var(--accent-ink);border-bottom-color:var(--accent-ink)}
+  a.jumpname .arw{font-size:10px;opacity:.5;margin-left:3px}
+
+  .foot{font-size:12.5px;color:var(--muted);margin-top:10px;line-height:1.55}
+  .qbadge{display:inline-block;background:var(--accent-soft);color:var(--accent-ink);border:1px solid #E2E0EA;
+     border-radius:4px;padding:3px 10px;font-size:11.5px;font-weight:700;letter-spacing:.04em;
+     text-transform:uppercase;margin-left:6px}
+
+  /* ---------- TRACE INTERACTION — carriers invisible, container is the control ---------- */
+  span.trc,span.srclink,span.srcmiss{color:inherit;font-weight:inherit}
+  td.tcell,th.tcell{cursor:pointer}
+  td.tcell:hover,th.tcell:hover{background:var(--accent-soft)}
+  .cc.tcell{cursor:pointer}
+  .cc.tcell:hover{background:var(--accent-soft)}
+  span.pmark{border-bottom:1px dashed #BCB8CF;cursor:pointer}
+  span.pmark:hover{background:var(--spot)}
+  table.traced td{cursor:pointer}
+  table.traced tbody td:hover{background:var(--accent-soft)}
+  /* selected: the container whose trace box is open stays highlighted */
+  td.trc-sel,th.trc-sel{background:var(--sel);box-shadow:inset 0 0 0 1.5px var(--accent)}
+  .cc.trc-sel{background:var(--sel);box-shadow:inset 0 0 0 1.5px var(--accent)}
+  span.pmark.trc-sel{background:var(--sel);border-radius:3px}
+
+  /* trace box (click-to-open) */
+  #trcpop{position:absolute;z-index:6;background:var(--navy);color:#fff;border-radius:8px;padding:11px 13px;
+    font-size:11.5px;line-height:1.5;box-shadow:0 10px 28px rgba(32,20,95,.34);max-width:360px;display:none}
+  #trcpop .tlbl{font-weight:700;letter-spacing:.02em;border-bottom:1px solid rgba(255,255,255,.16);padding-bottom:4px;margin-bottom:6px}
+  #trcpop .tcalc{margin-bottom:6px;opacity:.9}
+  #trcpop table.tsteps{width:100%;border-collapse:collapse;margin:2px 0 7px;font-size:11.5px}
+  #trcpop table.tsteps td{padding:2px 0;border:0;color:var(--dark-ink-2);text-align:left;vertical-align:baseline}
+  #trcpop table.tsteps td.v{text-align:right;font-variant-numeric:tabular-nums;padding-left:16px;white-space:nowrap}
+  #trcpop table.tsteps tr.res td{border-top:1px solid rgba(255,255,255,.28);font-weight:700;color:#fff;padding-top:4px}
+  #trcpop a.thop{display:block;color:var(--dark-ink-4);text-decoration:none;margin-top:3px}
+  #trcpop a.thop:hover{text-decoration:underline}
+  #trcpop span.thop{display:block;color:var(--dark-ink-3);margin-top:3px}
+
+  /* ---------- STAT BLOCKS ---------- */
+  .covcov{display:flex;flex-wrap:wrap;gap:12px;margin:4px 0 14px}
+  .covcov .cc{border:1px solid var(--line);border-top:2px solid var(--accent);border-radius:5px;
+    padding:14px 18px;background:#FBFAFC;min-width:132px}
+  .covcov .cc .v{font-size:22px;font-weight:800;color:var(--navy);font-variant-numeric:tabular-nums;
+    letter-spacing:-.01em;line-height:1}
+  .covcov .cc .k{font-size:11.5px;color:var(--muted);margin-top:6px;text-transform:uppercase;letter-spacing:.06em}
+  .covcov .cc.warn{border-top-color:var(--amber)} .covcov .cc.warn .v{color:var(--amber)}
+  .covcov .cc.bad{border-top-color:var(--red)} .covcov .cc.bad .v{color:var(--red)}
+
+  ul{margin:8px 0 6px 2px;padding-left:18px} li{margin:6px 0}
+  ol{margin:8px 0 6px 2px;padding-left:20px}
+  .muted{color:var(--muted)} .small{font-size:12px}
+  .tblwrap{overflow-x:auto}
+
+  /* executive summary — quiet left accent, not a loud yellow band */
+  .summary{background:#fff;border-left:3px solid var(--accent)}
+  .lens{display:grid;grid-template-columns:1fr 1fr;gap:2px 26px;margin:12px 0 2px;font-size:13.5px}
+  .lens .row{padding:8px 0;border-top:1px solid var(--line)}
+  .lens .row b .rr{font-weight:800;letter-spacing:.01em}
+
+  /* three-statement flow tie-note */
+  .flow{background:var(--wash);border-left:3px solid var(--line-2);padding:9px 13px;border-radius:0 6px 6px 0;
+    font-size:13px;margin:12px 0 6px;color:var(--ink-2)}
+  .flow:empty{display:none}
+  .flow b{color:var(--navy)}
+  .flow a{color:var(--accent-ink);text-decoration:none;border-bottom:1px dotted var(--accent)}
+
+  /* ---------- CHART ---------- */
+  .chart-toggle{display:inline-flex;border:1px solid var(--line-2);border-radius:5px;overflow:hidden;margin-bottom:8px}
+  .chart-toggle button{border:0;background:#fff;color:var(--muted);font-size:12px;font-weight:700;
+    letter-spacing:.03em;padding:8px 16px;cursor:pointer;font-family:inherit;transition:background .1s,color .1s}
+  .chart-toggle button:not(.active):hover{background:var(--wash);color:var(--ink)}
+  .chart-toggle button.active{background:var(--navy);color:#fff}
+  .chartwrap{position:relative}
+  .chart-legend{display:flex;flex-wrap:wrap;gap:16px;margin:10px 0 2px;font-size:12px;color:var(--muted)}
+  .chart-legend span{display:inline-flex;align-items:center;gap:7px}
+  .chart-legend i{width:12px;height:12px;border-radius:2px;display:inline-block}
+  .chart-legend i.ln{height:3px;width:18px;border-radius:2px}
+  .chart-legend i.dash{height:0;width:18px;border-top:3px dashed currentColor;background:none}
+  .axis-note{font-size:11.5px;color:var(--faint);margin-top:6px}
+  #tt{position:absolute;pointer-events:none;background:var(--navy);color:#fff;border-radius:6px;padding:9px 11px;
+      font-size:11.5px;line-height:1.5;box-shadow:0 8px 24px rgba(32,20,95,.34);opacity:0;transition:opacity .08s;z-index:5;min-width:158px}
+  #tt .ttm{font-weight:700;margin-bottom:5px;border-bottom:1px solid rgba(255,255,255,.2);padding-bottom:4px;letter-spacing:.02em}
+  #tt .ttr{display:flex;justify-content:space-between;gap:16px}
+  #tt .ttr .sw{display:inline-flex;align-items:center;gap:6px}
+  #tt .ttr .sw i{width:9px;height:9px;border-radius:2px;display:inline-block}
+
+  footer{margin-top:32px;font-size:11.5px;color:var(--muted);border-top:1px solid var(--line-2);
+    padding-top:16px;line-height:1.6}
+
+  @media(max-width:720px){
+    .wrap{padding:0 16px 48px}
+    header.top{margin:0 -16px 0;padding:16px 20px 34px 18px}
+    header.top h1{font-size:20px}
+    .brand{gap:16px}
+    .grid2,.lens{grid-template-columns:1fr}
+  }
+
+  /* --- supporting components --- */
+  /* Covenant status strip — always visible, directly under the header; never collapsible.
+     ONE chip size for every covenant of the agreement: the governing verdict of an either/or
+     group and a covenant tested on its own are peers, so both wear `overall lead` — same size,
+     same status-coloured border. Only the legs INSIDE a group render smaller, indented under the
+     group they belong to; size here means "part of the one above", never "less important". */
+  .cov-strip{margin-bottom:22px}
+  .cov-strip h3{margin:0 0 10px}
+  .cov-overall-row{margin-bottom:10px}
+  a.covchip.lead{padding:12px 18px;font-size:14.5px;gap:10px}
+  a.covchip.lead .cdot{width:12px;height:12px}
+  a.covchip.lead b{font-size:14.5px}
+  .cov-legs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px 20px;padding-left:14px;border-left:2px solid var(--line)}
+  .cov-legs a.covchip{font-size:12px;padding:7px 11px}
+  .cov-rest{display:flex;flex-wrap:wrap;gap:10px}
+  /* Snapshot collapsible boxes — persistent header bar (title + one teaser figure + chevron),
+     body hidden until click. Native <details>/<summary>; print force-expands every box. */
+  details.snapbox{padding:0;overflow:hidden}
+  details.snapbox>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:12px;padding:16px 18px;user-select:none}
+  details.snapbox>summary::-webkit-details-marker{display:none}
+  details.snapbox>summary h3{margin:0;flex:0 0 auto}
+  details.snapbox>summary .sbx-teaser{flex:1;color:var(--muted);font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  details.snapbox>summary .chev{font-size:18px;color:var(--muted);font-weight:700;margin-left:auto;transition:transform .15s ease;line-height:1}
+  details.snapbox[open]>summary{border-bottom:1px solid var(--line)}
+  details.snapbox[open]>summary .chev{transform:rotate(90deg)}
+  details.snapbox>.sbx-body{padding:16px 18px}
+  .snapbox .sbx-body > h3{display:none}
+  @media print{
+    details.snapbox:not([open])>.sbx-body{display:block !important;content-visibility:visible !important}
+    details.snapbox>summary .chev{display:none}
+    details.snapbox>summary{cursor:default}
+  }
+
+  /* Performance box — segmented time-basis control (report-structure.md → Performance) */
+  .perfbar{display:flex;gap:0;margin:2px 0 10px;border:1px solid var(--hair);border-radius:5px;overflow:hidden;width:fit-content}
+  .perfbar button{appearance:none;border:0;background:#fff;color:var(--muted);font:inherit;font-size:11.5px;
+    letter-spacing:.04em;text-transform:uppercase;padding:6px 13px;cursor:pointer;border-right:1px solid var(--hair)}
+  .perfbar button:last-child{border-right:0}
+  .perfbar button:hover{background:var(--accent-soft);color:var(--navy)}
+  .perfbar button[aria-selected="true"]{background:var(--navy);color:#fff}
+  .perfbasis{margin-top:7px;font-size:11px}
+  #perf-table th.pbasis{color:var(--amber)}
+  /* No column shading in the Performance table: shading implied a primary basis, and choosing the
+     basis is the judgment the toggle hands back to the reader. */
+  #perf-table td.spot,#perf-table th.spot{background:transparent;font-weight:inherit;color:inherit}
+  #perf-table .lvl{font-variant-numeric:tabular-nums}
+  #perf-table .cmp{display:block;font-size:10.5px;color:var(--muted);letter-spacing:.02em}
+
+  /* ---------- TABS (report-structure.md -> Tabs) ---------- */
+  /* Slim sticky strip: pale-green ground, dark-green labels, and a strong
+     dark underline on the active tab -- dense at desktop, still readable. */
+  .tabbar{position:sticky;top:0;z-index:7;display:flex;gap:0;background:var(--wash);
+    margin:0 -22px 26px;padding:0 22px;border-bottom:1px solid var(--line-2);
+    box-shadow:0 1px 2px rgba(32,20,95,.06)}
+  .tabbar button{appearance:none;border:0;background:transparent;color:var(--accent-ink);font:inherit;
+    font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+    padding:12px 14px 10px;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap}
+  .tabbar button:hover{color:var(--navy)}
+  .tabbar button.active{color:var(--navy);border-bottom-color:var(--navy);border-bottom-width:4px}
+  .tabbar button:focus-visible{outline:2px solid var(--navy);outline-offset:-3px}
+  .tabpane{display:none}
+  .tabpane.active{display:block;animation:tabin .18s ease}
+  @keyframes tabin{from{opacity:.4}to{opacity:1}}
+  .tabpane > h2:first-child{margin-top:6px}
+  @media print{.tabpane{display:block !important}.tabbar{display:none}}
+
+  /* ---------- WIDE LAYOUT (report-structure.md -> Layout) ---------- */
+  .wrap{max-width:1760px}
+  .hrow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 28px;align-items:start}
+  .hrow.w60{grid-template-columns:1.22fr 1fr}
+  .hrow .grid2{grid-template-columns:1fr} /* a half-width cell stacks its internal pair */
+  #trendwrap .card{max-width:1560px}
+  @media(max-width:1279px){.hrow,.hrow.w60{grid-template-columns:1fr}}
+  @media(max-width:720px){.tabbar{overflow-x:auto;margin:0 -16px 22px;padding:0 16px}}
+
+  /* Deal Summary / Files & audit tables */
+  .kt table td{padding:8px 11px;border-bottom:1px solid var(--line)}
+  .kt table tr:last-child td{border-bottom:none}
+  .kt table td.muted{width:34%;color:var(--muted)}
+  .facttable td.muted{width:34%;color:var(--muted)}
+  a.doclink{color:var(--accent-ink);text-decoration:none;border-bottom:1px solid #E9E8EF;font-weight:600}
+  a.doclink:hover{border-bottom-color:var(--accent-ink)}
+  .notice{background:var(--amberbg);border-left:3px solid var(--amber);padding:9px 13px;
+    border-radius:0 6px 6px 0;font-size:13px;margin:12px 0 4px;color:var(--ink-2)}
+  .notice b{color:var(--amber)}
+  /* Covenant Δ/note cell: a material analyst note gets its own amber box, visible
+     on load, inside the table cell it already lives in -- no click to see it. */
+  .notice.covnote{margin:0;padding:7px 10px;font-size:12.5px}
+  /* Bold amber-on-amberbg text measures 3.62:1 (below WCAG AA 4.5:1 for this
+     text size); the covnote label alone needs a darker override, other
+     .notice uses (e.g. the data-quality "Not on file" callout) keep --amber. */
+  .notice.covnote b{color:var(--ink)}
+  /* A methodology or provenance read is routine, not a warning: same quiet
+     neutral panel as .flow, no amber. */
+  .flow.readnote{margin:14px 0 6px}
+  td.grp{background:var(--spot);font-weight:700;color:var(--navy);text-transform:uppercase;
+    font-size:11px;letter-spacing:.08em}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="wavebg" aria-hidden="true"><svg viewBox="0 0 1440 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="wv" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#492EB8"/><stop offset="0.55" stop-color="#2B1485"/><stop offset="1" stop-color="#1E0C64"/></linearGradient></defs><path d="M0,64 C240,112 480,12 720,54 C960,96 1200,30 1440,70 L1440,120 L0,120 Z" fill="url(#wv)" opacity="0.5"/><path d="M0,88 C260,42 520,122 780,82 C1040,46 1240,98 1440,76 L1440,120 L0,120 Z" fill="url(#wv)" opacity="0.92"/></svg></div>
+  <div class="brand">
+    <div class="brandtext">
+      <div class="eyebrow">Portfolio Monitoring</div>
+      <h1>Asteron Care Partners, LLC &mdash; Monthly Monitoring Report</h1>
+      <div class="sub">Period: <b>June 2026</b> (latest reporting month) &bull; Prepared 2026-09-15<!-- credit-monitoring 1.0.0 --></div>
+      
+      <div class="pills"><span class="pill watch">On watchlist &middot; Improving</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- TAB BAR — fixed five tabs in this order; sticky; the Overview tab is the default.
+     Tab ids are fixed (tab-overview / tab-deal / tab-covenants / tab-financials /
+     tab-files) so hash links (#tab=covenants) are stable across borrowers. -->
+<nav class="tabbar" aria-label="Report sections">
+  <button data-tab="overview" class="active">Overview</button>
+  <button data-tab="deal">Deal summary</button>
+  <button data-tab="covenants">Covenants</button>
+  <button data-tab="financials">Financial performance</button>
+  <button data-tab="files">Files &amp; audit</button>
+</nav>
+
+<!-- ============================ TAB: OVERVIEW ============================
+     The monthly monitoring view: covenant strip first (never hidden), the two metric
+     boxes side by side (open), the SHORT executive summary, then the trend chart. -->
+<div class="tabpane active" id="tab-overview">
+<h2 id="sec-covstrip" style="margin-top:6px">Covenant compliance</h2>
+<!-- COVENANT STATUS STRIP — always visible, directly under the header banner; never
+     collapsible (Style, report-structure.md). The renderer orders it: the OVERALL verdict
+     leads and renders larger, an either/or group's legs nest smaller and indented beneath
+     it, remaining chips follow, and a covenant whose next scheduled test falls more than 12
+     months out is left to the Covenant detail & stress section's closing block. -->
+<div class="card cov-strip">
+  <h3>June 2026 <span class="small muted" style="font-weight:400;text-transform:none;letter-spacing:0"> · borrower certified compliant · click for detail</span></h3>
+  <div class="cov-rest">
+    <a class="covchip pass overall lead" href="#sec-covenant"><span class="cdot"></span>Minimum liquidity <b>Pass</b></a>
+  </div>
+</div>
+
+<h2 id="sec-snapshot">Performance &amp; collateral metrics</h2>
+<div class="hrow">
+<div>
+<!-- PERFORMANCE (% change only) -->
+<details class="card snapbox" id="box-performance" open>
+  <summary>
+    <h3>Performance</h3>
+    <span class="sbx-teaser">Net revenue YTD -20.1% vs prior year</span>
+    <span class="chev" aria-hidden="true">&#9656;</span>
+  </summary>
+  <div class="sbx-body">
+  <!-- FOUR TOGGLED VIEWS. Every figure is PRE-COMPUTED by references/performance_views.py
+       and embedded in #perf-data; the box renderer only composes cells and re-binds traces.
+       The browser performs no arithmetic: a number computed here would be neither gated by
+       the validator nor traceable to a model cell. -->
+  <div class="perfbar" role="tablist" aria-label="Performance time basis"></div>
+  <div class="tblwrap"><table class="traced" id="perf-table"><thead></thead><tbody></tbody></table></div>
+  <div class="perfbasis small muted"></div>
+  </div>
+</details>
+</div>
+<div>
+<!-- COLLATERAL METRICS -->
+<details class="card snapbox" id="box-collateral" open>
+  <summary>
+    <h3>Collateral metrics</h3>
+    <span class="sbx-teaser">Pledged components cover 3.35&times; funded debt</span>
+    <span class="chev" aria-hidden="true">&#9656;</span>
+  </summary>
+  <div class="sbx-body">
+  <h3>Collateral metrics
+    <span class="small muted" style="font-weight:400;text-transform:none;letter-spacing:0">&middot; pledged assets tracked via the financials &middot; click a line for detail</span>
+  </h3>
+  <p class="small muted" style="margin:0 0 8px">Senior secured; first-priority blanket lien on substantially all personal property of the borrower and guarantors (accounts, chattel paper, deposit accounts, equipment, fixtures, general intangibles, instruments, inventory, books/records, and proceeds), subject to customary exclusions/permitted liens. Guarantees from Asteron Care Holdings, Inc. and the five regional operating subsidiaries (Southeast, Mid-Atlantic, Northeast, Great Lakes, Central Operations, LLC). Reinstated exit debt and new-money term debt share the SAME first-priority lien class (pari passu). Source: executed Guaranty and Security Agreement (effective 2026-03-31) and Amended and Restated Credit Agreement (executed 2026-03-20, effective 2026-03-31) -- the CURRENT/Exit Facility. No inventory line exists on this borrower&#x27;s Balance Sheet (healthcare-services business), so inventory is not tracked as a pledged component below even though the security agreement nominally covers it. Coverage is measured against <b>$49.71MM funded debt</b>.</p>
+  <div class="covcov">
+    <div class="cc"><div class="v"><span class="trc" data-calc="All pledged assets of 166,354,653 divided by the 49,707,153 of debt the lien secures, both at Jun 2026." data-hops='[{&quot;h&quot;: null, &quot;t&quot;: &quot;the model \u2014 Balance Sheet (W19)&quot;}]'>3.35&times;</span></div><div class="k">All pledged assets</div></div>
+    <div class="cc"><div class="v"><span class="trc" data-calc="Ex-goodwill assets of 88,265,106 divided by the 49,707,153 of debt the lien secures, both at Jun 2026." data-hops='[{&quot;h&quot;: null, &quot;t&quot;: &quot;the model \u2014 Balance Sheet (W19)&quot;}]'>1.78&times;</span></div><div class="k">Ex-goodwill assets</div></div>
+    <div class="cc bad"><div class="v"><span class="trc" data-calc="Liquid (cash + A/R) of 39,713,873 divided by the 49,707,153 of debt the lien secures, both at Jun 2026." data-hops='[{&quot;h&quot;: null, &quot;t&quot;: &quot;the model \u2014 Balance Sheet (W19)&quot;}]'>0.80&times;</span></div><div class="k">Liquid (cash + A/R)</div></div>
+  </div>
+  <div class="tblwrap">
+  <table class="traced" data-money="mm">
+    <thead><tr><th>Pledged component</th><th class="n spot"><span class="trc" data-calc="Period-end level read from the model balance sheet for June 2026." data-hops='[]'>Jun 2026 $MM</span></th><th class="n"><span class="trc" data-calc="June 2026 against the prior month&#x27;s period-end levels — the dollar move with the percentage alongside, because dollar deltas add up across components and a percentage on a small base reads as noise." data-hops='[]'>MoM</span></th><th class="n"><span class="trc" data-calc="June 2026 against the same month a year earlier." data-hops='[]'>YoY</span></th><th class="n"><span class="trc" data-calc="Each component against the pinned budget&#x27;s balance-sheet plan for the same month, where that plan exists; a budget without one leaves this column blank." data-hops='[]'>vs Budget</span></th></tr></thead>
+    <tbody>
+      <tr data-method="The reported Cash (controlled accounts) at Jun 2026, as the model row &quot;Cash&quot;."><td><a class="jumpname" href="#sec-bs">Cash (controlled accounts) <span class="arw">&#8599;</span></a></td><td class="n spot"><span class="trc" data-calc="The reported Cash (controlled accounts) at Jun 2026, as the model row &quot;Cash&quot;." data-hops='[{&quot;h&quot;: null, &quot;t&quot;: &quot;the model \u2014 Balance Sheet (W7)&quot;}]'>$18.82</span></td><td class="n up">+$0.40MM <span class="cmp">(+2.2%)</span></td><td class="n up">+$10.28MM <span class="cmp">(+120.5%)</span></td><td class="n up"><span class="trc" data-calc="The reported Cash (controlled accounts) of 18,817,444 at Jun 2026 against the 16,814,145 the pinned budget plans for the same month." data-hops='[{&quot;h&quot;: null, &quot;t&quot;: &quot;Approved Stabilization Budget (transposed for budget-map).xlsx \u2014 Budget (transposed) (D10)&quot;}]'>+$2.00MM <span class="cmp">(+11.9%)</span></span></td></tr>
+      <tr data-method="The reported Accounts receivable (net) at Jun 2026, as the model row &quot;Accounts receivable&quot;."><td><a class="jumpname" href="#sec-bs">Accounts receivable (net) <span class="arw">&#8599;</span></a></td><td class="n spot"><span class="trc" data-calc="The reported Accounts receivable (net) at Jun 2026, as the model row &quot;Accounts receivable&quot;." data-hops='[{&quot;h&quot;: null, &quot;t&quot;: &quot;the model \u2014 Balance Sheet (W8)&quot;}]'>$20.90</span></td><td class="n up">+$0.46MM <span class="cmp">(+2.3%)</span></td><td class="n down">&minus;$2.74MM <span class="cmp">(-11.6%)</span></td><td class="n small muted">&mdash;</td></tr>
+      <tr data-method="The reported PP&amp;E, net at Jun 2026, as the model row &quot;PP&amp;E, net&quot;."><td><a class="jumpname" href="#sec-bs">PP&amp;E, net <span class="arw">&#8599;</span></a></td><td class="n spot"><span class="trc" data-calc="The reported PP&amp;E, net at Jun 2026, as the model row &quot;PP&amp;E, net&quot;." data-hops='[{&quot;h&quot;: null, &quot;t&quot;: &quot;the model \u2014 Balance Sheet (W11)&quot;}]'>$48.55</span></td><td class="n down">&minus;$0.78MM <span class="cmp">(-1.6%)</span></td><td class="n down">&minus;$9.43MM <span class="cmp">(-16.3%)</span></td><td class="n small muted">&mdash;</td></tr>
+      <tr data-method="The reported Goodwill at Jun 2026, as the model row &quot;Goodwill&quot;."><td><a class="jumpname" href="#sec-bs">Goodwill <span class="arw">&#8599;</span></a></td><td class="n spot"><span class="trc" data-calc="The reported Goodwill at Jun 2026, as the model row &quot;Goodwill&quot;." data-hops='[{&quot;h&quot;: null, &quot;t&quot;: &quot;the model \u2014 Balance Sheet (W13)&quot;}]'>$78.09</span></td><td class="n neu">+$0.00MM <span class="cmp">(+0.0%)</span></td><td class="n down">&minus;$1.91MM <span class="cmp">(-2.4%)</span></td><td class="n small muted">&mdash;</td></tr>
+      <tr data-method="The 4 pledged components above, added up at each period end."><td><b>Total pledged components</b></td><td class="n spot"><b><span class="trc" data-calc="The 4 pledged components above, added up at each period end." data-hops='[{&quot;h&quot;: null, &quot;t&quot;: &quot;the model \u2014 Balance Sheet (W7)&quot;}, {&quot;h&quot;: null, &quot;t&quot;: &quot;the model \u2014 Balance Sheet (W8)&quot;}, {&quot;h&quot;: null, &quot;t&quot;: &quot;the model \u2014 Balance Sheet (W11)&quot;}, {&quot;h&quot;: null, &quot;t&quot;: &quot;the model \u2014 Balance Sheet (W13)&quot;}]'>$166.35</span></b></td><td class="n up">+$0.08MM <span class="cmp">(+0.0%)</span></td><td class="n down">&minus;$3.80MM <span class="cmp">(-2.2%)</span></td><td class="n small muted">&mdash;</td></tr>
+    </tbody>
+  </table>
+  </div>
+<p class="small muted"><b>The plan for some pledged assets is not shown.</b> the pinned budget plans no balance for Accounts receivable (net), PP&amp;E, net, Goodwill this month, so those lines are compared against earlier months only and the total is not compared against plan.</p>
+  <div class="foot">Pledged collateral covers the $49.7M of secured debt 3.3x on an all-assets basis or 1.8x excluding goodwill, but only 0.8x on liquid assets (cash plus receivables) alone, so the cushion depends on property and goodwill rather than liquid collateral.</div>
+  </div>
+</details>
+</div>
+</div>
+
+<!-- EXECUTIVE SUMMARY — the analyst's one-pager for the deal team (report-structure.md ->
+     Executive summary). Five labeled prose blocks in a fixed order: the period update
+     (monthly, or quarterly when the period closes a calendar quarter — the renderer sets
+     the label), then Liquidity, Collateral, Covenants, Outlook. Prose, not bullets; each
+     label deep-links to the section holding its detail; anything longer than a few
+     sentences belongs in that detail section. -->
+<h2 id="sec-summary">Executive summary <span class="small muted" style="font-weight:400">&middot; the full analysis lives in the other tabs</span></h2>
+<div class="card summary">
+  <p class="sumblock"><b><a class="jumpname" href="#sec-is">Quarterly update</a>:</b> June revenue was $13.2M, 17.4% (about $2.8M) below the $15.9M Approved Stabilization Budget for the month, though up 2.2% from May's $12.9M. Quarter to date (Apr-Jun, since the March 2026 restructuring), revenue of $38.7M runs 17.0% (about $7.9M) below the $46.6M budget over the same span. EBITDA beat budget in June at $1.5M against a $1.3M plan (+$257K, +19.9%), though the quarter-to-date beat is thinner at +7.1% (+$259K) against a $3.6M plan -- lighter opex run-rate is offsetting the top-line shortfall rather than volume recovering to plan.</p>
+  <p class="sumblock"><b><a class="jumpname" href="#sec-bs">Liquidity</a>:</b> Cash ended June at $18.8M, $8.8M (88%) above the $10.0M covenant floor, and has risen every month since the March 2026 recapitalization ($18.1M, $18.1M, $18.4M, $18.8M). The increase is funded by operating cash flow ($692K in June) rather than new borrowing -- financing cash flow was a modest net use of $51K, the facility's scheduled amortization payment. No month has shown a cash decline since the recapitalization.</p>
+  <p class="sumblock"><b><a class="jumpname" href="#sec-snapshot">Collateral</a>:</b> Pledged collateral totals $166.4M at June 2026: cash $18.8M, accounts receivable $20.9M, PP&E net $48.6M, and goodwill $78.1M. That covers the $49.7M of secured debt 3.3x on an all-assets basis or 1.8x excluding goodwill, but only 0.8x on liquid collateral (cash plus receivables) alone, so the cushion depends on the illiquid asset base. Goodwill is flat month over month at $78.1M and down 2.4% year over year; total pledged components are essentially flat month over month.</p>
+  <p class="sumblock"><b><a class="jumpname" href="#sec-covenant">Covenants</a>:</b> Minimum Liquidity is the only actively tested financial covenant this period and passes with room: $18.8M against the $10.0M floor, matching the borrower's own certificate exactly. The legacy 1.2000x FCCR test remains suspended (informational only) through December 31, 2026; the certified informational ratio was 0.3682x at June 2026, below 1.2000x and worsening every quarter since the Q3 2025 suspension (1.43x, 1.05x, 0.67x, 0.37x). The nearest live risk is this spec's modeled FCCR reinstatement at 1.2000x effective January 1, 2027 -- clearing that level from today's informational trend would need a substantial EBITDA recovery or Fixed Charges reduction beyond what June's run-rate shows.</p>
+  <p class="sumblock"><b><a class="jumpname" href="#sec-stress">Outlook</a>:</b> The governing question for this credit is whether the post-restructuring operating recovery -- revenue and EBITDA both improving month over month, with the borrower's own site-operations reporting showing a declining weak-site count and lower agency-labor reliance -- closes enough of the gap to the stabilization budget before the FCCR's informational path forces a decision. The borrower owes the lender its FCCR reinstatement-readiness analysis (Stabilization Milestone M4) by September 30, 2026, about two weeks from this review, which should clarify whether reinstatement, a further amendment, or continued suspension follows. Restructuring accounting (the TDR framework, instrument-level modification test, CODI, and Section 382 conclusions) also remains open and could still move successor balance-sheet figures once resolved.</p>
+</div>
+
+<div id="trendwrap">
+<!-- 18-MONTH TREND -->
+<h2 id="sec-trend">18-month trend <span class="small muted" style="font-weight:400">(Jan 2025 &ndash; Jun 2026)</span></h2>
+<div class="card">
+  <div class="chart-toggle" id="toggle">
+    <!-- The kept drawing code binds `#toggle .tgl` and reads `data-m`, so these two
+         attributes are what make the toggle live. Renaming either leaves the buttons on the
+         page with nothing listening and the chart stuck on the absolute view. -->
+    <button class="tgl active" data-m="abs">Absolute ($)</button>
+    <button class="tgl" data-m="pct">Margins (%)</button>
+  </div>
+  <div class="chartwrap">
+    <svg id="chart" width="100%" viewBox="0 0 940 320" role="img" aria-label="18-month performance trend"></svg>
+    <div id="tt"></div>
+  </div>
+  <div class="chart-legend" id="legend"></div>
+  <!-- The drawing code writes the axis caption here on every repaint. Without this element
+       that write throws and takes the rest of the repaint with it. -->
+  <div class="axis-note" id="axisnote"></div>
+  <p class="small muted" style="margin:8px 0 0">Chart reads the 18 monthly columns of the monitoring model (Jan 2025 &ndash; Jun 2026): <span class="srcmiss" title="Asteron Care Partners Monthly IS-BS-CF.xlsx — 18 monthly columns">Asteron Care Partners Monthly IS-BS-CF.xlsx</span>. The margins view divides each line by revenue in the same month. The 6 boxes across the top hold complete calendar quarters, added up from the same columns; a quarter the window does not hold in full gets no box.</p>
+</div>
+<!-- The chart's DATA, written by render_memo.py from the payload: months, the four dollar
+     series, the three margin series, the axis captions, the basis-break index and the
+     complete quarters with their totals. The drawing code below reads it from here and
+     declares no series and computes no total of its own. -->
+<script type="application/json" id="trend-data">{"basis_break_index": 15, "months": ["Jan 25", "Feb 25", "Mar 25", "Apr 25", "May 25", "Jun 25", "Jul 25", "Aug 25", "Sep 25", "Oct 25", "Nov 25", "Dec 25", "Jan 26", "Feb 26", "Mar 26", "Apr 26", "May 26", "Jun 26"], "notes": {"abs": "Net revenue, gross profit, EBITDA and operating expense in US dollars, read from the monthly financial statements. The box above each quarter-end month holds that quarter's three months added together. The dashed line at Apr 2026 marks a change in how the borrower reports these figures: months either side of it are not directly comparable.", "pct": "Each line is that figure as a share of net revenue in the same month, so no dollar amount is shown. The box above each quarter-end month holds the quarter's own margin \u2014 the three months' figures added up, then divided \u2014 not the average of the three monthly margins. The dashed line at Apr 2026 marks a change in how the borrower reports these figures: months either side of it are not directly comparable."}, "quarters": [{"end_index": 2, "label": "Q1 2025", "months": ["Jan 2025", "Feb 2025", "Mar 2025"], "short": "Q1 25", "spans_basis_break": false, "values": {"ebitda": 8630515.549999999, "ebitda_margin": 0.19839086839251013, "gross_margin": 0.4069236730250584, "gross_profit": 17702231.54, "net_revenue": 43502584.67, "opex": -9071715.99, "opex_pct_of_revenue": -0.20853280463254828}}, {"end_index": 5, "label": "Q2 2025", "months": ["Apr 2025", "May 2025", "Jun 2025"], "short": "Q2 25", "spans_basis_break": false, "values": {"ebitda": 10972847.129999999, "ebitda_margin": 0.234630676792199, "gross_margin": 0.43915241983892955, "gross_profit": 20537605.89, "net_revenue": 46766464.13, "opex": -9564758.76, "opex_pct_of_revenue": -0.20452174304673051}}, {"end_index": 8, "label": "Q3 2025", "months": ["Jul 2025", "Aug 2025", "Sep 2025"], "short": "Q3 25", "spans_basis_break": false, "values": {"ebitda": -1584999.339999999, "ebitda_margin": -0.04369692404842282, "gross_margin": 0.23873225209301482, "gross_profit": 8659430.16, "net_revenue": 36272560.93, "opex": -10244429.5, "opex_pct_of_revenue": -0.28242917614143764}}, {"end_index": 11, "label": "Q4 2025", "months": ["Oct 2025", "Nov 2025", "Dec 2025"], "short": "Q4 25", "spans_basis_break": false, "values": {"ebitda": -1270952.6, "ebitda_margin": -0.03462268157312728, "gross_margin": 0.24624986538125815, "gross_profit": 9039505.1, "net_revenue": 36708670.22, "opex": -10310457.7, "opex_pct_of_revenue": -0.2808725469543854}}, {"end_index": 14, "label": "Q1 2026", "months": ["Jan 2026", "Feb 2026", "Mar 2026"], "short": "Q1 26", "spans_basis_break": false, "values": {"ebitda": -1269389.409999999, "ebitda_margin": -0.03797954949951448, "gross_margin": 0.21122423472113905, "gross_profit": 7059741.63, "net_revenue": 33422971.75, "opex": -8329131.04, "opex_pct_of_revenue": -0.24920378422065356}}, {"end_index": 17, "label": "Q2 2026", "months": ["Apr 2026", "May 2026", "Jun 2026"], "short": "Q2 26", "spans_basis_break": false, "values": {"ebitda": 3898520.9300000006, "ebitda_margin": 0.10075031052766563, "gross_margin": 0.319566844495786, "gross_profit": 12365599.92, "net_revenue": 38694877.56, "opex": -8467078.99, "opex_pct_of_revenue": -0.2188165339681204}}], "series": {"ebitda": {"row": "Reported EBITDA", "values": [2635203.76, 2814225.61, 3181086.18, 3427158.21, 3673341.91, 3872347.01, -389136.7, -692261.329999998, -503601.310000001, -165445.39, 143312.1, -1248819.31, -603571.879999999, -481082.28, -184735.25, 1095905.32, 1254874.33, 1547741.28]}, "ebitda_margin": {"derived_from": ["ebitda", "net_revenue"], "values": [0.1860470643488017, 0.19524596781945724, 0.21314293732270895, 0.22447383626502673, 0.2353060047677092, 0.2437272880307297, -0.03167902964158527, -0.05835173490186619, -0.04153332505418089, -0.013136952706496537, 0.011005620737195854, -0.11257665759801852, -0.055416360095831334, -0.043494180405345834, -0.01610518319575106, 0.08659909678836944, 0.09746331789038745, 0.11756842682219552]}, "gross_margin": {"derived_from": ["gross_profit", "net_revenue"], "values": [0.39594709827332564, 0.40413176892113334, 0.4200372672440084, 0.43011279507665656, 0.43976125242298025, 0.44724078429991904, 0.24869503743507362, 0.2265852323266962, 0.24052414622971505, 0.2640477129122671, 0.28404309500478286, 0.18168001759536576, 0.19603707372965962, 0.20641648734006204, 0.23028086492197622, 0.3067159988695092, 0.316405821977655, 0.335011734534522]}, "gross_profit": {"row": "Gross Profit", "values": [5608265.23, 5825052.3, 6268914.01, 6566754.6, 6865075.29, 7105776.0, 3054903.11, 2688115.35, 2916411.7, 3325388.91, 3698729.35, 2015386.84, 2135154.04, 2283140.26, 2641447.33, 3881468.83, 4073835.7, 4410295.39]}, "net_revenue": {"row": "Revenue", "values": [14164178.13, 14413745.09, 14924661.45, 15267517.44, 15610914.45, 15888032.24, 12283731.68, 11863594.65, 12125234.6, 12593894.01, 13021718.94, 11093057.27, 10891582.9, 11060842.52, 11470546.33, 12654927.83, 12875350.0, 13164599.73]}, "opex": {"rows": ["Corporate and administrative costs", "Occupancy and site costs"], "values": [-2973061.4699999997, -3010826.69, -3087827.83, -3139596.3899999997, -3191733.38, -3233428.99, -3444039.8099999996, -3380376.6799999997, -3420013.01, -3490834.3, -3555417.25, -3264206.15, -2738725.92, -2764222.54, -2826182.58, -2785563.51, -2818961.37, -2862554.11]}, "opex_pct_of_revenue": {"derived_from": ["opex", "net_revenue"], "values": [-0.20990003392452392, -0.20888580110167607, -0.2068943299212995, -0.2056389588116298, -0.2044552476552711, -0.20351349626918935, -0.2803740670766589, -0.28493696722856254, -0.2820574712838958, -0.2771846656187636, -0.273037474267587, -0.2942566751933843, -0.25145343382549107, -0.2499106677454079, -0.24638604811772727, -0.2201169020811397, -0.21894250408726754, -0.21744330771232645]}}}</script>
+</div>
+</div>
+
+<!-- ========================== TAB: DEAL SUMMARY ==========================
+     The static deal record, from deal-context + the executed documents. Company and
+     Key terms side by side; Transaction summary beside Security summary; Capital
+     structure full width. Changes on amendment or restructure, not month to month. -->
+<div class="tabpane" id="tab-deal">
+<div class="hrow">
+<div>
+
+<!-- COMPANY — one paragraph on the business, then two compact fact tables (ownership /
+     business model / management left; scale / customers / end markets right). A field the
+     deal file does not carry renders as not on file — never invented. -->
+<h2 id="sec-company">Company</h2>
+<div class="card">
+  <p style="margin:0 0 10px">Asteron Care Partners operates a 15-site, 5-region outpatient healthcare-services platform, billing a diversified Medicare, Commercial, Medicaid, Workers' Compensation, and Self-Pay mix with no single payer class exceeding about 27% of receivables.</p>
+  <div class="grid2">
+    <div><table class="facttable">
+      <tr><td class="muted">Ownership</td><td><span class="srcmiss" title="IC Memo.pdf">Asteron Care Holdings, Inc. is the corporate parent/guarantor; a financial sponsor holds equity post-restructuring (unnamed -- see sponsor_status note) alongside Series A preferred equity issued to former debtholders in the March 2026 debt-for-equity exchange; Not itemized beyond the holding-company structure and the debt-for-equity preferred issuance -- flagged draft</span></td></tr>
+      <tr><td class="muted">Business model</td><td><span class="srcmiss" title="IC Memo.pdf">Fee-for-service billing to payers for patient visits and clinical procedures at owned/leased clinical sites; Transactional/volume-based (per-visit, per-procedure billing) -- not contractually recurring or subscription revenue; no ARR/retention metric is reported in the monthly package.; Not disclosed in the available documents beyond payer-class claims data -- flagged draft.</span></td></tr>
+      <tr><td class="muted">Management</td><td class="muted">not on file in the deal file</td></tr>
+    </table></div>
+    <div><table class="facttable">
+      <tr><td class="muted">Scale</td><td><span class="srcmiss" title="IC Memo.pdf">Patient visits / procedures by site; Revenue; yes -- Site Operations tab · Weak-site count (of 15 total); Site-level and consolidated EBITDA; yes -- monthly Status tab and Site Operations · Agency/contract labor % of revenue; Direct clinical labor cost, margin; yes -- Labor tab and Approved Budget &#x27;Agency ratio&#x27; column · Employed vacancies by site; Reliance on higher-cost agency labor; yes -- Labor tab</span></td></tr>
+      <tr><td class="muted">Customers</td><td><span class="srcmiss" title="IC Memo.pdf">Patients across a diversified payer mix -- Medicare, Commercial, Medicaid, Workers&#x27; Compensation, and Self-Pay/Other -- billed through five regional operating subsidiaries; By June 2026 AR balance: Medicare 27.0%, Commercial 26.1%, Medicaid 23.1%, Workers&#x27; Compensation 15.7%, Self-Pay/Other 8.1% -- no single payer class exceeds ~27%, i.e. no material payer concentration; Not a contracted/recurring relationship at the patient level; payer-class mix is diversified across 5 major categories which limits single-payer risk, but overall patient volumes (visits/procedures) are not contractually locked in</span></td></tr>
+      <tr><td class="muted">End markets</td><td><span class="srcmiss" title="IC Memo.pdf">Commercial-insured patients; ~26% of June 2026 AR balance; Employer-sponsored coverage, regional payer contracts · Medicare beneficiaries; ~27% of June 2026 AR balance; Medicare fee schedules and beneficiary demand · Medicaid beneficiaries; ~23% of June 2026 AR balance; State Medicaid fee schedules and eligibility · Workers&#x27; compensation claimants; ~16% of June 2026 AR balance; Employer/insurer workplace-injury referrals</span></td></tr>
+    </table></div>
+  </div>
+</div>
+
+</div>
+<div>
+
+<!-- KEY TERMS — the deal's economics in one two-column card, each row citing the executed
+     document that sets it. Financial covenants get ONE summary row that deep-links to the
+     Covenants tab; thresholds live there, not here. -->
+<h2 id="sec-terms">Key terms</h2>
+<div class="card kt">
+  <div class="grid2">
+    <div><table>
+      <tr><td class="muted">Borrower</td><td><span class="trc" data-calc="Borrower as the deal background records it, from the executed loan documents." data-hops='[]'>Asteron Care Partners, LLC</span></td></tr>
+      <tr><td class="muted">Lender / agent</td><td class="muted">not on file in the deal file</td></tr>
+      <tr><td class="muted">Sponsor</td><td><span class="trc" data-calc="Sponsor as the deal background records it, from the executed loan documents." data-hops='[]'>sponsor-backed (sponsor entity not named in the available documents)</span></td></tr>
+      <tr><td class="muted">Closing date</td><td><span class="trc" data-calc="Closing date as the deal background records it, from the executed loan documents." data-hops='[]'>March 2026</span></td></tr>
+      <tr><td class="muted">Facility</td><td><span class="trc" data-calc="Facility as the deal background records it, from the executed loan documents. No figure is stated for what is still available to draw, because what is left is not a committed balance — see the draw structure below. The gap between the facility size and the funded balance is not availability." data-hops='[]'>$51,000,000 Senior secured term loan (reinstated exit term debt + new-money term debt, single first-priority lien class); $51,000,000 advanced to date; single advance at restructuring close (no revolver or delayed-draw commitment) -- $44,000,000 reinstated debt (exchanged from predecessor/legacy debt) + $7,000,000 new-money term debt, funded 2026-03-31</span></td></tr>
+      <tr><td class="muted">Maturity</td><td><span class="trc" data-calc="Maturity as the deal background records it, from the executed loan documents." data-hops='[]'>31 March 2031</span></td></tr>
+      <tr><td class="muted">Amortization</td><td class="muted">not on file in the deal file</td></tr>
+      <tr><td class="muted">Cash interest rate</td><td><span class="trc" data-calc="Cash interest rate as the deal background records it, from the executed loan documents." data-hops='[]'>Fixed cash interest: 11.50% through March 2026, stepping down to 10.00% from April 2026 onward; no floating index disclosed. Monthly principal amortization stepped down from 0.70%/month (Predecessor/Legacy) to 0.10%/month beginning April 2026. No PIK disclosed.</span></td></tr>
+    </table></div>
+    <div><table>
+      <tr><td class="muted">PIK rate</td><td class="muted">not on file in the deal file</td></tr>
+      <tr><td class="muted">OID</td><td><span class="trc" data-calc="OID as the deal background records it, from the executed loan documents." data-hops='[]'>None disclosed. Debt issuance costs of $1,200,000 were capitalized as a deferred financing asset at close (successor gross debt $51,000,000 vs. provisional successor carrying debt $49,800,000 per the Predecessor Close/Successor Opening workpaper; carrying debt per the June 2026 package is $49,707,152.95 after 3 months&#x27; amortization). Debt/equity accounting for the exchange itself (TDR framework, instrument-level 10% modification test) is explicitly PROVISIONAL pending workpapers not yet concluded.</span></td></tr>
+      <tr><td class="muted">Fees / kicker</td><td><span class="trc" data-calc="Fees / kicker as the deal background records it, from the executed loan documents." data-hops='[]'>Debt issuance costs of $1,200,000 and restructuring advisory fees of $1,800,000 per the executed Sources &amp; Uses (Restructuring Closing Materials); the executed Fee Letter (effective 2026-03-31) references &#x27;debt issuance and administrative fees per the executed closing statement&#x27; but does not itemize dollar amounts in the available text -- sourced instead from the Sources &amp; Uses workbook.; $140,000 upfront fee on the $7,000,000 Exit Amendment bridge facility (Dec 2025), superseded/rolled into the March 2026 exit capitalization; recorded as a below-EBITDA expense in the December 2025 Income Statement.</span></td></tr>
+      <tr><td class="muted">Equity kicker</td><td><span class="trc" data-calc="Equity kicker as the deal background records it, from the executed loan documents." data-hops='[]'>None disclosed as a lender warrant/kicker. The restructuring itself converted $16,910,820.62 of predecessor debt into Series A preferred equity held by former debtholders (debt-for-equity exchange, not a lender warrant), alongside $8,000,000 of new common equity from the (unnamed) sponsor.</span></td></tr>
+      <tr><td class="muted">Prepayment</td><td class="muted">not on file in the deal file</td></tr>
+      <tr><td class="muted">ECF sweep</td><td class="muted">not on file in the deal file</td></tr>
+      <tr><td class="muted">Collateral</td><td><span class="trc" data-calc="Collateral as the deal background records it, from the executed loan documents." data-hops='[]'>First-priority blanket lien on substantially all assets of the borrower and guarantors (accounts, chattel paper, deposit accounts, equipment, fixtures, general intangibles, instruments, inventory, books/records, proceeds) per the executed Guaranty and Security Agreement (effective 2026-03-31); controlled/concentration deposit accounts; guarantees from Asteron Care Holdings, Inc. and the five regional operating subsidiaries.</span></td></tr>
+      <tr><td class="muted">Borrowing base</td><td class="muted">not on file in the deal file</td></tr>
+      <tr><td class="muted">Financial covenants</td><td>Minimum Fixed Charge Coverage Ratio and Minimum Liquidity, each tested on its own. &mdash; the thresholds and this month's result are on the <a class="jumpname" href="#sec-covenant">Covenants tab <span class="arw">&#8599;</span></a></td></tr>
+    </table></div>
+  </div>
+</div>
+
+</div>
+</div>
+<div class="hrow">
+<div>
+
+<!-- TRANSACTION SUMMARY — one paragraph in the fixed house order: facility and structure ->
+     lenders and agent -> use of proceeds -> pro forma leverage at close with its EBITDA
+     basis -> security. An element no source carries is named in the amber notice. -->
+<h2 id="sec-transaction">Transaction summary</h2>
+<div class="card">
+  <p style="margin:0">The March 31, 2026 exit recapitalization, arranged with Cairn Ridge Private Credit, LP as administrative agent, exchanged $60.9M of predecessor/legacy debt into $44.0M of reinstated term debt plus $16.9M of Series A preferred equity, alongside $7.0M of new-money term debt and $8.0M of new sponsor common equity.</p>
+  <div class="notice"><b>Not on file:</b> no document in this deal record states who lent and who acts as agent, what the money was used for and leverage at close and the earnings it was measured on. Those elements are left out of the paragraph rather than assumed.</div>
+  <div class="foot">Sources: <span class="srcmiss" title="Amended and Restated Credit Agreement.pdf">Amended and Restated Credit Agreement.pdf</span>, <span class="srcmiss" title="IC Memo.pdf">IC Memo.pdf</span>.</div>
+</div>
+
+</div>
+<div>
+
+<!-- SECURITY SUMMARY — who holds the loan, at what basis, as of period end. The
+     lender-of-record rows restate the EXECUTED LOAN DOCUMENTS; any split across lender
+     vehicles stays UNDETERMINED unless a document states it. Cost at close is par
+     net of any OID. Fair value, enterprise value and any unevidenced split render as not on
+     file inside the amber sourcing notice — never estimated. -->
+<h2 id="sec-security">Security summary <span class="small muted" style="font-weight:400">&middot; as of 6/30/2026</span></h2>
+<div class="card">
+  <div class="tblwrap">
+  <table>
+    <thead><tr><th>Holder</th><th class="n">Hold at close (par)</th><th class="n">Cost (% of par)</th><th class="n">Amortized cost at close</th><th class="n spot">Principal o/s incl. PIK · 6/30/2026</th><th class="n">Fair value</th><th class="n">Enterprise value</th><th class="n">Loan-to-EV</th></tr></thead>
+    <tbody>
+      <tr><td><span class="srcmiss" title="Amended and Restated Credit Agreement.pdf"><span class="small muted">Lender of record per the executed loan and security agreement</span></span></td><td class="n"><span class="small muted">split undetermined</span></td><td class="n">&mdash;</td><td class="n">&mdash;</td><td class="n spot">&mdash;</td><td class="n">&mdash;</td><td class="n">&mdash;</td><td class="n">&mdash;</td></tr>
+      <tr><td><b><span class="small muted">Total</span></b></td><td class="n"><b><span class="srcmiss" title="Amended and Restated Credit Agreement.pdf">$51,000,000</span></b></td><td class="n"><span class="small muted">not stated in the deal file</span></td><td class="n"><span class="small muted">not on file in the deal file</span></td><td class="n spot"><span class="small muted">not separable from the model&#x27;s funded-debt line</span></td><td class="n"><span class="small muted">not on file</span></td><td class="n"><span class="small muted">not on file</span></td><td class="n"><span class="small muted">n/a</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="notice"><b>Sourcing:</b> First-priority blanket lien on substantially all assets of the borrower and its five regional operating-subsidiary guarantors, per the Guaranty and Security Agreement effective March 31, 2026.</div>
+</div>
+
+</div>
+</div>
+
+<!-- CAPITAL STRUCTURE — deduced, never certified: our instrument(s) from the executed
+     documents, every other lender from the borrower's debt schedule with its ranking (a
+     surviving prior lien is NAMED), then an explicit UNATTRIBUTED RESIDUAL row bridging to
+     the model's funded-debt line — a balance the package does not explain is a finding,
+     stated. Debt-like items that are not funded debt sit below the total as memo rows.
+     Equity is book value with its caveat named. -->
+<h2 id="sec-capstructure">Capital structure <span class="small muted" style="font-weight:400">&middot; deduced from the period-end balance sheet and the executed documents</span></h2>
+<div class="card">
+  <div class="tblwrap">
+  <table class="traced">
+    <thead><tr><th>Instrument</th><th>Ranking / security</th><th class="n spot">June 2026</th><th>Pricing / notes</th></tr></thead>
+    <tbody>
+      <tr><td><b>Senior secured term loan (reinstated exit term debt + new-money term debt, single first-priority lien class)</b></td><td class="small muted">First-priority blanket lien on substantially all assets of the borrower and guarantors (accounts, chattel paper, deposit accounts, equipment, fixtures, general intangibles, instruments, inventory, books/records, proceeds) per the executed Guaranty and Security Agreement (effective 2026-03-31); controlled/concentration deposit accounts; guarantees from Asteron Care Holdings, Inc. and the five regional operating subsidiaries.</td><td class="n spot"><b><span class="trc" data-calc="First-priority blanket lien on substantially all assets of the borrower and guarantors (accounts, chattel paper, deposit accounts, equipment, fixtures, general intangibles, instruments, inventory, books/records, proceeds) per the executed Guaranty and Security Agreement (effective 2026-03-31); controlled/concentration deposit accounts; guarantees from Asteron Care Holdings, Inc. and the five regional operating subsidiaries." data-hops='[{&quot;h&quot;: null, &quot;t&quot;: &quot;the deal&#x27;s own record of this term, kept with the monitoring files&quot;}]'>$51,000,000</span></b></td><td class="small">Senior secured term loan, fixed 10.00% cash interest and 0.10%/month principal amortization from April 2026, final maturity March 31, 2031, first-priority lien on substantially all assets.</td></tr>
+      <tr><td><b>Total funded debt</b></td><td class="small muted"></td><td class="n spot"><span class="small muted">&mdash;</span></td><td class="small">Equal to the single senior secured term loan tranche shown above; no other funded-debt instrument exists in this capital structure.</td></tr>
+      <tr><td>Total equity, at book</td><td class="small muted">Book value, not a market figure</td><td class="n spot"><span class="trc" data-calc="Book value, not a market figure" data-hops='[{&quot;h&quot;: null, &quot;t&quot;: &quot;the model \u2014 Balance Sheet (W25)&quot;}]'>$109,569,857</span></td><td class="small">Book value, not a market figure; includes the Series A preferred equity issued to former debtholders in the March 2026 debt-for-equity exchange.</td></tr>
+      <tr><td><b>Total capitalization, at book</b></td><td class="small muted">Funded debt plus equity at book</td><td class="n spot"><span class="small muted">&mdash;</span></td><td class="small">Funded debt plus equity at book.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="foot">Leverage and coverage ratios are not shown on a trailing-twelve-month basis across the March 2026 debt-for-equity recapitalization, which reduced funded debt from $60.9M to $51.0M and added a $16.9M Series A preferred layer -- only three same-basis months exist since the exchange, short of the twelve a TTM window needs, so this is a structural break rather than an organic deleveraging trend.</div>
+</div>
+
+</div>
+
+<!-- =========================== TAB: COVENANTS =========================== -->
+<div class="tabpane" id="tab-covenants">
+<h2 style="margin-top:6px">Covenant compliance</h2>
+<!-- COVENANT STATUS STRIP — repeated at the top of this tab, byte-identical to the Overview
+     strip and in the same surrounding markup. -->
+<div class="card cov-strip">
+  <h3>June 2026 <span class="small muted" style="font-weight:400;text-transform:none;letter-spacing:0"> · borrower certified compliant · click for detail</span></h3>
+  <div class="cov-rest">
+    <a class="covchip pass overall lead" href="#sec-covenant"><span class="cdot"></span>Minimum liquidity <b>Pass</b></a>
+  </div>
+</div>
+<!-- COVENANTS — FINANCIAL COVENANTS ONLY. The grid seats the covenants that carry a
+     primitive in the spec; a reference-only obligation (reporting, affirmative, negative)
+     gets no grid seat, no chip and no list, and appears in Flags & follow-ups when broken.
+     Breaches and at-risk tests lead. Covenants whose next scheduled test is more than 12
+     months out render only in the closing block. -->
+<h2 id="sec-covenant">Covenant detail &amp; stress</h2>
+<div class="card">
+  <div class="flow" style="margin-top:0"><span class="srcmiss" title="Amended and Restated Credit Agreement.pdf — the financial-covenant section">the loan agreement dated 31 March 2026</span>, <span class="srcmiss" title="the source document">2021-01-15; Predecessor Credit Agreement; Original senior secured term facility; 11.50% cash interest, 0.70%/month principal, remaining principal due at maturity. First-priority liens on accounts, deposit accounts, equipment, general intangibles, material contracts, books, records, proceeds. Guarantors: Asteron Care Holdings, Inc. and the regional operating subsidiaries. No FCCR or other financial covenant found in this agreement&#x27;s text.</span>, <span class="srcmiss" title="the source document">2025-01-15; Legacy Credit Agreement; Refinanced the Predecessor facility AT PAR (same $57,834,030.22 balance per borrower-config&#x27;s restructuring-timeline note; same economics, same agent Cairn Ridge Private Credit, LP). Introduced the 1.2000x quarterly trailing-twelve-month FCCR covenant (Covenant EBITDA / fixed charges) -- the only financial covenant identified across the full document set until the A&amp;R&#x27;s Minimum Liquidity covenant.</span>, <span class="srcmiss" title="the source document">2025-12-05; Exit Amendment; $7,000,000.00 bridge commitment at 11.50% fixed cash interest, $140,000.00 upfront fee, maturity 2026-03-31 (now repaid/superseded). SUSPENDED the Legacy Credit Agreement&#x27;s 1.2000x FCCR test (informational only) through 2026-12-31, expressly stating the suspension &#x27;is not a waiver, amendment of the 1.2000x threshold, or compliance determination.&#x27; Added a minimum-liquidity reporting control and weekly cash/variance reporting.</span>, <span class="srcmiss" title="the source document">2026-03-31; Amended and Restated Credit Agreement (current/operative agreement); Executed the exit capitalization: $44,000,000.00 reinstated term debt + $16,910,820.62 Series A preferred equity (from the $60,910,820.62 predecessor/legacy debt exchange), plus $7,000,000.00 new-money term debt and $8,000,000.00 sponsor common equity. Cash interest stepped down to 10.00% (from 11.50%) and monthly principal amortization stepped down to 0.10% (from 0.70%), both effective April 2026; new final maturity 2031-03-31. CONTINUES the 1.2000x FCCR suspension through 2026-12-31 unchanged (does not reinstate, waive, or replace it). Adds a new, independent Minimum Liquidity covenant ($10,000,000.00, continuous, weekly reporting). Supersedes the Exit Amendment and the Legacy Credit Agreement &#x27;without importing later operating information.&#x27;</span>. Every financial covenant below has to be met in the same month; the agreement offers no alternative between them. The certified figures come from <span class="srcmiss" title="source:Asteron Care Partners/Portfolio Monitoring/2026-Q2/Compliance Certificate.pdf">the compliance certificate for this month</span>; who signed it and on what date was not captured with its figures.</div>
+  <div class="tblwrap">
+  <table>
+    <thead><tr><th>Covenant</th><th class="n">Test</th><th>Certified (borrower)</th><th>Model</th><th>&Delta; / note</th><th>Result</th></tr></thead>
+    <tbody>
+      <tr><td>Minimum Liquidity<br><span class="small muted">Liquidity</span></td><td class="n"><span class="srcmiss" title="Amended and Restated Credit Agreement.pdf — section MINIMUM LIQUIDITY, page 1, The loan parties must maintain at least $10,000,000.00 of liquidity and deliver weekly liquidity and variance reporting during stabilization.">≥ $10,000,000</span></td><td><span class="srcmiss" title="source:Asteron Care Partners/Portfolio Monitoring/2026-Q2/Compliance Certificate.pdf">$18,817,444</span> <span class="tag pass">Pass</span><br><span class="small muted">headroom $8,817,444 (+88.2%)</span></td><td><span class="trc" data-calc="Our figure = Cash at Jun 2026 = 18,817,400. The test: 18,817,400 must be at least 10,000,000 (the level the loan agreement sets)" data-hops='[{&quot;h&quot;: null, &quot;t&quot;: &quot;Asteron Care Partners Monthly IS-BS-CF.xlsx \u2014 Balance Sheet (W7)&quot;}, {&quot;h&quot;: null, &quot;t&quot;: &quot;monthly.xlsx \u2014 Balance Sheet&quot;}, {&quot;h&quot;: null, &quot;t&quot;: &quot;Amended and Restated Credit Agreement.pdf&quot;}, {&quot;h&quot;: null, &quot;t&quot;: &quot;Amended and Restated Credit Agreement.pdf \u2014 MINIMUM LIQUIDITY&quot;}, {&quot;h&quot;: null, &quot;t&quot;: &quot;Compliance Certificate.pdf&quot;}]'>$18,817,444</span> <span class="tag pass">Pass</span><br><span class="small muted">headroom $8,817,444 (+88.2%)</span></td><td class="small">Our reconstruction and the borrower's certificate agree exactly at $18,817,443.79, since Liquidity is bound to the single undifferentiated Cash line on the balance sheet with no adjustment in either direction.</td><td><span class="tag pass">PASS</span></td></tr>
+      <tr><td>Minimum Fixed Charge Coverage Ratio (FCCR)<br><span class="small muted">EBITDA ÷ Fixed Charges</span></td><td class="n">&mdash;</td><td><span class="srcmiss" title="source:Asteron Care Partners/Portfolio Monitoring/2026-Q2/Compliance Certificate.pdf">0.37&times;</span></td><td><span class="small muted">not measured this month</span></td><td class="small">Our reconstruction excludes the borrower's $553,353.26/month operating-lease EBITDA add-back (no agreement text supports it) and reads Fixed Charges as facility cash interest and scheduled principal only, versus the certificate's broader roughly $17.4M TTM figure that also includes lease payments and maintenance capex -- our narrower, agreement-text-only reconstruction governs this analysis, though the test itself is suspended and neither figure creates a compliance determination this period.</td><td><span class="tag atrisk">&amp;mdash;</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="small">The one actively tested covenant, Minimum Liquidity, passes with 88% headroom; the legacy FCCR covenant remains suspended through December 31, 2026 and its informational reading continues to worsen, making it the nearest real risk to this credit rather than a present breach.</p>
+
+  <h3 style="margin-top:14px">Not tested within the next 12 months</h3>
+  <p class="small muted" style="margin-bottom:0">None this run &mdash; every financial covenant in this facility is tested within the next twelve months, so all of them sit in the grid above.</p>
+</div>
+
+<!-- COVENANT HISTORY — its own collapsed block: a row per financial covenant, a column per
+     test date, each cell tracing to that test's required and actual. History, not news, so
+     it stays collapsed and nothing in it seats the strip. -->
+
+<details class="card snapbox" id="box-cov-history">
+  <summary><h3>Covenant history</h3><span class="sbx-teaser"></span><span class="chev" aria-hidden="true">&#9656;</span></summary>
+  <div class="sbx-body">
+  <p class="small muted" style="margin:0 0 8px"><b class="g">P</b> passed &middot; <b class="a">A</b> passed within 15% of the level &middot; <b class="rd">B</b> below what the agreement requires &middot; <b class="muted">n/e</b> could not be evaluated. <b>Click any cell</b> for that test's required level and our figure.</p>
+  <p class="small muted" style="margin:0 0 8px">A compliance certificate from the borrower was read for 30 June 2026. The other dates are our own calculation from the model, with nothing from the borrower to check them against.</p>
+<div class="tblwrap">
+  <table>
+    <thead><tr><th>Covenant</th><th class="n">31 Mar 2025</th><th class="n">30 Jun 2025</th><th class="n">30 Sep 2025</th><th class="n">31 Dec 2025</th><th class="n">31 Mar 2026</th><th class="n">30 Apr 2026</th><th class="n">31 May 2026</th><th class="n">30 Jun 2026</th></tr></thead>
+    <tbody>
+      <tr><td>Minimum Fixed Charge Coverage Ratio (FCCR) <span class="small muted">(passed 1 of 6 tests; the rest could not be measured)</span></td><td class="n"><span class="trc" data-calc="Minimum Fixed Charge Coverage Ratio (FCCR) at 31 March 2025 — the window this test needs reaches back before the workbook&#x27;s first month, so no figure can be built" data-steps='[{&quot;l&quot;: &quot;Result&quot;, &quot;v&quot;: &quot;Not tested&quot;, &quot;res&quot;: true}]' data-hops='[]'><span class="muted">n/e</span></span></td><td class="n"><span class="trc" data-calc="Minimum Fixed Charge Coverage Ratio (FCCR) at 30 June 2025 — the window this test needs reaches back before the workbook&#x27;s first month, so no figure can be built" data-steps='[{&quot;l&quot;: &quot;Result&quot;, &quot;v&quot;: &quot;Not tested&quot;, &quot;res&quot;: true}]' data-hops='[]'><span class="muted">n/e</span></span></td><td class="n"><span class="trc" data-calc="Minimum Fixed Charge Coverage Ratio (FCCR) at 30 September 2025" data-steps='[{&quot;l&quot;: &quot;Required&quot;, &quot;v&quot;: &quot;1.20x&quot;}, {&quot;l&quot;: &quot;Our figure&quot;, &quot;v&quot;: &quot;2.44x&quot;}, {&quot;l&quot;: &quot;Result&quot;, &quot;v&quot;: &quot;Pass&quot;, &quot;res&quot;: true}]' data-hops='[]'><span class="g">P</span></span></td><td class="n"><span class="trc" data-calc="Minimum Fixed Charge Coverage Ratio (FCCR) at 31 December 2025 — gap" data-steps='[{&quot;l&quot;: &quot;Result&quot;, &quot;v&quot;: &quot;Not tested&quot;, &quot;res&quot;: true}]' data-hops='[]'><span class="muted">n/e</span></span></td><td class="n"><span class="trc" data-calc="Minimum Fixed Charge Coverage Ratio (FCCR) at 31 March 2026 — gap" data-steps='[{&quot;l&quot;: &quot;Result&quot;, &quot;v&quot;: &quot;Not tested&quot;, &quot;res&quot;: true}]' data-hops='[]'><span class="muted">n/e</span></span></td><td class="n muted">&mdash;</td><td class="n muted">&mdash;</td><td class="n"><span class="trc" data-calc="Minimum Fixed Charge Coverage Ratio (FCCR) at 30 June 2026 — gap" data-steps='[{&quot;l&quot;: &quot;Result&quot;, &quot;v&quot;: &quot;Not tested&quot;, &quot;res&quot;: true}]' data-hops='[]'><span class="muted">n/e</span></span></td></tr>
+      <tr><td>Minimum Liquidity <span class="small muted">(passed all 4 tests)</span></td><td class="n muted">&mdash;</td><td class="n muted">&mdash;</td><td class="n muted">&mdash;</td><td class="n muted">&mdash;</td><td class="n"><span class="trc" data-calc="Minimum Liquidity at 31 March 2026" data-steps='[{&quot;l&quot;: &quot;Required&quot;, &quot;v&quot;: &quot;$10,000,000&quot;}, {&quot;l&quot;: &quot;Our figure&quot;, &quot;v&quot;: &quot;$18,136,709&quot;}, {&quot;l&quot;: &quot;Result&quot;, &quot;v&quot;: &quot;Pass&quot;, &quot;res&quot;: true}]' data-hops='[]'><span class="g">P</span></span></td><td class="n"><span class="trc" data-calc="Minimum Liquidity at 30 April 2026" data-steps='[{&quot;l&quot;: &quot;Required&quot;, &quot;v&quot;: &quot;$10,000,000&quot;}, {&quot;l&quot;: &quot;Our figure&quot;, &quot;v&quot;: &quot;$18,140,282&quot;}, {&quot;l&quot;: &quot;Result&quot;, &quot;v&quot;: &quot;Pass&quot;, &quot;res&quot;: true}]' data-hops='[]'><span class="g">P</span></span></td><td class="n"><span class="trc" data-calc="Minimum Liquidity at 31 May 2026" data-steps='[{&quot;l&quot;: &quot;Required&quot;, &quot;v&quot;: &quot;$10,000,000&quot;}, {&quot;l&quot;: &quot;Our figure&quot;, &quot;v&quot;: &quot;$18,413,087&quot;}, {&quot;l&quot;: &quot;Result&quot;, &quot;v&quot;: &quot;Pass&quot;, &quot;res&quot;: true}]' data-hops='[]'><span class="g">P</span></span></td><td class="n"><span class="trc" data-calc="Minimum Liquidity at 30 June 2026. The borrower certified this date as well." data-steps='[{&quot;l&quot;: &quot;Required&quot;, &quot;v&quot;: &quot;$10,000,000&quot;}, {&quot;l&quot;: &quot;Our figure&quot;, &quot;v&quot;: &quot;$18,817,444&quot;}, {&quot;l&quot;: &quot;Result&quot;, &quot;v&quot;: &quot;Pass&quot;, &quot;res&quot;: true}]' data-hops='[]'><span class="g">P</span></span></td></tr>
+    </tbody>
+  </table>
+  </div></div>
+</details>
+
+<!-- FORWARD STRESS — scenarios are DERIVED from the confirmed menu, never invented, and
+     every row traces its arithmetic. -->
+<h2 id="sec-stress">Forward stress</h2>
+<div class="card">
+  <p class="small muted" style="margin:0 0 6px">What a forward read has to agree with: where the agreement's own schedule goes next, the room the tightest test has today, and the move that lands each test on its threshold. <b>Click any figure</b> for its arithmetic.</p>
+  <div class="tblwrap">
+  <table class="traced">
+    <tbody>
+      <tr><td>Minimum Fixed Charge Coverage Ratio (FCCR) &mdash; the level required at 5 December 2025</td><td class="n"><span class="srcmiss" title="Amended and Restated Credit Agreement.pdf">&mdash;</span></td></tr>
+      <tr><td>Minimum Fixed Charge Coverage Ratio (FCCR) &mdash; the level required at 1 January 2027</td><td class="n"><span class="srcmiss" title="Amended and Restated Credit Agreement.pdf">1.20&times;</span></td></tr>
+      <tr><td>Room on the tightest test today &mdash; Minimum Liquidity</td><td class="n"><span class="trc" data-calc="Our figure = Cash at Jun 2026 = 18,817,400. The test: 18,817,400 must be at least 10,000,000 (the level the loan agreement sets)" data-hops='[{&quot;h&quot;: null, &quot;t&quot;: &quot;Asteron Care Partners Monthly IS-BS-CF.xlsx \u2014 Balance Sheet (W7)&quot;}, {&quot;h&quot;: null, &quot;t&quot;: &quot;monthly.xlsx \u2014 Balance Sheet&quot;}, {&quot;h&quot;: null, &quot;t&quot;: &quot;Amended and Restated Credit Agreement.pdf&quot;}, {&quot;h&quot;: null, &quot;t&quot;: &quot;Amended and Restated Credit Agreement.pdf \u2014 MINIMUM LIQUIDITY&quot;}, {&quot;h&quot;: null, &quot;t&quot;: &quot;Compliance Certificate.pdf&quot;}]'>+88.2%</span></td></tr>
+      <tr><td>Minimum Liquidity — the level it breaches below</td><td class="n"><span class="trc" data-calc="The agreement&#x27;s floor. It stands at $18,817,444 today, $8,817,444 above the floor." data-hops='[{&quot;h&quot;: null, &quot;t&quot;: &quot;Asteron Care Partners Monthly IS-BS-CF.xlsx \u2014 Balance Sheet (W7)&quot;}, {&quot;h&quot;: null, &quot;t&quot;: &quot;monthly.xlsx \u2014 Balance Sheet&quot;}, {&quot;h&quot;: null, &quot;t&quot;: &quot;Amended and Restated Credit Agreement.pdf&quot;}, {&quot;h&quot;: null, &quot;t&quot;: &quot;Amended and Restated Credit Agreement.pdf \u2014 MINIMUM LIQUIDITY&quot;}, {&quot;h&quot;: null, &quot;t&quot;: &quot;Compliance Certificate.pdf&quot;}]'>$10,000,000</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="foot">If the FCCR mechanically reinstates at 1.2000x on January 1, 2027 while the informational ratio continues along its June 2026 trend (0.3682x, worsening every quarter since suspension), the facility would show a breach absent a further amendment or a different outcome from the pending reinstatement-readiness analysis due September 30, 2026.</div>
+</div>
+</div>
+
+<!-- ===================== TAB: FINANCIAL PERFORMANCE =====================
+     Income statement + cash flow reviews stacked left; balance sheet review right. -->
+<div class="tabpane" id="tab-financials">
+<div class="hrow">
+<div>
+<!-- INCOME STATEMENT REVIEW -->
+<h2 id="sec-is">Income statement review</h2>
+<div class="card">
+  <p class="small muted" style="margin:0 0 6px">Displayed: trailing 5 months (Feb&ndash;Jun 2026) plus the year to date (Jan&ndash;Jun 2026). Analysis basis: the full year to date. All figures in US dollars. Source: <span class="srcmiss" title="Asteron Care Partners Monthly IS-BS-CF.xlsx — Income Statement, Feb&amp;ndash;Jun 2026">Asteron Care Partners Monthly IS-BS-CF.xlsx</span>. <b>Click any figure</b> for its calculation and source.</p>
+  <div class="tblwrap">
+  <table class="traced">
+    <thead><tr><th>Income statement (US$)</th><th class="n"><span class="trc" data-calc="The borrower&#x27;s income statement for Feb 2026." data-hops='[{"t":"The borrower&apos;s income statement","h":null}]'>Feb 26</span></th><th class="n"><span class="trc" data-calc="The borrower&#x27;s income statement for Mar 2026." data-hops='[{"t":"The borrower&apos;s income statement","h":null}]'>Mar 26</span></th><th class="n"><span class="trc" data-calc="The borrower&#x27;s income statement for Apr 2026." data-hops='[{"t":"The borrower&apos;s income statement","h":null}]'>Apr 26</span></th><th class="n"><span class="trc" data-calc="The borrower&#x27;s income statement for May 2026." data-hops='[{"t":"The borrower&apos;s income statement","h":null}]'>May 26</span></th><th class="n"><span class="trc" data-calc="The borrower&#x27;s income statement for Jun 2026." data-hops='[{"t":"The borrower&apos;s income statement","h":null}]'>Jun 26</span></th><th class="n"><span class="trc" data-calc="The 6 months of this fiscal year to date, added up. Balances are never added this way, so only the flow statements carry this column." data-hops='[{"t":"The borrower&apos;s income statement","h":null}]'>YTD 2026</span></th></tr></thead>
+    <tbody>
+      <tr data-method="As the borrower reported it on its income statement."><td>Revenue</td><td class="n">11,060,843</td><td class="n">11,470,546</td><td class="n">12,654,928</td><td class="n">12,875,350</td><td class="n">13,164,600</td><td class="n spot">72,117,849</td></tr>
+      <tr data-method="As the borrower reported it on its income statement."><td>Direct clinical labor</td><td class="n">(5,717,290)</td><td class="n">(5,717,290)</td><td class="n">(5,758,889)</td><td class="n">(5,758,889)</td><td class="n">(5,758,889)</td><td class="n spot">(34,428,538)</td></tr>
+      <tr data-method="As the borrower reported it on its income statement."><td>Contract labor</td><td class="n">(1,674,930)</td><td class="n">(1,674,930)</td><td class="n">(1,403,602)</td><td class="n">(1,403,602)</td><td class="n">(1,319,386)</td><td class="n spot">(9,151,381)</td></tr>
+      <tr data-method="As the borrower reported it on its income statement."><td>Medical supplies</td><td class="n">(854,562)</td><td class="n">(886,293)</td><td class="n">(1,003,531)</td><td class="n">(1,021,006)</td><td class="n">(1,044,128)</td><td class="n spot">(5,650,932)</td></tr>
+      <tr data-method="As the borrower reported it on its income statement."><td>Other patient service costs</td><td class="n">(530,920)</td><td class="n">(550,586)</td><td class="n">(607,437)</td><td class="n">(618,017)</td><td class="n">(631,901)</td><td class="n spot">(3,461,657)</td></tr>
+      <tr data-method="As the borrower reported it on its income statement."><td>Cost of Patient Services</td><td class="n">(8,777,702)</td><td class="n">(8,829,099)</td><td class="n">(8,773,459)</td><td class="n">(8,801,514)</td><td class="n">(8,754,304)</td><td class="n spot">(52,692,508)</td></tr>
+      <tr data-method="As the borrower reported it on its income statement."><td>Gross Profit</td><td class="n">2,283,140</td><td class="n">2,641,447</td><td class="n">3,881,469</td><td class="n">4,073,836</td><td class="n">4,410,295</td><td class="n spot">19,425,342</td></tr>
+      <tr data-method="As the borrower reported it on its income statement."><td>Occupancy and site costs</td><td class="n">(1,668,517)</td><td class="n">(1,689,822)</td><td class="n">(1,531,410)</td><td class="n">(1,542,871)</td><td class="n">(1,557,912)</td><td class="n spot">(9,650,248)</td></tr>
+      <tr data-method="As the borrower reported it on its income statement."><td>Corporate and administrative costs</td><td class="n">(1,095,705)</td><td class="n">(1,136,361)</td><td class="n">(1,254,154)</td><td class="n">(1,276,090)</td><td class="n">(1,304,642)</td><td class="n spot">(7,145,962)</td></tr>
+      <tr data-method="As the borrower reported it on its income statement."><td>Reported EBITDA</td><td class="n">(481,082)</td><td class="n">(184,735)</td><td class="n">1,095,905</td><td class="n">1,254,874</td><td class="n">1,547,741</td><td class="n spot">2,629,132</td></tr>
+      <tr data-method="As the borrower reported it on its income statement."><td>Depreciation</td><td class="n">(1,007,465)</td><td class="n">(1,010,019)</td><td class="n">(1,012,736)</td><td class="n">(1,015,661)</td><td class="n">(1,018,780)</td><td class="n spot">(6,069,522)</td></tr>
+      <tr data-method="As the borrower reported it on its income statement."><td>Cash interest</td><td class="n">(583,729)</td><td class="n">(583,729)</td><td class="n">(425,000)</td><td class="n">(424,575)</td><td class="n">(424,150)</td><td class="n spot">(3,024,912)</td></tr>
+      <tr data-method="As the borrower reported it on its income statement."><td>Debt issuance cost amortization</td><td class="n">0</td><td class="n">0</td><td class="n">(20,000)</td><td class="n">(20,000)</td><td class="n">(20,000)</td><td class="n spot">(60,000)</td></tr>
+      <tr data-method="As the borrower reported it on its income statement."><td>Restructuring advisory expense</td><td class="n">0</td><td class="n">(1,800,000)</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td class="n spot">(1,800,000)</td></tr>
+      <tr data-method="As the borrower reported it on its income statement."><td>Net income</td><td class="n">(2,072,276)</td><td class="n">(3,578,483)</td><td class="n">(361,831)</td><td class="n">(205,362)</td><td class="n">84,811</td><td class="n spot">(8,325,302)</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <h3 style="margin-top:12px">Key observations <span class="small muted" style="font-weight:400;text-transform:none;letter-spacing:0">— year-to-date</span></h3>
+  <ul class="small">
+<li>Revenue rose 2.2% month over month to $13.16M in June but sits 17.4% (about $2.8M) below the Approved Stabilization Budget's $15.9M plan for the month, and 17.0% below budget quarter to date ($38.7M vs $46.6M).</li><li>Gross margin improved to 33.5% in June from 31.6% in May, continuing the trend since the March 2026 restructuring boundary.</li><li>EBITDA rose 23.3% month over month to $1.55M (11.8% margin), beating the $1.3M June budget by 19.9%, though the quarter-to-date beat is a thinner 7.1% against a $3.6M budget.</li><li>Net income turned positive in June ($84.8K) after a $205.4K loss in May.</li><li>Gross Profit and Gross Margin figures shown against budget are not meaningful for this borrower: the Approved Stabilization Budget only plans Revenue and EBITDA, so those other lines compare against a proxy row rather than a real plan.</li>
+  </ul>
+
+Revenue is fee-for-service, billed to a diversified payer mix (Medicare, Commercial, Medicaid, Workers' Compensation, and Self-Pay) across five regional operating subsidiaries and fifteen clinical sites, with no single payer class exceeding about 27% of the June 2026 receivables balance. It is transactional rather than contractually recurring: no ARR or retention metric is reported, and volumes depend on patient visits and procedures at each site rather than a committed book of business. The revenue shortfall against the Approved Stabilization Budget (-17.4% in June, -17.0% quarter to date) reads as a volume and site-productivity gap on the information available, separate from pricing or payer mix.
+</div>
+
+<!-- CASH FLOW REVIEW -->
+<h2 id="sec-cf">Cash flow review</h2>
+<div class="card">
+  <p class="small muted" style="margin:0 0 6px">Displayed: trailing 5 months (Feb&ndash;Jun 2026) plus the year to date (Jan&ndash;Jun 2026). Analysis basis: the full year to date. The borrower files its own indirect cash-flow statement each month and these are its figures as reported. All figures in US dollars. Source: <span class="srcmiss" title="Asteron Care Partners Monthly IS-BS-CF.xlsx — Cash Flow Statement, Feb&amp;ndash;Jun 2026">Asteron Care Partners Monthly IS-BS-CF.xlsx</span>. <b>Click any figure</b> for its calculation and source.</p>
+  <div class="tblwrap">
+  <table class="traced">
+    <thead><tr><th>Cash flow (US$)</th><th class="n"><span class="trc" data-calc="The borrower&#x27;s cash flow statement for Feb 2026." data-hops='[{"t":"The borrower&apos;s cash flow statement","h":null}]'>Feb 26</span></th><th class="n"><span class="trc" data-calc="The borrower&#x27;s cash flow statement for Mar 2026." data-hops='[{"t":"The borrower&apos;s cash flow statement","h":null}]'>Mar 26</span></th><th class="n"><span class="trc" data-calc="The borrower&#x27;s cash flow statement for Apr 2026." data-hops='[{"t":"The borrower&apos;s cash flow statement","h":null}]'>Apr 26</span></th><th class="n"><span class="trc" data-calc="The borrower&#x27;s cash flow statement for May 2026." data-hops='[{"t":"The borrower&apos;s cash flow statement","h":null}]'>May 26</span></th><th class="n"><span class="trc" data-calc="The borrower&#x27;s cash flow statement for Jun 2026." data-hops='[{"t":"The borrower&apos;s cash flow statement","h":null}]'>Jun 26</span></th><th class="n"><span class="trc" data-calc="The 6 months of this fiscal year to date, added up. Balances are never added this way, so only the flow statements carry this column." data-hops='[{"t":"The borrower&apos;s cash flow statement","h":null}]'>YTD 2026</span></th></tr></thead>
+    <tbody>
+      <tr data-method="As the borrower reported it on its cash flow statement."><td>Beginning cash</td><td class="n">9,181,041</td><td class="n">7,684,278</td><td class="n">18,136,709</td><td class="n">18,140,282</td><td class="n">18,413,087</td><td class="n spot">82,567,816</td></tr>
+      <tr data-method="As the borrower reported it on its cash flow statement."><td>Cash from operations</td><td class="n">(1,297,668)</td><td class="n">(3,141,099)</td><td class="n">282,362</td><td class="n">555,510</td><td class="n">692,217</td><td class="n spot">(4,544,006)</td></tr>
+      <tr data-method="As the borrower reported it on its cash flow statement."><td>Cash from investing</td><td class="n">(199,095)</td><td class="n">(206,470)</td><td class="n">(227,789)</td><td class="n">(231,756)</td><td class="n">(236,963)</td><td class="n spot">(1,298,121)</td></tr>
+      <tr data-method="As the borrower reported it on its cash flow statement."><td>Cash from financing</td><td class="n">0</td><td class="n">13,800,000</td><td class="n">(51,000)</td><td class="n">(50,949)</td><td class="n">(50,898)</td><td class="n spot">13,647,153</td></tr>
+      <tr data-method="As the borrower reported it on its cash flow statement. The borrower&#x27;s own account list carries the same amount under &quot;Memo: Cash per Balance Sheet&quot;."><td>Ending cash</td><td class="n">7,684,278</td><td class="n">18,136,709</td><td class="n">18,140,282</td><td class="n">18,413,087</td><td class="n">18,817,444</td><td class="n spot">90,372,842</td></tr>
+      <tr data-method="As the borrower reported it on its cash flow statement."><td>Memo: Net income (per Income Statement)</td><td class="n">(2,072,276)</td><td class="n">(3,578,483)</td><td class="n">(361,831)</td><td class="n">(205,362)</td><td class="n">84,811</td><td class="n spot">(8,325,302)</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <h3 style="margin-top:12px">Key observations <span class="small muted" style="font-weight:400;text-transform:none;letter-spacing:0">— year-to-date</span></h3>
+  <ul class="small">
+<li>Operating cash flow was positive at $692K in June, up from $556K in May; free cash flow (operating less investing) was $455K for the month.</li><li>Financing cash flow was a modest net use of $51K in June, the facility's scheduled monthly principal payment -- no new draws or equity contributions this period.</li><li>Quarter-to-date (Apr-Jun) operating cash flow is negative at -$4.5M, reflecting working-capital and restructuring-related outflows in the first month after the March 2026 recapitalization rather than the June run-rate.</li>
+  </ul>
+</div>
+</div>
+<div>
+<!-- BALANCE SHEET REVIEW -->
+<h2 id="sec-bs">Balance sheet review <span class="small muted" style="font-weight:400">· incl. liquidity &amp; runway, aging and collateral</span></h2>
+<div class="card">
+  <p class="small muted" style="margin:0 0 6px">Displayed: trailing 5 months (Feb&ndash;Jun 2026), period-end balances. No year-to-date column &mdash; balances do not sum. All figures in US dollars. Source: <span class="srcmiss" title="Asteron Care Partners Monthly IS-BS-CF.xlsx — Balance Sheet, Feb&amp;ndash;Jun 2026">Asteron Care Partners Monthly IS-BS-CF.xlsx</span>. <b>Click any figure</b> for its calculation and source.</p>
+  <div class="tblwrap">
+  <table class="traced">
+    <thead><tr><th>Balance sheet (US$)</th><th class="n"><span class="trc" data-calc="The borrower&#x27;s balance sheet for Feb 2026." data-hops='[{"t":"The borrower&apos;s balance sheet","h":null}]'>Feb 26</span></th><th class="n"><span class="trc" data-calc="The borrower&#x27;s balance sheet for Mar 2026." data-hops='[{"t":"The borrower&apos;s balance sheet","h":null}]'>Mar 26</span></th><th class="n"><span class="trc" data-calc="The borrower&#x27;s balance sheet for Apr 2026." data-hops='[{"t":"The borrower&apos;s balance sheet","h":null}]'>Apr 26</span></th><th class="n"><span class="trc" data-calc="The borrower&#x27;s balance sheet for May 2026." data-hops='[{"t":"The borrower&apos;s balance sheet","h":null}]'>May 26</span></th><th class="n"><span class="trc" data-calc="The borrower&#x27;s balance sheet for Jun 2026." data-hops='[{"t":"The borrower&apos;s balance sheet","h":null}]'>Jun 26</span></th></tr></thead>
+    <tbody>
+      <tr data-method="As the borrower reported it on its balance sheet."><td>Cash</td><td class="n">7,684,278</td><td class="n">18,136,709</td><td class="n">18,140,282</td><td class="n">18,413,087</td><td class="n">18,817,444</td></tr>
+      <tr data-method="As the borrower reported it on its balance sheet."><td>Accounts receivable</td><td class="n">19,031,161</td><td class="n">19,735,948</td><td class="n">20,087,028</td><td class="n">20,436,575</td><td class="n">20,896,429</td></tr>
+      <tr data-method="As the borrower reported it on its balance sheet."><td>Other current assets</td><td class="n">3,000,000</td><td class="n">3,000,000</td><td class="n">3,000,000</td><td class="n">3,000,000</td><td class="n">3,000,000</td></tr>
+      <tr data-method="As the borrower reported it on its balance sheet."><td>Tax refund receivable</td><td class="n">2,132,090</td><td class="n">2,132,090</td><td class="n">2,132,090</td><td class="n">2,132,090</td><td class="n">2,132,090</td></tr>
+      <tr data-method="As the borrower reported it on its balance sheet."><td>PP&amp;E, net</td><td class="n">51,705,452</td><td class="n">50,901,903</td><td class="n">50,116,955</td><td class="n">49,333,051</td><td class="n">48,551,233</td></tr>
+      <tr data-method="As the borrower reported it on its balance sheet."><td>Operating lease ROU assets</td><td class="n">31,557,245</td><td class="n">31,172,098</td><td class="n">30,785,042</td><td class="n">30,396,068</td><td class="n">30,005,167</td></tr>
+      <tr data-method="As the borrower reported it on its balance sheet."><td>Goodwill</td><td class="n">78,089,547</td><td class="n">78,089,547</td><td class="n">78,089,547</td><td class="n">78,089,547</td><td class="n">78,089,547</td></tr>
+      <tr data-method="As the borrower reported it on its balance sheet. The borrower&#x27;s own account list carries the same amount under &quot;Liabilities and equity&quot;."><td>Total assets</td><td class="n">193,199,773</td><td class="n">203,168,294</td><td class="n">202,350,944</td><td class="n">201,800,418</td><td class="n">201,491,910</td></tr>
+      <tr data-method="As the borrower reported it on its balance sheet."><td>Accounts payable</td><td class="n">5,261,837</td><td class="n">5,387,310</td><td class="n">5,343,168</td><td class="n">5,411,249</td><td class="n">5,433,051</td></tr>
+      <tr data-method="As the borrower reported it on its balance sheet."><td>Operating lease liabilities</td><td class="n">33,307,215</td><td class="n">32,928,745</td><td class="n">32,548,368</td><td class="n">32,166,072</td><td class="n">31,781,849</td></tr>
+      <tr data-method="As the borrower reported it on its balance sheet."><td>Funded debt, carrying amount</td><td class="n">60,910,821</td><td class="n">49,800,000</td><td class="n">49,769,000</td><td class="n">49,738,051</td><td class="n">49,707,153</td></tr>
+      <tr data-method="As the borrower reported it on its balance sheet."><td>Other accrued liabilities</td><td class="n">5,000,000</td><td class="n">5,000,000</td><td class="n">5,000,000</td><td class="n">5,000,000</td><td class="n">5,000,000</td></tr>
+      <tr data-method="As the borrower reported it on its balance sheet."><td>Total liabilities</td><td class="n">104,479,872</td><td class="n">93,116,055</td><td class="n">92,660,536</td><td class="n">92,315,372</td><td class="n">91,922,053</td></tr>
+      <tr data-method="As the borrower reported it on its balance sheet. Its own lines — &quot;Common equity&quot;; &quot;Preferred equity&quot; — fold into this one, and they foot."><td>Total equity</td><td class="n">88,719,901</td><td class="n">110,052,239</td><td class="n">109,690,408</td><td class="n">109,485,046</td><td class="n">109,569,857</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <h3 style="margin-top:12px">Key observations <span class="small muted" style="font-weight:400;text-transform:none;letter-spacing:0">— year-to-date</span></h3>
+  <ul class="small">
+<li>Cash rose to $18.82M at June 2026, up 2.2% from May and 11.9% above the $16.81M cash plan, with no month of decline since the March 2026 recapitalization.</li><li>Total debt was essentially flat at $49.71M (-0.06% month over month), consistent with the facility's small scheduled monthly amortization.</li><li>Accounts receivable rose 2.3% to $20.90M; days sales outstanding is 47.6 days.</li><li>Total assets were flat at $201.49M (-0.15% month over month); total equity was flat at $109.57M.</li><li>Restructuring accounting (TDR framework, instrument-level 10% modification test, CODI, and Section 382) remained PROVISIONAL through the June 2026 package, so successor balance-sheet figures could still restate once those workpapers conclude.</li>
+  </ul>
+  <h3 style="margin-top:12px">Liquidity &amp; runway</h3>
+  <p class="small muted" style="margin:0 0 6px">Two ways of measuring the burn, because they answer differently. <b>Click any figure</b> to see how it was worked out.</p>
+  <div class="tblwrap">
+  <table>
+    <tbody>
+      <tr><td>Cash</td><td class="n"><span class="trc" data-calc="cash = spot balance at Jun 2026; cash_floor per covenant-spec; months_to_floor = (cash - floor) / burn" data-hops='[{&quot;h&quot;: null, &quot;t&quot;: &quot;Asteron Care Partners Monthly IS-BS-CF.xlsx \u2014 Balance Sheet (W7)&quot;}, {&quot;h&quot;: null, &quot;t&quot;: &quot;monthly.xlsx \u2014 Balance Sheet&quot;}, {&quot;h&quot;: null, &quot;t&quot;: &quot;Asteron Care Partners Monthly IS-BS-CF.xlsx \u2014 Cash Flow Statement (U8:W8)&quot;}, {&quot;h&quot;: null, &quot;t&quot;: &quot;monthly.xlsx \u2014 Cash Flow&quot;}, {&quot;h&quot;: null, &quot;t&quot;: &quot;monthly.xlsx \u2014 Cash Flow&quot;}, {&quot;h&quot;: null, &quot;t&quot;: &quot;monthly.xlsx \u2014 Cash Flow&quot;}, {&quot;h&quot;: null, &quot;t&quot;: &quot;Asteron Care Partners Monthly IS-BS-CF.xlsx \u2014 Cash Flow Statement (U10:W10)&quot;}, {&quot;h&quot;: null, &quot;t&quot;: &quot;monthly.xlsx \u2014 Cash Flow&quot;}, {&quot;h&quot;: null, &quot;t&quot;: &quot;monthly.xlsx \u2014 Cash Flow&quot;}, {&quot;h&quot;: null, &quot;t&quot;: &quot;monthly.xlsx \u2014 Cash Flow&quot;}, {&quot;h&quot;: null, &quot;t&quot;: &quot;the deal&#x27;s own record of this term, kept with the monitoring files&quot;}]'>$18,817,444</span></td></tr>
+      <tr><td>Covenant cash floor</td><td class="n"><span class="trc" data-calc="cash = spot balance at Jun 2026; cash_floor per covenant-spec; months_to_floor = (cash - floor) / burn" data-hops='[{&quot;h&quot;: null, &quot;t&quot;: &quot;Asteron Care Partners Monthly IS-BS-CF.xlsx \u2014 Balance Sheet (W7)&quot;}, {&quot;h&quot;: null, &quot;t&quot;: &quot;monthly.xlsx \u2014 Balance Sheet&quot;}, {&quot;h&quot;: null, &quot;t&quot;: &quot;Asteron Care Partners Monthly IS-BS-CF.xlsx \u2014 Cash Flow Statement (U8:W8)&quot;}, {&quot;h&quot;: null, &quot;t&quot;: &quot;monthly.xlsx \u2014 Cash Flow&quot;}, {&quot;h&quot;: null, &quot;t&quot;: &quot;monthly.xlsx \u2014 Cash Flow&quot;}, {&quot;h&quot;: null, &quot;t&quot;: &quot;monthly.xlsx \u2014 Cash Flow&quot;}, {&quot;h&quot;: null, &quot;t&quot;: &quot;Asteron Care Partners Monthly IS-BS-CF.xlsx \u2014 Cash Flow Statement (U10:W10)&quot;}, {&quot;h&quot;: null, &quot;t&quot;: &quot;monthly.xlsx \u2014 Cash Flow&quot;}, {&quot;h&quot;: null, &quot;t&quot;: &quot;monthly.xlsx \u2014 Cash Flow&quot;}, {&quot;h&quot;: null, &quot;t&quot;: &quot;monthly.xlsx \u2014 Cash Flow&quot;}, {&quot;h&quot;: null, &quot;t&quot;: &quot;the deal&#x27;s own record of this term, kept with the monitoring files&quot;}]'>$10,000,000</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <ul class="small" style="margin-top:4px">
+<li>Cash of $18.82M at June 2026 sits $8.82M (88%) above the $10.0M Minimum Liquidity covenant floor and matches the borrower's own certified figure exactly.</li><li>Cash has risen every month since the March 2026 recapitalization ($18.14M, $18.14M, $18.41M, $18.82M), funded by positive operating cash flow rather than new borrowing.</li><li>Cash is running 11.9% (about $2.0M) above the $16.81M plan for June.</li>
+  </ul>
+
+Receivables and payables ageing could not be covered this period. The borrower's only monthly AR/AP export is a claim/invoice-level transaction list rather than the bucketed aging grid the engine's parser reads, so the module was skipped rather than run on a reshaped or estimated basis. The underlying transaction totals do reconcile exactly to the Balance Sheet: $20.90M of AR and $5.43M of AP at June 2026. A durable fix requires an engineering change to the aging parser to accept a transaction-level input grouped by payer class or vendor.
+  <p class="small muted" style="margin-bottom:0">Total pledged components were essentially flat month over month (+0.05%) and down 2.2% year over year, tracking the modest decline in PP&E and goodwill over the same period.</p>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ========================== TAB: FILES & AUDIT ========================= -->
+<div class="tabpane" id="tab-files">
+<div class="hrow w60">
+<div>
+
+<!-- SOURCE DOCUMENTS — the audit registry: every ORIGINAL resource the report rests on,
+     grouped (loan documentation / underwriting & diligence / monthly reporting / budget &
+     forecast / working analysis artifacts), each row linking the store URL the memo's
+     traces already cite. A document the report relies on but cannot link is still listed,
+     with its location described in words. The registry lists sources; it repeats no
+     figures. -->
+<h2 id="sec-files">Source documents <span class="small muted" style="font-weight:400">&middot; every original resource this report rests on</span></h2>
+<div class="card kt">
+  <div class="tblwrap">
+  <table>
+    <thead><tr><th style="width:32%">Document</th><th>What it is</th><th style="width:16%">Dated / covers</th></tr></thead>
+    <tbody>
+      <tr><td class="grp" colspan="3">Loan documentation</td></tr>
+      <tr><td>Amended and Restated Credit Agreement.pdf <span class="small muted">&mdash; named in this report; the folder it sits in is not one this memo can open</span></td><td>The Amended and Restated Credit Agreement, executed March 20 and effective March 31, 2026, the current operative facility governing this and every 2026 monthly package from March forward.</td><td><span class="small">31 March 2026</span></td></tr>
+      <tr><td class="grp" colspan="3">Underwriting &amp; diligence</td></tr>
+      <tr><td>IC Memo.pdf <span class="small muted">&mdash; named in this report; the folder it sits in is not one this memo can open</span></td><td>The Restructuring IC Memo approving the March 2026 exit capitalization, source of the business profile and credit thesis captured in this review.</td><td>&mdash;</td></tr>
+      <tr><td class="grp" colspan="3">Monthly reporting</td></tr>
+      <tr><td>monthly.xlsx <span class="small muted">&mdash; named in this report; the folder it sits in is not one this memo can open</span></td><td>The borrower's own June 2026 monthly financial reporting package (Income Statement, Balance Sheet, Cash Flow, Debt and Equity, Budget versus Actual, Trial Balance, and Covenant tabs).</td><td><span class="small">June 2026</span></td></tr>
+      <tr><td>source:Asteron Care Partners/Portfolio Monitoring/2026-Q2/Compliance Certificate.pdf <span class="small muted">&mdash; named in this report; the folder it sits in is not one this memo can open</span></td><td>The lender's quarterly Compliance Certificate for Q2 2026, source of the certified Minimum Liquidity and informational FCCR figures used in this review.</td><td><span class="small">June 2026</span></td></tr>
+      <tr><td class="grp" colspan="3">Budget &amp; forecast</td></tr>
+      <tr><td>Approved Budget.xlsx <span class="small muted">&mdash; This SUPERSEDES the prior &#x27;FY2025 Approved Budget.xlsx&#x27; (Board-approved 2024-12-18, covering Jan-Dec 2025 only, pre-restructuring) which is retained in the same Planning folder for history but is not the pinned budget going forward.</span></td><td>The Approved Stabilization Budget, approved March 20, 2026 by the Restructuring Committee and Administrative Agent, covering April through December 2026; supersedes the pre-restructuring FY2025 budget.</td><td><span class="small">Approved Budget.xlsx, &#x27;Approved Budget&#x27; tab -- the &#x27;Approved Stabilization Budget&#x27;, approved 2026-03-20 by the Asteron Restructuring Committee and Administrative Agent, covering 2026-04 through 2026-12.</span></td></tr>
+      <tr><td class="grp" colspan="3">Working analysis artifacts</td></tr>
+      <tr><td>Archived analysis outputs <span class="small muted">&mdash; 4 gated outputs from this run, kept beside the monitoring model in this borrower&#x27;s monitoring folder</span></td><td>This run's four archived module outputs (covenant compliance, budget versus actual, three-statement analysis, and the skipped AP/AR aging module), each validated and gated before this memo was composed.</td><td><span class="small">June 2026 run</span></td></tr>
+      <tr><td>Asteron Care Partners Monthly IS-BS-CF.xlsx <span class="small muted">&mdash; named in this report; the folder it sits in is not one this memo can open</span></td><td>The canonical monthly IS/BS/CF workbook this review's figures are read from, snapshotted for this run.</td><td>&mdash;</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="foot">Prepared for analyst review only; no credit recommendation is made.</div>
+</div>
+
+</div>
+<div>
+<!-- DATA QUALITY — the run's own mechanical notes first, then the analyst's judgment notes,
+     in one list. Each note names the figures it affects and what to trust, in plain words
+     the credit reader can act on. -->
+<h2 id="sec-data">Data quality &amp; basis notes</h2>
+<div class="card">
+  <ul class="small" style="margin-top:0">
+    <li><b>Some source documents are listed but do not open</b> &mdash; the registry lists Amended and Restated Credit Agreement.pdf, Approved Budget.xlsx, Asteron Care Partners Monthly IS-BS-CF.xlsx, IC Memo.pdf, ap-ar-aging-2026-06.skipped.json, budget-vs-actual-2026-06.json, covenant-compliance-2026-06.json, monthly.xlsx, source:Asteron Care Partners/Portfolio Monitoring/2026-Q2/Compliance Certificate.pdf, three-statement-analysis-2026-06.json without a link, because the memo knows the document by name but not where it sits in a shared folder. The documents themselves are unchanged; only the link from this memo is missing.</li>
+    <li><b>Some links could not be built</b> &mdash; For some files the monitor knows the folder but not its web address, so those figures name the file without a link rather than guess one.</li>
+    <li><b>Some figures trace to the model, not past it</b> &mdash; Some figures trace to the cell of the monitoring workbook they were read from but not on to the borrower&#x27;s own monthly file for that month. The workbook cell is the furthest the trail goes for those figures.</li>
+    <li><span class="trc" data-calc="4 cases, each listed below." data-steps='[{&quot;l&quot;: &quot;The monitoring workbook holds no line called \&quot;inventory\&quot;, so any figure that needs it is left off rather than shown as zero.&quot;, &quot;v&quot;: &quot;&quot;}, {&quot;l&quot;: &quot;The monitoring workbook holds no line called \&quot;net_change_cash\&quot;, so any figure that needs it is left off rather than shown as zero.&quot;, &quot;v&quot;: &quot;&quot;}, {&quot;l&quot;: &quot;The monitoring workbook holds no line called \&quot;total_current_assets\&quot;, so any figure that needs it is left off rather than shown as zero.&quot;, &quot;v&quot;: &quot;&quot;}, {&quot;l&quot;: &quot;The monitoring workbook holds no line called \&quot;total_current_liabilities\&quot;, so any figure that needs it is left off rather than shown as zero.&quot;, &quot;v&quot;: &quot;&quot;}]' data-hops='[]'><b>Lines the monitoring workbook could not settle</b></span> &mdash; 4 lines in the monitoring workbook could not be settled: a name more than one row uses, or a line the workbook does not carry. A figure that needed one of them is left off rather than shown as zero.</li>
+    <li><b>Certificate signer and date</b> &mdash; who signed source:Asteron Care Partners/Portfolio Monitoring/2026-Q2/Compliance Certificate.pdf and on what date was not captured when its figures were read, so the memo names the certificate without naming its signatory.</li>
+    <li><b>Other lenders</b> &mdash; the borrower delivers no schedule of its borrowings, so no other lender is named and the balance below our own loan is shown as unattributed.</li>
+    <li><b>Total funded debt</b> &mdash; this month&#x27;s review did not produce a funded-debt total for the borrower, so the capital structure shows our own loan and the equity without a total across them, and nothing states what else the borrower owes.</li>
+    <li><b>Company facts</b> &mdash; the deal record on file does not state management for this borrower, so those rows say so.</li>
+    <li><b>Cost at close</b> &mdash; the deal record does not state a discount to par as a percentage, so cost at close is not shown against par.</li>
+    <li><b>Principal outstanding, fair value and enterprise value</b> &mdash; the monthly reporting states one funded-debt figure covering every borrowing, so the balance of our own loan including accrued PIK cannot be separated out; the mark and the enterprise value sit with fund accounting and the valuation process rather than in the monthly package.</li>
+    <li><b>Key terms</b> &mdash; the executed documents on file do not state lender / agent, amortization, pik rate, prepayment, ecf sweep, borrowing base for this deal, so those rows say so.</li>
+    <li><b>Transaction summary</b> &mdash; no document on file states who lent and who acts as agent, what the money was used for, leverage at close and the earnings it was measured on, so the summary names those as not on file.</li>
+    <li><b>Our standing view of the credit</b> &mdash; the deal record&#x27;s own note says its watchlist and direction were written during onboarding and still need the covering analyst&#x27;s sign-off, so they are left off this memo.</li>
+    <li><b>months either side of Apr 2026</b> &mdash; Successor (post-restructuring) reporting basis begins with the March 31, 2026 Amended and Restated Credit Agreement / exit capitalization (carryover accounting; TDR/instrument-level workpapers still PROVISIONAL).</li>
+<li>No AR/AP aging module ran this period: the borrower's only monthly AR/AP file is a claim/invoice-level transaction list without the bucketed customer/vendor-by-aging-band grid the engine's parser reads, though the underlying data reconciles exactly to the Balance Sheet's $20.90M receivable and $5.43M payable balances.</li><li>The monitoring workbook holds no inventory, net-change-in-cash, total-current-assets, or total-current-liabilities lines for this borrower, so ratios needing them are omitted rather than shown as zero.</li><li>Restructuring accounting (TDR framework, instrument-level 10% modification test, CODI, Section 382, and any resulting gain or loss) remained PROVISIONAL through the June 2026 reporting package; successor balance-sheet figures could still restate.</li><li>Leverage and coverage ratios spanning the March 2026 debt-for-equity recapitalization are not shown on a trailing-twelve-month basis: only three same-basis months exist since the exchange, short of the twelve the window needs.</li>
+  </ul>
+The most time-sensitive open question is what happens to the FCCR covenant when its stated December 31, 2026 suspension window ends: the credit agreement's own text supports a literal reading of mechanical reinstatement at 1.2000x on January 1, 2027, but Stabilization Milestone M4 (an FCCR reinstatement-readiness analysis, due from the borrower September 30, 2026) suggests the lender may act on the informational trend before that date instead. Separately, the EBITDA reconciling item the borrower's certificates use ($553,353.26 per month, added to this model's Reported EBITDA to reach "Covenant EBITDA") is not supported by any agreement text located to date; resolving it, ideally against a longer-form version of the credit agreement if one exists, would settle both the FCCR's true informational level and the Fixed Charges definition's roughly $9.1M TTM gap to the certified figure. The restructuring's TDR framework, instrument-level modification test, CODI, and Section 382 conclusions also remain open with the borrower's accountants.
+</div>
+
+<!-- FLAGS -->
+<h2 id="sec-flags">Flags &amp; follow-ups</h2>
+<p class="small muted" style="margin:0 0 10px">Ordered in three tiers — covenant-touching items first, then missing required deliverables, then everything else; within each tier, dollar-valued items sort largest first, unvalued items follow.</p>
+
+<div class="card">
+  <ol>
+<li>FCCR reinstatement-readiness analysis (Stabilization Milestone M4) is due from the borrower to the lender on September 30, 2026, about two weeks from this review, and should clarify what happens when the legacy FCCR covenant's suspension window ends.</li><li>The EBITDA reconciling item embedded in the borrower's own certified "Covenant EBITDA" ($553,353.26 per month, $6.64M annualized) is not supported by any agreement text located to date and remains excluded from this analysis's EBITDA definition.</li><li>An Interim goodwill reassessment required as of March 31, 2026 had not been completed as of the June 2026 reporting package.</li><li>Restructuring accounting (TDR framework, instrument-level 10% modification test, CODI, and Section 382) remains PROVISIONAL through the June 2026 package; successor balance-sheet figures could still restate.</li>
+  </ol>
+</div>
+</div>
+</div>
+</div>
+
+<footer>
+  Sources: internal deal files — the executed loan documents, the underwriting memo, the monthly reporting packages with the compliance certificate and the pinned budget. Objective figures trace to the monthly financials model and to the archived analysis outputs kept beside it. Interpretive views (watchlist / trajectory) are provisional and require analyst sign-off. This report was generated for analyst review only and has not been sent or shared anywhere.
+</footer>
+</div>
+<script>
+const TREND=(function(){
+  /* The chart's series come from the payload, never from this file. render_memo.py writes
+     #trend-data; a missing or empty island leaves every series empty and the chart blank,
+     which validate_memo.py refuses -- an empty chart is loud, a wrong one is not. */
+  var el=document.getElementById("trend-data"); if(!el) return {months:[],series:{}};
+  try{ return JSON.parse(el.textContent)||{months:[],series:{}}; }
+  catch(e){ return {months:[],series:{}}; }
+})();
+const S=TREND.series||{};
+const M=TREND.months||[];
+const pick=k=>{const v=((S[k]||{}).values)||[]; return M.map((_,i)=>v[i]==null?null:v[i]);};
+const REV =pick("net_revenue");
+const GP  =pick("gross_profit");
+const OPEX=pick("opex");
+const EB  =pick("ebitda");
+/* The margins are payload series too. Computing them here would put arithmetic in the
+   browser, where nothing gates it and nothing traces it to a model cell. */
+const GPM =pick("gross_margin");
+const EBM =pick("ebitda_margin");
+const OPXM=pick("opex_pct_of_revenue");
+
+/* `key` names the payload series each item draws. The quarter boxes read their
+   figures out of the island by that key, so an item and its quarter total can
+   never come from two different series. */
+const VIEWS={
+  abs:{unit:'$',
+    bars:{name:'Net revenue', key:'net_revenue', color:'#E0DEE9', data:REV},
+    lines:[{name:'Gross profit', key:'gross_profit', color:'#222222', data:GP},
+           {name:'EBITDA', key:'ebitda', color:'#1f7a4d', data:EB},
+           {name:'Operating expense', key:'opex', color:'#8a5d09', data:OPEX}],
+    note:(TREND.notes&&TREND.notes.abs)||''},
+  pct:{unit:'%',
+    ctxBars:{name:'Net revenue (context)', key:'net_revenue', color:'#E0DEE9', data:REV},
+    lines:[{name:'Gross profit margin', key:'gross_margin', color:'#1f7a4d', data:GPM, dash:true},
+           {name:'EBITDA margin', key:'ebitda_margin', color:'#155C39', data:EBM, dash:true},
+           {name:'Opex % of revenue', key:'opex_pct_of_revenue', color:'#6E6E72', data:OPXM, dash:true}],
+    note:(TREND.notes&&TREND.notes.pct)||''}
+};
+
+const NS="http://www.w3.org/2000/svg";
+const W=940,padL=58,padR=22,padB=42;
+const n=M.length, iw=W-padL-padR;
+/* THE QUARTER BAND. Each complete calendar quarter gets one box, over the month
+   that closes it, holding the quarter's own totals. The totals are computed in
+   memo_payload.py and gated before they reach the page; this code positions them
+   and formats them, and adds nothing up.
+   The band is reserved ABOVE the plot rather than drawn inside it: a box over the
+   lines hides the months it is summarising. The chart therefore grows taller by
+   the band instead of the plot shrinking, so the drawn area is the same height
+   with the boxes as without them. */
+const Q=(TREND.quarters||[]).filter(q=>q&&q.values&&typeof q.end_index==='number');
+const QP=(iw/Math.max(n,1))*3;                  /* space between one box and the next */
+const QCOLS=QP>=124?2:1;                        /* two value columns when they fit */
+const QBW=Math.min(150,Math.max(64,QP-8)), QBH=QCOLS===2?44:71, QY=6;
+const QH=Q.length?QBH+12:0;
+const padT=16+QH, H=320+QH, ih=H-padT-padB;
+const svg=document.getElementById("chart"), tt=document.getElementById("tt");
+svg.setAttribute("viewBox","0 0 "+W+" "+H);
+const BB=(TREND.basis_break_index==null?-1:TREND.basis_break_index); let mode='abs';
+function el(t,a){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e;}
+const x=i=>padL+(i+0.5)*(iw/n);
+function niceDom(min,max){
+  min=Math.min(0,min); max=Math.max(0,max);
+  if(min===0&&max===0) max=1;
+  const span=max-min||1, pad=span*0.08; max+=pad; if(min<0)min-=pad;
+  const step=Math.pow(10,Math.floor(Math.log10(span)))/2||1;
+  return [Math.floor(min/step)*step, Math.ceil(max/step)*step];
+}
+
+function render(){
+  const v=VIEWS[mode];
+  while(svg.firstChild) svg.removeChild(svg.firstChild);
+  const has=q=>q!==null&&q!==undefined&&!Number.isNaN(q); /* a month with no figure is a gap, not a zero */ let vals=[]; v.lines.forEach(l=>vals.push(...l.data.filter(has)));
+  if(mode==='abs') vals.push(...v.bars.data.filter(has));
+  const [mn,mx]=niceDom(Math.min(...vals),Math.max(...vals));
+  const y=val=>padT+ih-((val-mn)/(mx-mn))*ih;
+
+  for(let gth=0;gth<=4;gth++){
+    const f=gth/4, yy=padT+ih-f*ih, lv=mn+f*(mx-mn);
+    svg.appendChild(el("line",{x1:padL,y1:yy,x2:W-padR,y2:yy,stroke:"#F2F1F6"}));
+    const t=el("text",{x:padL-7,y:yy+4,"text-anchor":"end","font-size":10,fill:"#6E6E72"});
+    t.textContent = mode==='abs' ? (lv/1e6).toFixed(1)+'M' : (lv*100).toFixed(0)+'%';
+    svg.appendChild(t);
+  }
+  if(mn<0){const yz=y(0); svg.appendChild(el("line",{x1:padL,y1:yz,x2:W-padR,y2:yz,stroke:"#DBD9E5","stroke-width":1}));}
+
+  /* One rule per quarter-end column, tying each box to the month it summarises.
+     It is drawn in TWO parts, because the two stretches do different work: the
+     stub crossing the empty gap between the box and the plot is solid and carries
+     the link, while the part crossing the data is dashed and lighter so it reads
+     behind the bars and lines rather than among them. Both sit under the series
+     for the same reason. */
+  Q.forEach(q=>{ if(q.end_index<0||q.end_index>=n) return;
+    const qx=x(q.end_index);
+    svg.appendChild(el("line",{x1:qx,y1:QY+QBH,x2:qx,y2:padT,
+      stroke:"#A19CBC","stroke-width":1.2,opacity:.95}));
+    svg.appendChild(el("line",{x1:qx,y1:padT,x2:qx,y2:padT+ih,
+      stroke:"#A19CBC","stroke-dasharray":"4 3","stroke-width":1,opacity:.7}));});
+
+  const bw=(iw/n)*0.62;
+  if(mode==='abs'){
+    const z=y(0);
+    for(let i=0;i<n;i++){if(!has(v.bars.data[i]))continue; const yv=y(v.bars.data[i]);
+      svg.appendChild(el("rect",{x:x(i)-bw/2,y:Math.min(yv,z),width:bw,height:Math.abs(z-yv),fill:v.bars.color,rx:1,opacity:.85}));}
+  } else {
+    const rmax=Math.max(...v.ctxBars.data);
+    for(let i=0;i<n;i++){if(!has(v.ctxBars.data[i]))continue; const h=(v.ctxBars.data[i]/rmax)*ih*0.8;
+      svg.appendChild(el("rect",{x:x(i)-bw/2,y:padT+ih-h,width:bw,height:h,fill:v.ctxBars.color,rx:1,opacity:.13}));}
+  }
+
+  if(BB>=0&&BB<n){
+    const bb=x(BB)-(iw/n)/2;
+    svg.appendChild(el("line",{x1:bb,y1:padT,x2:bb,y2:padT+ih,stroke:"#b23a2c","stroke-dasharray":"5 4","stroke-width":1.2,opacity:.55}));
+  }
+
+  for(let i=0;i<n;i++){ if(i%2===0||i>=n-3){
+    const t=el("text",{x:x(i),y:H-padB+16,"text-anchor":"middle","font-size":9,fill:"#6E6E72"});
+    t.textContent=M[i]; svg.appendChild(t);}}
+
+  v.lines.forEach(s=>{
+    let d="",pen=false; for(let i=0;i<n;i++){if(!has(s.data[i])){pen=false;continue;} d+=(pen?"L":"M")+x(i)+" "+y(s.data[i]); pen=true;}
+    const a={d,fill:"none",stroke:s.color,"stroke-width":2.2,"stroke-linejoin":"round","stroke-linecap":"round"};
+    if(s.dash)a["stroke-dasharray"]="5 3";
+    svg.appendChild(el("path",a));
+    for(let i=0;i<n;i++)if(has(s.data[i]))svg.appendChild(el("circle",{cx:x(i),cy:y(s.data[i]),r:2.2,fill:s.color}));
+  });
+
+  /* THE QUARTER BOXES. One per complete quarter, over the month that closes it,
+     carrying the same four series the view draws, in the same order as the legend
+     and the tooltip. A quarter the payload could not total for a series shows a
+     dash for that series rather than a figure standing in for it. */
+  if(Q.length){
+    const items=[mode==='abs'?v.bars:v.ctxBars].concat(v.lines);
+    const colw=(QBW-14)/QCOLS;
+    Q.forEach(q=>{
+      const i=q.end_index; if(i<0||i>=n) return;
+      const bx=Math.max(padL-8,Math.min(W-padR-QBW+8,x(i)-QBW/2));
+      svg.appendChild(el("rect",{x:bx,y:QY,width:QBW,height:QBH,rx:3,
+        fill:"#F4F3F8",stroke:"#D7D5E2"}));
+      const lab=el("text",{x:bx+7,y:QY+13,"font-size":9,"font-weight":700,fill:"#222222"});
+      /* The dagger says the three months are not on one reporting basis; the
+         axis caption below the chart says what it means. */
+      lab.textContent=(q.short||q.label||"")+(q.spans_basis_break?" †":"");
+      svg.appendChild(lab);
+      items.forEach((it,k)=>{
+        const val=(q.values||{})[it.key];
+        const cx=bx+7+(k%QCOLS)*colw, cy=QY+27+Math.floor(k/QCOLS)*13;
+        svg.appendChild(el("rect",{x:cx,y:cy-6,width:6,height:6,rx:1,fill:it.color}));
+        const t=el("text",{x:cx+9,y:cy,"font-size":8.5,fill:"#5C5C5C"});
+        /* A loss reads -$0.68M, never $-0.68M: the sign belongs in front of the
+           amount, and a quarter of negative EBITDA is exactly what a reader scans
+           this band for. */
+        t.textContent = !has(val) ? "—"
+          : (it.key==='net_revenue'||mode==='abs')
+            ? (val<0?'-':'')+'$'+Math.abs(val/1e6).toFixed(2)+'M'
+          : (val*100).toFixed(1)+'%';
+        svg.appendChild(t);
+      });
+    });
+  }
+
+  const guide=el("line",{x1:0,y1:padT,x2:0,y2:padT+ih,stroke:"#222222","stroke-width":1,opacity:0});
+  svg.appendChild(guide);
+  const cap=el("rect",{x:padL,y:padT,width:iw,height:ih,fill:"transparent"}); svg.appendChild(cap);
+  cap.addEventListener("mousemove",e=>{
+    const r=svg.getBoundingClientRect(), sx=(e.clientX-r.left)*(W/r.width);
+    let i=Math.round((sx-padL)/(iw/n)-0.5); i=Math.max(0,Math.min(n-1,i));
+    const gx=x(i); guide.setAttribute("x1",gx); guide.setAttribute("x2",gx); guide.setAttribute("opacity",.25);
+    let rows="";
+    const revItem = mode==='abs'? v.bars : v.ctxBars;
+    rows+=`<div class="ttr"><span class="sw"><i style="background:${revItem.color}"></i>Net revenue</span><span>${has(REV[i])?'$'+(REV[i]/1e6).toFixed(2)+'M':'not reported'}</span></div>`;
+    v.lines.forEach(s=>{const val= !has(s.data[i]) ? 'not reported' : mode==='abs' ? '$'+(s.data[i]/1e6).toFixed(2)+'M' : (s.data[i]*100).toFixed(1)+'%';
+      rows+=`<div class="ttr"><span class="sw"><i style="background:${s.color}"></i>${s.name}</span><span>${val}</span></div>`;});
+    tt.innerHTML=`<div class="ttm">${M[i]}</div>${rows}`; tt.style.opacity=1;
+    let lx=(gx/W)*r.width+14; if(lx>r.width-172) lx=(gx/W)*r.width-158;
+    tt.style.left=lx+"px"; tt.style.top=(padT+8)*(r.height/H)+"px";
+  });
+  cap.addEventListener("mouseleave",()=>{tt.style.opacity=0;guide.setAttribute("opacity",0);});
+
+  const leg=document.getElementById("legend"); leg.innerHTML="";
+  const revItem = mode==='abs'? v.bars : v.ctxBars;
+  leg.insertAdjacentHTML("beforeend",`<span><i style="background:${revItem.color}"></i>${revItem.name}</span>`);
+  v.lines.forEach(s=>leg.insertAdjacentHTML("beforeend",
+    `<span style="color:${s.color}"><i class="${s.dash?'dash':'ln'}" style="${s.dash?'':'background:'+s.color}"></i><span style="color:var(--muted)">${s.name}</span></span>`));
+  document.getElementById("axisnote").textContent=v.note;
+}
+
+document.querySelectorAll("#toggle .tgl").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("#toggle .tgl").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active"); mode=b.dataset.m; render();
+}));
+render();
+</script>
+<script>
+// Figure trace box. ONE interaction: click a traceable CONTAINER, the box opens;
+// nothing bare-navigates and nothing looks like a hyperlink. Trace data lives in invisible
+// spans; the container is the control:
+//  - span.trc: computed figure — data-calc (context), data-steps (labeled value lines,
+//    result last), data-hops (JSON [{t, h}]; h:null renders plain text when the store link
+//    is unresolved, per the degradation contract).
+//  - span.srclink / span.srcmiss: DIRECT-source figure — the box is titled "Source" and shows
+//    the citation only (the title attribute carries the file + where in it) with the file link
+//    inside (srcmiss: named, no link). No boilerplate.
+//  - table.traced: ANY cell — <tr data-method> says HOW the line is computed (row data-steps
+//    shown on the spot column; a cell's own data-steps wins); the column header's span.trc
+//    says WHICH file supplied the column. No data-method = transcribed as-reported.
+// Init classifies each span's context: td/th → .tcell on the cell; .cc chip → .tcell on the
+// chip; prose → .pmark on the span (the only text-level marker). The open container keeps a
+// .trc-sel highlight while its box is shown; Esc or click-away closes.
+(function(){
+  var pop=document.createElement('div');pop.id='trcpop';document.body.appendChild(pop);
+  var sel=null;
+  // Classification is a named function and exposed, because the Performance box repaints its own
+  // thead/tbody when the reader switches time basis: those fresh spans need classifying too, or a
+  // toggled view's column headers stop answering. Cell clicks are delegated on document, so only
+  // the span→container classification needs re-running.
+  function classify(root){
+    (root||document).querySelectorAll('span.trc,span.srclink,span.srcmiss').forEach(function(s){
+      var chip=s.closest('.cc');
+      if(chip){chip.classList.add('tcell');return}
+      var cell=s.closest('td,th');
+      if(cell){if(!cell.closest('table.traced')||cell.tagName==='TH')cell.classList.add('tcell');return}
+      s.classList.add('pmark');
+    });
+  }
+  window.traceInit=classify;
+  classify(document);
+  function hide(){pop.style.display='none';if(sel){sel.classList.remove('trc-sel');sel=null}}
+  function parse(s){try{return JSON.parse(s||'[]')}catch(_){return []}}
+  function fileName(href){try{return decodeURIComponent(href.split('/').pop())}catch(_){return href}}
+  function render(anchor,calc,steps,hops,label){
+    hide();
+    pop.textContent='';
+    var t=document.createElement('div');t.className='tlbl';t.textContent=label||'How this figure was arrived at';pop.appendChild(t);
+    (Array.isArray(calc)?calc:[calc]).forEach(function(cl){if(!cl)return;var c=document.createElement('div');c.className='tcalc';c.textContent=cl;pop.appendChild(c)});
+    if(steps.length){
+      var tb=document.createElement('table');tb.className='tsteps';
+      steps.forEach(function(s,i){
+        var tr=document.createElement('tr');if(i===steps.length-1&&s.res)tr.className='res';
+        var l=document.createElement('td');l.textContent=s.l;tr.appendChild(l);
+        var v=document.createElement('td');v.className='v';v.textContent=s.v;tr.appendChild(v);
+        tb.appendChild(tr);
+      });
+      pop.appendChild(tb);
+    }
+    hops.forEach(function(h){
+      var a=document.createElement(h.h?'a':'span');a.className='thop';
+      if(h.h){a.target='_blank';a.rel='noopener';a.href=h.h;a.textContent=h.t+' \u2197'}
+      else{a.textContent=h.t}
+      pop.appendChild(a);
+    });
+    sel=anchor;sel.classList.add('trc-sel');
+    pop.style.display='block';
+    var r=anchor.getBoundingClientRect(),
+        left=Math.max(8,Math.min(window.scrollX+r.left,window.scrollX+document.documentElement.clientWidth-pop.offsetWidth-8));
+    pop.style.left=left+'px';pop.style.top=(window.scrollY+r.bottom+6)+'px';
+  }
+  function open(s,anchor){
+    if(s.classList.contains('srclink')||s.classList.contains('srcmiss')){
+      var hops=s.dataset.href?[{t:'Open: '+fileName(s.dataset.href),h:s.dataset.href}]:[];
+      render(anchor,[s.getAttribute('title')||''],[],hops,'Source');
+    }else{
+      render(anchor,s.dataset.calc,parse(s.dataset.steps),parse(s.dataset.hops));
+    }
+  }
+  document.addEventListener('click',function(e){
+    if(pop.contains(e.target)){if(e.target.closest('a'))hide();return}  // box hops navigate; box body stays open
+    if(e.target.closest('a')){hide();return}  // jump chips & links navigate
+    var m=e.target.closest('span.pmark');
+    if(m){open(m,m);return}
+    var box=e.target.closest('td.tcell,th.tcell,.cc.tcell');
+    if(box){
+      var s=box.querySelector('span.trc,span.srclink,span.srcmiss');
+      if(s){open(s,box);return}
+    }
+    var cell=e.target.closest('table.traced td');
+    if(!cell){hide();return}
+    var tr=cell.parentElement,table=cell.closest('table');
+    /* A traced table with NO heading row: the forward-stress table is label and
+       figure, nothing above them. Its figures carry their own arithmetic, so the
+       figure answers for itself. Reading a heading row that is not there threw
+       here, and every figure in that table then answered nothing. */
+    if(!(table.tHead&&table.tHead.rows[0])){
+      var lone=cell.querySelector('span.trc,span.srclink,span.srcmiss');
+      if(lone){open(lone,cell);return}
+      hide();return;
+    }
+    var head=table.tHead.rows[0].cells;
+    var ci=cell.cellIndex;
+    if(ci===0){for(var i=1;i<head.length;i++)if(head[i].className.indexOf('spot')>=0)ci=i}
+    var hs=head[ci]?head[ci].querySelector('span.trc'):null;
+    var method=tr.dataset.method||'As reported \u2014 from the package below; no calculation.';
+    var isSpot=head[ci]&&head[ci].className.indexOf('spot')>=0;
+    var own=parse(cell.dataset.steps);
+    var steps=own.length?own:(isSpot?parse(tr.dataset.steps):[]);
+    render(cell,[tr.cells[0].textContent.trim()+' \u00b7 '+(head[ci]?head[ci].textContent.trim():''),method,hs?hs.dataset.calc:null],
+           steps,hs?parse(hs.dataset.hops):[]);
+  });
+  window.addEventListener('keydown',function(e){if(e.key==='Escape')hide()});
+})();
+</script>
+
+<script type="application/json" id="perf-data">{"basis_note": "a window either spanning the reporting-basis change or compared against one on the other side of it. Read those comparisons with that in mind.", "borrower": "Asteron Care Partners, LLC", "default_view": "monthly", "period": "2026-06", "units": "USD, in whole units", "views": [{"columns": [{"base_months": ["May 2026"], "basis": null, "id": "mom", "label": "MoM", "months": ["Jun 2026"], "window": "Jun 2026 against May 2026"}, {"base_months": ["Jun 2025"], "basis": "not like-for-like: this window and what it is compared against are reported on either side of the basis change", "id": "yoy", "label": "YoY", "months": ["Jun 2026"], "window": "Jun 2026 against the same month a year earlier, Jun 2025"}, {"base_months": ["Apr 2025", "May 2025", "Jun 2025"], "basis": "not like-for-like: this window and what it is compared against are reported on either side of the basis change", "id": "t3m", "label": "T3M vs prior-year T3M", "months": ["Apr 2026", "May 2026", "Jun 2026"], "window": "Apr 2026 to Jun 2026 against the SAME three months a year earlier, Apr 2025 to Jun 2025"}, {"base_months": null, "basis": null, "id": "budget", "label": "vs Budget", "months": ["Jun 2026"], "window": "Jun 2026 against the plan for the same month"}], "id": "monthly", "kind": "change", "label": "Monthly", "note": "Like-for-like change. Levels are in the income statement review.", "rows": [{"cells": [{"a": 13164599.73, "b": 12875350.0, "v": 0.022465387737032425}, {"a": 13164599.73, "b": 15888032.24, "v": -0.17141408507111638}, {"a": 38694877.56, "b": 46766464.13, "v": -0.17259347526387386}, {"a": 13164599.73, "b": 15939567.0, "v": -0.17409301457185125}], "id": "revenue", "label": "Net revenue", "method": "Revenue as reported on the monthly income statement, summed over the column's months.", "unit": "pct"}, {"cells": [{"a": 4410295.39, "b": 4073835.7, "v": 0.08259039263660031}, {"a": 4410295.39, "b": 7105776.0, "v": -0.379336558033915}, {"a": 12365599.92, "b": 20537605.89, "v": -0.3979045081383632}, {"a": 4410295.39, "b": 1291104.93, "v": 2.4159077914759415}], "id": "gross_profit", "label": "Gross profit", "method": "Gross profit as reported, summed over the column's months.", "unit": "pct"}, {"cells": [{"a": 0.335011734534522, "b": 0.316405821977655, "v": 186.05912556867}, {"a": 0.335011734534522, "b": 0.44724078429991904, "v": -1122.2904976539705}, {"a": 0.319566844495786, "b": 0.43915241983892955, "v": -1195.8557534314357}, {"a": 0.335011734534522, "b": 0.08100000018821088, "v": 2540.117343463111}], "id": "gross_margin", "label": "Gross margin", "method": "Gross profit divided by revenue for the column's months.", "unit": "bps"}, {"cells": [{"a": 1547741.28, "b": 1254874.33, "v": 0.23338348948456053}, {"a": 1547741.28, "b": 3872347.01, "v": -0.6003092501774524}, {"a": 3898520.9300000006, "b": 10972847.129999999, "v": -0.6447119982797025}, {"a": 1547741.28, "b": 1291104.93, "v": 0.19877265126700439}], "id": "ebitda", "label": "EBITDA", "method": "The income statement's own EBITDA line -- the same line the covenant is measured on -- summed over the column's months.", "unit": "pct"}, {"cells": [{"a": 0.11756842682219552, "b": 0.09746331789038745, "v": 201.05108931808073}, {"a": 0.11756842682219552, "b": 0.2437272880307297, "v": -1261.588612085342}, {"a": 0.10075031052766563, "b": 0.234630676792199, "v": -1338.8036626453336}, {"a": 0.11756842682219552, "b": 0.08100000018821088, "v": 365.68426633984643}], "id": "ebitda_margin", "label": "EBITDA margin", "method": "EBITDA divided by revenue for the column's months.", "unit": "bps"}, {"cells": [{"a": -2862554.11, "b": -2818961.37, "v": -0.01546411400451357}, {"a": -2862554.11, "b": -3233428.99, "v": 0.11470017778247245}, {"a": -8467078.989999998, "b": -9564758.76, "v": 0.11476293313225198}, {"a": -2862554.11, "b": 0.0, "delta": -2862554.11, "small_base": true, "v": null}], "id": "opex", "label": "Operating expense", "method": "Operating expense: the borrower's operating expense groups summed over the column's months.", "unit": "pct"}, {"cells": [{"a": -0.21744330771232645, "b": -0.21894250408726754, "v": 14.991963749410864}, {"a": -0.21744330771232645, "b": -0.20351349626918935, "v": -139.29811443137098}, {"a": -0.21881653396812034, "b": -0.20452174304673051, "v": -142.94790921389827}, {"a": -0.21744330771232645, "b": 0.0, "v": -2174.4330771232644}], "id": "opex_pct", "label": "Operating expense % of revenue", "method": "Operating expense divided by revenue for the column's months.", "unit": "bps"}]}, {"columns": [{"base_months": null, "basis": null, "id": "q4-2024", "label": "Q4 2024", "months": ["Oct 2024", "Nov 2024", "Dec 2024"], "window": "Q4 2024 (Oct to Dec 2024)"}, {"base_months": null, "basis": null, "id": "q1-2025", "label": "Q1 2025", "months": ["Jan 2025", "Feb 2025", "Mar 2025"], "window": "Q1 2025 (Jan to Mar 2025)"}, {"base_months": null, "basis": null, "id": "q2-2025", "label": "Q2 2025", "months": ["Apr 2025", "May 2025", "Jun 2025"], "window": "Q2 2025 (Apr to Jun 2025)"}, {"base_months": null, "basis": null, "id": "q3-2025", "label": "Q3 2025", "months": ["Jul 2025", "Aug 2025", "Sep 2025"], "window": "Q3 2025 (Jul to Sep 2025)"}, {"base_months": ["Oct 2024", "Nov 2024", "Dec 2024"], "basis": null, "id": "q4-2025", "label": "Q4 2025", "months": ["Oct 2025", "Nov 2025", "Dec 2025"], "window": "Q4 2025 (Oct to Dec 2025), compared with Q4 2024"}, {"base_months": ["Jan 2025", "Feb 2025", "Mar 2025"], "basis": null, "id": "q1-2026", "label": "Q1 2026", "months": ["Jan 2026", "Feb 2026", "Mar 2026"], "window": "Q1 2026 (Jan to Mar 2026), compared with Q1 2025"}, {"base_months": ["Apr 2025", "May 2025", "Jun 2025"], "basis": "not like-for-like: this window and what it is compared against are reported on either side of the basis change", "id": "q2-2026", "label": "Q2 2026", "months": ["Apr 2026", "May 2026", "Jun 2026"], "window": "Q2 2026 (Apr to Jun 2026), compared with Q2 2025"}], "id": "quarterly", "kind": "level", "label": "Quarterly", "note": "Complete quarters only, oldest first. The comparison under each level is the same quarter a year earlier.", "rows": [{"cells": [{"v": 44291804.13}, {"v": 43502584.67}, {"v": 46766464.13}, {"v": 36272560.93}, {"b": 44291804.13, "cmp": -0.17120851270232518, "v": 36708670.22}, {"b": 43502584.67, "cmp": -0.23170147237138866, "v": 33422971.75}, {"b": 46766464.13, "cmp": -0.17259347526387386, "v": 38694877.56}], "id": "revenue", "label": "Net revenue", "method": "Revenue as reported on the monthly income statement, summed over the column's months.", "unit": "usd"}, {"cells": [{"v": 18409655.87}, {"v": 17702231.54}, {"v": 20537605.89}, {"v": 8659430.16}, {"b": 18409655.87, "cmp": -0.5089802240828091, "v": 9039505.1}, {"b": 17702231.54, "cmp": -0.601194820322636, "v": 7059741.63}, {"b": 20537605.89, "cmp": -0.3979045081383632, "v": 12365599.92}], "id": "gross_profit", "label": "Gross profit", "method": "Gross profit as reported, summed over the column's months.", "unit": "usd"}, {"cells": [{"v": 0.41564475034627585}, {"v": 0.4069236730250584}, {"v": 0.43915241983892955}, {"v": 0.23873225209301482}, {"b": 0.41564475034627585, "cmp": -1693.948849650177, "v": 0.24624986538125815}, {"b": 0.4069236730250584, "cmp": -1956.9943830391933, "v": 0.21122423472113905}, {"b": 0.43915241983892955, "cmp": -1195.8557534314357, "v": 0.319566844495786}], "id": "gross_margin", "label": "Gross margin", "method": "Gross profit divided by revenue for the column's months.", "unit": "pct"}, {"cells": [{"v": 9818401.73}, {"v": 8630515.549999999}, {"v": 10972847.129999999}, {"v": -1584999.339999999}, {"b": 9818401.73, "flip": true, "v": -1270952.6}, {"b": 8630515.549999999, "flip": true, "v": -1269389.409999999}, {"b": 10972847.129999999, "cmp": -0.6447119982797025, "v": 3898520.9300000006}], "id": "ebitda", "label": "EBITDA", "method": "The income statement's own EBITDA line -- the same line the covenant is measured on -- summed over the column's months.", "unit": "usd"}, {"cells": [{"v": 0.22167536235783494}, {"v": 0.19839086839251013}, {"v": 0.234630676792199}, {"v": -0.04369692404842282}, {"b": 0.22167536235783494, "cmp": -2562.9804393096224, "v": -0.03462268157312728}, {"b": 0.19839086839251013, "cmp": -2363.7041789202462, "v": -0.03797954949951448}, {"b": 0.234630676792199, "cmp": -1338.8036626453336, "v": 0.10075031052766563}], "id": "ebitda_margin", "label": "EBITDA margin", "method": "EBITDA divided by revenue for the column's months.", "unit": "pct"}, {"cells": [{"v": -8591254.14}, {"v": -9071715.99}, {"v": -9564758.76}, {"v": -10244429.5}, {"b": -8591254.14, "cmp": -0.200110895567105, "v": -10310457.7}, {"b": -9071715.99, "cmp": 0.08185716471046613, "v": -8329131.040000001}, {"b": -9564758.76, "cmp": 0.11476293313225198, "v": -8467078.989999998}], "id": "opex", "label": "Operating expense", "method": "Operating expense: the borrower's operating expense groups summed over the column's months.", "unit": "usd"}, {"cells": [{"v": -0.19396938798844093}, {"v": -0.20853280463254828}, {"v": -0.20452174304673051}, {"v": -0.28242917614143764}, {"b": -0.19396938798844093, "cmp": -869.0315896594448, "v": -0.2808725469543854}, {"b": -0.20853280463254828, "cmp": -406.7097958810531, "v": -0.2492037842206536}, {"b": -0.20452174304673051, "cmp": -142.94790921389827, "v": -0.21881653396812034}], "id": "opex_pct", "label": "Operating expense % of revenue", "method": "Operating expense divided by revenue for the column's months.", "unit": "pct"}]}, {"columns": [{"base_months": null, "basis": null, "id": "fy2025", "label": "FY2025", "months": ["Jan 2025", "Feb 2025", "Mar 2025", "Apr 2025", "May 2025", "Jun 2025", "Jul 2025", "Aug 2025", "Sep 2025", "Oct 2025", "Nov 2025", "Dec 2025"], "window": "FY2025 (January to December 2025)"}, {"base_months": ["Jan 2025", "Feb 2025", "Mar 2025", "Apr 2025", "May 2025", "Jun 2025"], "basis": "not like-for-like: this window spans the reporting-basis change", "id": "ytd", "label": "2026 YTD", "months": ["Jan 2026", "Feb 2026", "Mar 2026", "Apr 2026", "May 2026", "Jun 2026"], "window": "Jan to Jun 2026 (6 months), compared with the same months a year earlier"}, {"base_months": null, "basis": "not like-for-like: this window spans the reporting-basis change", "factor": 2.0, "id": "ytd_ann", "label": "2026 YTD annualised", "months": ["Jan 2026", "Feb 2026", "Mar 2026", "Apr 2026", "May 2026", "Jun 2026"], "window": "Jan to Jun 2026 scaled to twelve months (x 12/6)"}], "id": "annual", "kind": "level", "label": "Annual", "note": "Complete fiscal years, then the current year to date and that figure scaled to twelve months.", "rows": [{"cells": [{"v": 163250279.95}, {"b": 90269048.8, "cmp": -0.20107888286510886, "v": 72117849.31}, {"v": 144235698.62}], "id": "revenue", "label": "Net revenue", "method": "Revenue as reported on the monthly income statement, summed over the column's months.", "unit": "usd"}, {"cells": [{"v": 55938772.690000005}, {"b": 38239837.43, "cmp": -0.4920129672214456, "v": 19425341.55}, {"v": 38850683.1}], "id": "gross_profit", "label": "Gross profit", "method": "Gross profit as reported, summed over the column's months.", "unit": "usd"}, {"cells": [{"v": 0.34265651922393536}, {"b": 0.42362069766265226, "cmp": -1542.6516729319012, "v": 0.26935553036946214}, {"v": 0.26935553036946214}], "id": "gross_margin", "label": "Gross margin", "method": "Gross profit divided by revenue for the column's months.", "unit": "pct"}, {"cells": [{"v": 16747410.74}, {"b": 19603362.68, "cmp": -0.8658836464479469, "v": 2629131.5200000014}, {"v": 5258263.040000003}], "id": "ebitda", "label": "EBITDA", "method": "The income statement's own EBITDA line -- the same line the covenant is measured on -- summed over the column's months.", "unit": "usd"}, {"cells": [{"v": 0.1025873324390584}, {"b": 0.2171659382767308, "cmp": -1807.0989382789223, "v": 0.036456044448838563}, {"v": 0.036456044448838563}], "id": "ebitda_margin", "label": "EBITDA margin", "method": "EBITDA divided by revenue for the column's months.", "unit": "pct"}, {"cells": [{"v": -39191361.95}, {"b": -18636474.75, "cmp": 0.09874532306599448, "v": -16796210.03}, {"v": -33592420.06}], "id": "opex", "label": "Operating expense", "method": "Operating expense: the borrower's operating expense groups summed over the column's months.", "unit": "usd"}, {"cells": [{"v": -0.24006918678487696}, {"b": -0.20645475938592145, "cmp": -264.44726534702176, "v": -0.23289948592062362}, {"v": -0.23289948592062362}], "id": "opex_pct", "label": "Operating expense % of revenue", "method": "Operating expense divided by revenue for the column's months.", "unit": "pct"}]}, {"columns": [{"base_months": null, "basis": "not like-for-like: this window spans the reporting-basis change", "factor": 1.0, "id": "l12m", "label": "LTM", "months": ["Jul 2025", "Aug 2025", "Sep 2025", "Oct 2025", "Nov 2025", "Dec 2025", "Jan 2026", "Feb 2026", "Mar 2026", "Apr 2026", "May 2026", "Jun 2026"], "window": "the twelve months to Jun 2026"}, {"base_months": null, "basis": "not like-for-like: this window spans the reporting-basis change", "factor": 2.0, "id": "l6m", "label": "L6M annualised", "months": ["Jan 2026", "Feb 2026", "Mar 2026", "Apr 2026", "May 2026", "Jun 2026"], "window": "the 6 months to Jun 2026 scaled to twelve months (x 2)"}, {"base_months": null, "basis": null, "factor": 4.0, "id": "l3m", "label": "L3M annualised", "months": ["Apr 2026", "May 2026", "Jun 2026"], "window": "the 3 months to Jun 2026 scaled to twelve months (x 4)"}, {"base_months": null, "basis": "not like-for-like: this window spans the reporting-basis change", "factor": 2.0, "id": "ytd_ann", "label": "2026 YTD annualised", "months": ["Jan 2026", "Feb 2026", "Mar 2026", "Apr 2026", "May 2026", "Jun 2026"], "window": "Jan to Jun 2026 scaled to twelve months (x 12/6)"}], "id": "annualised", "kind": "level", "label": "Annualised", "note": "Trailing windows scaled to a twelve-month rate, so a run-rate can be read against a full year.", "rows": [{"cells": [{"v": 145099080.45999998}, {"v": 144235698.62}, {"v": 154779510.24}, {"v": 144235698.62}], "id": "revenue", "label": "Net revenue", "method": "Revenue as reported on the monthly income statement, summed over the column's months.", "unit": "usd"}, {"cells": [{"v": 37124276.809999995}, {"v": 38850683.1}, {"v": 49462399.68}, {"v": 38850683.1}], "id": "gross_profit", "label": "Gross profit", "method": "Gross profit as reported, summed over the column's months.", "unit": "usd"}, {"cells": [{"v": 0.25585466628945447}, {"v": 0.26935553036946214}, {"v": 0.319566844495786}, {"v": 0.26935553036946214}], "id": "gross_margin", "label": "Gross margin", "method": "Gross profit divided by revenue for the column's months.", "unit": "pct"}, {"cells": [{"v": -226820.41999999736}, {"v": 5258263.040000003}, {"v": 15594083.720000003}, {"v": 5258263.040000003}], "id": "ebitda", "label": "EBITDA", "method": "The income statement's own EBITDA line -- the same line the covenant is measured on -- summed over the column's months.", "unit": "usd"}, {"cells": [{"v": -0.0015632105956903414}, {"v": 0.036456044448838563}, {"v": 0.10075031052766563}, {"v": 0.036456044448838563}], "id": "ebitda_margin", "label": "EBITDA margin", "method": "EBITDA divided by revenue for the column's months.", "unit": "pct"}, {"cells": [{"v": -37351097.230000004}, {"v": -33592420.06}, {"v": -33868315.95999999}, {"v": -33592420.06}], "id": "opex", "label": "Operating expense", "method": "Operating expense: the borrower's operating expense groups summed over the column's months.", "unit": "usd"}, {"cells": [{"v": -0.2574178768851449}, {"v": -0.23289948592062362}, {"v": -0.21881653396812034}, {"v": -0.23289948592062362}], "id": "opex_pct", "label": "Operating expense % of revenue", "method": "Operating expense divided by revenue for the column's months.", "unit": "pct"}]}]}</script>
+<script>
+/* Performance box renderer. Reads the pre-computed payload, paints the active view, and re-binds
+   figure traces so a view opened later answers exactly like the default one.
+   Cell trace stores follow report-structure: method per ROW, window per COLUMN, operands per CELL. */
+(function(){
+  var el=document.getElementById('perf-data'); if(!el) return;
+  var data; try{ data=JSON.parse(el.textContent); }catch(e){ return; }
+  if(!data.views || !data.views.length) return;
+  var bar=document.querySelector('.perfbar'), tbl=document.getElementById('perf-table');
+  var basisEl=document.querySelector('.perfbasis'); if(!bar||!tbl) return;
+
+  function usd(v){ if(v==null) return '—';
+    var n=Math.round(v), s=Math.abs(n).toLocaleString('en-US');
+    return n<0 ? '('+s+')' : s; }
+  function pct(v,d){ return v==null ? '—' : (v>=0?'+':'')+(v*100).toFixed(d==null?1:d)+'%'; }
+  function bps(v){ return v==null ? '—' : (v>=0?'+':'')+Math.round(v).toLocaleString('en-US'); } function share(v,d){ return v==null ? '—' : (v*100).toFixed(d==null?1:d)+'%'; }
+  function esc(x){ return String(x==null?'':x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
+
+  /* favourable/unfavourable: opex growth is neutral (it grows with revenue) */
+  function tone(rowId,v){
+    if(v==null) return 'neu';
+    if(rowId==='opex'||rowId==='opex_pct') return 'neu';
+    return v>=0 ? 'up' : 'down';
+  }
+
+  function cellText(view,row,cell){
+    /* In a LEVEL view the level always shows; a suppressed comparison is a sub-line, never a
+       replacement for the figure itself. In a CHANGE view the change IS the figure, so a suppressed
+       comparison replaces it. */
+    if(view.kind==='change'){
+      if(cell.flip)       return 'sign change';
+      if(cell.small_base) return (cell.delta==null?'—':(cell.delta>=0?'+':'−')+usd(Math.abs(cell.delta)));
+      return row.unit==='bps' ? bps(cell.v) : pct(cell.v);
+    }
+    return row.unit==='pct' ? share(cell.v,1) : usd(cell.v); /* a level margin is a share, not a change: +38.3% reads as a move that never happened */
+  }
+  function cellSub(view,row,cell){
+    if(view.kind!=='level') return '';
+    if(cell.flip)       return 'sign change';
+    if(cell.small_base) return 'off a near-zero base';
+    if(cell.cmp==null)  return '';
+    return row.unit==='pct' ? bps(cell.cmp)+' bps' : pct(cell.cmp);
+  }
+  /* operand lines for the trace box — the same shape data-steps uses elsewhere */
+  function steps(view,row,col,cell){
+    var out=[];
+    if(view.kind==='change'){
+      out.push({l:row.label+', '+(col.months.length>1?col.months[0]+' to '+col.months[col.months.length-1]:col.months[0]),
+                v:row.unit==='bps'?pct(cell.a,1):usd(cell.a)});
+      out.push({l:'compared with '+(col.id==='budget'?'the plan for the month'
+                :(col.base_months&&col.base_months.length>1?col.base_months[0]+' to '+col.base_months[col.base_months.length-1]:(col.base_months||['—'])[0])),
+                v:row.unit==='bps'?pct(cell.b,1):usd(cell.b)});
+      out.push({l:cell.flip?'Change (crosses zero — a percentage would say nothing)'
+                :(cell.small_base?'Move (the base is under 1% of revenue, so a percentage would be noise)'
+                :(row.unit==='bps'?'Change (basis points)':'Change')),
+                v:cellText(view,row,cell), res:true});
+    }else{
+      out.push({l:row.label+', '+col.window, v:cellText(view,row,cell)});
+      if(col.factor && col.factor!==1) out.push({l:'Scaled to a twelve-month rate', v:'x '+(Math.round(col.factor*100)/100)});
+      if(cell.b!=null) out.push({l:'Comparable window', v:row.unit==='pct'?pct(cell.b,1):usd(cell.b)});
+      var sub=cellSub(view,row,cell); if(sub) out.push({l:'Change', v:sub, res:true});
+    }
+    return out;
+  }
+
+  function paint(vid){
+    var view=null,i; for(i=0;i<data.views.length;i++) if(data.views[i].id===vid) view=data.views[i];
+    if(!view) return;
+    var h='<tr><th>Metric</th>',c,r,cell;
+    for(i=0;i<view.columns.length;i++){ c=view.columns[i];
+      h+='<th class="n'+(c.basis?' pbasis':'')+'"><span class="trc" data-calc="'+esc(c.window+(c.basis?' — '+c.basis:''))+'"'
+        +' data-hops=\'[{"t":"Model — monthly financials, income statement","h":null}]\'>'+esc(c.label)+(c.basis?'*':'')+'</span></th>';
+    }
+    tbl.tHead.innerHTML=h+'</tr>';
+    var b='';
+    for(var ri=0;ri<view.rows.length;ri++){ r=view.rows[ri];
+      var sub=(r.id.indexOf('margin')>-1||r.id==='opex_pct');
+      b+='<tr'+(sub?' class="sub"':'')+' data-method="'+esc(r.method)+'">'
+        +'<td>'+(sub?esc(r.label):'<a class="jumpname" href="#sec-is">'+esc(r.label)+' <span class="arw">&#8599;</span></a>')+'</td>';
+      for(i=0;i<view.columns.length;i++){ c=view.columns[i]; cell=r.cells[i]||{};
+        var t=cellText(view,r,cell), sb=cellSub(view,r,cell);
+        var kls=view.kind==='change'?tone(r.id,cell.v):(cell.cmp!=null?tone(r.id,cell.cmp):'neu');
+        b+='<td class="n '+kls+'" data-steps=\''+esc(JSON.stringify(steps(view,r,c,cell)))+'\'>'
+          +'<span class="lvl">'+t+'</span>'+(sb?'<span class="cmp">'+sb+'</span>':'')+'</td>';
+      }
+      b+='</tr>';
+    }
+    tbl.tBodies[0].innerHTML=b;
+    if(basisEl){
+      var tagged=view.columns.filter(function(x){return x.basis;}).map(function(x){return x.label;});
+      basisEl.textContent = tagged.length ? ('* '+tagged.join(', ')+' — '+data.basis_note) : '';
+    }
+    Array.prototype.forEach.call(bar.children,function(btn){
+      btn.setAttribute('aria-selected', btn.dataset.view===vid ? 'true':'false'); });
+    if(window.traceInit) window.traceInit(tbl);   /* re-bind traces for the freshly painted cells */
+  }
+
+  data.views.forEach(function(v){
+    var btn=document.createElement('button');
+    btn.type='button'; btn.dataset.view=v.id; btn.textContent=v.label;
+    btn.setAttribute('role','tab'); btn.onclick=function(){ paint(v.id); };
+    bar.appendChild(btn);
+  });
+  paint(data.default_view||data.views[0].id);
+  /* print shows the default view only; the others are a screen affordance */
+})();
+</script>
+<script>
+/* TAB SWITCHER (report-structure.md -> Tabs). Anchors keep working across tabs: a click
+   on any in-page link first activates the tab that CONTAINS the target, then the browser
+   performs the normal jump. Print shows all tabs (CSS); no state is stored. */
+function showTab(id){
+  document.querySelectorAll('.tabpane').forEach(function(p){p.classList.toggle('active', p.id==='tab-'+id);});
+  document.querySelectorAll('.tabbar button').forEach(function(b){b.classList.toggle('active', b.dataset.tab===id);});
+  try{history.replaceState(null,'','#tab='+id);}catch(e){}
+}
+document.querySelectorAll('.tabbar button').forEach(function(b){
+  b.addEventListener('click', function(){ showTab(b.dataset.tab); window.scrollTo(0,0); });
+});
+document.addEventListener('click', function(e){
+  var a = e.target.closest('a[href^="#"]'); if(!a) return;
+  var id = a.getAttribute('href').slice(1); if(!id || id.indexOf('tab=')===0) return;
+  var t = document.getElementById(id); if(!t) return;
+  var pane = t.closest('.tabpane');
+  if(pane && !pane.classList.contains('active')) showTab(pane.id.replace('tab-',''));
+});
+(function(){
+  var h=(location.hash||''), m=h.match(/tab=([a-z]+)/), el=(!m&&h.length>1)?document.getElementById(h.slice(1)):null, pane=el&&el.closest('.tabpane');
+  showTab(m&&document.getElementById('tab-'+m[1])?m[1]:pane?pane.id.replace('tab-',''):'overview'); if(pane){history.replaceState(null,'',h);el.scrollIntoView();} /* a link to a section opens the tab holding it and keeps its target */
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,134 @@
+{
+  "borrower": "Asteron Care Partners, LLC",
+  "agreement": "Amended and Restated Credit Agreement among Asteron Care Partners, LLC (borrower), Asteron Care Holdings, Inc. and the regional operating subsidiaries (guarantors), and Cairn Ridge Private Credit, LP (administrative agent) -- executed 2026-03-20, effective 2026-03-31. Covers the CURRENT capital structure only: the reinstated exit term debt and the new-money term debt (the two funded tranches created by the exit capitalization). The predecessor/legacy facility and the Exit Amendment bridge are both superseded/repaid and are NOT modeled here.",
+  "as_of_agreement_date": "2026-03-31",
+  "amendments_reflected": [
+    {
+      "date": "2021-01-15",
+      "name": "Predecessor Credit Agreement",
+      "effect": "11.50% cash interest, 0.70%/month principal -- superseded, not modeled in this spec."
+    },
+    {
+      "date": "2025-01-15",
+      "name": "Legacy Credit Agreement",
+      "effect": "Refinanced the Predecessor facility at par with the same economics -- superseded, not modeled in this spec."
+    },
+    {
+      "date": "2025-12-05",
+      "name": "Exit Amendment",
+      "effect": "$7,000,000.00 bridge at 11.50% cash interest, $140,000.00 upfront fee, matured/was repaid 2026-03-31 -- superseded, not modeled in this spec."
+    },
+    {
+      "date": "2026-03-31",
+      "name": "Amended and Restated Credit Agreement (current facility -- modeled below)",
+      "effect": "$44,000,000.00 reinstated term debt + $7,000,000.00 new-money term debt funded 2026-03-31 (combined $51,000,000.00). Cash interest 10.00% fixed from the funding date (no index, no grid). Monthly principal amortization of 0.10% beginning April 2026. Final maturity 2031-03-31. Series A preferred equity ($16,910,820.62, created by the same exchange) carries no disclosed dividend/coupon terms anywhere in the executed documents or financial data reviewed -- see the ambiguity note below; it is NOT modeled as debt service in this spec."
+    }
+  ],
+  "facility": {
+    "name": "Amended and Restated Senior Secured Term Facility (reinstated exit term debt + new-money term debt)",
+    "maturity_date": "2031-03-31",
+    "agreement_ref": {
+      "section": "PAYMENT TERMS",
+      "page": 1,
+      "quote": "Cash interest is 11.50% through March 2026 and 10.00% beginning April 2026. Monthly principal is 0.10% beginning April 2026; final maturity is March 31, 2031."
+    }
+  },
+  "tranches": [
+    {
+      "id": "reinstated_exit_term_debt",
+      "fundings": [
+        {
+          "date": "2026-03-31",
+          "amount": 44000000.00,
+          "agreement_ref": {
+            "section": "EXIT CAPITALIZATION",
+            "page": 1,
+            "quote": "Reinstated exit debt is $44,000,000.00 and new-money term debt is $7,000,000.00."
+          }
+        }
+      ]
+    },
+    {
+      "id": "new_money_term_debt",
+      "fundings": [
+        {
+          "date": "2026-03-31",
+          "amount": 7000000.00,
+          "agreement_ref": {
+            "section": "EXIT CAPITALIZATION",
+            "page": 1,
+            "quote": "Reinstated exit debt is $44,000,000.00 and new-money term debt is $7,000,000.00."
+          }
+        }
+      ]
+    }
+  ],
+  "amortization_base": {
+    "definition_verbatim": "Not separately defined in the executed A&R text made available -- the agreement states only the amortization RATE ('Monthly principal is 0.10% beginning April 2026'), not the base it applies to. This spec applies the engine's standard base (aggregate original principal funded before the payment date -- the combined $51,000,000.00 reinstated + new-money principal, unchanged after close since neither tranche has undrawn capacity). See day_count.ambiguities for a material limitation this creates.",
+    "agreement_ref": {
+      "section": "PAYMENT TERMS",
+      "page": 1,
+      "quote": "Monthly principal is 0.10% beginning April 2026; final maturity is March 31, 2031."
+    }
+  },
+  "cash_interest": {
+    "index": null,
+    "floor": 0,
+    "margin_grid": [
+      {
+        "above": null,
+        "rate": 0.10,
+        "when": "flat fixed rate for all periods from the A&R effective date (2026-03-31) through maturity -- no index, no grid steps"
+      }
+    ],
+    "adjustment": "None -- fixed rate for the life of the facility per the A&R agreement (steps down once, from the predecessor/legacy 11.50% to 10.00%, at the A&R's own effective date; no further adjustment mechanism is stated).",
+    "first_payment_date": "2026-04-01",
+    "payment_day": 1,
+    "agreement_ref": {
+      "section": "PAYMENT TERMS",
+      "page": 1,
+      "quote": "Cash interest is 11.50% through March 2026 and 10.00% beginning April 2026."
+    }
+  },
+  "amortization": {
+    "start_date": "2026-04-01",
+    "annual_pct_of_base_grid": [
+      {
+        "above": null,
+        "rate": 0.012,
+        "when": "flat 0.10%/month (1.2% annual) of the original combined $51,000,000.00 principal, per A&R Payment Terms"
+      }
+    ],
+    "payments_per_year": 12,
+    "balloon_at_maturity": true,
+    "fixed_charges_attribution": "accrued",
+    "agreement_ref": {
+      "section": "PAYMENT TERMS",
+      "page": 1,
+      "quote": "Monthly principal is 0.10% beginning April 2026; final maturity is March 31, 2031."
+    }
+  },
+  "day_count": {
+    "convention": "actual/360",
+    "count_both_endpoints": true,
+    "verbatim": "Not stated in the executed A&R text made available. Inferred from attempting to reproduce the certified 2026-04 interest accrual ($425,000.00 = $51,000,000.00 x 10.00% x 30/360, both endpoints counted -> 30 days in April) shown in the 2026-Q1 Covenant Calculation exhibit.",
+    "agreement_ref": {
+      "section": "PAYMENT TERMS",
+      "page": 1,
+      "quote": "Cash interest is 11.50% through March 2026 and 10.00% beginning April 2026."
+    },
+    "ambiguities": [
+      "Day-count convention (actual/360, both endpoints counted) is INFERRED, not stated anywhere in the executed documents made available -- confirm against a longer-form agreement if one exists.",
+      "MATERIAL: the A&R states 'Monthly principal is 0.10%' without naming its base. The borrower's certified Covenant Calculation exhibits (2026-Q1, 2026-Q2 -- part of the same lender compliance-certificate package) compute this as 0.10% of the PRIOR month's OUTSTANDING (declining) balance -- verified to the penny for 2026-04 ($51,000.00 = 0.10% x $51,000,000.00), 2026-05 ($50,949.00 = 0.10% x $50,949,000.00) and 2026-06 ($50,898.05 = 0.10% x $50,898,051.00), tying exactly to the Approved Stabilization Budget's 'Ending debt' column. This debt-service engine (v1) only supports a FLAT annual percentage of the ORIGINAL aggregate funded principal (the base is invariant absent a new draw), so it structurally CANNOT reproduce a declining-balance amortization. This spec approximates the contractual amortization as a flat 1.2%/12 of the original $51,000,000.00 combined principal ($51,000.00/month, every month to maturity). Compare the generated schedule's monthly principal to the certified Covenant Calculation figures each quarter -- the flat approximation will diverge from the true declining-balance schedule starting with the second installment (May 2026) and the gap compounds toward maturity (2031-03-31); reconcile against the certified exhibits rather than relying on the generated schedule standalone, and consider populating covenant_support_rows.scheduled_principal directly from certified data if the gap becomes material to a live covenant.",
+      "VERIFIED BY RUNNING THE GENERATOR (--as-of 2026-06): the generated schedule's cash interest is 424,575.00 (2026-04), 438,288.33 (2026-05), 423,725.00 (2026-06) against the certified 425,000.00 / 424,575.00 / 424,150.43 for the same months -- not a match in any of the three months, and NOT explained solely by the declining-balance issue above. Comparing the certified figures directly: 425,000.00 = $51,000,000.00 x 10%/12 exactly; 424,575.00 = $50,949,000.00 x 10%/12 exactly; 424,150.43 = $50,898,051.00 x 10%/12 (rounded). I.e. the certified interest calculation is a FLAT annual-rate-divided-by-12 convention applied to the BEGINNING-of-month (pre-that-month's-own-principal-payment) balance, with NO variation for the actual number of calendar days in the month (April=30, May=31, June=30) -- effectively a 30/360 bond-basis 'even month' convention. This debt-service engine (v1) only supports 'actual/360' or 'actual/365' with REAL calendar-day counting (so its interest necessarily varies between a 30-day and a 31-day month, as seen in the 424,575.00 -> 438,288.33 -> 423,725.00 generated series), and has no 'flat annual/12, no day-count' or true '30/360 bond-basis' option -- this is a SEPARATE engine capability gap from the declining-balance issue above, not a spec-tuning error. actual/360 with count_both_endpoints=true was kept as the closest available approximation (it alone reproduces the certified figure for a month that happens to be exactly 30 days, e.g. April or June, when also using the correct pre-payment balance) but the generated monthly cash-interest figures should NOT be relied on standalone -- reconcile every month against the certified Covenant Calculation / Compliance Certificate exhibits, and treat this as an open engine-enhancement item (a 30/360 bond-basis day-count option) for a future revision of debt_service.py."
+    ]
+  },
+  "observations": {
+    "index_rates": [],
+    "grid_state": []
+  },
+  "covenant_support_rows": {
+    "cash_interest": "Facility Cash Interest Expense",
+    "scheduled_principal": "Facility Scheduled Debt Principal Payments"
+  }
+}

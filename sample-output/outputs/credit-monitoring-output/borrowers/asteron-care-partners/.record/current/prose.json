@@ -1,0 +1,145 @@
+{
+ "AGING_READ": "Receivables and payables ageing could not be covered this period. The borrower's only monthly AR/AP export is a claim/invoice-level transaction list rather than the bucketed aging grid the engine's parser reads, so the module was skipped rather than run on a reshaped or estimated basis. The underlying transaction totals do reconcile exactly to the Balance Sheet: $20.90M of AR and $5.43M of AP at June 2026. A durable fix requires an engineering change to the aging parser to accept a transaction-level input grouped by payer class or vendor.",
+ "BS_OBSERVATIONS": "<li>Cash rose to $18.82M at June 2026, up 2.2% from May and 11.9% above the $16.81M cash plan, with no month of decline since the March 2026 recapitalization.</li><li>Total debt was essentially flat at $49.71M (-0.06% month over month), consistent with the facility's small scheduled monthly amortization.</li><li>Accounts receivable rose 2.3% to $20.90M; days sales outstanding is 47.6 days.</li><li>Total assets were flat at $201.49M (-0.15% month over month); total equity was flat at $109.57M.</li><li>Restructuring accounting (TDR framework, instrument-level 10% modification test, CODI, and Section 382) remained PROVISIONAL through the June 2026 package, so successor balance-sheet figures could still restate once those workpapers conclude.</li>",
+ "CAPSTRUCTURE_NOTES": {
+  "our_instrument": "Senior secured term loan, fixed 10.00% cash interest and 0.10%/month principal amortization from April 2026, final maturity March 31, 2031, first-priority lien on substantially all assets.",
+  "total_funded_debt": "Equal to the single senior secured term loan tranche shown above; no other funded-debt instrument exists in this capital structure.",
+  "total_equity": "Book value, not a market figure; includes the Series A preferred equity issued to former debtholders in the March 2026 debt-for-equity exchange.",
+  "total_capitalization": "Funded debt plus equity at book."
+ },
+ "CF_OBSERVATIONS": "<li>Operating cash flow was positive at $692K in June, up from $556K in May; free cash flow (operating less investing) was $455K for the month.</li><li>Financing cash flow was a modest net use of $51K in June, the facility's scheduled monthly principal payment -- no new draws or equity contributions this period.</li><li>Quarter-to-date (Apr-Jun) operating cash flow is negative at -$4.5M, reflecting working-capital and restructuring-related outflows in the first month after the March 2026 recapitalization rather than the June run-rate.</li>",
+ "COLLATERAL_COVERAGE_CLOSING": "Total pledged components were essentially flat month over month (+0.05%) and down 2.2% year over year, tracking the modest decline in PP&E and goodwill over the same period.",
+ "COLLATERAL_READ": "Pledged collateral covers the $49.7M of secured debt 3.3x on an all-assets basis or 1.8x excluding goodwill, but only 0.8x on liquid assets (cash plus receivables) alone, so the cushion depends on property and goodwill rather than liquid collateral.",
+ "COVENANT_DELTAS": {
+  "fccr": "Our reconstruction excludes the borrower's $553,353.26/month operating-lease EBITDA add-back (no agreement text supports it) and reads Fixed Charges as facility cash interest and scheduled principal only, versus the certificate's broader roughly $17.4M TTM figure that also includes lease payments and maintenance capex -- our narrower, agreement-text-only reconstruction governs this analysis, though the test itself is suspended and neither figure creates a compliance determination this period.",
+  "min_liquidity": "Our reconstruction and the borrower's certificate agree exactly at $18,817,443.79, since Liquidity is bound to the single undifferentiated Cash line on the balance sheet with no adjustment in either direction."
+ },
+ "COVENANT_OVERALL": "The one actively tested covenant, Minimum Liquidity, passes with 88% headroom; the legacy FCCR covenant remains suspended through December 31, 2026 and its informational reading continues to worsen, making it the nearest real risk to this credit rather than a present breach.",
+ "DATA_QUALITY_NOTES": "<li>No AR/AP aging module ran this period: the borrower's only monthly AR/AP file is a claim/invoice-level transaction list without the bucketed customer/vendor-by-aging-band grid the engine's parser reads, though the underlying data reconciles exactly to the Balance Sheet's $20.90M receivable and $5.43M payable balances.</li><li>The monitoring workbook holds no inventory, net-change-in-cash, total-current-assets, or total-current-liabilities lines for this borrower, so ratios needing them are omitted rather than shown as zero.</li><li>Restructuring accounting (TDR framework, instrument-level 10% modification test, CODI, Section 382, and any resulting gain or loss) remained PROVISIONAL through the June 2026 reporting package; successor balance-sheet figures could still restate.</li><li>Leverage and coverage ratios spanning the March 2026 debt-for-equity recapitalization are not shown on a trailing-twelve-month basis: only three same-basis months exist since the exchange, short of the twelve the window needs.</li>",
+ "DEAL_COMPANY_PROFILE": "Asteron Care Partners operates a 15-site, 5-region outpatient healthcare-services platform, billing a diversified Medicare, Commercial, Medicaid, Workers' Compensation, and Self-Pay mix with no single payer class exceeding about 27% of receivables.",
+ "DEAL_LEVERAGE_CONTEXT": "Leverage and coverage ratios are not shown on a trailing-twelve-month basis across the March 2026 debt-for-equity recapitalization, which reduced funded debt from $60.9M to $51.0M and added a $16.9M Series A preferred layer -- only three same-basis months exist since the exchange, short of the twelve a TTM window needs, so this is a structural break rather than an organic deleveraging trend.",
+ "DEAL_SECURITY_SOURCING": "First-priority blanket lien on substantially all assets of the borrower and its five regional operating-subsidiary guarantors, per the Guaranty and Security Agreement effective March 31, 2026.",
+ "DEAL_TRANSACTION": "The March 31, 2026 exit recapitalization, arranged with Cairn Ridge Private Credit, LP as administrative agent, exchanged $60.9M of predecessor/legacy debt into $44.0M of reinstated term debt plus $16.9M of Series A preferred equity, alongside $7.0M of new-money term debt and $8.0M of new sponsor common equity.",
+ "DOCUMENT_NOTES": {
+  "budget.plan": "The Approved Stabilization Budget, approved March 20, 2026 by the Restructuring Committee and Administrative Agent, covering April through December 2026; supersedes the pre-restructuring FY2025 budget.",
+  "loan_documentation.credit_agreement": "The Amended and Restated Credit Agreement, executed March 20 and effective March 31, 2026, the current operative facility governing this and every 2026 monthly package from March forward.",
+  "monthly_reporting.compliance_certificate": "The lender's quarterly Compliance Certificate for Q2 2026, source of the certified Minimum Liquidity and informational FCCR figures used in this review.",
+  "monthly_reporting.monthly-xlsx": "The borrower's own June 2026 monthly financial reporting package (Income Statement, Balance Sheet, Cash Flow, Debt and Equity, Budget versus Actual, Trial Balance, and Covenant tabs).",
+  "underwriting.ic_uw_memo": "The Restructuring IC Memo approving the March 2026 exit capitalization, source of the business profile and credit thesis captured in this review.",
+  "working_analysis.archived_outputs": "This run's four archived module outputs (covenant compliance, budget versus actual, three-statement analysis, and the skipped AP/AR aging module), each validated and gated before this memo was composed.",
+  "working_analysis.model": "The canonical monthly IS/BS/CF workbook this review's figures are read from, snapshotted for this run."
+ },
+ "FLAGS": "<li>FCCR reinstatement-readiness analysis (Stabilization Milestone M4) is due from the borrower to the lender on September 30, 2026, about two weeks from this review, and should clarify what happens when the legacy FCCR covenant's suspension window ends.</li><li>The EBITDA reconciling item embedded in the borrower's own certified \"Covenant EBITDA\" ($553,353.26 per month, $6.64M annualized) is not supported by any agreement text located to date and remains excluded from this analysis's EBITDA definition.</li><li>An Interim goodwill reassessment required as of March 31, 2026 had not been completed as of the June 2026 reporting package.</li><li>Restructuring accounting (TDR framework, instrument-level 10% modification test, CODI, and Section 382) remains PROVISIONAL through the June 2026 package; successor balance-sheet figures could still restate.</li>",
+ "FORWARD_STRESS": "If the FCCR mechanically reinstates at 1.2000x on January 1, 2027 while the informational ratio continues along its June 2026 trend (0.3682x, worsening every quarter since suspension), the facility would show a breach absent a further amendment or a different outcome from the pending reinstatement-readiness analysis due September 30, 2026.",
+ "IS_OBSERVATIONS": "<li>Revenue rose 2.2% month over month to $13.16M in June but sits 17.4% (about $2.8M) below the Approved Stabilization Budget's $15.9M plan for the month, and 17.0% below budget quarter to date ($38.7M vs $46.6M).</li><li>Gross margin improved to 33.5% in June from 31.6% in May, continuing the trend since the March 2026 restructuring boundary.</li><li>EBITDA rose 23.3% month over month to $1.55M (11.8% margin), beating the $1.3M June budget by 19.9%, though the quarter-to-date beat is a thinner 7.1% against a $3.6M budget.</li><li>Net income turned positive in June ($84.8K) after a $205.4K loss in May.</li><li>Gross Profit and Gross Margin figures shown against budget are not meaningful for this borrower: the Approved Stabilization Budget only plans Revenue and EBITDA, so those other lines compare against a proxy row rather than a real plan.</li>",
+ "LIQUIDITY_READ": "<li>Cash of $18.82M at June 2026 sits $8.82M (88%) above the $10.0M Minimum Liquidity covenant floor and matches the borrower's own certified figure exactly.</li><li>Cash has risen every month since the March 2026 recapitalization ($18.14M, $18.14M, $18.41M, $18.82M), funded by positive operating cash flow rather than new borrowing.</li><li>Cash is running 11.9% (about $2.0M) above the $16.81M plan for June.</li>",
+ "OPEN_QUESTIONS": "The most time-sensitive open question is what happens to the FCCR covenant when its stated December 31, 2026 suspension window ends: the credit agreement's own text supports a literal reading of mechanical reinstatement at 1.2000x on January 1, 2027, but Stabilization Milestone M4 (an FCCR reinstatement-readiness analysis, due from the borrower September 30, 2026) suggests the lender may act on the informational trend before that date instead. Separately, the EBITDA reconciling item the borrower's certificates use ($553,353.26 per month, added to this model's Reported EBITDA to reach \"Covenant EBITDA\") is not supported by any agreement text located to date; resolving it, ideally against a longer-form version of the credit agreement if one exists, would settle both the FCCR's true informational level and the Fixed Charges definition's roughly $9.1M TTM gap to the certified figure. The restructuring's TDR framework, instrument-level modification test, CODI, and Section 382 conclusions also remain open with the borrower's accountants.",
+ "REVENUE_QUALITY_NOTES": "Revenue is fee-for-service, billed to a diversified payer mix (Medicare, Commercial, Medicaid, Workers' Compensation, and Self-Pay) across five regional operating subsidiaries and fifteen clinical sites, with no single payer class exceeding about 27% of the June 2026 receivables balance. It is transactional rather than contractually recurring: no ARR or retention metric is reported, and volumes depend on patient visits and procedures at each site rather than a committed book of business. The revenue shortfall against the Approved Stabilization Budget (-17.4% in June, -17.0% quarter to date) reads as a volume and site-productivity gap on the information available, separate from pricing or payer mix.",
+ "SUMMARY_COLLATERAL": "Pledged collateral totals $166.4M at June 2026: cash $18.8M, accounts receivable $20.9M, PP&E net $48.6M, and goodwill $78.1M. That covers the $49.7M of secured debt 3.3x on an all-assets basis or 1.8x excluding goodwill, but only 0.8x on liquid collateral (cash plus receivables) alone, so the cushion depends on the illiquid asset base. Goodwill is flat month over month at $78.1M and down 2.4% year over year; total pledged components are essentially flat month over month.",
+ "SUMMARY_COVENANTS": "Minimum Liquidity is the only actively tested financial covenant this period and passes with room: $18.8M against the $10.0M floor, matching the borrower's own certificate exactly. The legacy 1.2000x FCCR test remains suspended (informational only) through December 31, 2026; the certified informational ratio was 0.3682x at June 2026, below 1.2000x and worsening every quarter since the Q3 2025 suspension (1.43x, 1.05x, 0.67x, 0.37x). The nearest live risk is this spec's modeled FCCR reinstatement at 1.2000x effective January 1, 2027 -- clearing that level from today's informational trend would need a substantial EBITDA recovery or Fixed Charges reduction beyond what June's run-rate shows.",
+ "SUMMARY_LIQUIDITY": "Cash ended June at $18.8M, $8.8M (88%) above the $10.0M covenant floor, and has risen every month since the March 2026 recapitalization ($18.1M, $18.1M, $18.4M, $18.8M). The increase is funded by operating cash flow ($692K in June) rather than new borrowing -- financing cash flow was a modest net use of $51K, the facility's scheduled amortization payment. No month has shown a cash decline since the recapitalization.",
+ "SUMMARY_OUTLOOK": "The governing question for this credit is whether the post-restructuring operating recovery -- revenue and EBITDA both improving month over month, with the borrower's own site-operations reporting showing a declining weak-site count and lower agency-labor reliance -- closes enough of the gap to the stabilization budget before the FCCR's informational path forces a decision. The borrower owes the lender its FCCR reinstatement-readiness analysis (Stabilization Milestone M4) by September 30, 2026, about two weeks from this review, which should clarify whether reinstatement, a further amendment, or continued suspension follows. Restructuring accounting (the TDR framework, instrument-level modification test, CODI, and Section 382 conclusions) also remains open and could still move successor balance-sheet figures once resolved.",
+ "SUMMARY_UPDATE": "June revenue was $13.2M, 17.4% (about $2.8M) below the $15.9M Approved Stabilization Budget for the month, though up 2.2% from May's $12.9M. Quarter to date (Apr-Jun, since the March 2026 restructuring), revenue of $38.7M runs 17.0% (about $7.9M) below the $46.6M budget over the same span. EBITDA beat budget in June at $1.5M against a $1.3M plan (+$257K, +19.9%), though the quarter-to-date beat is thinner at +7.1% (+$259K) against a $3.6M plan -- lighter opex run-rate is offsetting the top-line shortfall rather than volume recovering to plan.",
+ "_contract": {
+  "deep_links": "a reference to another section is written <a class=\"jumpname\" href=\"#sec-covenant\">Covenant detail <span class=\"arw\">&#8599;</span></a> \u2014 same markup, any section id below",
+  "flags_must_name": {
+   "items": [
+    {
+     "write_one_of": [
+      "FCCR"
+     ]
+    },
+    {
+     "write_one_of": [
+      "Interim"
+     ]
+    },
+    {
+     "write_one_of": [
+      "EBITDA"
+     ]
+    },
+    {
+     "write_one_of": [
+      "PROVISIONAL"
+     ]
+    }
+   ],
+   "rule": "the FLAGS box covers every open item; the gate looks for each item's identifying token (or its dollar amount) in your prose"
+  },
+  "how": "Fill every key; values are HTML. Leave a box \"\" when the month gives it nothing, and say so in your report. Keys opening with \"_\" (this note) are ignored by the renderer.",
+  "keyed_boxes": {
+   "CAPSTRUCTURE_NOTES": "per row id: the instrument's pricing or terms in one clause",
+   "COVENANT_DELTAS": "per covenant id: one clause on WHY the certified figure and ours differ \u2014 the component that carries the gap, named. Our reconstruction governs; do not write that the borrower's basis governs, whichever way the gap runs",
+   "DOCUMENT_NOTES": "per document id: what the document is and what it settles, one sentence"
+  },
+  "language": "lead with the fact and its figure; the banned words and patterns are in references/report-structure.md under the language contract",
+  "list_boxes": {
+   "boxes": [
+    "BS_OBSERVATIONS",
+    "CF_OBSERVATIONS",
+    "DATA_QUALITY_NOTES",
+    "FLAGS",
+    "IS_OBSERVATIONS",
+    "LIQUIDITY_READ"
+   ],
+   "value": "a string of <li>\u2026</li> items and nothing outside them"
+  },
+  "paragraph_boxes": {
+   "boxes": [
+    "AGING_READ",
+    "OPEN_QUESTIONS",
+    "REVENUE_QUALITY_NOTES"
+   ],
+   "value": "one or two short paragraphs"
+  },
+  "section_ids": [
+   "sec-bs",
+   "sec-capstructure",
+   "sec-cf",
+   "sec-company",
+   "sec-covenant",
+   "sec-covstrip",
+   "sec-data",
+   "sec-files",
+   "sec-flags",
+   "sec-is",
+   "sec-security",
+   "sec-snapshot",
+   "sec-stress",
+   "sec-summary",
+   "sec-terms",
+   "sec-transaction",
+   "sec-trend"
+  ],
+  "sentence_boxes": {
+   "boxes": [
+    "COLLATERAL_COVERAGE_CLOSING",
+    "COLLATERAL_READ",
+    "COVENANT_OVERALL",
+    "DEAL_COMPANY_PROFILE",
+    "DEAL_LEVERAGE_CONTEXT",
+    "DEAL_SECURITY_SOURCING",
+    "DEAL_TRANSACTION",
+    "FORWARD_STRESS",
+    "SUMMARY_COLLATERAL",
+    "SUMMARY_COVENANTS",
+    "SUMMARY_LIQUIDITY",
+    "SUMMARY_OUTLOOK",
+    "SUMMARY_UPDATE"
+   ],
+   "value": "sentences that sit inside an existing paragraph \u2014 inline tags like <b> only, no <p> or <ul>"
+  },
+  "summary_blocks": {
+   "SUMMARY_COLLATERAL": "pledged components and their total, coverage against funded debt, and the prior-year or plan comparison where one is on file",
+   "SUMMARY_COVENANTS": "one sentence when everything passes with room; otherwise the failing or governing leg, the certified-vs-model gap, and the nearest tight test with what clearing it takes",
+   "SUMMARY_LIQUIDITY": "period-end cash against the floor, where the cash came from (earned, borrowed, working capital), months of runway when burning, and the expected direction with its basis",
+   "SUMMARY_OUTLOOK": "the forward indicators on file (backlog, order book, seasonality), the governing question for the credit, and the open asks \u2014 never a concern manufactured to fill the space",
+   "SUMMARY_UPDATE": "revenue and EBITDA vs Budget and prior year \u2014 the period first, the cumulative line second \u2014 then the driver: which segment or brand moved, mix or margin, at the finest level the package reports",
+   "bad_news": "a miss, a breach or a stretch is written in its home block with the same syntax as a beat \u2014 there is no separate red-flags list, and a fired concern must not be left out of its block",
+   "cadence": "the renderer titles the first block from the period: a March/June/September/December period reads 'Quarterly update' and its prose covers the quarter and the year so far; any other month reads 'Monthly update' and covers the month and the year so far",
+   "numbers": "round to $X.XM / $XXXK in these five blocks; full precision lives in the tables, where every figure is click-traceable",
+   "what": "the executive summary is the analyst's one-pager for the deal team: five labelled prose blocks, each 2-5 sentences, written the way a portfolio review reads \u2014 the figure, its comparator (vs Budget, vs prior year), then the driver. The template owns the labels; write only the prose."
+  }
+ }
+}

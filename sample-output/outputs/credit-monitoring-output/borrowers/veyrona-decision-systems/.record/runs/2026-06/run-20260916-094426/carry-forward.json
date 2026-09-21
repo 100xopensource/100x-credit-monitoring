@@ -1,0 +1,27 @@
+{
+  "open_requests_to_borrower": [
+    "Confirm the facility interest rate (index/margin/cash-PIK split) with Granite Harbor Direct Lending, LP -- not stated in any executed document.",
+    "Obtain a re-signed Q1 2026 compliance certificate reflecting the March 2026 restatement (verdict unchanged: 5.1265x as-filed vs ~5.1200x corrected, both under 5.25x).",
+    "Confirm usage, if any, under the unquantified cloud-migration capex basket (First Amendment) and customer-data-license investment basket (Second Amendment).",
+    "Confirm what the Third Amendment's undefined \"revised-reporting controls\" obligation actually requires."
+  ],
+  "unresolved_flags": [
+    "Covenant headroom at its tightest point in the deal history: 2.1% at Q2 2026 vs ~13% at close, driven by three tightening amendments outpacing leverage improvement.",
+    "Third Amendment executed at a looser 5.00x ceiling than its own unsigned draft (4.75x) 19 days earlier -- unexplained in documents on file, worth follow-up.",
+    "Persistently thin operating cash conversion: AR growth has absorbed nearly all monthly EBITDA-level cash generation throughout the 22-month history on file; no cash build-up toward the 2030 maturity at the current trajectory."
+  ],
+  "analyst_focus": [
+    {
+      "item": "covenant headroom trajectory across three tightening amendments -- 13% down to ~2%",
+      "asked_period": "2026-06",
+      "finding": "Confirmed: headroom compressed from 0.7709x/12.8% at Q1 2025 to 0.1038x/2.1% at Q2 2026, driven by the ceiling ratchet (6.00x->5.75x->5.25x->5.00x) outpacing EBITDA recovery, not by a leverage deterioration."
+    },
+    {
+      "item": "confirm the March 2026 restatement flowed correctly and Q1 2026 stale certificate is handled",
+      "asked_period": "2026-06",
+      "finding": "Confirmed: the model carries the corrected March-June figures with no artificial trend break; the Q1 2026 certificate remains as-filed (pre-restatement) and unreissued, verdict unaffected either way."
+    }
+  ],
+  "last_period_headline": "Compliant at 4.90x vs 5.00x (2.1% headroom, the tightest yet); interest rate remains undocumented and Q1 2026 certificate was never re-issued after the March restatement.",
+  "_note": "No prior monitoring memo exists for this borrower (first onboarding) \u2014 carry_forward is seeded empty per the skill's own instruction. The genuinely open items surfaced during onboarding (stale April/May 2026 standalone monthly-package balance sheets; the never-reissued Q1 2026 compliance certificate) are documented in borrower-config.json paths._restatement_note and paths._as_filed_note instead, and should be picked up as carry_forward items by the first monthly-monitor run."
+}

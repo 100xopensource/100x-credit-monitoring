@@ -1,0 +1,677 @@
+{
+  "module": "covenant-compliance",
+  "period": "2026-06",
+  "run_id": "run-20260915-060221",
+  "run_id_from": "run",
+  "produced_at": "2026-09-15T06:07:37+00:00",
+  "produced_by": {
+    "engine": "covenant-compliance",
+    "plugin_version": null
+  },
+  "reporting_unit": {
+    "scale": 1.0,
+    "currency": "USD",
+    "verbatim": "Management accounts | USD | Unaudited",
+    "plain": "USD"
+  },
+  "stores": {
+    "store": {
+      "url_base": null
+    },
+    "source": {
+      "url_base": null
+    }
+  },
+  "source_ref_reach": {
+    "cell": 12,
+    "file": 18,
+    "unlocated": 1,
+    "borrower_doc": 31
+  },
+  "source_files": [
+    "store:borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+    "store:borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/covenant-spec.json",
+    "certified-values-2026-06.json"
+  ],
+  "results": [
+    {
+      "id": "max_net_leverage",
+      "name": "Maximum Net Leverage Ratio",
+      "primitive": "max_ratio",
+      "test_date": "2025-03-31",
+      "window": "ttm",
+      "required": 5.0,
+      "actual": 1.716529,
+      "headroom_abs": 3.283471,
+      "headroom_pct": 0.656694,
+      "status": "pass",
+      "source": "(model:'Net Debt')/(model:'Reported EBITDA' (EBITDA bridge)) [ttm]",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Balance Sheet",
+          "row": 35,
+          "label": "Net Debt",
+          "cells": "M35",
+          "period": "2025-03",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Balance Sheet"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/covenant-spec.json",
+          "section": "definitions.Net_Debt",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/3_Loan Documentation/2_Executed/Initial Closing/1_Original_Credit_Agreement.pdf"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 40,
+          "label": "Reported EBITDA",
+          "cells": "B40:M40",
+          "period": "2024-04..2025-03",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/covenant-spec.json",
+          "section": "definitions.Covenant_EBITDA",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/3_Loan Documentation/2_Executed/Initial Closing/1_Original_Credit_Agreement.pdf"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/covenant-spec.json",
+          "section": "covenants.max_net_leverage",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/3_Loan Documentation/2_Executed/Initial Closing/1_Original_Credit_Agreement.pdf",
+              "page": 6,
+              "section": "7.11",
+              "quote": "The Net Leverage Ratio may not exceed 5.00x on each fiscal quarter end beginning March 31, 2025. The calculation uses quarter-end Net Debt and Covenant EBITDA for the trailing four fiscal quarters."
+            }
+          ]
+        }
+      ],
+      "calc": "actual 1.71653 = [model:'Net Debt' at Mar 2025 = 2.19226e+07] / [model:'Reported EBITDA' (EBITDA bridge) summed Apr 2024..Mar 2025 (12 mo) = 1.27715e+07]; test: max_ratio 1.71653 <= 5 (threshold per covenant-spec covenants.max_net_leverage)",
+      "cert_value": null,
+      "cert_status": null,
+      "cert_headroom_abs": null,
+      "cert_headroom_pct": null,
+      "delta_model_vs_cert": null,
+      "cert_agrees": null,
+      "cert_tolerance_applied": null,
+      "notes": "numerator=21922643, denominator=12771497"
+    },
+    {
+      "id": "max_net_leverage",
+      "name": "Maximum Net Leverage Ratio",
+      "primitive": "max_ratio",
+      "test_date": "2025-06-30",
+      "window": "ttm",
+      "required": 5.0,
+      "actual": 1.598354,
+      "headroom_abs": 3.401646,
+      "headroom_pct": 0.680329,
+      "status": "pass",
+      "source": "(model:'Net Debt')/(model:'Reported EBITDA' (EBITDA bridge)) [ttm]",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Balance Sheet",
+          "row": 35,
+          "label": "Net Debt",
+          "cells": "P35",
+          "period": "2025-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Balance Sheet"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/covenant-spec.json",
+          "section": "definitions.Net_Debt",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/3_Loan Documentation/2_Executed/Initial Closing/1_Original_Credit_Agreement.pdf"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 40,
+          "label": "Reported EBITDA",
+          "cells": "E40:P40",
+          "period": "2024-07..2025-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/covenant-spec.json",
+          "section": "definitions.Covenant_EBITDA",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/3_Loan Documentation/2_Executed/Initial Closing/1_Original_Credit_Agreement.pdf"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/covenant-spec.json",
+          "section": "covenants.max_net_leverage",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/3_Loan Documentation/2_Executed/Initial Closing/1_Original_Credit_Agreement.pdf",
+              "page": 6,
+              "section": "7.11",
+              "quote": "The Net Leverage Ratio may not exceed 5.00x on each fiscal quarter end beginning March 31, 2025. The calculation uses quarter-end Net Debt and Covenant EBITDA for the trailing four fiscal quarters."
+            }
+          ]
+        }
+      ],
+      "calc": "actual 1.59835 = [model:'Net Debt' at Jun 2025 = 2.11608e+07] / [model:'Reported EBITDA' (EBITDA bridge) summed Jul 2024..Jun 2025 (12 mo) = 1.32391e+07]; test: max_ratio 1.59835 <= 5 (threshold per covenant-spec covenants.max_net_leverage)",
+      "cert_value": null,
+      "cert_status": null,
+      "cert_headroom_abs": null,
+      "cert_headroom_pct": null,
+      "delta_model_vs_cert": null,
+      "cert_agrees": null,
+      "cert_tolerance_applied": null,
+      "notes": "numerator=21160751, denominator=13239092"
+    },
+    {
+      "id": "max_net_leverage",
+      "name": "Maximum Net Leverage Ratio",
+      "primitive": "max_ratio",
+      "test_date": "2025-09-30",
+      "window": "ttm",
+      "required": 5.0,
+      "actual": 1.493527,
+      "headroom_abs": 3.506473,
+      "headroom_pct": 0.701295,
+      "status": "pass",
+      "source": "(model:'Net Debt')/(model:'Reported EBITDA' (EBITDA bridge)) [ttm]",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Balance Sheet",
+          "row": 35,
+          "label": "Net Debt",
+          "cells": "S35",
+          "period": "2025-09",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Balance Sheet"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/covenant-spec.json",
+          "section": "definitions.Net_Debt",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/3_Loan Documentation/2_Executed/Initial Closing/1_Original_Credit_Agreement.pdf"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 40,
+          "label": "Reported EBITDA",
+          "cells": "H40:S40",
+          "period": "2024-10..2025-09",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/covenant-spec.json",
+          "section": "definitions.Covenant_EBITDA",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/3_Loan Documentation/2_Executed/Initial Closing/1_Original_Credit_Agreement.pdf"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/covenant-spec.json",
+          "section": "covenants.max_net_leverage",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/3_Loan Documentation/2_Executed/Initial Closing/1_Original_Credit_Agreement.pdf",
+              "page": 6,
+              "section": "7.11",
+              "quote": "The Net Leverage Ratio may not exceed 5.00x on each fiscal quarter end beginning March 31, 2025. The calculation uses quarter-end Net Debt and Covenant EBITDA for the trailing four fiscal quarters."
+            }
+          ]
+        }
+      ],
+      "calc": "actual 1.49353 = [model:'Net Debt' at Sep 2025 = 2.04239e+07] / [model:'Reported EBITDA' (EBITDA bridge) summed Oct 2024..Sep 2025 (12 mo) = 1.3675e+07]; test: max_ratio 1.49353 <= 5 (threshold per covenant-spec covenants.max_net_leverage)",
+      "cert_value": null,
+      "cert_status": null,
+      "cert_headroom_abs": null,
+      "cert_headroom_pct": null,
+      "delta_model_vs_cert": null,
+      "cert_agrees": null,
+      "cert_tolerance_applied": null,
+      "notes": "numerator=20423947, denominator=13674974"
+    },
+    {
+      "id": "max_net_leverage",
+      "name": "Maximum Net Leverage Ratio",
+      "primitive": "max_ratio",
+      "test_date": "2025-12-31",
+      "window": "ttm",
+      "required": 5.0,
+      "actual": 1.42888,
+      "headroom_abs": 3.57112,
+      "headroom_pct": 0.714224,
+      "status": "pass",
+      "source": "(model:'Net Debt')/(model:'Reported EBITDA' (EBITDA bridge)) [ttm]",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Balance Sheet",
+          "row": 35,
+          "label": "Net Debt",
+          "cells": "V35",
+          "period": "2025-12",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Balance Sheet"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/covenant-spec.json",
+          "section": "definitions.Net_Debt",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/3_Loan Documentation/2_Executed/Initial Closing/1_Original_Credit_Agreement.pdf"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 40,
+          "label": "Reported EBITDA",
+          "cells": "K40:V40",
+          "period": "2025-01..2025-12",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/covenant-spec.json",
+          "section": "definitions.Covenant_EBITDA",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/3_Loan Documentation/2_Executed/Initial Closing/1_Original_Credit_Agreement.pdf"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/covenant-spec.json",
+          "section": "covenants.max_net_leverage",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/3_Loan Documentation/2_Executed/Initial Closing/1_Original_Credit_Agreement.pdf",
+              "page": 6,
+              "section": "7.11",
+              "quote": "The Net Leverage Ratio may not exceed 5.00x on each fiscal quarter end beginning March 31, 2025. The calculation uses quarter-end Net Debt and Covenant EBITDA for the trailing four fiscal quarters."
+            }
+          ]
+        }
+      ],
+      "calc": "actual 1.42888 = [model:'Net Debt' at Dec 2025 = 1.97118e+07] / [model:'Reported EBITDA' (EBITDA bridge) summed Jan 2025..Dec 2025 (12 mo) = 1.37953e+07]; test: max_ratio 1.42888 <= 5 (threshold per covenant-spec covenants.max_net_leverage)",
+      "cert_value": null,
+      "cert_status": null,
+      "cert_headroom_abs": null,
+      "cert_headroom_pct": null,
+      "delta_model_vs_cert": null,
+      "cert_agrees": null,
+      "cert_tolerance_applied": null,
+      "notes": "numerator=19711777, denominator=13795264"
+    },
+    {
+      "id": "max_net_leverage",
+      "name": "Maximum Net Leverage Ratio",
+      "primitive": "max_ratio",
+      "test_date": "2026-03-31",
+      "window": "ttm",
+      "required": 5.0,
+      "actual": 1.380634,
+      "headroom_abs": 3.619366,
+      "headroom_pct": 0.723873,
+      "status": "pass",
+      "source": "(model:'Net Debt')/(model:'Reported EBITDA' (EBITDA bridge)) [ttm]",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Balance Sheet",
+          "row": 35,
+          "label": "Net Debt",
+          "cells": "Y35",
+          "period": "2026-03",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Balance Sheet"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/covenant-spec.json",
+          "section": "definitions.Net_Debt",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/3_Loan Documentation/2_Executed/Initial Closing/1_Original_Credit_Agreement.pdf"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 40,
+          "label": "Reported EBITDA",
+          "cells": "N40:Y40",
+          "period": "2025-04..2026-03",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/covenant-spec.json",
+          "section": "definitions.Covenant_EBITDA",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/3_Loan Documentation/2_Executed/Initial Closing/1_Original_Credit_Agreement.pdf"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/covenant-spec.json",
+          "section": "covenants.max_net_leverage",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/3_Loan Documentation/2_Executed/Initial Closing/1_Original_Credit_Agreement.pdf",
+              "page": 6,
+              "section": "7.11",
+              "quote": "The Net Leverage Ratio may not exceed 5.00x on each fiscal quarter end beginning March 31, 2025. The calculation uses quarter-end Net Debt and Covenant EBITDA for the trailing four fiscal quarters."
+            }
+          ]
+        }
+      ],
+      "calc": "actual 1.38063 = [model:'Net Debt' at Mar 2026 = 1.90207e+07] / [model:'Reported EBITDA' (EBITDA bridge) summed Apr 2025..Mar 2026 (12 mo) = 1.37768e+07]; test: max_ratio 1.38063 <= 5 (threshold per covenant-spec covenants.max_net_leverage)",
+      "cert_value": null,
+      "cert_status": null,
+      "cert_headroom_abs": null,
+      "cert_headroom_pct": null,
+      "delta_model_vs_cert": null,
+      "cert_agrees": null,
+      "cert_tolerance_applied": null,
+      "notes": "numerator=19020747, denominator=13776819"
+    },
+    {
+      "id": "max_net_leverage",
+      "name": "Maximum Net Leverage Ratio",
+      "primitive": "max_ratio",
+      "test_date": "2026-06-30",
+      "window": "ttm",
+      "required": 5.0,
+      "actual": 1.319024,
+      "headroom_abs": 3.680976,
+      "headroom_pct": 0.736195,
+      "status": "pass",
+      "source": "(model:'Net Debt')/(model:'Reported EBITDA' (EBITDA bridge)) [ttm]",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Balance Sheet",
+          "row": 35,
+          "label": "Net Debt",
+          "cells": "AB35",
+          "period": "2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Balance Sheet"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/covenant-spec.json",
+          "section": "definitions.Net_Debt",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/3_Loan Documentation/2_Executed/Initial Closing/1_Original_Credit_Agreement.pdf"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 40,
+          "label": "Reported EBITDA",
+          "cells": "Q40:AB40",
+          "period": "2025-07..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts/2026.06/Monthly_Financial_Package_2026-06.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/covenant-spec.json",
+          "section": "definitions.Covenant_EBITDA",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/3_Loan Documentation/2_Executed/Initial Closing/1_Original_Credit_Agreement.pdf"
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "store": "store",
+          "path_in_store": "borrowers/nemeris-field-systems/.record/runs/2026-06/run-20260915-060221/config/covenant-spec.json",
+          "section": "covenants.max_net_leverage",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Nemeris Field Systems/3_Loan Documentation/2_Executed/Initial Closing/1_Original_Credit_Agreement.pdf",
+              "page": 6,
+              "section": "7.11",
+              "quote": "The Net Leverage Ratio may not exceed 5.00x on each fiscal quarter end beginning March 31, 2025. The calculation uses quarter-end Net Debt and Covenant EBITDA for the trailing four fiscal quarters."
+            }
+          ]
+        },
+        {
+          "file": 2,
+          "section": "values.max_net_leverage.2026-06-30",
+          "kind": "certified-transcription",
+          "upstream": [
+            {
+              "store": null,
+              "unlocated_reason": "no configured store contains this file"
+            }
+          ]
+        }
+      ],
+      "calc": "actual 1.31902 = [model:'Net Debt' at Jun 2026 = 1.82842e+07] / [model:'Reported EBITDA' (EBITDA bridge) summed Jul 2025..Jun 2026 (12 mo) = 1.38619e+07]; test: max_ratio 1.31902 <= 5 (threshold per covenant-spec covenants.max_net_leverage)",
+      "cert_value": 1.319,
+      "cert_status": "pass",
+      "cert_headroom_abs": 3.681,
+      "cert_headroom_pct": 0.7362,
+      "delta_model_vs_cert": 2.4e-05,
+      "cert_agrees": true,
+      "cert_tolerance_applied": 0.05,
+      "notes": "numerator=18284247, denominator=13861947"
+    }
+  ],
+  "exceptions": [],
+  "engine": "spec-driven v5 (per-figure source refs + calc records; explicit flow/spot basis; certified-vs-model dual columns with per-component delta decomposition; dollar thresholds put on the model's declared unit; ledger-proxy flag on coverage covenants without a debt-service schedule)",
+  "borrower": "Nemeris Field Systems, LLC",
+  "reconciliation_required": false,
+  "reconciliation_blockers": [],
+  "reconciliation_override": false,
+  "spec_agreement_ref": "Credit Agreement (Nemeris 2025 Senior Secured Facility) among Nemeris Field Systems, LLC, as Borrower; Nemeris Holdings, LLC and Nemeris Service Operations, LLC, as Guarantors; the lenders on Schedule 2.01; and Northlake Example Credit Partners, LP, as Administrative Agent and Collateral Agent. Dated January 10, 2025; effective / closing January 15, 2025. As amended by the First Amendment to Credit Agreement dated January 25, 2026, effective January 31, 2026 (reporting-delivery mechanics only).",
+  "cure_rights": {},
+  "model_month_ends": [
+    "2024-04-30",
+    "2024-05-31",
+    "2024-06-30",
+    "2024-07-31",
+    "2024-08-31",
+    "2024-09-30",
+    "2024-10-31",
+    "2024-11-30",
+    "2024-12-31",
+    "2025-01-31",
+    "2025-02-28",
+    "2025-03-31",
+    "2025-04-30",
+    "2025-05-31",
+    "2025-06-30",
+    "2025-07-31",
+    "2025-08-31",
+    "2025-09-30",
+    "2025-10-31",
+    "2025-11-30",
+    "2025-12-31",
+    "2026-01-31",
+    "2026-02-28",
+    "2026-03-31",
+    "2026-04-30",
+    "2026-05-31",
+    "2026-06-30"
+  ],
+  "certified_source": "Compliance_Certificate_Q2_2026.pdf, Schedule 1 -- Net Leverage Ratio (page 2); corrected per Covenant_Calculation_Q2_2026_CORRECTED.xlsx and Borrower_Correction_Notice_2026-07-29.pdf, both in the same 2026 Q2 Portfolio Management folder",
+  "certified_period": "2026-06",
+  "transcription_notes": [
+    "Two covenant-calculation workbooks sit in the 2026 Q2 folder: Covenant_Calculation_Q2_2026_ORIGINAL_SUBMITTED.xlsx (Net Leverage 1.3086x, Covenant EBITDA $13,971,947.33, filed 2026-07-25) and Covenant_Calculation_Q2_2026_CORRECTED.xlsx (Net Leverage 1.3190x, Covenant EBITDA $13,861,947.33, filed 2026-07-29). The original included a $110,000 add-back for projected savings from unfilled territory-manager positions. Northlake Example Credit Partners queried it 2026-07-28 (Lender_Query_Unsupported_Addback_2026-07-28.pdf) as unsupported under the Covenant EBITDA definition ('specifically permitted, documented items'); the borrower's Borrower_Correction_Notice_2026-07-29.pdf removed the add-back and confirmed the corrected workbook supersedes the original. The delivered Compliance_Certificate_Q2_2026.pdf (Schedule 1 and Schedule 2) already carries the CORRECTED figures (Covenant EBITDA $13,861,947.33, Net Leverage 1.3190x, status COMPLIANT) -- transcribed here. Per this module's brief, the CORRECTED figures are used; the $110,000 rejected add-back does not change the covenant math reported but is disclosed as a correction history item.",
+    "Certificate Schedule 1 states Funded Debt $23,602,424.11, Less Unrestricted Cash $5,318,177.16, Net Debt $18,284,246.95, Covenant EBITDA $13,861,947.33, Maximum permitted 5.0000x, Headroom 3.6810x -- all consistent with the CORRECTED workbook's Leverage Summary tab and with the model workbook's Balance Sheet Debt & Liquidity block (Net Debt row) for 2026-06.",
+    "Only the ratio (max_net_leverage) is transcribed here per cert_ref -- no other financial covenant is on this certificate; the remaining covenant-spec entries are reporting/negative covenants not wired to a tested primitive (neg_capex_cap, neg_restricted_payments_leverage_condition) or reference-only reporting deliverables, outside this covenant's cert_ref scope."
+  ],
+  "action_items": [],
+  "methodology": "Company-prepared/unaudited model; EBITDA taken from the model's single pinned EBITDA bridge row (not recomputed). Thresholds and definitions per the standardized covenant-spec; each definition's flow/spot basis is explicit in the spec. cert_* fields are the borrower's own certified actuals transcribed from the compliance certificate -- reported alongside the model reconstruction, never merged with it."
+}

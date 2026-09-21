@@ -1,0 +1,466 @@
+{
+  "module": "ap-ar-aging",
+  "period": "2026-06",
+  "run_id": "run-20260916-083949",
+  "run_id_from": "run",
+  "produced_at": "2026-09-16T08:49:19+00:00",
+  "produced_by": {
+    "engine": "ap-ar-aging",
+    "plugin_version": "1.0.0"
+  },
+  "reporting_unit": {
+    "scale": 1.0,
+    "currency": "USD",
+    "verbatim": "Authoritative consolidated actuals | USD",
+    "plain": "USD"
+  },
+  "stores": {
+    "source": {
+      "url_base": null
+    },
+    "store": {
+      "url_base": null
+    }
+  },
+  "source_ref_reach": {
+    "cell": 20,
+    "file": 0,
+    "unlocated": 0,
+    "borrower_doc": 6
+  },
+  "source_files": [
+    "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/ap-ar-aging.xlsx",
+    "source:Talvorn Technical Services/Finance Uploads/Monthly Close/2026/05/ap-ar-aging.xlsx",
+    "store:borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx"
+  ],
+  "results": [
+    {
+      "side": "AR",
+      "latest": {
+        "month": "Jun 2026",
+        "as_of": null,
+        "total": 18721486.62,
+        "pct_over_90": 0.05,
+        "bucket_distribution": {
+          "current": {
+            "amount": 12168966.3,
+            "pct_of_total": 0.65
+          },
+          "1-30": {
+            "amount": 0.0,
+            "pct_of_total": 0.0
+          },
+          "31-60": {
+            "amount": 3931512.19,
+            "pct_of_total": 0.21
+          },
+          "61-90": {
+            "amount": 1684933.8,
+            "pct_of_total": 0.09
+          },
+          ">90": {
+            "amount": 936074.33,
+            "pct_of_total": 0.05
+          }
+        },
+        "top5_concentration": [],
+        "dso_days": 40.55,
+        "days_basis": 30,
+        "n_counterparties": 0,
+        "rows_reconciliation": {
+          "grand_total": 18721486.62,
+          "counterparty_rows_total": 18721486.62,
+          "difference": 0.0,
+          "reconciles": true,
+          "n_counterparties": 0,
+          "rolled_up_rows": []
+        },
+        "source_ref": [
+          {
+            "file": 0,
+            "store": "source",
+            "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/ap-ar-aging.xlsx",
+            "sheet": "Accounts Receivable",
+            "row": 9
+          },
+          {
+            "file": 0,
+            "store": "source",
+            "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/ap-ar-aging.xlsx",
+            "sheet": "Accounts Receivable",
+            "row": "5-8"
+          },
+          {
+            "file": 2,
+            "store": "store",
+            "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+            "sheet": "Income Statement",
+            "row": 12,
+            "label": "Net Revenue",
+            "cells": "W12",
+            "period": "2026-06",
+            "upstream": [
+              {
+                "store": "source",
+                "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/monthly-current.xlsx",
+                "sheet": "Income Statement"
+              }
+            ]
+          }
+        ],
+        "calc": "Jun 2026 AR aging snapshot: total 18,721,486.62 = the aging export's TOTAL row (row 9, Amount column); bucket amounts = read directly from the export's own per-bucket rows (rows 5-8); this export reports bucket totals only, with no customer/vendor rows anywhere in the file; those rows sum to 18,721,486.62, which reconciles to the grand total, so every share below divides by a total its parts add up to; pct_over_90 = >90 bucket 936,074.33 / total; dso_days 40.55 = total / monthly revenue ('Net Revenue' = 13,852,034.69 for Jun 2026, model 'Income Statement' row 12 cell W12) * 30 (calendar days in Jun 2026)",
+        "concentration_note": "No counterparty-level (customer/vendor) data anywhere in this export -- it reports Current/31-60/61-90/90+ bucket totals only. top5_concentration above is empty by the export's own shape, not a parsing or config gap."
+      },
+      "prior": {
+        "month": "May 2026",
+        "as_of": null,
+        "total": 18889432.01,
+        "pct_over_90": 0.05,
+        "bucket_distribution": {
+          "current": {
+            "amount": 11711447.85,
+            "pct_of_total": 0.62
+          },
+          "1-30": {
+            "amount": 0.0,
+            "pct_of_total": 0.0
+          },
+          "31-60": {
+            "amount": 4344569.36,
+            "pct_of_total": 0.23
+          },
+          "61-90": {
+            "amount": 1888943.2,
+            "pct_of_total": 0.1
+          },
+          ">90": {
+            "amount": 944471.6,
+            "pct_of_total": 0.05
+          }
+        },
+        "top5_concentration": [],
+        "dso_days": 42.38,
+        "days_basis": 31,
+        "n_counterparties": 0,
+        "rows_reconciliation": {
+          "grand_total": 18889432.01,
+          "counterparty_rows_total": 18889432.01,
+          "difference": 0.0,
+          "reconciles": true,
+          "n_counterparties": 0,
+          "rolled_up_rows": []
+        },
+        "source_ref": [
+          {
+            "file": 1,
+            "store": "source",
+            "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/05/ap-ar-aging.xlsx",
+            "sheet": "Accounts Receivable",
+            "row": 9
+          },
+          {
+            "file": 1,
+            "store": "source",
+            "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/05/ap-ar-aging.xlsx",
+            "sheet": "Accounts Receivable",
+            "row": "5-8"
+          },
+          {
+            "file": 2,
+            "store": "store",
+            "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+            "sheet": "Income Statement",
+            "row": 12,
+            "label": "Net Revenue",
+            "cells": "V12",
+            "period": "2026-05",
+            "upstream": [
+              {
+                "store": "source",
+                "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/05/monthly-current.xlsx",
+                "sheet": "Income Statement"
+              }
+            ]
+          }
+        ],
+        "calc": "May 2026 AR aging snapshot: total 18,889,432.01 = the aging export's TOTAL row (row 9, Amount column); bucket amounts = read directly from the export's own per-bucket rows (rows 5-8); this export reports bucket totals only, with no customer/vendor rows anywhere in the file; those rows sum to 18,889,432.01, which reconciles to the grand total, so every share below divides by a total its parts add up to; pct_over_90 = >90 bucket 944,471.60 / total; dso_days 42.38 = total / monthly revenue ('Net Revenue' = 13,816,817.68 for May 2026, model 'Income Statement' row 12 cell V12) * 31 (calendar days in May 2026)",
+        "concentration_note": "No counterparty-level (customer/vendor) data anywhere in this export -- it reports Current/31-60/61-90/90+ bucket totals only. top5_concentration above is empty by the export's own shape, not a parsing or config gap."
+      },
+      "trend": {
+        "total_change": -167945.39,
+        "dso_days_prior": 42.38,
+        "dso_days_latest": 40.55,
+        "note": "Single-month aging snapshots; DSO/DPO use one month of flow and are volatile month to month. Each month's days metric uses that month's calendar days.",
+        "source_ref": [
+          {
+            "file": 0,
+            "store": "source",
+            "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/ap-ar-aging.xlsx",
+            "sheet": "Accounts Receivable",
+            "row": 9
+          },
+          {
+            "file": 1,
+            "store": "source",
+            "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/05/ap-ar-aging.xlsx",
+            "sheet": "Accounts Receivable",
+            "row": 9
+          }
+        ],
+        "calc": "total_change = Jun 2026 AR aging total 18,721,486.62 (from the aging export's TOTAL row (row 9, Amount column)) - May 2026 total 18,889,432.01 (from the aging export's TOTAL row (row 9, Amount column)); dso_days_latest/_prior repeated from this side's latest/prior records"
+      },
+      "tie_out": {
+        "what": "A/R aging total vs BS 'Accounts Receivable'",
+        "aging_total": 18721486.62,
+        "balance_sheet": 18721486.62,
+        "difference": 0.0,
+        "ties": true,
+        "source_ref": [
+          {
+            "file": 0,
+            "store": "source",
+            "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/ap-ar-aging.xlsx",
+            "sheet": "Accounts Receivable",
+            "row": 9
+          },
+          {
+            "file": 2,
+            "store": "store",
+            "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+            "sheet": "Balance Sheet",
+            "row": 8,
+            "label": "Accounts Receivable",
+            "cells": "W8",
+            "period": "2026-06",
+            "upstream": [
+              {
+                "store": "source",
+                "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/monthly-current.xlsx",
+                "sheet": "Balance Sheet"
+              }
+            ]
+          }
+        ],
+        "calc": "difference 0.00 = aging total 18,721,486.62 (from the aging export's TOTAL row (row 9, Amount column)) - balance-sheet 'Accounts Receivable' 18,721,486.62 (model 'Balance Sheet' row 8 cell W8, Jun 2026); ties when |difference| <= 1.00"
+      }
+    },
+    {
+      "side": "AP",
+      "latest": {
+        "month": "Jun 2026",
+        "as_of": null,
+        "total": 9144005.14,
+        "pct_over_90": 0.05,
+        "bucket_distribution": {
+          "current": {
+            "amount": 5943603.34,
+            "pct_of_total": 0.65
+          },
+          "1-30": {
+            "amount": 0.0,
+            "pct_of_total": 0.0
+          },
+          "31-60": {
+            "amount": 1920241.08,
+            "pct_of_total": 0.21
+          },
+          "61-90": {
+            "amount": 822960.46,
+            "pct_of_total": 0.09
+          },
+          ">90": {
+            "amount": 457200.26,
+            "pct_of_total": 0.05
+          }
+        },
+        "top5_concentration": [],
+        "dpo_days": 36.0,
+        "days_basis": 30,
+        "n_counterparties": 0,
+        "rows_reconciliation": {
+          "grand_total": 9144005.14,
+          "counterparty_rows_total": 9144005.14,
+          "difference": 0.0,
+          "reconciles": true,
+          "n_counterparties": 0,
+          "rolled_up_rows": []
+        },
+        "source_ref": [
+          {
+            "file": 0,
+            "store": "source",
+            "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/ap-ar-aging.xlsx",
+            "sheet": "Accounts Payable",
+            "row": 9
+          },
+          {
+            "file": 0,
+            "store": "source",
+            "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/ap-ar-aging.xlsx",
+            "sheet": "Accounts Payable",
+            "row": "5-8"
+          },
+          {
+            "file": 2,
+            "store": "store",
+            "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+            "sheet": "Income Statement",
+            "row": 14,
+            "label": "Cost of Revenue",
+            "cells": "W14",
+            "period": "2026-06",
+            "upstream": [
+              {
+                "store": "source",
+                "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/monthly-current.xlsx",
+                "sheet": "Income Statement"
+              }
+            ]
+          }
+        ],
+        "calc": "Jun 2026 AP aging snapshot: total 9,144,005.14 = the aging export's TOTAL row (row 9, Amount column); bucket amounts = read directly from the export's own per-bucket rows (rows 5-8); this export reports bucket totals only, with no customer/vendor rows anywhere in the file; those rows sum to 9,144,005.14, which reconciles to the grand total, so every share below divides by a total its parts add up to; pct_over_90 = >90 bucket 457,200.26 / total; dpo_days 36.00 = total / the monthly DPO basis ('Cost of Revenue' = 7,620,004.28 for Jun 2026, model 'Income Statement' row 14 cell W14) * 30 (calendar days in Jun 2026)",
+        "concentration_note": "No counterparty-level (customer/vendor) data anywhere in this export -- it reports Current/31-60/61-90/90+ bucket totals only. top5_concentration above is empty by the export's own shape, not a parsing or config gap.",
+        "dpo_basis": "DPO denominator = configured model line 'Cost of Revenue' (operating_cogs) = 7620004.28."
+      },
+      "prior": {
+        "month": "May 2026",
+        "as_of": null,
+        "total": 8968220.02,
+        "pct_over_90": 0.05,
+        "bucket_distribution": {
+          "current": {
+            "amount": 5560296.41,
+            "pct_of_total": 0.62
+          },
+          "1-30": {
+            "amount": 0.0,
+            "pct_of_total": 0.0
+          },
+          "31-60": {
+            "amount": 2062690.6,
+            "pct_of_total": 0.23
+          },
+          "61-90": {
+            "amount": 896822.0,
+            "pct_of_total": 0.1
+          },
+          ">90": {
+            "amount": 448411.01,
+            "pct_of_total": 0.05
+          }
+        },
+        "top5_concentration": [],
+        "dpo_days": 37.2,
+        "days_basis": 31,
+        "n_counterparties": 0,
+        "rows_reconciliation": {
+          "grand_total": 8968220.02,
+          "counterparty_rows_total": 8968220.02,
+          "difference": 0.0,
+          "reconciles": true,
+          "n_counterparties": 0,
+          "rolled_up_rows": []
+        },
+        "source_ref": [
+          {
+            "file": 1,
+            "store": "source",
+            "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/05/ap-ar-aging.xlsx",
+            "sheet": "Accounts Payable",
+            "row": 9
+          },
+          {
+            "file": 1,
+            "store": "source",
+            "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/05/ap-ar-aging.xlsx",
+            "sheet": "Accounts Payable",
+            "row": "5-8"
+          },
+          {
+            "file": 2,
+            "store": "store",
+            "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+            "sheet": "Income Statement",
+            "row": 14,
+            "label": "Cost of Revenue",
+            "cells": "V14",
+            "period": "2026-05",
+            "upstream": [
+              {
+                "store": "source",
+                "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/05/monthly-current.xlsx",
+                "sheet": "Income Statement"
+              }
+            ]
+          }
+        ],
+        "calc": "May 2026 AP aging snapshot: total 8,968,220.02 = the aging export's TOTAL row (row 9, Amount column); bucket amounts = read directly from the export's own per-bucket rows (rows 5-8); this export reports bucket totals only, with no customer/vendor rows anywhere in the file; those rows sum to 8,968,220.02, which reconciles to the grand total, so every share below divides by a total its parts add up to; pct_over_90 = >90 bucket 448,411.01 / total; dpo_days 37.20 = total / the monthly DPO basis ('Cost of Revenue' = 7,473,516.68 for May 2026, model 'Income Statement' row 14 cell V14) * 31 (calendar days in May 2026)",
+        "concentration_note": "No counterparty-level (customer/vendor) data anywhere in this export -- it reports Current/31-60/61-90/90+ bucket totals only. top5_concentration above is empty by the export's own shape, not a parsing or config gap."
+      },
+      "trend": {
+        "total_change": 175785.12,
+        "dpo_days_prior": 37.2,
+        "dpo_days_latest": 36.0,
+        "note": "Single-month aging snapshots; DSO/DPO use one month of flow and are volatile month to month. Each month's days metric uses that month's calendar days.",
+        "source_ref": [
+          {
+            "file": 0,
+            "store": "source",
+            "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/ap-ar-aging.xlsx",
+            "sheet": "Accounts Payable",
+            "row": 9
+          },
+          {
+            "file": 1,
+            "store": "source",
+            "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/05/ap-ar-aging.xlsx",
+            "sheet": "Accounts Payable",
+            "row": 9
+          }
+        ],
+        "calc": "total_change = Jun 2026 AP aging total 9,144,005.14 (from the aging export's TOTAL row (row 9, Amount column)) - May 2026 total 8,968,220.02 (from the aging export's TOTAL row (row 9, Amount column)); dpo_days_latest/_prior repeated from this side's latest/prior records"
+      },
+      "tie_out": {
+        "what": "A/P aging total vs BS 'Accounts Payable'",
+        "aging_total": 9144005.14,
+        "balance_sheet": 9144005.14,
+        "difference": 0.0,
+        "ties": true,
+        "source_ref": [
+          {
+            "file": 0,
+            "store": "source",
+            "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/ap-ar-aging.xlsx",
+            "sheet": "Accounts Payable",
+            "row": 9
+          },
+          {
+            "file": 2,
+            "store": "store",
+            "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+            "sheet": "Balance Sheet",
+            "row": 13,
+            "label": "Accounts Payable",
+            "cells": "W13",
+            "period": "2026-06",
+            "upstream": [
+              {
+                "store": "source",
+                "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/monthly-current.xlsx",
+                "sheet": "Balance Sheet"
+              }
+            ]
+          }
+        ],
+        "calc": "difference 0.00 = aging total 9,144,005.14 (from the aging export's TOTAL row (row 9, Amount column)) - balance-sheet 'Accounts Payable' 9,144,005.14 (model 'Balance Sheet' row 13 cell W13, Jun 2026); ties when |difference| <= 1.00"
+      }
+    }
+  ],
+  "exceptions": [],
+  "engine": "ap-ar-aging v5 (config-driven, borrower-agnostic) + per-figure source refs/calc + rows-vs-TOTAL reconciliation",
+  "borrower": "Talvorn Technical Services, LLC",
+  "latest_month": "Jun 2026",
+  "prior_month": "May 2026",
+  "note": "DSO/DPO are single-month and volatile. DPO uses configured basis 'operating_cogs' (model line 'Cost of Revenue'). This borrower's A/R and A/P aging exports report Current/31-60/61-90/90+ bucket totals only, with no named customer or vendor rows anywhere in the file or the deal folder -- top-N concentration is empty for both sides by the export's own shape (genuinely no counterparty-level data available), not a config gap.",
+  "methodology": "Company-prepared aging exports (unaudited). Balance-sheet AR/AP, revenue, and the configured DPO-basis line are read from the canonical monthly financials model via monitor_lib."
+}

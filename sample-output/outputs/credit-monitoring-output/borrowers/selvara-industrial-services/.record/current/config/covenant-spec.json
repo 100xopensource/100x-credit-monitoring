@@ -1,0 +1,244 @@
+{
+  "borrower": "Selvara Industrial Services, LLC",
+  "agreement": "Selvara 2025 Senior Secured Credit Facility -- Executed Credit Agreement, issued 2025-01-10, effective 2025-01-15, between Selvara Industrial Services, LLC (Borrower) and Northstar Ridge Credit Partners, LP (Administrative Agent), maturing 2030-01-15; as amended by the Executed First Amendment (issued 2025-10-01, effective 2025-10-05) and subject to the Executed Temporary Limited Waiver (executed 2026-03-20, effective 2026-03-31, EXPIRED 2026-06-30).",
+  "as_of_agreement_date": "2025-01-15",
+  "amendments_reflected": [
+    {
+      "name": "Executed First Amendment",
+      "issued": "2025-10-01",
+      "effective": "2025-10-05",
+      "effect": "Required monthly principal amortization stepped up from 0.20% to 2.00% of beginning funded debt, beginning with the October 2025 payment period. Explicitly confirms the 1.2000x minimum FCCR, the TTM measurement window, and the quarterly Test Dates are UNCHANGED. No other term (margin, fees, covenant definitions) is mentioned as changed anywhere in the amendment's text.",
+      "agreement_ref": {
+        "section": "AMORTIZATION CHANGE",
+        "page": 1,
+        "quote": "Required monthly principal becomes 2.00% of beginning funded debt beginning with the October 2025 payment period."
+      }
+    }
+  ],
+  "waivers_reflected": [
+    {
+      "name": "Executed Temporary Limited Waiver",
+      "issued_and_executed": "2026-03-20",
+      "effective": "2026-03-31",
+      "expired": "2026-06-30",
+      "scope": "Covers ONLY the March 31, 2026 and June 30, 2026 FCCR Test Dates. Does not amend the 1.2000x minimum. Does not deem either test compliant -- underlying breaches remain reportable as 'BREACH - WAIVED'; all other rights reserved.",
+      "conditions_found": "NONE beyond the scope/reservation language quoted above -- the executed waiver's full text (one page) contains no fee, no additional-reporting covenant, no cure plan, and no forbearance-period language of any kind. Verified by full-text review; the unexecuted Waiver_Request_DRAFT_NOT_EXECUTED.pdf (superseded, non-authoritative per its own disposition note) was read for context only and is not reflected here.",
+      "status_as_of_extraction": "EXPIRED as of 2026-06-30. As of this extraction (2026-09-15), NO waiver or other executed relief covers the next Test Date (2026-09-30, ~15 days away).",
+      "agreement_ref": {
+        "section": "LIMITED SCOPE / RESERVATION",
+        "page": 1,
+        "quote": "Covers only the March 31 and June 30, 2026 FCCR Test Dates. The waiver does not amend the 1.2000x minimum and does not deem either test compliant."
+      }
+    }
+  ],
+  "threshold_unit": "dollars",
+  "covenant_status_alert": {
+    "as_of": "2026-09-15",
+    "covenant_id": "min_fccr",
+    "level": "ACTIVE BREACH HISTORY -- WAIVER EXPIRED -- NEXT TEST DATE (2026-09-30) UNCOVERED",
+    "summary": "FCCR breached its 1.2000x minimum at the last TWO consecutive quarterly Test Dates: 2026-03-31 (corrected TTM FCCR 1.0338x) and 2026-06-30 (corrected TTM FCCR 0.9192x). Both are recorded as 'BREACH - WAIVED' -- NOT cured -- under the Executed Temporary Limited Waiver, which covers only those two dates and EXPIRED 2026-06-30. As of this extraction (2026-09-15), NO waiver or other executed relief covers the next Test Date, 2026-09-30 (~15 days away). FCCR has declined every quarter since the First Amendment's amortization step-up (0.20% -> 2.00%/month, effective the October 2025 payment) mechanically inflated the Fixed Charges denominator; TTM Covenant EBITDA has been broadly stable-to-growing over the same window, so the deterioration is a mechanical, amendment-driven denominator effect, not (so far) an EBITDA collapse. Absent new executed relief or a material improvement in TTM Fixed Charges/EBITDA before 2026-09-30, an FCCR test at that date computed on the same trend would be an uncovered, unwaived breach. See the 'min_fccr' covenant's own 'waiver_status' block for the full detail and cert-by-cert figures."
+  },
+  "definitions": {
+    "EBITDA": {
+      "verbatim": "Covenant EBITDA -- 'FCCR equals trailing-twelve-month Covenant EBITDA divided by trailing-twelve-month cash interest, required principal, and lease payments.' The executed documents made available do not carry a separate itemized EBITDA add-back definition (no add-back/adjustments clause appears anywhere in original_agreement.pdf, amendment_1.pdf, or waiver_1.pdf).",
+      "agreement_ref": {
+        "section": "FIXED CHARGE COVERAGE RATIO",
+        "page": 1,
+        "quote": "FCCR equals trailing-twelve-month Covenant EBITDA divided by trailing-twelve-month cash interest, required principal, and lease payments."
+      },
+      "basis": "flow",
+      "compute": {
+        "ebitda_bridge": "Reported EBITDA"
+      },
+      "note": "Verified at three independent points that the borrower's own 'Reported EBITDA' line ties EXACTLY to the certified 'Covenant EBITDA' used in every quarterly Covenant_Calculation TTM Build with zero addback: March 2026 both 2,618,535.91; June 2026 both 2,696,995.08; May 2026 both 2,588,973.90. Consistent with borrower-config.json's independent three-point verification. Bind to the model's single pinned EBITDA bridge row ('Reported EBITDA'); do not recompute a different EBITDA. No deemed EBITDA schedule anywhere in the agreement -- full-text sweep of all three executed documents for 'deemed', 'stipulated', and 'agreed EBITDA' returns no hits. NOTE (ambiguity, see step 7): the 2025-Q1 Covenant_Calculation.xlsx TTM Build spans 2024-04 through 2025-03 -- nine of those twelve months (2024-04 through 2024-12) predate the facility's 2025-01-15 Closing Date, and five of those nine months (2024-04 through 2024-08) predate even the borrower's earliest monthly reporting-package folder (Archive/2024-09). The agreement's text as provided states no pro-forma/deemed convention for pre-Closing Test Period months, yet the certificate shows populated EBITDA and Fixed Charges figures for them on an apparent pro-forma basis (the same effective ~10.2551% cash rate and 0.20% amortization schedule appear to run backward through these pre-close months as well). Flagged for sign-off -- see the min_fccr covenant's pre_close_window_note."
+    },
+    "Fixed_Charges": {
+      "verbatim": "trailing-twelve-month cash interest, required principal, and lease payments",
+      "agreement_ref": {
+        "section": "FIXED CHARGE COVERAGE RATIO",
+        "page": 1,
+        "quote": "FCCR equals trailing-twelve-month Covenant EBITDA divided by trailing-twelve-month cash interest, required principal, and lease payments."
+      },
+      "basis": "flow",
+      "compute": {
+        "formula": {
+          "lines": ["Cash Interest Expense", "Scheduled Debt Principal Payments", "Lease payments"],
+          "op": "sum"
+        }
+      },
+      "note": "Three components exactly as the agreement's own FCCR formula lists them. (1) 'Cash Interest Expense' and (2) 'Scheduled Debt Principal Payments' are the covenant-support rows build-monitoring-model populates from debt-service-schedule.json -- the facility's own CONTRACTUAL cash interest and scheduled amortization, per Method step 3b, not booked ledger interest. (3) 'Lease payments' is the borrower's own native Cash-Flow-tab line (present and consistent in every Archive month and the June 2026 package checked; not a debt-service item). 'Required principal' means SCHEDULED amortization only. AMBIGUITY flagged for step 7: for THIS borrower specifically, the native 'Cash interest' and 'Required principal' Cash-Flow-tab lines are independently verified (see debt-service-spec.json's engine-limitation notes) to ALREADY equal the facility's own true contractual amounts to the penny every month checked, because Selvara carries no debt other than this one facility (no sweep-in risk the ledger-vs-contract distinction usually guards against). The generated debt-service-schedule.json, by contrast, is only an APPROXIMATION of the true contract (engine v1 cannot model the agreement's declining-balance amortization base or its apparent flat/30-360-style interest convention -- see debt-service-spec.json ambiguities). Sign-off should confirm whether Fixed_Charges' cash-interest/principal components should bind to the generated (approximate) covenant-support rows as specified here, or directly to the borrower's own native 'Cash interest' / 'Required principal' lines, which for this borrower are the more precise source."
+    },
+    "Funded_Debt": {
+      "verbatim": "beginning funded debt (per AMORTIZATION: 'Required monthly principal equals 0.20% [2.00% from the October 2025 payment] of beginning funded debt')",
+      "agreement_ref": {
+        "section": "AMORTIZATION",
+        "page": 1,
+        "quote": "Required monthly principal equals 0.20% of beginning funded debt."
+      },
+      "basis": "spot",
+      "compute": {
+        "model_line": "Ending debt"
+      },
+      "note": "Not itself a covenant input (this agreement carries no leverage covenant -- FCCR is the ONLY financial covenant found). Captured for the collateral / funded-debt-denominator view requested alongside the security provisions. 'Ending debt' is the Debt Roll-Forward tab's single rolled-up funded-debt balance (Beginning debt - Required principal +/- Draws/PIK = Ending debt), verified to tie every month checked; no draws or PIK have ever occurred (a single up-front-funded term loan with no delayed-draw capacity -- Draws and PIK are 0 in every month reviewed, 2025-01 through 2026-06)."
+    }
+  },
+  "covenants": [
+    {
+      "id": "min_fccr",
+      "name": "Minimum Fixed Charge Coverage Ratio (FCCR)",
+      "primitive": "min_coverage",
+      "numerator": { "ref": "EBITDA" },
+      "denominator": { "ref": "Fixed_Charges" },
+      "window": "ttm",
+      "threshold": 1.2,
+      "threshold_unit": "unitless",
+      "frequency": "quarterly",
+      "first_test_date": "2025-03-31",
+      "cure_rights": "NONE stated anywhere in the executed agreement, amendment, or waiver -- no equity-cure or other contractual cure-right language appears in original_agreement.pdf, amendment_1.pdf, or waiver_1.pdf (confirmed by full-text sweep for 'cure'). The only post-breach relief obtained to date is the negotiated Temporary Limited Waiver (see waiver_status below), which is explicit that it 'does not deem either test compliant' -- i.e. it waives the CONSEQUENCES of breach, it does not CURE the breach.",
+      "agreement_ref": {
+        "section": "FIXED CHARGE COVERAGE RATIO",
+        "page": 1,
+        "quote": "Minimum FCCR is 1.2000x, tested only on March 31, June 30, September 30, and December 31."
+      },
+      "cert_ref": "Compliance Certificate / Covenant_Calculation_<period>.xlsx, 'Covenant Summary' tab ('Calculated FCCR', 'TTM Covenant EBITDA', 'TTM fixed charges') and 'TTM Build' tab (monthly Interest/Principal/Leases detail). For the 2026-Q1 (March) and 2026-Q2 (June) Test Dates, use the CORRECTED TTM figures in Monthly/Current/2026-06/Compliance/{March Correction/March_Corrected_TTM_Calculation.xlsx, March_Authoritative_Certificate.xlsx}/{June Correction/June_Corrected_TTM_Calculation.xlsx} and certificate.xlsx -- NEVER the originally-submitted single-month figures. See measurement_window_correction_history below.",
+      "at_risk_band": 0.1,
+      "waiver_status": {
+        "as_of": "2026-09-15",
+        "headline": "TWO CONSECUTIVE BREACH-WAIVED TEST DATES; WAIVER EXPIRED; NEXT TEST DATE OPEN AND UNCOVERED",
+        "test_dates": [
+          {
+            "test_date": "2025-03-31",
+            "status": "COMPLIANT",
+            "ttm_fccr": 1.6245,
+            "note": "Pre-amendment; TTM Build spans 2024-04 through 2025-03 (see EBITDA definition's pre-close note)."
+          },
+          {
+            "test_date": "2025-06-30",
+            "status": "COMPLIANT",
+            "ttm_fccr": 1.6099,
+            "note": "Verified from Portfolio Monitoring/2025-Q2/Covenant_Calculation_2025-Q2.xlsx (TTM Covenant EBITDA 25,457,389.69 / TTM fixed charges 15,812,781.83)."
+          },
+          {
+            "test_date": "2025-09-30",
+            "status": "COMPLIANT",
+            "ttm_fccr": 1.6436,
+            "note": "Verified from Portfolio Monitoring/2025-Q3/Covenant_Calculation_2025-Q3.xlsx (TTM Covenant EBITDA 25,836,238.92 / TTM fixed charges 15,719,619.05) -- last full quarter before the First Amendment's 2025-10-05 amortization step-up first shows in a TTM Build."
+          },
+          {
+            "test_date": "2025-12-31",
+            "status": "COMPLIANT",
+            "ttm_fccr": 1.2365,
+            "note": "Verified from Portfolio Monitoring/2025-Q4/Covenant_Calculation_2025-Q4.xlsx (TTM Covenant EBITDA 27,133,577.21 / TTM fixed charges 21,942,970.62) -- first Test Date whose full TTM window is fully post-Amendment (3 months at 2.00%/month, 9 months still at 0.20%/month); still compliant but only 0.0365x above the 1.2000x minimum."
+          },
+          {
+            "test_date": "2026-03-31",
+            "status": "BREACH -- WAIVED (NOT cured)",
+            "ttm_fccr_corrected": 1.0338,
+            "ttm_fccr_originally_submitted_in_error": 0.835,
+            "measurement_window_error": "Originally submitted using a SINGLE MONTH of EBITDA/fixed charges instead of the Section-referenced TTM window; corrected 2026-04-19/21. Both the erroneous single-month figure and the corrected TTM figure are BREACHES.",
+            "waiver_ref": "waiver_1.pdf, effective 2026-03-31"
+          },
+          {
+            "test_date": "2026-06-30",
+            "status": "BREACH -- WAIVED (NOT cured)",
+            "ttm_fccr_corrected": 0.9192,
+            "ttm_fccr_originally_submitted_in_error": 0.9133,
+            "measurement_window_error": "Same single-month-vs-TTM error recurred; corrected 2026-07-20. Both readings are breaches.",
+            "waiver_ref": "waiver_1.pdf -- this is the LAST Test Date the waiver covers; the waiver EXPIRED 2026-06-30."
+          },
+          {
+            "test_date": "2026-09-30",
+            "status": "OPEN -- NO WAIVER OR OTHER EXECUTED RELIEF IN EFFECT",
+            "ttm_fccr": null,
+            "note": "Next scheduled Test Date, approximately 15 days from this extraction (as-of 2026-09-15). waiver_1.pdf expired 2026-06-30 and by its own terms covers only the two named 2026 Test Dates. No executed amendment, waiver, or forbearance for 2026-09-30 exists anywhere in the deal folder as of this extraction (Waiver_Request_DRAFT_NOT_EXECUTED.pdf is an unexecuted, superseded draft and carries no legal effect). FCCR has trended down every quarter since 2025-Q4 (1.2365x -> 1.0338x -> 0.9192x); absent relief or improvement, a test computed on this trend would be an uncovered breach."
+          }
+        ],
+        "agreement_ref": {
+          "section": "LIMITED SCOPE",
+          "page": 1,
+          "quote": "Covers only the March 31 and June 30, 2026 FCCR Test Dates. The waiver does not amend the 1.2000x minimum and does not deem either test compliant."
+        }
+      },
+      "measurement_window_correction_history": {
+        "what_happened": "At BOTH the 2026-03-31 and 2026-06-30 quarterly Test Dates, Selvara's compliance team originally computed and submitted FCCR using a SINGLE MONTH of Covenant EBITDA and fixed charges instead of the agreement's TRAILING TWELVE MONTHS (the agreement states the FCCR is a trailing-twelve-month ratio -- see this covenant's own agreement_ref and the FIXED CHARGE COVERAGE RATIO clause). The lender queried both submissions (March_Lender_TTM_Query.pdf, 2026-04-16; June_Lender_TTM_Query.pdf, 2026-07-17), directing the borrower to 'preserve the original certificate, deliver a corrected TTM workbook, and do not describe a breach as cured.' Corrected TTM figures were then issued: March 1.0338x (originally submitted in error as 0.8350x) and June 0.9192x (originally submitted in error as 0.9133x). BOTH the erroneous single-month figures and the corrected TTM figures are breaches of the 1.2000x minimum -- the correction changed the MEASURED MAGNITUDE, not the compliance VERDICT.",
+        "why_it_matters_for_this_spec": "This covenant's own 'window' field above is explicitly set to 'ttm' (NOT 'spot' or a monthly window) precisely because of this history -- a monitoring run that read this covenant on a single-month window would reproduce the same measurement-window error the borrower's own compliance team made twice in a row. Use ONLY the corrected TTM figures for cross-checking March and June 2026 (see cert_ref).",
+        "process_signal": "The SAME single-month-vs-TTM mistake recurring in two consecutive quarters is itself a controls/process signal for the analyst's broader credit view, independent of the covenant math itself."
+      }
+    }
+  ],
+  "accounting_basis": {
+    "stated": false,
+    "clause_verbatim": "",
+    "agreement_ref": { "section": "", "page": 0, "quote": "" },
+    "reference_financials": {
+      "described_as": "",
+      "document": "",
+      "resolved": false,
+      "ebitda_build_note": ""
+    },
+    "note": "No preamble or accounting-basis clause appears anywhere in original_agreement.pdf, amendment_1.pdf, or waiver_1.pdf -- full-text sweep for 'GAAP', 'accounting practice', 'consistently applied', 'the Model', 'financial statements delivered', and 'historic accounting' returns no hits beyond the FIXED CHARGE COVERAGE RATIO and AMORTIZATION sections already captured. NOTE: the one-page executed original_agreement.pdf provided in this data room reads as a short EXCERPT (FCCR terms, amortization terms, and an execution block only) rather than the full multi-section credit agreement a facility of this size would typically carry in practice. If a longer-form executed document exists outside this data room, it should be checked for a preamble/accounting-basis clause, an EBITDA add-back list, a cure-rights section, and interest-rate/day-count terms (none of which appear in the version reviewed here) before this spec is treated as fully conclusive on those points."
+  },
+  "step7_signoff": {
+    "decided_on": "2026-09-15",
+    "decided_by": "onboarding session (auto-decided per analyst's standing instruction not to pause for confirmation during this batch onboarding; every decision below is flagged for prompt analyst review given the imminent 2026-09-30 test date)",
+    "decisions": [
+      {
+        "id": "fixed_charges_component_source",
+        "question": "Should Fixed_Charges' cash-interest and scheduled-principal components bind to the generated (approximate) debt-service-schedule rows, or directly to this borrower's own native 'Cash interest' / 'Required principal' Cash-Flow-tab lines, which are independently verified exact (Selvara carries no other debt to create a ledger-vs-contract gap)?",
+        "options_considered": [
+          "Accept as parsed: bind to the generated covenant-support rows per the standard template convention",
+          "Bind directly to the native ledger lines, since they are demonstrably more precise for this specific borrower"
+        ],
+        "decision": "Bind Fixed_Charges' cash_interest and scheduled_principal components directly to the borrower's own native 'Cash interest' and 'Required principal' Cash-Flow-tab lines, NOT the generated debt-service-schedule.",
+        "rationale": "This is the highest-stakes covenant in the whole 6-borrower onboarding batch: two consecutive breaches, an expired waiver, and a test date 15 days away. The generated schedule is a known, quantified approximation (flat-original-principal amortization base vs. the agreement's declining-balance reality; a flat 30/360-style interest convention the engine can't reproduce -- see debt-service-spec.json), while the native ledger lines are independently verified exact to the penny in every month checked. Using the less precise source on the covenant closest to an active breach is not defensible when a verified, more precise source is directly available. build-monitoring-model should populate the covenant-support rows from the native ledger for this borrower, not the generated schedule."
+      },
+      {
+        "id": "cash_interest_rate_reconstruction",
+        "question": "No executed document states a cash interest rate, index, margin, or day-count. Accept the reverse-engineered flat ~10.2551% rate (derived from the borrower's own books, consistent to 9-10 significant figures across 17 non-adjacent months)?",
+        "options_considered": [
+          "Accept as parsed: use the reverse-engineered rate as the best-available reading, clearly flagged as an assumption",
+          "Leave the rate entirely unset and refuse to model cash interest at all"
+        ],
+        "decision": "Accept as parsed. The reverse-engineered rate stands as an assumption, but per the fixed_charges_component_source decision above, the covenant test itself reads the native ledger directly, so this ambiguity no longer propagates into the live FCCR test -- only into the informational debt-service-schedule.json output.",
+        "rationale": "The rate's precision matters far less now that Fixed_Charges reads the native ledger. Recommend confirming against a longer-form agreement if one is ever located, since the reviewed original_agreement.pdf reads as a one-page excerpt missing an interest-rate section entirely."
+      },
+      {
+        "id": "amortization_declining_balance_and_daycount",
+        "question": "Accept the engine's flat, original-principal-base amortization and its non-matching interest day-count, now that both are informational only?",
+        "options_considered": [
+          "Accept as parsed: keep the generated schedule as a documented approximation for informational/forward-looking purposes only",
+          "Suppress the generated schedule entirely given it does not tie"
+        ],
+        "decision": "Accept as parsed: keep the generated schedule, clearly labeled as an approximation not used for the live covenant test.",
+        "rationale": "Same engine-limitation class already documented for Nemeris, Orinth Vale, and Asteron. Removing the schedule entirely would lose a useful (if imprecise) forward reference; the real risk would be treating it as authoritative, which it is not, here."
+      },
+      {
+        "id": "pre_close_proforma_ttm_window",
+        "question": "The 2025-Q1 (2025-03-31) TTM Build spans back to 2024-04, five months before the borrower's earliest monthly package and nine months before the 2025-01-15 closing, on an apparent pro-forma basis the agreement's text does not describe.",
+        "options_considered": [
+          "Accept as parsed: record as a flagged ambiguity, use the certified 2025-03-31 figure as reported without attempting to independently reconstruct the pre-close pro-forma convention",
+          "Reject the 2025-03-31 test date as not evaluable given the undocumented convention"
+        ],
+        "decision": "Accept as parsed. The certified 2025-03-31 figure (1.6245x, compliant) stands as reported for the historical trend line. The model side of covenant-compliance will independently read 'insufficient history' for that date once build-monitoring-model runs, since the model only goes back to the borrower's earliest monthly package -- that is the correct, honest outcome rather than fabricating a reconstruction of an undocumented pro-forma convention.",
+        "rationale": "This date is not the borrower's live problem (it was comfortably compliant); worth flagging for completeness but not worth blocking anything today."
+      },
+      {
+        "id": "lien_priority_language",
+        "question": "The security agreement never states 'first priority' verbatim -- is the inferred first-priority reading (from the facility's own naming and the closing mechanics extinguishing prior liens) acceptable?",
+        "options_considered": [
+          "Accept as parsed: first-priority is the best-supported reading",
+          "Record lien priority as unconfirmed/unknown"
+        ],
+        "decision": "Accept as parsed: first-priority.",
+        "rationale": "Standard, sufficient evidence for a first-priority reading in a refinancing context; no competing lien is disclosed anywhere in the documents reviewed."
+      }
+    ],
+    "open_items_for_analyst": [
+      "2026-09-30 test date, ~15 days away, with no executed relief in effect -- HIGHEST PRIORITY. FCCR has declined every quarter since the amortization step-up (1.2365x -> 1.0338x -> 0.9192x); absent relief or material improvement, the next test reads as an uncovered breach.",
+      "The same single-month-vs-TTM measurement error recurring in two consecutive quarters is a controls/process signal independent of the covenant math -- worth raising with the borrower directly.",
+      "Cash interest rate/index/day-count are reverse-engineered, not contractual -- confirm against a longer-form agreement if one is ever located; the reviewed original_agreement.pdf reads as a one-page excerpt missing an interest-rate section, a cure-rights section, and an EBITDA add-back list entirely.",
+      "Pre-close pro-forma TTM convention for the 2025-Q1 test date is undocumented in the agreement text -- low priority given that date was comfortably compliant.",
+      "Fee letter discloses no fee amounts/rates; the $4,000,000 lump 'Closing fees' figure in the transaction models is not broken out or tied to named fees, and nothing is modeled in debt-service-spec.json's fees[]."
+    ]
+  }
+}

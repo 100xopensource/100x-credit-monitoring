@@ -1,0 +1,145 @@
+{
+  "borrower_name": "Nemeris Field Systems, LLC",
+  "fund": "",
+  "timezone": "America/New_York",
+  "paths": {
+    "reporting_packages_folder": "source:Nemeris Field Systems/1_Borrower Information/2_Financials/Management Accounts",
+    "compliance_certificate_folder": "source:Nemeris Field Systems/5_Loan Monitoring/Portfolio Management",
+    "model_output_path": "store:borrowers/nemeris-field-systems/_model/Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+    "monitor_output_folder": "store:borrowers/nemeris-field-systems/.record/current",
+    "credit_agreement_path": "source:Nemeris Field Systems/3_Loan Documentation/2_Executed/Initial Closing/1_Original_Credit_Agreement.pdf",
+    "ic_uw_memo_path": "source:Nemeris Field Systems/2_Prescreen and Underwriting/2_Underwriting/Initial Closing/Final_IC_Memo.pdf",
+    "covenant_spec_path": "store:borrowers/nemeris-field-systems/.record/current/config/covenant-spec.json",
+    "debt_service_spec_path": "store:borrowers/nemeris-field-systems/.record/current/config/debt-service-spec.json",
+    "debt_service_schedule_path": "store:borrowers/nemeris-field-systems/.record/current/config/debt-service-schedule.json",
+    "deal_context_path": "store:borrowers/nemeris-field-systems/.record/current/config/deal-context.json",
+    "budget_path": "source:Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+    "budget_version_note": "Approved_Budget_FY2025_H1_2026.xlsx, 'Monthly Operating Plan' tab, Version 2.1 (FY2025 approved by Board Finance Committee Dec 18 2024; H1 2026 approved Dec 17 2025). Covers 2025-01 through 2026-06.",
+    "budget_map_path": "store:borrowers/nemeris-field-systems/.record/current/config/budget-map.json",
+    "collateral_map_path": "store:borrowers/nemeris-field-systems/.record/current/config/collateral-map.json",
+    "_amendment_note": "An Amendment No. 1 to Credit Agreement was executed January 2026 (source:Nemeris Field Systems/3_Loan Documentation/2_Executed/January 2026 Amendment/1_Amendment_No_1_to_Credit_Agreement.pdf). covenant-setup must read this alongside the original agreement.",
+    "_ar_aging_note": "No customer-level AR aging export exists for this borrower (2026-06 Close Notes: 'No customer-level aging was delivered in this control case; do not infer aging buckets.'). Only Inventory_Aging files are delivered monthly. ap-ar-aging is therefore excluded from modules below."
+  },
+  "modules": [
+    "covenant-compliance",
+    "budget-vs-actual",
+    "three-statement-analysis"
+  ],
+  "module_inputs": {
+    "_note": "ap-ar-aging and revenue-quality omitted: no AR/AP aging exports exist for this borrower, and revenue is equipment-shipment-driven rather than recurring/subscription (IC memo explicitly excludes unsupported ARR framing)."
+  },
+  "model": {
+    "entity": "consolidated",
+    "scale": 1,
+    "currency": "USD",
+    "unit_verbatim": "Management accounts | USD | Unaudited",
+    "as_of": "2026-06"
+  },
+  "model_lines": {
+    "revenue": "Net Revenue",
+    "gross_profit": "Gross Profit",
+    "operating_cogs": "Cost of Revenue",
+    "ebitda_bridge": "Reported EBITDA",
+    "net_income": "",
+    "interest_expense": "",
+    "taxes": "",
+    "depreciation_amortization": "",
+    "financing_cost": "",
+    "accounts_receivable": "Accounts receivable",
+    "accounts_payable": "Trade accounts payable",
+    "pre_financing_subtotal": "",
+    "revenue_components": ["Ruggedized Tool Systems", "Diagnostic Units", "Replacement Components", "Preventive Maintenance Plans", "Calibration Services", "Field Support & Training"],
+    "total_debt": "Senior secured term loan",
+    "_gap_note": "Borrower's management accounts stop at Reported EBITDA — no net income, interest expense, tax, or D&A line is broken out on the Income Statement or Balance Sheet. three-statement-analysis will flag net_income/interest/coverage metrics as unresolved rather than guess a row."
+  },
+  "opex_groups": {
+    "Sales compensation": "Sales compensation",
+    "Marketing programs": "Marketing programs",
+    "Operations payroll": "Operations payroll",
+    "Product and engineering": "Product and engineering",
+    "Corporate payroll": "Corporate payroll",
+    "Facilities and occupancy": "Facilities and occupancy",
+    "Technology and communications": "Technology and communications",
+    "Insurance": "Insurance",
+    "Professional fees": "Professional fees",
+    "Travel and training": "Travel and training",
+    "Other operating expense": "Other operating expense"
+  },
+  "comparability_items": [],
+  "ebitda": {
+    "addback_financing_cost": false
+  },
+  "aging": {
+    "file_format": "auto",
+    "dpo_basis": "operating_cogs",
+    "amount_scale": 1,
+    "tie_tolerance": 1.0,
+    "top_n": 5
+  },
+  "analysis_notes": [
+    "Reporting basis note (2026-06 Close Notes): first-and-final package, no restatement or basis change.",
+    "2026 Q2 Portfolio Management folder contains a Lender_Query_Unsupported_Addback and Borrower_Correction_Notice plus both an ORIGINAL and CORRECTED Covenant_Calculation for Q2 2026 — covenant-setup and the covenant-compliance module should use the CORRECTED version and note the correction history.",
+    "Budget (Monthly Operating Plan) is only built down to Budget EBITDA — it does not budget interest, taxes, D&A or net income, consistent with the model's own gap noted in model_lines."
+  ],
+  "analysis": {
+    "basis_breaks": [],
+    "business_model": "mixed",
+    "cash_floor": null,
+    "fiscal_year_start_month": 1,
+    "trend_window": 3,
+    "line_read": {
+      "materiality_floor": null,
+      "run_min_months": 3,
+      "frozen_min_months": 3,
+      "big_move_pct": 0.25,
+      "share_shift_ppt": 5.0
+    },
+    "drift": {
+      "min_months": 6,
+      "min_same_sign_share": 0.7,
+      "min_total_pct": 0.15
+    },
+    "trend": {
+      "window": 4,
+      "trend_min_months": 3,
+      "trend_max_months": 5,
+      "run_end_tolerance": 2,
+      "k_vol": 1.5,
+      "ratio_rel": 0.2,
+      "wc_driver_pct": 0.1,
+      "wc_rev_pct": 0.1,
+      "reclass_net_frac": 0.2,
+      "reclass_min_pct": 0.25
+    },
+    "seasonality": {
+      "low_months": [],
+      "peak_months": []
+    },
+    "thresholds": {
+      "gross_margin_floor": 0.2,
+      "one_time_reliance_ppt": 0.05,
+      "dpo_days_high": 60,
+      "dio_days_high": 120,
+      "current_ratio_low": 1.0,
+      "revenue_drop_vs_trailing": 0.2,
+      "liquidity_months_to_floor": 3.0
+    }
+  },
+  "analysis_lines": {
+    "cash": "Cash and cash equivalents",
+    "accounts_receivable": "Accounts receivable",
+    "inventory": "Inventory",
+    "total_assets": "Total Assets",
+    "accounts_payable": "Trade accounts payable",
+    "total_debt": "Senior secured term loan",
+    "total_equity": "Members' equity",
+    "operating_cf": "Net cash from operating activities",
+    "investing_cf": "Net cash used in investing activities",
+    "financing_cf": "Net cash from financing activities",
+    "net_change_cash": "Net change in cash",
+    "_omitted_note": "total_current_assets and total_current_liabilities omitted — this borrower's Balance Sheet has no such subtotal rows (only CURRENT ASSETS / NON-CURRENT ASSETS section headers with no current subtotal). current_ratio/working_capital ratios will be suppressed with a disclosed reason rather than mismapped."
+  },
+  "shared_definitions": {
+    "ebitda_definition_ref": "covenant-spec.json#/definitions/EBITDA"
+  }
+}

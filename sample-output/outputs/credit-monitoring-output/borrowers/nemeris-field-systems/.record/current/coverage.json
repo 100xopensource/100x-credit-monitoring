@@ -1,0 +1,69 @@
+{
+  "module": "coverage",
+  "period": "2026-06",
+  "run_id": "run-20260915-060221",
+  "run_id_from": "run",
+  "produced_at": "2026-09-15T06:09:34+00:00",
+  "produced_by": {
+    "engine": "coverage",
+    "plugin_version": "1.0.0"
+  },
+  "source_files": [],
+  "results": [],
+  "exceptions": [],
+  "borrower": "Nemeris Field Systems, LLC",
+  "modules": [
+    {
+      "module": "covenant-compliance",
+      "state": "reported",
+      "figures": 6,
+      "exceptions": 0,
+      "reason": null,
+      "run_id": "run-20260915-060221",
+      "produced_at": "2026-09-15T06:07:37+00:00",
+      "source_ref_reach": {
+        "cell": 12,
+        "file": 18,
+        "unlocated": 1,
+        "borrower_doc": 31
+      },
+      "archived": "covenant-compliance-2026-06.json"
+    },
+    {
+      "module": "budget-vs-actual",
+      "state": "reported",
+      "figures": 32,
+      "exceptions": 6,
+      "reason": null,
+      "run_id": "run-20260915-060221",
+      "produced_at": "2026-09-15T06:04:50+00:00",
+      "source_ref_reach": {
+        "cell": 62,
+        "file": 28,
+        "unlocated": 0,
+        "borrower_doc": 56
+      },
+      "archived": "budget-vs-actual-2026-06.json"
+    },
+    {
+      "module": "three-statement-analysis",
+      "state": "reported",
+      "figures": 85,
+      "exceptions": 19,
+      "reason": null,
+      "run_id": "run-20260915-060221",
+      "produced_at": "2026-09-15T06:07:26+00:00",
+      "source_ref_reach": {
+        "cell": 135,
+        "file": 15,
+        "unlocated": 0,
+        "borrower_doc": 137
+      },
+      "archived": "three-statement-analysis-2026-06.json"
+    }
+  ],
+  "tally": {
+    "reported": 3
+  },
+  "readable": true
+}

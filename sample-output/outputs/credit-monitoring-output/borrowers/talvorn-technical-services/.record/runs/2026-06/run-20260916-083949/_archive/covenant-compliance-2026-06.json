@@ -1,0 +1,1637 @@
+{
+  "module": "covenant-compliance",
+  "period": "2026-06",
+  "run_id": "run-20260916-083949",
+  "run_id_from": "run",
+  "produced_at": "2026-09-16T08:45:30+00:00",
+  "produced_by": {
+    "engine": "covenant-compliance",
+    "plugin_version": null
+  },
+  "reporting_unit": {
+    "scale": 1.0,
+    "currency": "USD",
+    "verbatim": "Authoritative consolidated actuals | USD",
+    "plain": "USD"
+  },
+  "stores": {
+    "store": {
+      "url_base": null
+    },
+    "source": {
+      "url_base": null
+    }
+  },
+  "source_ref_reach": {
+    "cell": 16,
+    "file": 14,
+    "unlocated": 6,
+    "borrower_doc": 36
+  },
+  "source_files": [
+    "store:borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/covenant-spec.json",
+    "certified-values-2026-06.json",
+    "store:borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx"
+  ],
+  "results": [
+    {
+      "id": "min_fccr",
+      "name": "Minimum Fixed Charge Coverage Ratio (FCCR)",
+      "primitive": "min_coverage",
+      "test_date": "2025-03-31",
+      "window": "ttm",
+      "required": null,
+      "actual": null,
+      "headroom_abs": null,
+      "headroom_pct": null,
+      "status": "not_evaluable",
+      "reason": "insufficient_history",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/covenant-spec.json",
+          "section": "covenants.min_fccr",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Credit & Legal/Executed/original_agreement.pdf",
+              "page": 2,
+              "section": "FINANCIAL COVENANT",
+              "quote": "Minimum Fixed Charge Coverage Ratio: 1.20x."
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "section": "values.min_fccr.2025-03-31",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/03/certificate.pdf",
+              "page": 1,
+              "quote": "Talvorn Technical Services - Compliance Certificate 2025-03. Reporting period: 2025-03-31. FCCR CALCULATION: Trailing Covenant EBITDA: $24,018,414.20. Trailing Fixed Charges: $13,927,419.80. Calculated FCCR: 1.7245x. Minimum FCCR: 1.2000x. Status: COMPLIANT. Signed: Iris Calder, authorized officer."
+            }
+          ]
+        }
+      ],
+      "calc": "not evaluable at 2025-03-31: the model does not reach back far enough to fill this covenant's trailing window (covenants.min_fccr); the model starts at 2024-09-30. No pass/breach is asserted. The borrower's certificate reports 1.7245 for this date; it is shown as a cross-check and does not stand in for the model.",
+      "cert_value": 1.7245,
+      "cert_status": "pass",
+      "cert_headroom_abs": 0.5245,
+      "cert_headroom_pct": 0.4370833333333333,
+      "cert_agrees": null,
+      "delta_model_vs_cert": null
+    },
+    {
+      "id": "min_fccr",
+      "name": "Minimum Fixed Charge Coverage Ratio (FCCR)",
+      "primitive": "min_coverage",
+      "test_date": "2025-06-30",
+      "window": "ttm",
+      "required": null,
+      "actual": null,
+      "headroom_abs": null,
+      "headroom_pct": null,
+      "status": "not_evaluable",
+      "reason": "insufficient_history",
+      "source_ref": [
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/covenant-spec.json",
+          "section": "covenants.min_fccr",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Credit & Legal/Executed/original_agreement.pdf",
+              "page": 2,
+              "section": "FINANCIAL COVENANT",
+              "quote": "Minimum Fixed Charge Coverage Ratio: 1.20x."
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "section": "values.min_fccr.2025-06-30",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/03/certificate.pdf",
+              "page": 1,
+              "quote": "Talvorn Technical Services - Compliance Certificate 2025-06. Reporting period: 2025-06-30. FCCR CALCULATION: Trailing Covenant EBITDA: $24,488,168.47. Trailing Fixed Charges: $13,845,530.22. Calculated FCCR: 1.7687x. Minimum FCCR: 1.2000x. Status: COMPLIANT. Signed: Iris Calder, authorized officer."
+            }
+          ]
+        }
+      ],
+      "calc": "not evaluable at 2025-06-30: the model does not reach back far enough to fill this covenant's trailing window (covenants.min_fccr); the model starts at 2024-09-30. No pass/breach is asserted. The borrower's certificate reports 1.7687 for this date; it is shown as a cross-check and does not stand in for the model.",
+      "cert_value": 1.7687,
+      "cert_status": "pass",
+      "cert_headroom_abs": 0.5687,
+      "cert_headroom_pct": 0.47391666666666665,
+      "cert_agrees": null,
+      "delta_model_vs_cert": null
+    },
+    {
+      "id": "min_fccr",
+      "name": "Minimum Fixed Charge Coverage Ratio (FCCR)",
+      "primitive": "min_coverage",
+      "test_date": "2025-09-30",
+      "window": "ttm",
+      "required": 1.2,
+      "actual": 1.932219,
+      "headroom_abs": 0.732219,
+      "headroom_pct": 0.610183,
+      "status": "pass",
+      "source": "(model:'Reported EBITDA' (EBITDA bridge))/(model:sum(Cash Interest Expense, Scheduled Debt Principal Payments, Lease Payments)) [ttm]",
+      "source_ref": [
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 23,
+          "label": "Reported EBITDA",
+          "cells": "C23:N23",
+          "period": "2024-10..2025-09",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2024/10/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2024/11/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2024/12/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/01/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/02/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/03/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/04/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/05/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/06/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/07/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/08/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/09/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/covenant-spec.json",
+          "section": "definitions.Covenant_EBITDA",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Credit & Legal/Executed/original_agreement.pdf"
+            }
+          ]
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Balance Sheet",
+          "row": 32,
+          "label": "Cash Interest Expense",
+          "cells": "C32:N32",
+          "period": "2024-10..2025-09",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2024/10/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2024/11/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2024/12/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/01/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/02/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/03/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/04/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/05/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/06/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/07/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/08/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/09/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            }
+          ]
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Balance Sheet",
+          "row": 33,
+          "label": "Scheduled Debt Principal Payments",
+          "cells": "C33:N33",
+          "period": "2024-10..2025-09",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2024/10/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2024/11/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2024/12/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/01/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/02/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/03/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/04/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/05/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/06/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/07/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/08/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/09/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            }
+          ]
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Balance Sheet",
+          "row": 34,
+          "label": "Lease Payments",
+          "cells": "C34:N34",
+          "period": "2024-10..2025-09",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2024/10/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2024/11/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2024/12/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/01/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/02/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/03/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/04/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/05/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/06/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/07/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/08/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/09/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/covenant-spec.json",
+          "section": "definitions.Fixed_Charges",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Credit & Legal/Executed/original_agreement.pdf"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/covenant-spec.json",
+          "section": "covenants.min_fccr",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Credit & Legal/Executed/original_agreement.pdf",
+              "page": 2,
+              "section": "FINANCIAL COVENANT",
+              "quote": "Minimum Fixed Charge Coverage Ratio: 1.20x."
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "section": "values.min_fccr.2025-09-30",
+          "kind": "certified-transcription",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/03/certificate.pdf"
+            }
+          ]
+        }
+      ],
+      "calc": "actual 1.93222 = [model:'Reported EBITDA' (EBITDA bridge) summed Oct 2024..Sep 2025 (12 mo) = 2.65953e+07] / [model:sum(Cash Interest Expense, Scheduled Debt Principal Payments, Lease Payments) summed Oct 2024..Sep 2025 (12 mo) = 1.37641e+07]; test: min_coverage 1.93222 >= 1.2 (threshold per covenant-spec covenants.min_fccr)",
+      "cert_value": 1.9322,
+      "cert_status": "pass",
+      "cert_headroom_abs": 0.7322,
+      "cert_headroom_pct": 0.610167,
+      "delta_model_vs_cert": 1.9e-05,
+      "cert_agrees": true,
+      "cert_tolerance_applied": 0.05,
+      "notes": "numerator=26595317, denominator=13764131"
+    },
+    {
+      "id": "min_fccr",
+      "name": "Minimum Fixed Charge Coverage Ratio (FCCR)",
+      "primitive": "min_coverage",
+      "test_date": "2025-12-31",
+      "window": "ttm",
+      "required": 1.2,
+      "actual": 1.980117,
+      "headroom_abs": 0.780117,
+      "headroom_pct": 0.650098,
+      "status": "pass",
+      "source": "(model:'Reported EBITDA' (EBITDA bridge))/(model:sum(Cash Interest Expense, Scheduled Debt Principal Payments, Lease Payments)) [ttm]",
+      "source_ref": [
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 23,
+          "label": "Reported EBITDA",
+          "cells": "F23:Q23",
+          "period": "2025-01..2025-12",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/01/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/02/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/03/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/04/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/05/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/06/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/07/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/08/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/09/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/10/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/11/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/12/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/covenant-spec.json",
+          "section": "definitions.Covenant_EBITDA",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Credit & Legal/Executed/original_agreement.pdf"
+            }
+          ]
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Balance Sheet",
+          "row": 32,
+          "label": "Cash Interest Expense",
+          "cells": "F32:Q32",
+          "period": "2025-01..2025-12",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/01/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/02/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/03/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/04/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/05/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/06/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/07/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/08/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/09/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/10/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/11/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/12/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            }
+          ]
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Balance Sheet",
+          "row": 33,
+          "label": "Scheduled Debt Principal Payments",
+          "cells": "F33:Q33",
+          "period": "2025-01..2025-12",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/01/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/02/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/03/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/04/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/05/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/06/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/07/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/08/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/09/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/10/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/11/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/12/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            }
+          ]
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Balance Sheet",
+          "row": 34,
+          "label": "Lease Payments",
+          "cells": "F34:Q34",
+          "period": "2025-01..2025-12",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/01/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/02/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/03/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/04/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/05/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/06/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/07/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/08/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/09/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/10/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/11/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/12/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/covenant-spec.json",
+          "section": "definitions.Fixed_Charges",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Credit & Legal/Executed/original_agreement.pdf"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/covenant-spec.json",
+          "section": "covenants.min_fccr",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Credit & Legal/Executed/original_agreement.pdf",
+              "page": 2,
+              "section": "FINANCIAL COVENANT",
+              "quote": "Minimum Fixed Charge Coverage Ratio: 1.20x."
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "section": "values.min_fccr.2025-12-31",
+          "kind": "certified-transcription",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/03/certificate.pdf"
+            }
+          ]
+        }
+      ],
+      "calc": "actual 1.98012 = [model:'Reported EBITDA' (EBITDA bridge) summed Jan 2025..Dec 2025 (12 mo) = 2.70944e+07] / [model:sum(Cash Interest Expense, Scheduled Debt Principal Payments, Lease Payments) summed Jan 2025..Dec 2025 (12 mo) = 1.36832e+07]; test: min_coverage 1.98012 >= 1.2 (threshold per covenant-spec covenants.min_fccr)",
+      "cert_value": 1.9801,
+      "cert_status": "pass",
+      "cert_headroom_abs": 0.7801,
+      "cert_headroom_pct": 0.650083,
+      "delta_model_vs_cert": 1.7e-05,
+      "cert_agrees": true,
+      "cert_tolerance_applied": 0.05,
+      "notes": "numerator=27094376, denominator=13683219"
+    },
+    {
+      "id": "min_fccr",
+      "name": "Minimum Fixed Charge Coverage Ratio (FCCR)",
+      "primitive": "min_coverage",
+      "test_date": "2026-03-31",
+      "window": "ttm",
+      "required": 1.2,
+      "actual": 2.071284,
+      "headroom_abs": 0.871284,
+      "headroom_pct": 0.72607,
+      "status": "pass",
+      "source": "(model:'Reported EBITDA' (EBITDA bridge))/(model:sum(Cash Interest Expense, Scheduled Debt Principal Payments, Lease Payments)) [ttm]",
+      "source_ref": [
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 23,
+          "label": "Reported EBITDA",
+          "cells": "I23:T23",
+          "period": "2025-04..2026-03",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/04/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/05/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/06/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/07/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/08/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/09/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/10/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/11/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/12/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/01/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/02/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/03/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/covenant-spec.json",
+          "section": "definitions.Covenant_EBITDA",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Credit & Legal/Executed/original_agreement.pdf"
+            }
+          ]
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Balance Sheet",
+          "row": 32,
+          "label": "Cash Interest Expense",
+          "cells": "I32:T32",
+          "period": "2025-04..2026-03",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/04/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/05/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/06/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/07/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/08/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/09/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/10/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/11/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/12/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/01/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/02/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/03/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            }
+          ]
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Balance Sheet",
+          "row": 33,
+          "label": "Scheduled Debt Principal Payments",
+          "cells": "I33:T33",
+          "period": "2025-04..2026-03",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/04/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/05/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/06/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/07/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/08/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/09/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/10/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/11/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/12/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/01/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/02/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/03/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            }
+          ]
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Balance Sheet",
+          "row": 34,
+          "label": "Lease Payments",
+          "cells": "I34:T34",
+          "period": "2025-04..2026-03",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/04/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/05/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/06/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/07/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/08/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/09/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/10/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/11/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/12/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/01/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/02/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/03/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/covenant-spec.json",
+          "section": "definitions.Fixed_Charges",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Credit & Legal/Executed/original_agreement.pdf"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/covenant-spec.json",
+          "section": "covenants.min_fccr",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Credit & Legal/Executed/original_agreement.pdf",
+              "page": 2,
+              "section": "FINANCIAL COVENANT",
+              "quote": "Minimum Fixed Charge Coverage Ratio: 1.20x."
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "section": "values.min_fccr.2026-03-31",
+          "kind": "certified-transcription",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/03/certificate.pdf"
+            }
+          ]
+        }
+      ],
+      "calc": "actual 2.07128 = [model:'Reported EBITDA' (EBITDA bridge) summed Apr 2025..Mar 2026 (12 mo) = 2.81752e+07] / [model:sum(Cash Interest Expense, Scheduled Debt Principal Payments, Lease Payments) summed Apr 2025..Mar 2026 (12 mo) = 1.36028e+07]; test: min_coverage 2.07128 >= 1.2 (threshold per covenant-spec covenants.min_fccr)",
+      "cert_value": 2.0713,
+      "cert_status": "pass",
+      "cert_headroom_abs": 0.8713,
+      "cert_headroom_pct": 0.726083,
+      "delta_model_vs_cert": -1.6e-05,
+      "cert_agrees": true,
+      "cert_tolerance_applied": 0.05,
+      "notes": "numerator=28175247, denominator=13602792"
+    },
+    {
+      "id": "min_fccr",
+      "name": "Minimum Fixed Charge Coverage Ratio (FCCR)",
+      "primitive": "min_coverage",
+      "test_date": "2026-06-30",
+      "window": "ttm",
+      "required": 1.2,
+      "actual": 2.156366,
+      "headroom_abs": 0.956366,
+      "headroom_pct": 0.796972,
+      "status": "pass",
+      "source": "(model:'Reported EBITDA' (EBITDA bridge))/(model:sum(Cash Interest Expense, Scheduled Debt Principal Payments, Lease Payments)) [ttm]",
+      "source_ref": [
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Income Statement",
+          "row": 23,
+          "label": "Reported EBITDA",
+          "cells": "L23:W23",
+          "period": "2025-07..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/07/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/08/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/09/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/10/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/11/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/12/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/01/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/02/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/03/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/04/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/05/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/monthly-current.xlsx",
+              "sheet": "Income Statement"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/covenant-spec.json",
+          "section": "definitions.Covenant_EBITDA",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Credit & Legal/Executed/original_agreement.pdf"
+            }
+          ]
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Balance Sheet",
+          "row": 32,
+          "label": "Cash Interest Expense",
+          "cells": "L32:W32",
+          "period": "2025-07..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/07/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/08/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/09/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/10/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/11/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/12/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/01/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/02/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/03/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/04/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/05/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            }
+          ]
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Balance Sheet",
+          "row": 33,
+          "label": "Scheduled Debt Principal Payments",
+          "cells": "L33:W33",
+          "period": "2025-07..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/07/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/08/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/09/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/10/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/11/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/12/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/01/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/02/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/03/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/04/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/05/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            }
+          ]
+        },
+        {
+          "file": 2,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/Talvorn Technical Services Monthly IS-BS-CF.xlsx",
+          "sheet": "Balance Sheet",
+          "row": 34,
+          "label": "Lease Payments",
+          "cells": "L34:W34",
+          "period": "2025-07..2026-06",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/07/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/08/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/09/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/10/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/11/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/12/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/01/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/02/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/03/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/04/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/05/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            },
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2026/06/monthly-current.xlsx",
+              "sheet": "Balance Sheet"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/covenant-spec.json",
+          "section": "definitions.Fixed_Charges",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Credit & Legal/Executed/original_agreement.pdf"
+            }
+          ]
+        },
+        {
+          "file": 0,
+          "store": "store",
+          "path_in_store": "borrowers/talvorn-technical-services/.record/runs/2026-06/run-20260916-083949/config/covenant-spec.json",
+          "section": "covenants.min_fccr",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Credit & Legal/Executed/original_agreement.pdf",
+              "page": 2,
+              "section": "FINANCIAL COVENANT",
+              "quote": "Minimum Fixed Charge Coverage Ratio: 1.20x."
+            }
+          ]
+        },
+        {
+          "file": 1,
+          "section": "values.min_fccr.2026-06-30",
+          "kind": "certified-transcription",
+          "upstream": [
+            {
+              "store": "source",
+              "path_in_store": "Talvorn Technical Services/Finance Uploads/Monthly Close/2025/03/certificate.pdf"
+            }
+          ]
+        }
+      ],
+      "calc": "actual 2.15637 = [model:'Reported EBITDA' (EBITDA bridge) summed Jul 2025..Jun 2026 (12 mo) = 2.91602e+07] / [model:sum(Cash Interest Expense, Scheduled Debt Principal Payments, Lease Payments) summed Jul 2025..Jun 2026 (12 mo) = 1.35228e+07]; test: min_coverage 2.15637 >= 1.2 (threshold per covenant-spec covenants.min_fccr)",
+      "cert_value": 2.1564,
+      "cert_status": "pass",
+      "cert_headroom_abs": 0.9564,
+      "cert_headroom_pct": 0.797,
+      "delta_model_vs_cert": -3.4e-05,
+      "cert_agrees": true,
+      "cert_tolerance_applied": 0.05,
+      "notes": "numerator=29160208, denominator=13522846"
+    }
+  ],
+  "exceptions": [
+    {
+      "covenant": "min_fccr",
+      "type": "not_evaluable",
+      "reason": "insufficient_history",
+      "warning": "Covenant 'Minimum Fixed Charge Coverage Ratio (FCCR)' cannot be computed for its earliest periods \u2014 its ttm window reaches back further than the model's first month. Those periods are reported as not evaluable, not as a pass or breach.",
+      "test_dates": [
+        "2025-03-31",
+        "2025-06-30"
+      ]
+    }
+  ],
+  "engine": "spec-driven v5 (per-figure source refs + calc records; explicit flow/spot basis; certified-vs-model dual columns with per-component delta decomposition; dollar thresholds put on the model's declared unit; ledger-proxy flag on coverage covenants without a debt-service schedule)",
+  "borrower": "Talvorn Technical Services, LLC",
+  "reconciliation_required": false,
+  "reconciliation_blockers": [],
+  "reconciliation_override": false,
+  "spec_agreement_ref": "Talvorn 2025 Senior Secured Credit Facility -- Executed Credit Agreement between Talvorn Technical Services, LLC (Borrower) and Blue Mesa Private Credit, LP (Administrative Agent). Issued January 10, 2025; effective January 15, 2025; maturity January 15, 2030. Par refinancing of $104,139,422.73 of legacy (January 2022) principal; no new money, no sponsor equity, single obligor (no guarantors -- 'no unidentified subsidiary guarantor is certified' per the executed Guaranty and Security Agreement). No amendments or waivers exist in the deal folder: a full-text sweep of every executed document in Credit & Legal/Executed (original_agreement.pdf) and Credit & Legal/Executed/Initial Closing/ (fee-letter, guaranty-and-security, ip-security-agreement, funding-request, information-certificate, insurance-certificate, liquidity-certificate, officer-certificate, closing-compliance-certificate) for 'amend' and 'waiv' returns no hits describing a legal amendment or waiver of the credit agreement -- the only 'amend' hit anywhere in the Credit & Legal folder is the Board Finance Committee Mapping Policy's own express disclaimer that it 'does not amend the credit agreement.' No Amendments/ or Waivers/ subfolder exists anywhere in the deal folder structure.",
+  "cure_rights": {},
+  "model_month_ends": [
+    "2024-09-30",
+    "2024-10-31",
+    "2024-11-30",
+    "2024-12-31",
+    "2025-01-31",
+    "2025-02-28",
+    "2025-03-31",
+    "2025-04-30",
+    "2025-05-31",
+    "2025-06-30",
+    "2025-07-31",
+    "2025-08-31",
+    "2025-09-30",
+    "2025-10-31",
+    "2025-11-30",
+    "2025-12-31",
+    "2026-01-31",
+    "2026-02-28",
+    "2026-03-31",
+    "2026-04-30",
+    "2026-05-31",
+    "2026-06-30"
+  ],
+  "certified_source": "certificate.pdf",
+  "certified_period": "2026-06",
+  "transcription_notes": [
+    "Transcribed the 'FCCR CALCULATION' section (Trailing Covenant EBITDA / Trailing Fixed Charges / Calculated FCCR / Minimum FCCR / Status) from SIX separate quarter-end compliance certificates, one per test date since the facility's first_test_date: certificate.pdf inside Finance Uploads/Monthly Close/2025/03, 2025/06, 2025/09, 2025/12, 2026/03 and 2026/06. Each is a distinct physical file that happens to share the identical filename 'certificate.pdf' across every month's folder (confirmed: 18 of 18 months 2025-01 through 2026-06 each carry their own certificate.pdf, per the execution config's own _compliance_certificate_folder_note). The 'value' transcribed per test date is the certificate's own 'Calculated FCCR' line -- a bare number stated by the borrower, not derived.",
+    "JUDGMENT CALL (recorded per the module's 'source' field, which is singular): this file's top-level 'source' is set to the bare filename 'certificate.pdf' per the module spec's documented shape, which lets the engine locate ONE representative file via its own recursive search of reporting_packages_folder (compliance_certificate_folder is blank for this borrower). Because every month's certificate shares that same filename, the engine's search resolves to whichever one instance it encounters first (folder-walk order, not necessarily 2026-06's own certificate) -- the source_files entry the engine attaches to these cert refs may therefore point at a DIFFERENT month's certificate.pdf than the one a given test-date value was actually read from. To keep every value independently traceable regardless of which file the engine's search resolves to, each value's own 'quote' field embeds that certificate's own header and 'Reporting period' line, naming its exact source certificate in the transcription itself. Alternative reading: run six separate certified-values files (one per historical period) through six separate engine invocations, each with its own period-matched 'source' -- rejected because the task calls for one consolidated cross-check across all reachable test dates in a single module output, and the per-entry quote already disambiguates the physical file.",
+    "The FCCR is tested QUARTERLY only -- interim (non-quarter-end) months in the borrower's monthly package also carry a running FCCR figure marked 'NOT TESTED' (informational only, per the execution config's own note) and are NOT transcribed here as certified test results, consistent with the covenant-spec's own note that only quarter-end dates are tested under a flat, non-stepped 1.20x minimum.",
+    "No amendments or waivers exist for this facility (confirmed by covenant-spec.json's own full-text sweep) and Covenant EBITDA is contractually defined to equal Reported EBITDA with zero permitted add-backs, so no add-back reconciliation was needed while transcribing these six certificates."
+  ],
+  "action_items": [],
+  "methodology": "Company-prepared/unaudited model; EBITDA taken from the model's single pinned EBITDA bridge row (not recomputed). Thresholds and definitions per the standardized covenant-spec; each definition's flow/spot basis is explicit in the spec. cert_* fields are the borrower's own certified actuals transcribed from the compliance certificate -- reported alongside the model reconstruction, never merged with it."
+}

@@ -1,0 +1,50 @@
+{
+  "schema": "credit-monitoring-run-ledger/v1",
+  "schema_version": 1,
+  "run_id": "run-20260915-060221",
+  "period": "2026-06",
+  "status": "finished",
+  "started_at": "2026-09-15T06:02:21+00:00",
+  "base": {
+    "from": "seed"
+  },
+  "packages_seen": [],
+  "analyst_focus": [
+    "Deal-context default: revenue vs budget shipment-timing risk, Net Leverage cushion, EBITDA add-back discipline after Q2 2026 correction"
+  ],
+  "steps": {
+    "config": "done",
+    "model": "done",
+    "modules": {
+      "covenant-compliance": "done",
+      "budget-vs-actual": "done",
+      "three-statement-analysis": "done"
+    },
+    "coverage": "done",
+    "memo": "done",
+    "write_back": "done"
+  },
+  "delivery_base": {
+    ".record/changelog.jsonl": null,
+    ".record/current/config/borrower-config.json": "sha256:a0205fe16d114646c43bb4c47a42df43de60be1ebb4177856067f2385c7944f2",
+    ".record/current/config/budget-map.json": "sha256:1b73d7f4eecd79cd8e7e65bbcdcd235a880940fb21dae3cd7a2338a60c6707fd",
+    ".record/current/config/collateral-map.json": "sha256:afe54a2e2ee56aead0eccd51c5651600b2984904ddbfb7af01c68119303baa47",
+    ".record/current/config/covenant-spec.json": "sha256:adc88e8670ad2902a406c50047064e7515e32b06f999e5b390a06f19490d1c64",
+    ".record/current/config/deal-context.json": "sha256:e08e789b4adb66abe12debbe2f281fb399898a3883438c40df0b8358bca9edd4",
+    ".record/current/config/debt-service-schedule.json": "sha256:29a97f3e040f8d589e4e1032e5f7ed069cb041ba92fd0cef7fae3b9fb72d6494",
+    ".record/current/config/debt-service-schedule.md": "sha256:0522c8f2969275351c3c0fbe1bc8b287845d35a7ff4d56f3f81829a80046c3b1",
+    ".record/current/config/debt-service-spec.json": "sha256:ce297f61c70c4e955aed22b7e31ec5ace1c481346dc1aaeaa99fde99af8215cf",
+    ".record/edit-intake.json": null,
+    ".record/manifest.json": null,
+    ".record/published.json": null
+  },
+  "inputs": {
+    "config": "config",
+    "model": "Nemeris Field Systems Monthly IS-BS-CF.xlsx",
+    "sidecars": [
+      "source-map.json",
+      "restatements.json"
+    ],
+    "execution_config": "execution-config.json"
+  }
+}

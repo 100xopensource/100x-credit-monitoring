@@ -1,0 +1,143 @@
+{
+  "borrower_name": "Veyrona Decision Systems, LLC",
+  "fund": "",
+  "timezone": "America/New_York",
+  "paths": {
+    "reporting_packages_folder": "source:Veyrona Decision Systems/5_Loan Monitoring/Finance Reporting",
+    "compliance_certificate_folder": "source:Veyrona Decision Systems/5_Loan Monitoring/Quarterly Compliance",
+    "model_output_path": "store:borrowers/veyrona-decision-systems/_model/Veyrona Decision Systems Monthly IS-BS-CF.xlsx",
+    "monitor_output_folder": "store:borrowers/veyrona-decision-systems/.record/current",
+    "credit_agreement_path": "source:Veyrona Decision Systems/3_Loan Documentation/Executed/Original_Credit_Agreement.pdf",
+    "ic_uw_memo_path": "source:Veyrona Decision Systems/2_Prescreen and Underwriting/Underwriting_Memorandum.pdf",
+    "covenant_spec_path": "store:borrowers/veyrona-decision-systems/.record/current/config/covenant-spec.json",
+    "debt_service_spec_path": "store:borrowers/veyrona-decision-systems/.record/current/config/debt-service-spec.json",
+    "debt_service_schedule_path": "store:borrowers/veyrona-decision-systems/.record/current/config/debt-service-schedule.json",
+    "deal_context_path": "store:borrowers/veyrona-decision-systems/.record/current/config/deal-context.json",
+    "budget_path": "source:Veyrona Decision Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+    "budget_version_note": "Approved_Budget_FY2025_H1_2026.xlsx -- ONLY budget file in the deal folder (no candidates/decoys to disambiguate). Two tabs matter: 'Approved Plan' (FY2025 and H1 2026 ANNUAL/half-year aggregates for Revenue/Gross Profit/Opex/EBITDA) and 'Monthly Operating Plan' (true month-by-month cadence, but EBITDA ONLY -- no monthly Revenue/GP/Opex breakdown exists anywhere in this workbook). 'Approval' tab: Status 'APPROVED GOVERNING PLAN'; FY2025 approved by the Board Finance Committee 2024-12-18, H1 2026 approved 2025-12-17. 'Budget Checks' tab ties the monthly EBITDA rows to the annual aggregates exactly (difference = 0 for both FY2025 and H1 2026). Covers 2025-01 through 2026-06 inclusive (18 months) -- exactly the monitoring window through the latest authoritative month.",
+    "budget_map_path": "store:borrowers/veyrona-decision-systems/.record/current/config/budget-map.json",
+    "collateral_map_path": "store:borrowers/veyrona-decision-systems/.record/current/config/collateral-map.json",
+    "_agreement_amendment_chain_note": "OPERATIVE DOCUMENT CHAIN -- Original_Credit_Agreement.pdf (executed 2025-01-10, effective 2025-01-15, matures 2030-01-15) + THREE executed amendments (all read in full; covenant-setup should re-parse all four for the formal covenant-spec). Borrower: Veyrona Decision Systems, LLC (Delaware LLC), wholly owned by guarantor/co-grantor Veyron Holdings, LLC. Lender/Agent: Granite Harbor Direct Lending, LP (sole lender -- no syndicate). Facility: $250,000,000 total commitment = $187,274,929.89 funded term loan + $62,725,070.11 undrawn revolver (Schedule 1.1); refinanced $179,250,000 of legacy debt at closing. Amortization: 0.60% of beginning principal, monthly, unchanged by any amendment. INTEREST RATE MECHANICS (index, margin, cash/PIK split) ARE NOT STATED ANYWHERE in the Original Agreement or any of the three amendments -- a genuine drafting/extraction gap; covenant-setup / debt-service-spec cannot build a rate-driven interest schedule from these documents alone and should escalate for the missing pricing grid (fee letter or pricing schedule, if one exists outside this folder). Sole financial covenant: Maximum Net Leverage Ratio = Net Debt / TTM Covenant EBITDA, tested quarterly at calendar quarter-ends, first test 2025-03-31. 'Covenant EBITDA' is used as a defined term throughout but its addback-limb definition is NEVER spelled out in the text of any document reviewed -- see deal-context.json ebitda_addbacks for the resulting (empty, well-evidenced) register. No equity cure right is documented anywhere. No FCCR or minimum-liquidity covenant exists -- Net Leverage is the only financial covenant. COVENANT THRESHOLD TIMELINE: 6.00x (2025-03-31 test, Original Agreement) -> 5.75x effective 2025-08-05 (First Amendment, exec. 2025-08-01; also added an unquantified cloud-migration capex basket) -> 5.25x effective 2026-01-31 (Second Amendment, exec. 2026-01-20; added an unquantified customer-data-license investment basket + enhanced AR-aging reporting) -> 5.00x effective 2026-04-30 (Third Amendment, exec. 2026-04-20; preserved/did not claw back the undrawn revolver commitment, in exchange for undefined 'revised-reporting controls'). All three amendments are pure covenant-reset amendments with a small bundled accommodation each and explicit 'no waiver or novation' boilerplate -- none is a waiver, cure, or forbearance (no waiver document exists anywhere in this deal, confirmed by search). An UNSIGNED draft Third Amendment dated 2026-04-01 (Drafts/Unsigned_Third_Amendment_Proposal.pdf) had proposed a much TIGHTER 4.75x cap with several open/reserved terms; the EXECUTED Third Amendment 19 days later settled at a LOOSER 5.00x -- i.e. the borrower negotiated more headroom than the lender's own opening draft offered. The draft explicitly disclaims being an amendment/commitment and the executed Third Amendment's recitals explicitly reject reliance on it -- the draft is a superseded decoy for every purpose except this negotiation-direction observation, which is worth an independent follow-up (the documents alone don't say whether this reflects normal negotiation give-and-take or something else).",
+    "_covenant_trend_note": "COVENANT TREND ACROSS ALL 6 QUARTERS TESTED TO DATE (all from Covenant_Calculation_QX_20XX.xlsx 'Leverage Summary' tabs, cross-checked against the signed Compliance_Certificate PDFs where available) -- every quarter is COMPLIANT, but HEADROOM HAS COMPRESSED SHARPLY because each amendment cut the ceiling faster than actual leverage improved: Q1'25 Net Leverage 5.2291x vs 6.00x max (headroom 0.7709x = 12.8%); Q2'25 5.2063x vs 6.00x (0.7937x = 13.2%); Q3'25 5.2825x vs 5.75x, first quarter under the First Amendment (0.4675x = 8.1%); Q4'25 5.3056x vs 5.75x (0.4444x = 7.7%); Q1'26 5.1265x vs 5.25x, first quarter under the Second Amendment, AS-FILED using PRE-restatement March EBITDA (0.1235x = 2.4%); Q2'26 4.8962x vs 5.00x, first quarter under the Third Amendment (0.1038x = 2.1%). Absolute leverage itself drifted up through 2025 (5.23x->5.31x, driven by a dip in TTM EBITDA from $33.3M to $30.9M) before improving to 4.90x by Q2'26 (TTM EBITDA recovered to $32.2M) -- so the OPERATING picture is roughly stable-to-improving, but relative covenant cushion has collapsed from ~13% to ~2% purely because of the amendment ratchet. This is the central watchlist driver -- see deal-context.json our_view.",
+    "_restatement_note": "MARCH 2026 RESTATEMENT (Finance Reporting/2026/Q2/June Close/Restatement_Notice_2026-06-20.pdf, read first and confirmed against both quarterly packages): Veyrona's finance team found an OMITTED completed implementation milestone (customer Arcwell Transit, project 'Atlas Acceptance', accepted 2026-03-29 but not booked at the March close). Correction: March 2026 revenue $13,570,373.98 -> $14,062,563.71 (+$492,189.73); direct implementation cost +$452,814.55; net EBITDA impact +$39,375.18 ($3,012,476.43 -> $3,051,851.61). Entry is NON-CASH (Dr. Contract asset / Cr. Implementation revenue; Dr. Direct implementation costs / Cr. Accrued implementation costs) -- cash flow and the debt schedule are untouched. ONLY MARCH's income statement changed; April and May P&L figures are IDENTICAL in the ORIGINAL (Quarterly_Package_2026-06-18_ORIGINAL.xlsx) and REVISED (Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx) packages -- they are swept into the 'MARCH-MAY' revised package only because the balance sheet (Contract Asset / Accrued Cost / Retained Earnings Effect) is a cumulative snapshot that carries the March adjustment forward. AUTHORITATIVE FILE FOR MARCH, APRIL AND MAY 2026 GOING FORWARD: Quarterly_Package_2026-06-25_REVISED_MARCH-MAY.xlsx. CONFIRMED STALE, NEVER UPDATED: the individual monthly files under Finance Reporting/2026/03 (March_2026_AS_FILED_Monthly_Package.xlsx), /04 (April_2026_Monthly_Package.xlsx) and /05 (May_2026_AS_FILED_Monthly_Package.xlsx) were never reissued after the 2026-06-25 correction. March's standalone file is wrong on BOTH income statement (shows pre-restatement $13,570,373.98/$3,012,476.43) AND balance sheet. April's and May's standalone files have the CORRECT income statement (nothing was restated there) but a STALE balance sheet (still show Contract Asset $5.0M / Accrued Cost $2.0M rather than the revised $5,492,189.73 / $2,452,814.55 carried forward from the March fix). build-monitoring-model MUST source March/April/May 2026 from the REVISED consolidated file, never from the three standalone monthly files, or the canonical model will carry a permanent $492,189.73 March revenue understatement and understated Contract Asset/Accrued Cost on the balance sheet for April and May. June 2026's own regular monthly package (June_2026_Monthly_Package_2026-07-25.xlsx, filed a month later) is unaffected and already built on the revised March comparative -- no discrepancy of its own.",
+    "_as_filed_note": "WHAT 'AS_FILED' MEANS HERE (investigated per file, confirmed with dates and cross-references): (1) Every monthly package in this deal (2024-2026, all months) carries the SAME internal 'Package Authority' field value 'AS FILED' -- it is a GENERIC label meaning 'this is the original point-in-time filing', not a restatement-specific marker. Only March and May 2026 happen to carry the suffix in the FILENAME itself (April_2026_Monthly_Package.xlsx does not) -- this is a filenaming inconsistency, not a signal that April differs in kind; do not over-read the filename pattern. Given the restatement, May_2026_AS_FILED_Monthly_Package.xlsx IS still correct on its own income statement (May was never restated) but stale on its balance sheet for the reason above. (2) Covenant_Calculation_Q1_2026_AS_FILED.xlsx IS the one genuinely consequential AS_FILED file: no other quarter's covenant-calculation file (2025 Q1-Q4, 2026 Q2) carries this suffix, and it is stale in a way that matters. The Q1 2026 certificate was signed/delivered 2026-04-12 (Elena Marrow, CEO) -- over two months BEFORE the June 20 restatement was even discovered, so this was not negligence, simply not yet known. Its TTM build used the PRE-restatement 2026-Q1 quarterly EBITDA ($8,437,990.42); the Q2 2026 covenant calculation's own TTM build silently restates that same 2026-Q1 quarter to $8,477,365.60 -- exactly +$39,375.18, the restatement delta -- proving the Q2 filing implicitly folds the correction into its trailing-twelve-month roll-forward. HOWEVER: there is NO standalone corrected/re-signed Q1 2026 compliance certificate or covenant calculation anywhere in the deal folder (confirmed: only 3 files exist under Quarterly Compliance/2026 Q1/, all dated April 2026, none touched since) -- the Q1 2026 leverage ratio on file (5.1265x vs 5.25x max) is technically built on a stale EBITDA input that was never formally recertified, though recomputing with the corrected EBITDA still yields 5.1197x, comfortably compliant either way (does not flip the verdict, only the precision of the number on file). covenant-setup / monthly-monitor should treat the Q1 2026 AS_FILED covenant calculation as superseded-in-substance-but-never-formally-corrected, and flag the documentation gap (no evidence the credit agreement's own recertification mechanics, if any, were ever invoked).",
+    "_reporting_folder_structure_note": "Finance Reporting/<YYYY>/<MM>/ holds one monthly package per month, 2024-09 through 2026-05 (22 consecutive months, verified no gaps), each with 4 statement tabs (Income Statement, Balance Sheet, Cash Flow, Debt & Liquidity) plus Operating KPIs / Budget Comparison / Working Capital / Close Notes / Control Checks metadata tabs -- verified identical schema across Sept 2024, June 2025 and the June 2026 quarter-close package. Finance Reporting/2026/Q2/June Close/ holds the June-quarter-close package set (see _restatement_note) rather than a single monthly file for June -- June's own regular monthly package (June_2026_Monthly_Package_2026-07-25.xlsx) lives there too, filed a month after the March-May correction. Supporting Schedules/<Month YYYY>/ holds one AP_AR_Aging + one Sales_by_Channel workbook per month, ALSO 2024-09 through 2026-06 (22 months, verified complete, no gaps) -- named-counterparty (12 customers/8 vendors) AR/AP aging with Current/31-60/61-90/90+ buckets, and project/customer-level Sales_by_Channel detail with a 'Service line' field (Licensed datasets / Advisory solutions / Managed analytical services / Analytics implementations) acting as the channel breakdown. June 2026 AR/AP aging totals ($26,793,751.51 / $10,757,342.61) tie EXACTLY to the June 2026 monthly package's Balance Sheet Accounts Receivable / Accounts Payable, with the same tie-out independently verified for September 2024 -- a stable, usable monthly input."
+  },
+  "modules": [
+    "covenant-compliance",
+    "budget-vs-actual",
+    "ap-ar-aging",
+    "three-statement-analysis"
+  ],
+  "_modules_comment": "revenue-quality EXCLUDED: Veyrona's revenue is a mix of milestone/acceptance-based implementation work (percentage-of-completion-like, the largest disclosed backlog share at 63%), utilization-driven advisory (15% of backlog), and only a partial recurring component (licensed datasets + managed analytical services) -- not a SaaS/ARR business, and no retention-file or deferred-revenue-file exists anywhere in Supporting Schedules for the module to read. budget-vs-actual INCLUDED despite the actuals model having no native 'Gross Profit' row: Revenue and 'Cost of Revenue' BOTH exist natively on every Income Statement checked, so model_lines.gross_profit CAN be populated via a derived 'Gross Profit (derived)' row (see model_lines._construction_note) -- this is the deciding factor per the known engine limitation (budget-vs-actual and three-statement-analysis both hard-require model_lines.gross_profit to run at all; a borrower where it cannot be derived, e.g. Selvara, has the module skip entirely). ap-ar-aging INCLUDED: verified exact tie-out (see paths._reporting_folder_structure_note).",
+  "module_inputs": {
+    "revenue-quality": {
+      "basis_break_note": ""
+    },
+    "_comment": "Per-module settings. The monthly input FILES are not configured here: for each run the agent opens the borrower's reporting folder for the period, sees which file is which, and passes the paths to the engine. For March/April/May 2026 the agent MUST use the REVISED consolidated file per paths._restatement_note, never the stale standalone monthly files."
+  },
+  "model": {
+    "entity": "consolidated",
+    "scale": 1,
+    "currency": "USD",
+    "unit_verbatim": "Fictional clean-room borrower evidence | USD unless noted",
+    "as_of": "auto: latest month present in reporting_packages_folder",
+    "_scale_verification": "No '$ in thousands'/'USD 000s' caption anywhere -- every sheet in every workbook (monthly packages, budget, aging, sales-by-channel) carries the same generic caption above, which is USD whole-dollar by convention across this entire batch. Sanity-checked against magnitude: representative monthly revenue ~$17-19.9M (Sept 2024 $19,209,856.56; June 2025 $18,304,069.67; June 2026 $19,921,004.84) annualizes to ~$213-230M, matching the FY2022-FY2024 Reviewed Financial Statements almost exactly (FY2022 $213,428,965.52; FY2023 $215,434,666.67; FY2024 $213,000,000.00) -- confirms scale=1 (whole dollars), not thousands, with no drift across 2024/2025/2026 packages. Also cross-checked FY2024 annual detail (Revenue $213,000,000.00 - Cost of revenue $115,020,000.00 - Operating expenses $64,519,339.31 = $33,460,660.69) which ties EXACTLY to FY2024's disclosed Covenant EBITDA -- confirms Reported EBITDA = Revenue - Cost of Revenue - Operating Expenses with ZERO addback, which underpins the model_lines.gross_profit derivation below and the empty ebitda_addbacks register in deal-context.json."
+  },
+  "model_lines": {
+    "revenue": "Revenue",
+    "gross_profit": "Gross Profit (derived)",
+    "operating_cogs": "Cost of Revenue",
+    "ebitda_bridge": "Reported EBITDA",
+    "net_income": "",
+    "interest_expense": "",
+    "taxes": "",
+    "depreciation_amortization": "",
+    "financing_cost": "",
+    "accounts_receivable": "Accounts Receivable",
+    "accounts_payable": "Accounts Payable",
+    "pre_financing_subtotal": "",
+    "revenue_components": [],
+    "total_debt": "Funded Debt",
+    "_construction_note": "The monthly Income Statement (verified identical shape across Sept 2024, June 2025, and the June 2026 quarter-close package) has EXACTLY four rows: Revenue, Cost of Revenue, Operating Expenses, Reported EBITDA -- no Gross Profit subtotal, no Net Income, no Interest Expense, no Taxes, no D&A anywhere on the IS or the Cash Flow/Debt & Liquidity tabs. Veyrona is also a pass-through LLC with 'no entity-level current or deferred income tax' (FY2022/2023/2024 Reviewed Financial Statements) -- taxes is a genuine N/A, not merely unreported. JUDGMENT CALL (flagged for build-monitoring-model, which monitor-setup does NOT run): since Revenue and Cost of Revenue BOTH exist as native rows, monitor-setup is pre-defining ONE derived subtotal row build-monitoring-model must insert between them and Reported EBITDA: 'Gross Profit (derived)' = Revenue - Cost of Revenue. VERIFIED against FY2024 annual: 213,000,000.00 - 115,020,000.00 = 97,980,000.00; 97,980,000.00 - Operating Expenses 64,519,339.31 = 33,460,660.69 = the disclosed Covenant EBITDA exactly -- so this derivation is exact and tie-checked, not a guess (this is the same construction pattern used for Asteron's 'Gross Profit' derived row, following the same precedent). net_income/interest_expense/taxes/depreciation_amortization are left BLANK rather than guessed -- there is no cash-basis proxy for any of them anywhere in this package (unlike Selvara, which at least had 'Cash interest'/'Cash taxes' rows on its Cash Flow tab); three-statement-analysis will report these in lines_not_found with the dependent ratios (interest coverage, etc.) suppressed. total_debt maps to the Balance Sheet's 'Funded Debt' row -- a single, genuinely rolled-up funded-debt balance (also cross-referenced against the Debt & Liquidity tab's 'Ending Debt', which ties to it every month checked)."
+  },
+  "opex_groups": {
+    "Operating Expenses": "Operating Expenses",
+    "_comment": "Single lumped opex line -- the Income Statement has no sub-category breakdown at all (no Employee Compensation / S&M / G&A splits). budget-vs-actual's opex-breakdown section reduces to this one group on the actuals side, and even this one group has NO monthly budget counterpart (see budget-map.json _gap_note) -- so the module will show actual opex with no budget comparison for it, only the EBITDA-level comparison is fully budget-vs-actual capable."
+  },
+  "comparability_items": [],
+  "ebitda": {
+    "addback_financing_cost": false,
+    "_comment": "No financing_cost line exists anywhere in this borrower's monthly package, and EBITDA already ties exactly to Revenue - Cost of Revenue - Operating Expenses with zero addback in every period checked -- nothing to add back."
+  },
+  "aging": {
+    "file_format": "auto",
+    "dpo_basis": "operating_cogs",
+    "amount_scale": 1,
+    "tie_tolerance": 1.0,
+    "top_n": 5,
+    "_verification_note": "amount_scale=1 verified: June 2026 AR_AP_Aging totals (AR $26,793,751.51, AP $10,757,342.61, summed from the 12 named-customer / 8 named-vendor rows) tie EXACTLY to the June 2026 monthly package's Balance Sheet Accounts Receivable / Accounts Payable -- no scale adjustment needed. dpo_basis='operating_cogs' now resolves cleanly since model_lines.operating_cogs maps to the native 'Cost of Revenue' row (unlike a borrower where COGS is genuinely absent)."
+  },
+  "analysis_notes": [
+    "No acquisition/consolidation basis change found across the full history checked (2024-09 through 2026-06) -- analysis.basis_breaks is intentionally empty.",
+    "Budget-side gap: Approved_Budget_FY2025_H1_2026.xlsx's 'Monthly Operating Plan' tab provides ONLY a monthly Budget EBITDA figure (no monthly Revenue/Gross Profit/Opex breakdown exists anywhere in the workbook -- those exist only as two ANNUAL/H1 aggregate points on the 'Approved Plan' tab, which cannot support a monthly period join). budget-map.json therefore omits 'revenue' and 'gross_profit' from metric_rows rather than guessing a monthly split from the annual total -- the EBITDA-level budget-vs-actual comparison is fully supported; the Revenue-variance and Gross-Margin-variance lines will show as unavailable for this borrower, a genuine and disclosed gap (see budget-map.json _gap_note), not a misconfiguration.",
+    "EBITDA add-back sweep (for deal-context.json ebitda_addbacks) found NO restructuring/impairment/write-off/severance/transaction-cost/settlement/one-time/miscellaneous line anywhere in the Original Credit Agreement, any of the three Amendments, the FY2022-2024 Reviewed Financial Statements, the Underwriting Memorandum, or the Management Presentation -- and the Underwriting Memorandum explicitly disclaims addbacks ('no credit given to unsupported pipeline conversion, hypothetical headcount savings, or prospective margin actions'). Reported EBITDA ties exactly to the certified Covenant EBITDA figure at every point checked. ebitda_addbacks.entries is therefore empty. SEPARATE GAP FOR COVENANT-SETUP: the Credit Agreement never actually spells out the EBITDA addback-limb definition text (no '(i) interest, (ii) taxes, (iii) D&A...' language exists anywhere in the executed documents) -- covenant-setup should flag this as a legal-extraction gap rather than assume a standard addback stack."
+  ],
+  "analysis": {
+    "basis_breaks": [],
+    "business_model": "services",
+    "cash_floor": null,
+    "fiscal_year_start_month": 1,
+    "trend_window": 3,
+    "line_read": {
+      "materiality_floor": null,
+      "run_min_months": 3,
+      "frozen_min_months": 3,
+      "big_move_pct": 0.25,
+      "share_shift_ppt": 5.0
+    },
+    "drift": {
+      "min_months": 6,
+      "min_same_sign_share": 0.7,
+      "min_total_pct": 0.15
+    },
+    "trend": {
+      "window": 4,
+      "trend_min_months": 3,
+      "trend_max_months": 5,
+      "run_end_tolerance": 2,
+      "k_vol": 1.5,
+      "ratio_rel": 0.2,
+      "wc_driver_pct": 0.1,
+      "wc_rev_pct": 0.1,
+      "reclass_net_frac": 0.2,
+      "reclass_min_pct": 0.25
+    },
+    "seasonality": {
+      "low_months": [],
+      "peak_months": []
+    },
+    "thresholds": {
+      "gross_margin_floor": 0.2,
+      "one_time_reliance_ppt": 0.05,
+      "dpo_days_high": 60,
+      "dio_days_high": 120,
+      "current_ratio_low": 1.0,
+      "revenue_drop_vs_trailing": 0.2,
+      "liquidity_months_to_floor": 3.0
+    }
+  },
+  "analysis_lines": {
+    "cash": "Cash",
+    "accounts_receivable": "Accounts Receivable",
+    "accounts_payable": "Accounts Payable",
+    "total_debt": "Funded Debt",
+    "operating_cf": "Operating Change",
+    "investing_cf": "Investing Change",
+    "financing_cf": "Financing Change",
+    "_omitted_note": "inventory, total_assets, total_equity, total_current_assets, total_current_liabilities ALL omitted -- this borrower has NO Balance Sheet totals at all (only Cash, Accounts Receivable, Contract Asset, Accounts Payable, Accrued Cost, Funded Debt, and Retained Earnings Effect -- verified identical across every month checked), and no inventory line (consistent with a services/data business that the Security Agreement also confirms carries no pledged inventory). Unlike Selvara/Orinth Vale, this borrower's Cash Flow tab HAS native Operating/Investing/Financing subtotal columns ('Operating Change', 'Investing Change', 'Financing Change' alongside 'Beginning Cash'/'Ending Cash') -- no derived-row construction is needed here, a simpler case than most of this batch. net_change_cash is left unmapped -- fully recoverable as Ending Cash - Beginning Cash, or as the sum of the three Change columns, following the convention used for other borrowers with no explicitly labeled net-change row."
+  },
+  "shared_definitions": {
+    "ebitda_definition_ref": "covenant-spec.json#/definitions/EBITDA"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "borrower": "Orinth Vale Infrastructure, LLC",
+  "file": "store:borrowers/orinth-vale-infrastructure/_model/Orinth Vale Infrastructure H1 2026 Budget (transposed for budget-map).xlsx",
+  "sheet": "Budget (transposed)",
+  "_orientation_workaround_note": "ORIENTATION WORKAROUND (judgment call, flagged for the analyst): the real approved budget (source:Orinth Vale Infrastructure/03 Budgets/Approved/budget-h1.xlsx, 'Monthly Plan' tab, plus 'Cash & Liquidity' for Ending Cash) is laid out PERIODS-AS-ROWS / METRICS-AS-COLUMNS (one row per month: Period, Revenue, Costs, Operating Expenses, Budget EBITDA, Ending Debt). The budget-vs-actual engine reads a FIXED cell(row=metric_rows[metric], column=period_columns[period]) address, i.e. METRICS-AS-ROWS / PERIODS-AS-COLUMNS -- the opposite orientation. Since the real workbook cannot be reshaped in place (it is the read-only, lender-approved source document), monitor-setup built a byte-verified TRANSPOSED COPY at the 'file' path above (borrowers/orinth-vale-infrastructure/_model/), reshaping the SAME 6 months x 5 Monthly-Plan metrics plus Ending Cash (from Cash & Liquidity) into metrics-as-rows/periods-as-columns with NO value changes -- every figure was read back and compared to the source workbook and matched exactly. paths.budget_path in borrower-config still points at the ORIGINAL source workbook (the authoritative approved document); this 'file' here is the reshaped copy the engine actually reads. If H2 2026 or a later period is approved in the same periods-as-rows shape, this transposed copy must be regenerated the same way.",
+  "_metric_coverage_workaround_note": "METRIC-COVERAGE WORKAROUND: like Nemeris (and unlike Orinth Vale's own ACTUALS model, which does break these out natively), this budget is only built down to a single 'Budget EBITDA' row -- it has no Gross Profit, Net Income, Interest Expense, Taxes, or Depreciation & Amortization row at all. Row 10 ('Zero Proxy (verified blank)') of the transposed workbook is a VERIFIED-BLANK row (confirmed None across all 6 period columns) used as a zero proxy for interest_expense/taxes/depreciation_amortization, and row 7 (the real 'Budget EBITDA' figures) is pointed to by 'net_income' below, so the engine's fixed Net Income + Interest + Taxes + D&A bridge reconstructs to EXACTLY the real Budget EBITDA for every period (Budget EBITDA + 0 + 0 + 0 = Budget EBITDA). 'net_income' in this map is REALLY 'Budget EBITDA' -- do not read it as a true net-income budget. 'gross_profit' is derived as Revenue-minus-Costs (both real budget rows; verified for June 2026: 13,221,521.79 - 7,218,950.90 = 6,002,570.89), which is a genuine like-for-like construction (the actuals' own Gross Profit is also exactly Revenue-minus-Costs, see borrower-config model_lines._gap_note) -- unlike Asteron, this one IS a real, correctly-constructed budget gross-margin figure, not a meaningless EBITDA-margin proxy.",
+  "period_columns": {
+    "2026-01-31": 2,
+    "2026-02-28": 3,
+    "2026-03-31": 4,
+    "2026-04-30": 5,
+    "2026-05-31": 6,
+    "2026-06-30": 7
+  },
+  "metric_rows": {
+    "revenue": 4,
+    "gross_profit": {
+      "add": [
+        4
+      ],
+      "subtract": [
+        5
+      ]
+    },
+    "net_income": 7,
+    "interest_expense": 10,
+    "taxes": 10,
+    "depreciation_amortization": 10
+  },
+  "balance_sheet_rows": {
+    "Cash (controlled accounts)": 9
+  },
+  "_balance_sheet_rows_note": "Only Cash is planned in this budget (row 9, 'Ending Cash' from the source's 'Cash & Liquidity' tab). No Accounts receivable / Inventory / Property and equipment projections exist in the approved H1 2026 budget, so the Collateral box will render '\u2014' vs Budget for those three pledged components.",
+  "opex_groups": {
+    "Operating Expenses": 6
+  }
+}

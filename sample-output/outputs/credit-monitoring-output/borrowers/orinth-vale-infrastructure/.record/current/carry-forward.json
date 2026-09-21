@@ -1,0 +1,26 @@
+{
+  "open_requests_to_borrower": [],
+  "unresolved_flags": [
+    "EBITDA has missed its monthly budget three months running (April, May, June 2026) after three straight beats in Q1 2026 -- watch into H2 even though YTD EBITDA remains 5.3% ahead of budget.",
+    "Credit agreement's negative covenants section states no dollar baskets or carve-outs anywhere in the 9 executed closing documents -- confirm whether a fuller schedule exists outside that set.",
+    "Day-count convention for cash interest is not stated in the executed documents and was assumed (actual/360, both endpoints counted) rather than confirmed."
+  ],
+  "analyst_focus": [
+    {
+      "item": "Leverage trend and headroom against the 5.50x cap, and confirmation of the improving trajectory",
+      "asked_period": "2026-06",
+      "finding": "Confirmed: leverage improved to 2.39x at June 2026 (from 3.33x at close), the sixth straight quarter of improvement, with model and certificate agreeing to within a few basis points."
+    },
+    {
+      "item": "June 2026 first negative budget variance in the last six quarters -- is it noise or an inflection",
+      "asked_period": "2026-06",
+      "finding": "Reads as noise/pacing so far: revenue miss is immaterial (-0.5%) and EBITDA's miss (-3.6%) is the third in a row after three straight beats, but YTD EBITDA is still 5.3% ahead of budget. Worth re-checking at the next review once H2 actuals are available."
+    },
+    {
+      "item": "Equipment/fleet collateral concentration and archetype classification (asset-heavy-industrial vs services-project)",
+      "asked_period": "2026-06",
+      "finding": "Equipment/fleet (net PP&E $53.1M) is the largest single pledged component and growing modestly (capex outpacing depreciation); archetype classification (asset-heavy-industrial) was not revisited this run but nothing in June's data contradicts it."
+    }
+  ],
+  "last_period_headline": "June 2026: revenue $13.2M essentially in line with budget (-0.5%) while EBITDA $2.3M missed budget by 3.6% (third straight monthly miss); YTD remains solidly ahead of budget (revenue +1.5%, EBITDA +5.3%); Maximum Total Leverage passed at 2.39x vs the 5.50x cap, improving every quarter since the January 2025 close."
+}

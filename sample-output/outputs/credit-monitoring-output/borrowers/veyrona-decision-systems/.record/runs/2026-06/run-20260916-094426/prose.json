@@ -1,0 +1,119 @@
+{
+  "AGING_READ": "Accounts Receivable of $26.79M ties exactly to the balance sheet, with days sales outstanding of 40.4 days, up from 37.7 days five months earlier. The top five customers account for roughly 58% of the balance (Northstar Grid Services 13.3%, Cobalt Risk Partners 12.0%, Arcwell Transit 11.7%, Harborline Utilities 10.5%, Meridian Process Controls 9.3%), consistent with the top-10 concentration of 61.4% of revenue noted at underwriting, though none of these five individually approaches the 15% underwriting threshold. Accounts Payable of $10.76M also ties exactly to the balance sheet, with days payable outstanding of 30.0 days. The Second Amendment (effective January 2026) added an enhanced receivables-aging reporting requirement; the aging export's own format and granularity have been identical every month checked from before that date through June 2026, so if the enhanced requirement has been satisfied it was through some channel other than a change to this file -- worth confirming with the borrower rather than assuming from the export alone.",
+  "BS_OBSERVATIONS": "<li>Accounts Receivable rose $9,559,377 over the trailing three months to $26,793,751.51, the single largest balance-sheet move in the period; days sales outstanding rose from 37.7 to 40.4 days over the same window.</li><li>Funded Debt fell to $168,048,469.80 at June 2026 from $183,924,166.39 at close, a routine decline consistent with the facility's 0.60%/month contractual amortization; Net Debt (Funded Debt less cash) stood at $157,725,632.18.</li><li>Contract Asset and Accrued Cost have sat unchanged at exactly $5,492,189.73 and $2,452,814.55 since March 2026 -- the balance-sheet trace of the March 2026 restatement's late-booked milestone, static because nothing further has moved through those two accounts since.</li><li>Accounts Payable rose a smaller, roughly proportional $3,433,175 over the same three months to $10,757,342.61; both AR and AP tie exactly to their respective aging schedules with no reconciling difference.</li>",
+  "CAPSTRUCTURE_NOTES": {
+    "our_instrument": "Senior secured term loan plus revolving commitment, single-lender direct-lending facility maturing January 2030 with 0.60%/month contractual amortization; the facility's interest rate is not stated in any executed document on file and is treated as an open item pending lender confirmation, not as a modeled figure.",
+    "total_capitalization": "Not computable this period: it depends on the total funded-debt and total-equity figures noted above, neither of which is populated in this box's own sourced context.",
+    "total_equity": "This borrower's balance sheet carries no total-equity line under any label this monitor recognizes, so no book-equity figure is available in this box.",
+    "total_funded_debt": "No total funded-debt figure is populated in this box's own sourced context this period; tracked via the model's Funded Debt and Net Debt rows, see Balance sheet review and the covenant detail above."
+  },
+  "CF_OBSERVATIONS": "<li>Operating cash generation has run only in the tens of thousands of dollars per month against $3M-plus of monthly EBITDA (May $5,531; June $5,856; March -$29,392), with the gap absorbed almost entirely by the Accounts Receivable build described above.</li><li>No financing inflows appear in any month on file -- the $62,725,070.11 revolving commitment has remained undrawn throughout, and the ~$1.0-1.04M of monthly scheduled principal is being funded from operating cash rather than from a draw.</li><li>Cash on hand has been essentially flat across the full 22-month history, with no visible build-up occurring toward the January 2030 maturity at the current trajectory.</li>",
+  "COLLATERAL_COVERAGE_CLOSING": "Coverage at closing is not recomputed in this box; see the facility and security description above for the collateral scope agreed at close.",
+  "COLLATERAL_READ": "The collateral package covers substantially all assets of the borrower and its co-Grantor parent with no inventory pledged, consistent with a services and data business; no coverage-ratio figure is computable this period since no total funded-debt figure is populated in this box's own sourced context.",
+  "COVENANT_DELTAS": {
+    "max_net_leverage": "Our reconstruction governs. At every test date from September 2025 forward our model ties the certified figure to within four hundredths of a point (rounding only) except at March 31, 2026, where our reconstruction reads 5.1200x against a certified 5.1265x -- the gap is the March 2026 restatement (a late-booked, non-cash milestone acceptance) flowing into our EBITDA reconstruction, which the certificate does not carry because it was signed before the restatement was discovered; both readings sit comfortably under the 5.25x ceiling in effect that quarter, so the compliance verdict is unaffected."
+  },
+  "COVENANT_OVERALL": "All six quarterly test dates on file are compliant; the two earliest (March and June 2025) are not independently verifiable by our model because the trailing twelve-month window reaches before the model's first covered month, so those two rest on the certified figure alone.",
+  "DATA_QUALITY_NOTES": "<li>Interest expense, net income, inventory, and every balance-sheet total (total assets, total current assets, total current liabilities, total equity) are absent from this borrower's own monthly reporting -- genuine structural gaps in what the borrower reports, not configuration omissions, and every dependent ratio is suppressed rather than estimated.</li><li>The month-over-month EBITDA bridge reconciles exactly through Revenue, Cost of Revenue and Opex, but is reported as unresolved by the underlying engine only because this borrower has no net-income line to close the bridge against -- a labeling artifact of the missing net-income line above, not a new reconciliation failure.</li><li>Revenue and Gross Profit could not be compared against Budget this period: the pinned budget provides a monthly figure for EBITDA only, with Revenue and Gross Profit stated solely as two annual aggregate points that cannot be split into a monthly comparison.</li>",
+  "DEAL_COMPANY_PROFILE": "A sponsor-backed enterprise decision-intelligence and data-services provider serving regulated and industrial customers across four service lines: milestone-based implementation, licensed datasets, utilization-billed advisory, and recurring managed analytics.",
+  "DEAL_LEVERAGE_CONTEXT": "Opening Net Leverage of 5.23x against an initial 6.00x ceiling has moved to 4.90x against a ceiling ratcheted down to 5.00x across three amendments, leaving headroom far thinner today than at close.",
+  "DEAL_SECURITY_SOURCING": "Blanket first-priority lien on substantially all assets of the borrower and its parent, Veyron Holdings, LLC, which is a co-Grantor rather than only a guarantor, per the executed Guaranty and Security Agreement.",
+  "DEAL_TRANSACTION": "$250.0M total commitment ($187,274,929.89 funded term loan, $62,725,070.11 undrawn revolver) closed January 2025, refinancing $179.25M of legacy debt, maturing January 2030.",
+  "DOCUMENT_NOTES": {
+    "budget.plan": "The FY2025/H1 2026 approved budget, providing a monthly EBITDA plan and two annual aggregate points for Revenue and Gross Profit.",
+    "loan_documentation.credit_agreement": "The original executed credit agreement establishing the $250.0M facility, its sole financial covenant, and the collateral package; it does not state an interest rate.",
+    "monthly_reporting.compliance_certificate": "The borrower's Q2 2026 quarterly compliance certificate, certifying the Maximum Net Leverage Ratio calculation for the June 30, 2026 test date.",
+    "monthly_reporting.june-2026-monthly-package-2026-07-25-xlsx": "The borrower's June 2026 monthly financial reporting package, the primary source for this period's Income Statement, Balance Sheet and Cash Flow figures.",
+    "underwriting.ic_uw_memo": "The underwriting memorandum documenting the credit thesis, key risks and quality-of-earnings review at closing.",
+    "working_analysis.archived_outputs": "This period's archived module outputs (covenant compliance, budget vs. actual, AP/AR aging, three-statement analysis) underlying every figure in this memo.",
+    "working_analysis.model": "The canonical monthly Income Statement / Balance Sheet / Cash Flow workbook this monitor reads for every figure in this memo."
+  },
+  "FLAGS": "<li><b>Interest rate not disclosed (highest priority):</b> no executed document on file states this facility's reference index, margin, or cash/PIK split; every cash-interest figure used for schedule generation is a non-contractual placeholder pending confirmation with the lender, Granite Harbor Direct Lending, LP.</li><li><b>Q1 2026 compliance certificate never re-issued:</b> the certificate on file was signed April 12, 2026, before the March 2026 restatement was discovered (notice dated June 20, 2026); it certifies pre-restatement EBITDA. The compliance verdict does not change (5.1265x as-filed vs. approximately 5.1200x corrected, both under the 5.25x ceiling then in effect), but a re-signed certificate has not been requested and received.</li><li><b>Covenant headroom at its tightest point in the deal's history:</b> 2.1% at the June 30, 2026 test, down from roughly 13% at close, driven by three amendments tightening the ceiling (6.00x -> 5.75x -> 5.25x -> 5.00x) faster than leverage has improved.</li><li><b>Two unquantified covenant baskets remain uncapped:</b> a cloud-migration capex basket (First Amendment) and a customer-data-license investment basket (Second Amendment) carry no stated dollar limit; usage under either has not been confirmed with the borrower.</li><li><b>\"Revised-reporting controls\" undefined:</b> the Third Amendment preserved the undrawn revolver from clawback in exchange for this undefined obligation; what it requires has not been confirmed and should not be assumed satisfied.</li><li><b>March 2026 restatement:</b> a non-cash, $492,189.73 revenue / $39,375.18 EBITDA adjustment from a late-booked customer-acceptance milestone, flowing into the balance sheet through March-to-date-static Contract Asset and Accrued Cost accounts; the compliance verdict at the affected test date is unchanged.</li>",
+  "FORWARD_STRESS": "No borrower-provided forward projection or stress scenario is on file for this period; the forward read in the Outlook block above is based on the trailing trend only.",
+  "IS_OBSERVATIONS": "<li>Revenue of $19,921,004.84 for June 2026 grew 8.8% year over year and 7.7% month over month, continuing an uninterrupted upward run through the full 22-month history on file.</li><li>EBITDA of $3,087,755.75 grew 10.3% year over year and 9.1% month over month; the year-to-date figure of $17,054,464.91 runs 7.2% behind the $18,375,501.59 Budget, a gap that is below this review's materiality threshold but has now persisted every month this year.</li><li>Gross margin held at 46.0% for the month and 45.8% year to date, essentially flat against the trailing 22-month average of 45.6%, so the EBITDA-to-budget gap is not a margin story.</li><li>Cost of Revenue and the derived Gross Profit line have moved in lockstep with revenue for three consecutive months, consistent with a stable cost structure rather than a cost overrun.</li>",
+  "LIQUIDITY_READ": "<li>Period-end cash of $10.32M compares to no stated cash-floor covenant on this facility -- the deal's only financial covenant is the Net Leverage test above.</li><li>The $62.7M revolving commitment remains fully undrawn and available.</li><li>Interest coverage cannot be computed: no interest rate or interest-expense line exists in any executed document or in the borrower's own monthly reporting, a genuine drafting and reporting gap rather than a suppressed calculation.</li>",
+  "OPEN_QUESTIONS": "The facility's contractual interest rate needs confirmation from Granite Harbor Direct Lending, LP -- no rate, index or margin appears anywhere in the executed credit agreement or its three amendments. A re-signed Q1 2026 compliance certificate reflecting the March 2026 restatement has not been received from the borrower. Usage, if any, under the cloud-migration capex and customer-data-license investment baskets, and what the Third Amendment's \"revised-reporting controls\" actually require, both remain unconfirmed with the borrower. Separately, the Third Amendment's executed 5.00x ceiling is looser than an unsigned draft of the same amendment dated nineteen days earlier that had proposed 4.75x -- the documents on file do not explain why the final terms moved in the borrower's favor, and this is worth following up independent of the covenant math.",
+  "REVENUE_QUALITY_NOTES": "Revenue is a mix of milestone/customer-acceptance-based implementation work (63% of the $74.6M signed backlog at underwriting), recurring managed-analytics delivery (22%), and utilization-billed advisory work (15%), with licensed-dataset revenue recognized over the contract term. The milestone-billing structure is the source of the Contract Asset balance and was the mechanism behind the March 2026 restatement; growth in that balance is a working-capital and collections signal worth watching alongside the revenue trend itself, not a revenue-recognition concern on its own.",
+  "SUMMARY_COLLATERAL": "Collateral is a blanket first-priority lien on substantially all assets of the borrower and its parent, Veyron Holdings, LLC, which also stands as co-Grantor rather than only a guarantor -- accounts, contract rights, deposit accounts, equipment, IP, investment property and proceeds, with no inventory pledged (none exists on this borrower's balance sheet). No total funded-debt or equity figure is available in this box's own sourced context this period; the Funded Debt and Net Debt readings are covered in the Balance sheet review and the covenant detail above. No plan or prior-year comparison for the pledged asset base is on file, since the pinned budget carries no balance-sheet plan for this borrower.",
+  "SUMMARY_COVENANTS": "The borrower's sole financial covenant, Maximum Net Leverage, passed at 4.90x against a 5.00x ceiling at the June 30, 2026 test date -- compliant, but with only 2.1% headroom (0.10x), the tightest reading in the deal's six-quarter history. That ceiling has been cut three times by amendment since close (6.00x -> 5.75x -> 5.25x -> 5.00x), and headroom has compressed from roughly 13% at close to roughly 2% now even as trailing-twelve-month EBITDA has been broadly stable-to-improving ($33.3M at close, dipping to $30.9M through 2025, recovering to $32.2M by this test date) -- the ratchet, not operating performance, is what has driven the compression. The nearest tight point remains this same test: clearing the next quarter's test with the ceiling unchanged would need Net Debt to fall, or TTM EBITDA to grow, by roughly $5M-equivalent to restore a comparable cushion.",
+  "SUMMARY_LIQUIDITY": "Cash stood at $10.32M at June 30, 2026, essentially unchanged from the $10.26M level 22 months earlier at the start of the reporting history on file -- there is no cash floor covenant on this facility, so this is a trend observation rather than a covenant reading. The cash on hand is being generated from operations, not borrowed or drawn from the undrawn revolver ($62.7M available, unused throughout). Monthly operating cash generation has run only in the tens of thousands of dollars against $3M-plus of monthly EBITDA, with the balance absorbed by growth in Accounts Receivable ($9.6M higher over the trailing three months); on the current trajectory cash is not building toward the 2030 maturity, and that AR-driven cash conversion gap is worth tracking independent of the covenant story.",
+  "SUMMARY_OUTLOOK": "No backlog-conversion or order-book figure is reported in the monthly package this period, so the forward read leans on the trend already discussed above. The governing question for this credit is whether the covenant ceiling has more room to fall before EBITDA and Net Debt catch up, given three amendments in fifteen months have each tightened the covenant while granting the borrower a bundled accommodation in return. Two items remain open with the borrower: confirmation of the facility's actual interest rate, which is not stated in any executed document on file, and a re-issued Q1 2026 compliance certificate reflecting the March 2026 restatement (the as-filed certificate is pre-restatement; the verdict does not change either way).",
+  "SUMMARY_UPDATE": "Revenue of $19.9M for June 2026 came in essentially in line with the year-ago month's trajectory, up 8.8% year over year, with year-to-date revenue of $104.9M running 2.9% ahead of prior-year YTD ($101.9M). EBITDA of $3.09M was flat to Budget for the month (-0.1%), while YTD EBITDA of $17.05M sits 7.2% behind Budget's $18.38M -- below the materiality threshold used elsewhere in this review, but the fourth consecutive month running behind plan. Gross margin held flat at 46.0% for the month and 45.8% YTD, so the EBITDA gap to plan is a scale/opex-timing question rather than a margin deterioration. The driver behind revenue's growth remains the mix of implementation, licensed-dataset, advisory and managed-analytics service lines; the monthly package does not break June's mix out by line, so this cannot be attributed to a specific service beyond that.",
+  "_contract": {
+    "deep_links": "a reference to another section is written <a class=\"jumpname\" href=\"#sec-covenant\">Covenant detail <span class=\"arw\">&#8599;</span></a> \u2014 same markup, any section id below",
+    "how": "Fill every key; values are HTML. Leave a box \"\" when the month gives it nothing, and say so in your report. Keys opening with \"_\" (this note) are ignored by the renderer.",
+    "keyed_boxes": {
+      "CAPSTRUCTURE_NOTES": "per row id: the instrument's pricing or terms in one clause",
+      "COVENANT_DELTAS": "per covenant id: one clause on WHY the certified figure and ours differ \u2014 the component that carries the gap, named. Our reconstruction governs; do not write that the borrower's basis governs, whichever way the gap runs",
+      "DOCUMENT_NOTES": "per document id: what the document is and what it settles, one sentence"
+    },
+    "language": "lead with the fact and its figure; the banned words and patterns are in references/report-structure.md under the language contract",
+    "list_boxes": {
+      "boxes": [
+        "BS_OBSERVATIONS",
+        "CF_OBSERVATIONS",
+        "DATA_QUALITY_NOTES",
+        "FLAGS",
+        "IS_OBSERVATIONS",
+        "LIQUIDITY_READ"
+      ],
+      "value": "a string of <li>\u2026</li> items and nothing outside them"
+    },
+    "paragraph_boxes": {
+      "boxes": [
+        "AGING_READ",
+        "OPEN_QUESTIONS",
+        "REVENUE_QUALITY_NOTES"
+      ],
+      "value": "one or two short paragraphs"
+    },
+    "section_ids": [
+      "sec-bs",
+      "sec-capstructure",
+      "sec-cf",
+      "sec-company",
+      "sec-covenant",
+      "sec-covstrip",
+      "sec-data",
+      "sec-files",
+      "sec-flags",
+      "sec-is",
+      "sec-security",
+      "sec-snapshot",
+      "sec-stress",
+      "sec-summary",
+      "sec-terms",
+      "sec-transaction",
+      "sec-trend"
+    ],
+    "sentence_boxes": {
+      "boxes": [
+        "COLLATERAL_COVERAGE_CLOSING",
+        "COLLATERAL_READ",
+        "COVENANT_OVERALL",
+        "DEAL_COMPANY_PROFILE",
+        "DEAL_LEVERAGE_CONTEXT",
+        "DEAL_SECURITY_SOURCING",
+        "DEAL_TRANSACTION",
+        "FORWARD_STRESS",
+        "SUMMARY_COLLATERAL",
+        "SUMMARY_COVENANTS",
+        "SUMMARY_LIQUIDITY",
+        "SUMMARY_OUTLOOK",
+        "SUMMARY_UPDATE"
+      ],
+      "value": "sentences that sit inside an existing paragraph \u2014 inline tags like <b> only, no <p> or <ul>"
+    },
+    "summary_blocks": {
+      "SUMMARY_COLLATERAL": "pledged components and their total, coverage against funded debt, and the prior-year or plan comparison where one is on file",
+      "SUMMARY_COVENANTS": "one sentence when everything passes with room; otherwise the failing or governing leg, the certified-vs-model gap, and the nearest tight test with what clearing it takes",
+      "SUMMARY_LIQUIDITY": "period-end cash against the floor, where the cash came from (earned, borrowed, working capital), months of runway when burning, and the expected direction with its basis",
+      "SUMMARY_OUTLOOK": "the forward indicators on file (backlog, order book, seasonality), the governing question for the credit, and the open asks \u2014 never a concern manufactured to fill the space",
+      "SUMMARY_UPDATE": "revenue and EBITDA vs Budget and prior year \u2014 the period first, the cumulative line second \u2014 then the driver: which segment or brand moved, mix or margin, at the finest level the package reports",
+      "bad_news": "a miss, a breach or a stretch is written in its home block with the same syntax as a beat \u2014 there is no separate red-flags list, and a fired concern must not be left out of its block",
+      "cadence": "the renderer titles the first block from the period: a March/June/September/December period reads 'Quarterly update' and its prose covers the quarter and the year so far; any other month reads 'Monthly update' and covers the month and the year so far",
+      "numbers": "round to $X.XM / $XXXK in these five blocks; full precision lives in the tables, where every figure is click-traceable",
+      "what": "the executive summary is the analyst's one-pager for the deal team: five labelled prose blocks, each 2-5 sentences, written the way a portfolio review reads \u2014 the figure, its comparator (vs Budget, vs prior year), then the driver. The template owns the labels; write only the prose."
+    }
+  }
+}

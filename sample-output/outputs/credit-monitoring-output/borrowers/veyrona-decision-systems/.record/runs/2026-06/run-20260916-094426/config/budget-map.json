@@ -1,0 +1,36 @@
+{
+  "borrower": "Veyrona Decision Systems, LLC",
+  "file": "store:borrowers/veyrona-decision-systems/_model/Veyrona Decision Systems Budget (transposed).xlsx",
+  "sheet": "Budget (transposed)",
+  "_construction_note": "ORIENTATION + METRIC-COVERAGE WORKAROUND (judgment call, same pattern as Orinth Vale/Nemeris/Asteron elsewhere in this batch): the real approved budget (source:Veyrona Decision Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx, 'Monthly Operating Plan' tab) is laid out PERIODS-AS-ROWS (one row per month: Period, Budget EBITDA only) -- the engine needs METRICS-AS-ROWS / PERIODS-AS-COLUMNS. monitor-setup built a byte-verified TRANSPOSED COPY at the 'file' path above (borrowers/veyrona-decision-systems/_model/), reshaping the SAME 18 months x 1 metric (Budget EBITDA) into that orientation with NO value changes -- every figure was read back and matches the source exactly (verified: e.g. 2026-06 = 3,091,833.87 in both). paths.budget_path in borrower-config still points at the ORIGINAL source workbook (the authoritative approved document); this 'file' here is the reshaped copy the engine actually reads. If H2 2026 or later is approved in the same periods-as-rows/EBITDA-only shape, this transposed copy must be regenerated the same way.",
+  "_gap_note": "METRIC-COVERAGE GAP (more severe than Orinth Vale's or Asteron's own EBITDA-only budgets, because THIS budget has no monthly Revenue either): the Monthly Operating Plan tab provides ONLY a monthly Budget EBITDA figure -- no Gross Profit, Net Income, Interest Expense, Taxes, D&A, or even REVENUE breakdown exists at monthly granularity anywhere in the workbook. The only place Revenue/Gross Profit/Operating Expenses appear at all is the 'Approved Plan' tab's two ANNUAL/H1 aggregate rows (FY2025 total; H1 2026 total), which cannot be prorated into monthly figures without guessing -- so 'revenue' and 'gross_profit' keys are DELIBERATELY OMITTED from metric_rows below rather than invented. Row 6 ('Zero Proxy (verified blank)') of the transposed workbook is a VERIFIED-BLANK row (confirmed None across all 18 period columns) used as a zero proxy for interest_expense/taxes/depreciation_amortization, and row 5 (the real 'Budget EBITDA' figures) is pointed to by 'net_income' below, so the engine's fixed Net Income + Interest + Taxes + D&A bridge reconstructs to EXACTLY the real Budget EBITDA for every period (EBITDA + 0 + 0 + 0 = EBITDA). 'net_income' in this map is REALLY 'Budget EBITDA' -- do not read it as a true net-income budget. CONSEQUENCE FOR THE MEMO: the EBITDA-level Budget-vs-Actual comparison is fully supported and reliable; the Revenue-variance and Gross-Margin-variance lines will simply be unavailable for this borrower (not wrong, just absent) -- flagged in borrower-config analysis_notes too.",
+  "period_columns": {
+    "2025-01-31": 2,
+    "2025-02-28": 3,
+    "2025-03-31": 4,
+    "2025-04-30": 5,
+    "2025-05-31": 6,
+    "2025-06-30": 7,
+    "2025-07-31": 8,
+    "2025-08-31": 9,
+    "2025-09-30": 10,
+    "2025-10-31": 11,
+    "2025-11-30": 12,
+    "2025-12-31": 13,
+    "2026-01-31": 14,
+    "2026-02-28": 15,
+    "2026-03-31": 16,
+    "2026-04-30": 17,
+    "2026-05-31": 18,
+    "2026-06-30": 19
+  },
+  "metric_rows": {
+    "net_income": 5,
+    "interest_expense": 6,
+    "taxes": 6,
+    "depreciation_amortization": 6
+  },
+  "opex_groups": {
+    "_comment": "Omitted entirely -- no opex monthly breakdown exists in the budget at all (matches borrower-config opex_groups having only one lumped 'Operating Expenses' group, for which there is still no monthly budget figure)."
+  }
+}

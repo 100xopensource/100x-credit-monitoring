@@ -1,0 +1,11 @@
+{
+  "schema": "credit-monitoring-published/v1",
+  "schema_version": 1,
+  "borrower": "asteron-care-partners",
+  "months": {
+    "2026-06": {
+      "run": "run-20260915-071646",
+      "at": "2026-09-15T09:01:37+00:00"
+    }
+  }
+}

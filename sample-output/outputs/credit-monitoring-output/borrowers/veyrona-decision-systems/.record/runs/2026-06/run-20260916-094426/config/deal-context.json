@@ -1,0 +1,263 @@
+{
+  "borrower_name": "Veyrona Decision Systems, LLC",
+  "fund": "",
+  "last_reviewed": {
+    "date": "2026-09-16",
+    "trigger": "monthly"
+  },
+  "_onboarding_provenance_note": "This borrower was onboarded under a standing batch-onboarding instruction to auto-decide every judgment call (including the normally analyst-owned our_view, credit_thesis[].status, archetype confirmation, and ebitda_addbacks fields) rather than pause to ask interactively -- each such field's reasoning is documented inline below and should get a first analyst read at the next monthly cycle rather than being treated as pre-confirmed.",
+  "static": {
+    "vertical": "Enterprise decision-intelligence / data & analytics services (regulated and industrial end markets)",
+    "archetype": "services-project",
+    "archetype_provenance": "inferred \u2014 unconfirmed",
+    "_archetype_reasoning": "Revenue is built from implementation programs (milestone/customer-acceptance-based, percentage-of-completion-like, 63% of Dec-2024 backlog), advisory solutions (utilization-billed), licensed datasets (contract/renewal-based) and managed analytical services (recurring delivery) -- people delivering project/utilization-driven work with unbilled Contract Assets as the working-capital swing factor and backlog conversion/DSO as the natural KPI set. This matches 'services-project' far better than asset-heavy-industrial (no plant/equipment/order-book framing) or consumer-inventory (no physical product, no inventory anywhere in the model or the pledged collateral).",
+    "business_one_liner": "A sponsor-backed enterprise decision-intelligence and data-services provider serving regulated and industrial customers.",
+    "sponsor_status": "sponsor-backed (name not disclosed in any document reviewed)",
+    "deal_team": [],
+    "deal_team_provenance": "",
+    "_deal_team_note": "No non-officer borrower staff are named with confirmed authority anywhere in the deal folder. Four borrower officers ARE named (Elena Marrow, CEO -- signs every compliance certificate; Priya Sorn, CFO; Jon Bell, Controller; Jordan Pell, Authorized Manager of parent guarantor Veyron Holdings, LLC -- all per Closing_Certificate.pdf incumbency and the compliance certificates), but per the skill's own rule the memo omits any header entry carrying an officer title, so none qualify for display regardless. 'Mara Quill' appears only in the lender-authored PM Update documents with action items (e.g. 'Mara Quill to review revised Q2 support and headroom') -- this reads as OUR OWN portfolio-management staff, not the borrower's deal team, so it is excluded from this borrower-side field on that basis, not merely for lack of book evidence. Ran references/deal_team.py propose against the book for all five names; all returned 'unknown' (no prior-deal evidence either way). Left empty per 'deal_team: leave empty unless names are clearly given with confirmed authority.'",
+    "business_profile": {
+      "description": "Sponsor-backed enterprise decision-intelligence / data-services provider combining four service lines: (1) implementation programs, configuring analytics/workflow deployments, revenue recognized on documented customer acceptance of completed milestones; (2) licensed datasets, contractual data access recognized over the access period; (3) advisory solutions, specialist project teams billed on utilization; (4) managed analytical services, ongoing/recurring delivery under SLA. Revenue is deliberately NOT uniformly recurring -- the underwriting memo flags this explicitly as a monitoring point rather than a strength.",
+      "revenue_model": {
+        "how_they_make_money": "project / recurring service / licensing (mixed) \u2014 implementation revenue is milestone/acceptance-based (creates a Contract Asset before unconditional billing rights), licensed-dataset revenue is contract/renewal-based, advisory revenue is utilization-billed, managed-analytics revenue is recurring delivery under SLA",
+        "recurring_vs_transactional": "Mixed and explicitly flagged as such at underwriting; per Dec-2024 signed backlog ($74.6M): 63% implementation (milestone/project, least recurring), 22% managed analytics (most recurring), 15% advisory (utilization, transactional)",
+        "pricing_and_contracts": "Not disclosed (no rate cards, per-seat pricing, typical contract length, or ACV given in either the Underwriting Memorandum or the Management Presentation). Backlog conversion targets: 48% of the $74.6M signed backlog expected to convert within 6 months, 82% within 12 months.",
+        "channels": [
+          {
+            "channel": "Direct enterprise sales",
+            "mix": "100% (no partner/reseller/marketplace channel disclosed)",
+            "economics": "Not broken out by channel; economics vary by service line instead (see revenue_model above)"
+          }
+        ],
+        "source": "Underwriting_Memorandum.pdf; Management_Presentation_January_2025.pdf",
+        "source_tier": "management-prepared"
+      },
+      "end_markets": [
+        {
+          "market": "Regulated and industrial enterprises (utilities, transportation, compliance, process controls, industrial health named as top-account sectors)",
+          "exposure": "Not quantified by market %",
+          "demand_drivers": "Compliance, risk, asset-operations and planning workflows per the UW memo; procurement-cycle timing named as a diligence item"
+        }
+      ],
+      "customers": {
+        "profile": "Regulated and industrial enterprise accounts",
+        "concentration": "Top customer 11.8% of FY2024 revenue; top 5 = 39.6%; top 10 = 61.4% (Management Presentation only \u2014 the UW memo names concentration as a risk/diligence item but gives no numbers itself; the memo does state 'no single customer exceeds the 15% underwriting threshold')",
+        "stickiness": "Not independently quantified; the UW memo's stickiness argument is qualitative ('the mix creates attractive customer relevance' from bundling four service lines)",
+        "source": "Management_Presentation_January_2025.pdf (concentration %); Underwriting_Memorandum.pdf (15% threshold framing)",
+        "source_tier": "management-prepared"
+      },
+      "suppliers_and_inputs": {
+        "key_inputs": "Not disclosed in either document",
+        "concentration": "Not disclosed",
+        "cost_drivers": "Not disclosed \u2014 no vendor, subcontractor, or data-input cost structure is described anywhere in the UW memo or Management Presentation",
+        "source": "",
+        "source_tier": "management-prepared"
+      },
+      "geography_footprint": "Not disclosed \u2014 no HQ location, facility list, or domestic/international split given in any document reviewed (the Original Credit Agreement lists a Wilmington, Delaware registered office, which is an organizational/legal address, not necessarily an operating HQ)",
+      "seasonality_cyclicality": "No calendar seasonality claimed. Quarterly Covenant EBITDA showed steady sequential growth through FY2024 ($8.2M -> $8.3M -> $8.4M -> $8.6M) before reversing through 2025 and partially recovering by mid-2026 (see our_view) -- lumpiness here is acceptance/implementation-timing driven, not calendar seasonality.",
+      "competitive_position": "Thinly disclosed. No named competitors, no IP/patent moat, no market-share figure. The UW memo's only competitive argument is multi-service bundling creating 'attractive customer relevance' -- a real gap for an underwriting memo, flagged as such rather than embellished.",
+      "ownership": {
+        "structure": "sponsor-backed (PE sponsor identity never named in the UW memo, Management Presentation, or any loan document reviewed)",
+        "key_holders": "Not disclosed",
+        "source": "Underwriting_Memorandum.pdf",
+        "source_tier": "management-prepared"
+      },
+      "management": [
+        {
+          "name": "Elena Marrow",
+          "role": "Chief Executive Officer",
+          "note": "Signs every quarterly compliance certificate; no tenure/background disclosed"
+        },
+        {
+          "name": "Priya Sorn",
+          "role": "Chief Financial Officer",
+          "note": "Per Closing_Certificate.pdf incumbency; no tenure/background disclosed"
+        },
+        {
+          "name": "Jon Bell",
+          "role": "Controller",
+          "note": "Per Closing_Certificate.pdf incumbency and PM Update action items; no tenure/background disclosed"
+        }
+      ],
+      "headcount": "Not disclosed anywhere",
+      "history": "Not disclosed \u2014 no founding date or company-history narrative in any document reviewed",
+      "key_operating_kpis": [
+        {
+          "kpi": "Revenue mix by service line",
+          "drives": "Total revenue composition/quality",
+          "reported_in_package": "no \u2014 Sales_by_Channel gives project/customer-level detail with a Service line field, but the monthly package itself does not roll this into a tracked KPI row"
+        },
+        {
+          "kpi": "Backlog conversion rate (vs 48%/6mo, 82%/12mo targets)",
+          "drives": "Forward implementation revenue",
+          "reported_in_package": "no \u2014 backlog is a UW-memo/Management-Presentation disclosure, not part of the recurring monthly package"
+        },
+        {
+          "kpi": "Advisory utilization rate",
+          "drives": "Advisory revenue",
+          "reported_in_package": "no"
+        },
+        {
+          "kpi": "Contract Asset balance (unbilled revenue)",
+          "drives": "Working capital / collections risk; also the exact mechanism of the March 2026 restatement",
+          "reported_in_package": "yes \u2014 Balance Sheet 'Contract Asset' row, every month"
+        },
+        {
+          "kpi": "AR aging / customer concentration",
+          "drives": "Collections risk",
+          "reported_in_package": "yes for AR aging (Supporting Schedules); no for concentration % specifically (would need to be computed from Sales_by_Channel / AR Detail manually)"
+        },
+        {
+          "kpi": "Cash, Funded Debt, indicative Net Leverage",
+          "drives": "Covenant headroom",
+          "reported_in_package": "yes"
+        }
+      ],
+      "working_capital_profile": "Acceptance-milestone billing for implementation work creates a Contract Asset (performance recognized before an unconditional billing right) -- essentially unbilled-AR/percentage-of-completion dynamics, and is explicitly the mechanism behind the March 2026 restatement. Collections can lag revenue recognition; invoice disputes are named as a cash-conversion risk. No inventory (consistent with a services/data business and with the collateral package, which pledges no inventory). No supplier/AP payment-terms detail disclosed."
+    },
+    "facility": {
+      "instrument": "Senior secured term loan + revolving commitment, single-lender (unitranche-style) direct-lending facility",
+      "commitment_usd": 250000000,
+      "funded_usd": 187274929.89,
+      "draw_structure": "single-advance term loan ($187,274,929.89 funded at close) + undrawn revolving commitment ($62,725,070.11 at close, unchanged through the amendments except that the Third Amendment expressly preserved it from any clawback)",
+      "close_date": "2025-01",
+      "maturity_date": "2030-01-15",
+      "interest_rate": "NOT DISCLOSED in any executed document reviewed (Original Credit Agreement, First/Second/Third Amendments contain no reference index, margin, or cash/PIK split anywhere in their text) \u2014 a genuine drafting/extraction gap, flagged for covenant-setup and debt-service-spec, which cannot build a rate-driven interest schedule from these documents alone.",
+      "oid": "$1,867,110.56 (Sources_and_Uses.xlsx)",
+      "fees": {
+        "Legal/documentation fees": "$1,208,130.37",
+        "Accounting/diligence fees": "$988,470.30",
+        "Insurance/filing/account-control costs": "$768,810.23",
+        "Other transaction fees": "$5,100,000.00"
+      },
+      "equity_kicker": "None disclosed",
+      "security": "Blanket first-priority lien on substantially all assets of the Borrower AND its parent guarantor Veyron Holdings, LLC (co-Grantor) \u2014 accounts, contract rights, deposit accounts, equipment, IP, investment property, proceeds; full, unconditional, uncapped guaranty of payment and performance from Veyron Holdings, LLC.",
+      "source": "Original_Credit_Agreement.pdf (Schedule 1.1); Sources_and_Uses.xlsx; Closing_Capitalization.xlsx; Guaranty.pdf; Security_Agreement.pdf; Closing_Conditions_Memorandum.pdf",
+      "_amendments_summary": "Three executed amendments have progressively TIGHTENED the Maximum Net Leverage Ratio covenant while leaving rate, amortization (0.60%/month, unchanged throughout) and maturity untouched: First Amendment (exec. 2025-08-01, eff. 2025-08-05) cut the cap 6.00x -> 5.75x and added an unquantified cloud-migration capex basket. Second Amendment (exec. 2026-01-20, eff. 2026-01-31) cut it 5.75x -> 5.25x, added an unquantified customer-data-license investment basket, and required enhanced AR-aging reporting. Third Amendment (exec. 2026-04-20, eff. 2026-04-30) cut it 5.25x -> 5.00x and preserved the undrawn revolver commitment from clawback in exchange for undefined 'revised-reporting controls'. All three are pure covenant-reset amendments with a small bundled accommodation each and explicit no-waiver-or-novation language \u2014 none is a waiver, cure, or forbearance (no waiver document exists anywhere in this deal). A fourth, UNSIGNED draft Third Amendment (dated 2026-04-01) had proposed a materially tighter 4.75x cap with several terms left open; the version actually executed 19 days later settled at a looser 5.00x \u2014 the borrower negotiated MORE headroom than the lender's own opening draft, which is the reverse of the usual pre-signing tightening pattern and worth independent follow-up (documents alone don't explain why).",
+      "_note": "Three executed amendments in this deal (vs. zero for Talvorn and one-plus-an-expired-waiver for Selvara) is the most extensive amendment chain in this batch \u2014 see our_view for what the resulting covenant trend actually shows."
+    },
+    "credit_thesis": [
+      {
+        "pillar": "Demonstrated, growing EBITDA base at underwriting \u2014 FY2024 revenue $213.0M, Covenant EBITDA $33.46M, growing every quarter through 2024 ($8.2M -> $8.6M)",
+        "monitored_by": "Quarterly TTM Covenant EBITDA trend (Covenant_Calculation_QX_20XX.xlsx)",
+        "status": "pressured"
+      },
+      {
+        "pillar": "Leverage cushion at close \u2014 opening Net Leverage 5.30x vs. the initial 6.00x maximum (~13% headroom)",
+        "monitored_by": "Quarterly Net Leverage Ratio vs. the then-current covenant maximum",
+        "status": "pressured"
+      },
+      {
+        "pillar": "Contractual amortization (0.60%/month) drives organic deleveraging without reliance on a cash sweep or refinancing",
+        "monitored_by": "Funded Debt balance (Balance Sheet / Debt & Liquidity tab) month over month",
+        "status": "intact"
+      },
+      {
+        "pillar": "Multi-service customer embedding across four service lines creates stickiness ('the mix creates attractive customer relevance')",
+        "monitored_by": "Revenue mix by service line (Sales_by_Channel), renewal behavior on licensed datasets",
+        "status": "intact"
+      },
+      {
+        "pillar": "Customer concentration within underwriting tolerance \u2014 top customer 11.8% (below the stated 15% threshold), top 10 = 61.4%",
+        "monitored_by": "Top-customer and top-10 concentration % (computable from AR Detail / Sales_by_Channel, though not natively tracked as a KPI row)",
+        "status": "intact"
+      },
+      {
+        "pillar": "Conservative Quality-of-Earnings stance at underwriting \u2014 no credit given to unsupported pipeline conversion, hypothetical headcount savings, or prospective margin actions",
+        "monitored_by": "Any new EBITDA addback appearing in a future compliance certificate that was not part of the UW base case",
+        "status": "intact"
+      },
+      {
+        "pillar": "Reporting/covenant discipline built into the structure \u2014 monthly financials + AR aging within 30 days, quarterly compliance certificates within 45 days",
+        "monitored_by": "Timeliness/completeness of monthly and quarterly deliverables",
+        "status": "pressured"
+      }
+    ],
+    "key_risks_at_uw": [
+      {
+        "risk": "High opening leverage (5.30x) with limited cushion to the then-6.00x covenant",
+        "early_warning_signal": "Rising Net Leverage Ratio or declining TTM Covenant EBITDA"
+      },
+      {
+        "risk": "Project acceptance timing \u2014 implementation revenue only recognized on documented customer acceptance",
+        "early_warning_signal": "Backlog conversion slipping below the 48% (6mo) / 82% (12mo) targets; growing Contract Asset balance"
+      },
+      {
+        "risk": "Customer concentration (top 10 = 61.4% of FY2024 revenue)",
+        "early_warning_signal": "Rising concentration %, or loss/non-renewal of a top account"
+      },
+      {
+        "risk": "Advisory utilization risk",
+        "early_warning_signal": "Falling advisory utilization rate, or advisory revenue underperforming its ~15% backlog share"
+      },
+      {
+        "risk": "Licensed-dataset renewal timing",
+        "early_warning_signal": "Renewal rate/timing slippage on the licensed-dataset service line"
+      },
+      {
+        "risk": "Collections risk given milestone/Contract-Asset billing dynamics",
+        "early_warning_signal": "AR aging deterioration, rising DSO, growing invoice disputes"
+      },
+      {
+        "risk": "Reporting discipline",
+        "early_warning_signal": "Late/incomplete monthly financials or aging, restatements, unreconciled reporting issues \u2014 ALREADY OBSERVED: the March 2026 omitted-milestone restatement and a Q1 2026 compliance certificate that was never formally re-issued after that correction"
+      }
+    ]
+  },
+  "our_view": {
+    "watchlist": "on",
+    "trajectory": "deteriorating",
+    "thesis_status": "Compliant every quarter since close (6 of 6 quarterly tests passed), but covenant HEADROOM has compressed sharply \u2014 from ~13% at close (Q1'25: 0.7709x cushion vs a 6.00x max) to ~2% by Q2'26 (0.1038x cushion vs a 5.00x max) \u2014 because three amendments (Aug'25, Jan'26, Apr'26) have ratcheted the covenant ceiling down faster than actual leverage has improved (Net Leverage: 5.23x -> 5.21x -> 5.28x -> 5.31x -> 5.13x [as-filed, pre-restatement] -> 4.90x). TTM Covenant EBITDA itself dipped through 2025 (from $33.3M at Q1'25 to $30.9M at Q4'25) before recovering to $32.2M by Q2'26 \u2014 so the underlying operating trend is closer to stable-to-improving than the covenant math alone suggests, but the covenant ratchet has been the dominant force, not EBITDA growth. A March 2026 restatement (an omitted $492K revenue / $39K EBITDA milestone) and a Q1 2026 compliance certificate that was never formally re-issued after that correction is the underwriting's 'reporting discipline' pillar's first real test, and it did not go cleanly \u2014 this, combined with three renegotiations in 15 months, is a materially different risk profile from a clean, unamended credit.",
+    "what_would_change_our_mind": "A fourth consecutive quarter of TTM Covenant EBITDA decline; any quarterly Net Leverage print within 0.05x of the then-current maximum; a second reporting/restatement event or a documentation gap on a re-certification; or loss/non-renewal of a top-10 customer given how thin the remaining covenant cushion now is."
+  },
+  "carry_forward": {
+    "open_requests_to_borrower": [
+      "Confirm the facility interest rate (index/margin/cash-PIK split) with Granite Harbor Direct Lending, LP -- not stated in any executed document.",
+      "Obtain a re-signed Q1 2026 compliance certificate reflecting the March 2026 restatement (verdict unchanged: 5.1265x as-filed vs ~5.1200x corrected, both under 5.25x).",
+      "Confirm usage, if any, under the unquantified cloud-migration capex basket (First Amendment) and customer-data-license investment basket (Second Amendment).",
+      "Confirm what the Third Amendment's undefined \"revised-reporting controls\" obligation actually requires."
+    ],
+    "unresolved_flags": [
+      "Covenant headroom at its tightest point in the deal history: 2.1% at Q2 2026 vs ~13% at close, driven by three tightening amendments outpacing leverage improvement.",
+      "Third Amendment executed at a looser 5.00x ceiling than its own unsigned draft (4.75x) 19 days earlier -- unexplained in documents on file, worth follow-up.",
+      "Persistently thin operating cash conversion: AR growth has absorbed nearly all monthly EBITDA-level cash generation throughout the 22-month history on file; no cash build-up toward the 2030 maturity at the current trajectory."
+    ],
+    "analyst_focus": [
+      {
+        "item": "covenant headroom trajectory across three tightening amendments -- 13% down to ~2%",
+        "asked_period": "2026-06",
+        "finding": "Confirmed: headroom compressed from 0.7709x/12.8% at Q1 2025 to 0.1038x/2.1% at Q2 2026, driven by the ceiling ratchet (6.00x->5.75x->5.25x->5.00x) outpacing EBITDA recovery, not by a leverage deterioration."
+      },
+      {
+        "item": "confirm the March 2026 restatement flowed correctly and Q1 2026 stale certificate is handled",
+        "asked_period": "2026-06",
+        "finding": "Confirmed: the model carries the corrected March-June figures with no artificial trend break; the Q1 2026 certificate remains as-filed (pre-restatement) and unreissued, verdict unaffected either way."
+      }
+    ],
+    "last_period_headline": "Compliant at 4.90x vs 5.00x (2.1% headroom, the tightest yet); interest rate remains undocumented and Q1 2026 certificate was never re-issued after the March restatement.",
+    "_note": "No prior monitoring memo exists for this borrower (first onboarding) \u2014 carry_forward is seeded empty per the skill's own instruction. The genuinely open items surfaced during onboarding (stale April/May 2026 standalone monthly-package balance sheets; the never-reissued Q1 2026 compliance certificate) are documented in borrower-config.json paths._restatement_note and paths._as_filed_note instead, and should be picked up as carry_forward items by the first monthly-monitor run."
+  },
+  "provenance": {
+    "auto_draftable": [
+      "static.facility",
+      "static.business_one_liner",
+      "static.business_profile",
+      "static.credit_thesis",
+      "static.key_risks_at_uw",
+      "carry_forward"
+    ],
+    "analyst_required": [
+      "our_view.*",
+      "credit_thesis[].status",
+      "ebitda_addbacks.entries[].treatment"
+    ],
+    "_note": "our_view, credit_thesis[].status and archetype confirmation were auto-decided under the batch-onboarding standing instruction rather than confirmed interactively with the analyst \u2014 every judgment and its reasoning is documented inline in this file and in borrower-config.json. Recommend analyst review at the next monthly cycle rather than treating these as final sign-off."
+  },
+  "ebitda_addbacks": {
+    "_note": "SWEEP PERFORMED across the Original Credit Agreement, all three Amendments, the FY2022-2024 Reviewed Financial Statements, the Underwriting Memorandum, the Management Presentation, and every monthly package's Income Statement \u2014 NO restructuring/impairment/write-off/write-down/severance/transaction-cost/legal-settlement/one-time/miscellaneous line was found anywhere. Reported EBITDA ties EXACTLY to the certified Covenant EBITDA in every quarter checked (Reported EBITDA = Revenue - Cost of Revenue - Operating Expenses, verified against FY2024 annual figures to the penny), and the Underwriting Memorandum explicitly disclaims addbacks ('no credit given to unsupported pipeline conversion, hypothetical headcount savings, or prospective margin actions'). ebitda_addbacks.entries is therefore genuinely empty \u2014 this is a finding, not a skipped step. SEPARATE FLAG FOR COVENANT-SETUP: the Credit Agreement's 'Covenant EBITDA' term is used throughout but its addback-limb definition text is never actually spelled out anywhere in the executed documents (no '(i) interest, (ii) taxes, (iii) D&A...' enumeration exists) \u2014 covenant-setup should treat this as a legal-extraction gap requiring the actual definition (from a schedule/exhibit not in this folder, or from the lender's legal team) rather than assuming a standard addback stack when it builds covenant-spec.json.",
+    "entries": [],
+    "credit_ebitda": {
+      "report_both_in_memo": true
+    }
+  }
+}

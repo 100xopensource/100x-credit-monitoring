@@ -1,0 +1,78 @@
+{
+  "module": "coverage",
+  "period": "2026-06",
+  "run_id": "run-20260915-071646",
+  "run_id_from": "run",
+  "produced_at": "2026-09-15T08:55:21+00:00",
+  "produced_by": {
+    "engine": "coverage",
+    "plugin_version": "1.0.0"
+  },
+  "source_files": [],
+  "results": [],
+  "exceptions": [],
+  "borrower": "Asteron Care Partners, LLC",
+  "modules": [
+    {
+      "module": "covenant-compliance",
+      "state": "reported",
+      "figures": 10,
+      "exceptions": 2,
+      "reason": null,
+      "run_id": "run-20260915-071646",
+      "produced_at": "2026-09-15T07:24:05+00:00",
+      "source_ref_reach": {
+        "cell": 7,
+        "file": 18,
+        "unlocated": 0,
+        "borrower_doc": 25
+      },
+      "archived": "covenant-compliance-2026-06.json"
+    },
+    {
+      "module": "budget-vs-actual",
+      "state": "reported",
+      "figures": 14,
+      "exceptions": 6,
+      "reason": null,
+      "run_id": "run-20260915-071646",
+      "produced_at": "2026-09-15T07:30:04+00:00",
+      "source_ref_reach": {
+        "cell": 22,
+        "file": 12,
+        "unlocated": 0,
+        "borrower_doc": 22
+      },
+      "archived": "budget-vs-actual-2026-06.json"
+    },
+    {
+      "module": "ap-ar-aging",
+      "state": "skipped",
+      "reason": "No AR/AP aging-summary export exists for this borrower in a shape ap_ar_aging.py's parser can read. The only monthly AR/AP file is 'source:Asteron Care Partners/Successor Reporting/2026/06/ar-ap-support.xlsx' (and its May-2026 prior-month counterpart at 'source:Asteron Care Partners/Successor Reporting/Archive/2026-05/ar-ap-support.xlsx'), which carries two sheets -- 'AR Claims' (229 rows) and 'AP Invoices' (53 rows) -- each a CLAIM/INVOICE-LEVEL transaction list (one row per claim/invoice: Claim/Invoice #, Payer class/Vendor, Entity/Category, date, Original, Balance, Disputed, a single 'Bucket' label per row, Status) with NO 'Total' column and no grand-total row. This does not match any shape the engine's parser handles per module-ap-ar-aging.md's 'Export shapes the parser handles' (a customer/vendor-per-row grid with per-bucket DOLLAR columns and a Total column/row). Running ap_ar_aging.py directly against the file confirms this: it self-skips with 'ValueError: could not locate aging header row in ar-ap-support.xlsx'. Checked the rest of the deal folder for a dedicated bucketed aging export: 'Portfolio Monitoring' (2025-Q1 through 2026-Q2) holds only quarterly Compliance Certificate / Covenant Calculation (FCCR) / PM Update files, and Successor Reporting's monthly.xlsx carries only Status/Income Statement/Balance Sheet/Cash Flow/Debt and Equity/Budget versus Actual/Trial Balance/Covenant tabs -- no aging tab or export exists anywhere else for this borrower, and every archived month back to 2024-09 carries the same claim/invoice-level 'ar-ap-support.xlsx' shape (checked 2026-05 explicitly). The underlying transaction data is otherwise sound and reconciles: summing the June-2026 'Balance' column gives AR $20,896,429.14 and AP $5,433,050.66, tying EXACTLY to the June-2026 Balance Sheet Accounts receivable / Accounts payable rows in the model (both on model.scale=1, whole dollars -- confirmed against the model workbook's Balance Sheet tab -- so aging.amount_scale=1 as configured in borrower-config is correct and there is no unit mismatch to flag). The gap is purely an export SHAPE the shared engine's parser does not read, not missing or bad data. Reshaping the 282 claim/invoice rows into the counterparty x bucket grid the parser expects would mean this worker computing the module's own bucket/concentration/DSO-DPO arithmetic outside the audited, reproducible engine, which is out of scope for a single-run fix; the parser needs a durable claim/invoice-level (transaction-level) input mode -- group by payer class (AR) / vendor (AP), sum Balance within each row's own Bucket label -- added to ap_ar_aging.py as a follow-on engineering task before this module can run for Asteron in any period.",
+      "run_id": "run-20260915-071646",
+      "produced_at": "2026-09-15T08:53:23+00:00",
+      "archived": "ap-ar-aging-2026-06.skipped.json"
+    },
+    {
+      "module": "three-statement-analysis",
+      "state": "reported",
+      "figures": 81,
+      "exceptions": 0,
+      "reason": null,
+      "run_id": "run-20260915-071646",
+      "produced_at": "2026-09-15T08:51:03+00:00",
+      "source_ref_reach": {
+        "cell": 95,
+        "file": 7,
+        "unlocated": 0,
+        "borrower_doc": 97
+      },
+      "archived": "three-statement-analysis-2026-06.json"
+    }
+  ],
+  "tally": {
+    "reported": 3,
+    "skipped": 1
+  },
+  "readable": false
+}

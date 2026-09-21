@@ -105,23 +105,28 @@ For an unqualified start request, immediately call `AskUserQuestion` with:
 
 > "How would you like to begin?"
 >
-> **[Try sample data (recommended)]** / **[Use my own documents]** / **[Not now]**
+> **[Explore the completed sample (recommended)]** / **[Use my own documents]** / **[Not now]**
 
-- **Try sample data (recommended)** → explain that the
-  [Synthetic borrower dataset](https://github.com/100xopensource/100x-credit-monitoring-synthetic-dataset)
-  supports the full synthetic borrower set or minified versions. Tell the analyst to use the
-  repository documentation to choose, download, and extract one of those forms. Do not guess a file
-  or release asset, auto-download anything, or promise speed or completeness. If the repository
-  documentation is unavailable, say exactly:
+- **Explore the completed sample (recommended)** → say:
 
-  > "The sample download isn't available at that page yet. You can use your own documents, use a sample you already downloaded, or pause for now."
+  > "See what a finished review looks like: financial workbooks, monitoring memos, and a portfolio
+  > dashboard for six fictional borrowers, covering June 2026.
   >
-  > **[Use my own documents]** / **[Use an already-downloaded sample]** / **[Not now]**
+  > [View the live sample](https://100xpartners.ai/credit-monitoring/) · [Download sample results](https://github.com/100xopensource/100x-credit-monitoring/tree/main/sample-output)
+  >
+  > Viewing the results does not require a review run. If you want to work with the sample afterward,
+  > tell me whether you want to continue from the saved results or run it from scratch."
 
-  Ask that as an `AskUserQuestion` menu. Either document choice continues to **store-setup**; do not
-  recheck the remote page or block an already-downloaded sample. After the analyst confirms newly
-  downloaded data is extracted, follow the same path without repeating the welcome. Then use the
-  normal post-access company selection and monitor one borrower only.
+  Show both links as written.
+  Do not check the link or search for local sample files. Stop here without opening folders or starting a review.
+  Only if the analyst asks to continue or run: explain that viewing works, but saved-state continuation
+  is not verified and this candidate rejects the supplied store. Do not send a continuation request
+  into folder setup; point to the sample guide and offer a fresh run instead.
+  For an explicit fresh-run choice, link to the
+  [source dataset](https://github.com/100xopensource/100x-credit-monitoring-synthetic-dataset),
+  then use a separate empty results folder. Once the analyst has the files extracted, follow
+  **store-setup** without repeating the welcome or generic continue menu. Use normal company
+  selection for one borrower; downloading files alone does not authorize a review.
 - **Use my own documents** → preserve this as route intent and follow **store-setup** without asking
   for a company name first. It is not permission to open a native picker immediately: store-setup
   must explain both folders, attach the guide, ask its readiness question, and wait for the answer.
@@ -247,7 +252,7 @@ Call `AskUserQuestion` for every menu in this reference. Never render bracketed 
 assistant text; the user must receive clickable options.
 
 The no-name, no-records onboarding menu above is the only exception for an unqualified start request.
-Choosing **[Try sample data (recommended)]** or **[Use my own documents]** selects the route and
+Choosing **[Explore the completed sample (recommended)]** or **[Use my own documents]** selects the route and
 replaces this generic menu. It does not satisfy either folder-readiness gate in store-setup.
 
 For every other route where the state is literally `unknown` or `new`, use this menu:

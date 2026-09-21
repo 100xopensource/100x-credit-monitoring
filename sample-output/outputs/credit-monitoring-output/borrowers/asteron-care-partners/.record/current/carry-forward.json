@@ -1,0 +1,29 @@
+{
+  "open_requests_to_borrower": [
+    "FCCR reinstatement-readiness analysis (Stabilization Milestone M4), due to the lender 2026-09-30."
+  ],
+  "unresolved_flags": [
+    "FCCR reinstatement at 1.2000x effective 2027-01-01 is this spec's best-supported reading of the suspension text, not a confirmed mechanism -- revisit before year-end, especially once the M4 analysis is delivered.",
+    "EBITDA add-back ($553,353.26/month) inside the borrower's certified 'Covenant EBITDA' is not supported by any agreement text located to date -- excluded from this analysis's EBITDA definition; resolve if a longer-form credit agreement surfaces.",
+    "Restructuring accounting (TDR framework, instrument-level 10% modification test, CODI, Section 382) remains PROVISIONAL through the June 2026 package -- successor balance-sheet figures could still restate.",
+    "Interim goodwill reassessment required as of 2026-03-31 had not been completed as of the June 2026 package."
+  ],
+  "analyst_focus": [
+    {
+      "item": "FCCR reinstatement readiness (Milestone M4 due 2026-09-30) and the informational FCCR trend",
+      "asked_period": "2026-06",
+      "finding": "Informational FCCR worsened again to 0.3682x at June 2026 (from 0.67x in Q1 2026), fourth straight worsening quarter since the Dec 2025 suspension; the covenant remains suspended (not a breach) and M4 is due in about two weeks."
+    },
+    {
+      "item": "EBITDA definition gap ($553,353.26/month unsupported add-back) and Fixed Charges scope gap vs certified figures",
+      "asked_period": "2026-06",
+      "finding": "Confirmed unresolved: no executed document supports the add-back or a broader Fixed Charges definition; both remain excluded from this analysis and flagged for resolution if a longer-form agreement surfaces."
+    },
+    {
+      "item": "Watchlist trajectory: improving operating metrics vs worsening informational FCCR",
+      "asked_period": "2026-06",
+      "finding": "Operating metrics kept improving in June (EBITDA +23.3% MoM, gross margin up to 33.5%, revenue +2.2% MoM) even as the informational FCCR kept worsening -- trajectory 'improving' still holds on the operating side, but the covenant path has not yet turned."
+    }
+  ],
+  "last_period_headline": "June 2026: revenue $13.2M ran 17.4% below the Approved Stabilization Budget while EBITDA $1.5M beat budget by 19.9%; Minimum Liquidity passed at $18.8M vs the $10.0M floor; the informational FCCR (0.3682x, suspended/not tested) continued to worsen ahead of the FCCR reinstatement-readiness milestone due 2026-09-30."
+}

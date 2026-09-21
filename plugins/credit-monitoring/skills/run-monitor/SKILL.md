@@ -78,12 +78,14 @@ its concrete overwrite check finds changed, missing, unreadable, or unpublished 
 finalization**, **Retry finalization**, **Resume the interrupted review**, and **Select the unpublished
 result as current** each authorize only their named write.
 
-For the no-name onboarding menu, **Try sample data (recommended)** follows the exact repository route
-in `entry-routing.md`; after the analyst confirms extraction, follow **store-setup** without repeating
-the welcome or generic continue menu. **Use my own documents** goes directly to **store-setup** without
-asking for a company name first or repeating the generic continue menu. That choice is route intent,
+For the no-name onboarding menu, **Explore the completed sample (recommended)** follows
+`entry-routing.md`: show the sample link and stop. Do not fall through to folder setup.
+Explain the saved-sample continuation limitation before any folder setup; only an explicit fresh-run
+choice starts the sample folder route.
+**Use my own documents** goes directly to **store-setup** without asking for a company name first or
+repeating the generic continue menu. That choice is route intent,
 not permission to open a picker: store-setup must show its guide and explanation, ask the readiness
-question, and wait. Both paths use monitor-setup's post-access company selection and scope one
+question, and wait. Folder routes use monitor-setup's post-access company selection and scope one
 borrower. **Not now** has the same no-picker, no-change behavior as **Stop without making changes**.
 
 For every other route, call `AskUserQuestion` to ask the matching permission menu from

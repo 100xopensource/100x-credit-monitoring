@@ -1,0 +1,29 @@
+{
+  "source": "source:Asteron Care Partners/Portfolio Monitoring/2026-Q2/Compliance Certificate.pdf",
+  "period": "2026-06",
+  "values": {
+    "min_liquidity": {
+      "2026-06-30": {
+        "value": 18817443.79,
+        "page": 1,
+        "quote": "PM Update.pdf (Portfolio Monitoring/2026-Q2), 'LIQUIDITY' section: 'Ending cash was $18,817,443.79; ending gross debt was $50,847,152.95.' Cross-checked against Successor Reporting/Planning/Stabilization Milestones.xlsx, Milestones tab, row M3: owner 'Chief Financial Officer', due 2026-06-30, requirement 'Maintain minimum liquidity of $10 million', status 'COMPLETE'."
+      }
+    },
+    "fccr": {
+      "2026-06-30": {
+        "value": 0.3682,
+        "page": 1,
+        "quote": "Compliance Certificate.pdf (Portfolio Monitoring/2026-Q2), 'CALCULATION' section: 'TTM Covenant EBITDA is $6,413,418.70; TTM fixed charges are $17,417,557.44; FCCR is 0.3682x versus 1.2000x.' 'ECONOMIC STATE: WOULD BREACH.' 'GOVERNING DISPOSITION: SUSPENDED under operative authority; not waived and not deemed compliant.' Matches Covenant Calculation.xlsx 'Conclusion' tab (Test date 2026-06-30; TTM Covenant EBITDA 6,413,418.70; TTM fixed charges 17,417,557.44; Calculated FCCR 0.3682; Minimum FCCR 1.2; Test applicability SUSPENDED; Governing disposition SUSPENDED) and 'TTM Detail' tab (TTM Total row: EBITDA 6,413,418.70; Cash interest 6,238,068.98; Principal 2,080,006.60; Lease payments 6,487,698.42; Maintenance capex 2,611,783.44; Cash taxes 0; Fixed charges 17,417,557.44)."
+      }
+    }
+  },
+  "transcription_notes": [
+    "min_liquidity's certified actual ($18,817,443.79) is transcribed from the companion 2026-Q2 PM Update.pdf 'LIQUIDITY' line, not from Compliance Certificate.pdf itself -- this quarter's compliance certificate text states only the FCCR calculation and disposition, with no liquidity figure printed on it. Both documents sit in the same Portfolio Monitoring/2026-Q2 folder and are read together as the quarter's compliance-certificate/covenant-calculation exhibit per covenant-spec.json's min_liquidity cert_ref. The engine attaches one upstream document address to every value transcribed into this file (its top-level 'source' field, set here to Compliance Certificate.pdf), so the archived source_ref for the liquidity row's certified side will display the Compliance Certificate.pdf address even though the number itself came from PM Update.pdf in the same folder -- the quote field above carries the correct citation regardless.",
+    "fccr's certified TTM Covenant EBITDA ($6,413,418.70) and TTM fixed charges ($17,417,557.44) are the borrower's own, broader figures (Covenant Calculation.xlsx TTM Detail) -- wider than this spec's model-side EBITDA (Reported EBITDA, no lease add-back) and Fixed_Charges (facility cash interest + scheduled principal only, no lease payments or maintenance capex) definitions per covenant-spec.json's step7_signoff. A certified-vs-model FCCR delta on this basis is expected and documented there, not an error.",
+    "Stabilization Milestones.xlsx (Successor Reporting/Planning) independently confirms Milestone M3 'Maintain minimum liquidity of $10 million' status COMPLETE as of 2026-06-30, consistent with the certified liquidity figure and with the model's own Cash balance for June 2026.",
+    "The FCCR test date resolved for this period (2026-06-30) falls inside the covenant-spec threshold_schedule's SUSPENDED step (effective 2025-12-05, value null) -- the model side is expected to report this covenant as not_evaluable/gap for June 2026, per the module spec's 'Two statuses mean no answer' rule; the certified value above is the informational cross-check the module spec says to carry on that row regardless."
+  ],
+  "action_items": [
+    "Stabilization Milestone M4 ('Deliver FCCR reinstatement readiness analysis', owner CFO, due 2026-09-30) is still PENDING as of the June 2026 package (Successor Reporting/Planning/Stabilization Milestones.xlsx) -- due in about two weeks from today's date. Confirm the analysis is delivered on time and revisit covenant-spec.json's open step7_signoff item on whether the FCCR mechanically reinstates at 1.2000x on 2027-01-01, given the informational ratio is deeply sub-1.0x and has worsened every quarter since suspension (1.0478x Q4-2025; 0.6687x Q1-2026; 0.3682x Q2-2026)."
+  ]
+}

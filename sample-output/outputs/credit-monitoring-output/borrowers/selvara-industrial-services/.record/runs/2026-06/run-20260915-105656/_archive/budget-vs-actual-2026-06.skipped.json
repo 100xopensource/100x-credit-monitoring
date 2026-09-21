@@ -1,0 +1,17 @@
+{
+  "module": "budget-vs-actual",
+  "period": "2026-06",
+  "run_id": "run-20260915-105656",
+  "run_id_from": "run",
+  "produced_at": "2026-09-15T11:03:27+00:00",
+  "produced_by": {
+    "engine": "budget-vs-actual",
+    "plugin_version": "1.0.0"
+  },
+  "source_files": [],
+  "results": [],
+  "exceptions": [],
+  "skipped": true,
+  "reason": "model_lines.'gross_profit' is not set in borrower-config; budget-vs-actual needs it to read the model.",
+  "borrower": "Selvara Industrial Services, LLC"
+}

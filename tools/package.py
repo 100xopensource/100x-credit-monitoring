@@ -41,8 +41,12 @@ def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def write_sums(path, bundle_digest):
+    path.write_text(f"{bundle_digest}  {OUTPUT.name}\n", encoding="utf-8")
+
+
 def expected_hash():
-    for line in (ROOT / "SHA256SUMS.txt").read_text().splitlines():
+    for line in (ROOT / "SHA256SUMS.txt").read_text(encoding="utf-8").splitlines():
         value, name = line.split(None, 1)
         if name.strip().lstrip("*") == OUTPUT.name:
             return value
@@ -55,7 +59,9 @@ def main():
     args = parser.parse_args()
     if args.command == "build":
         build(OUTPUT)
-        print(f"{digest(OUTPUT)}  {OUTPUT.name}")
+        bundle_digest = digest(OUTPUT)
+        write_sums(ROOT / "SHA256SUMS.txt", bundle_digest)
+        print(f"{bundle_digest}  {OUTPUT.name}")
         return
     candidate = OUTPUT.with_suffix(".plugin.check")
     try:

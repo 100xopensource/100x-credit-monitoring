@@ -1,0 +1,52 @@
+{
+  "schema": "credit-monitoring-run-ledger/v1",
+  "schema_version": 1,
+  "run_id": "run-20260916-094426",
+  "period": "2026-06",
+  "status": "finished",
+  "started_at": "2026-09-16T09:44:26+00:00",
+  "base": {
+    "from": "seed"
+  },
+  "packages_seen": [],
+  "analyst_focus": [
+    "covenant headroom trajectory across three tightening amendments -- 13% down to ~2%",
+    "confirm the March 2026 restatement flowed correctly and Q1 2026's stale certificate is handled"
+  ],
+  "steps": {
+    "config": "done",
+    "model": "done",
+    "modules": {
+      "covenant-compliance": "done",
+      "budget-vs-actual": "done",
+      "ap-ar-aging": "done",
+      "three-statement-analysis": "done"
+    },
+    "coverage": "done",
+    "memo": "done",
+    "write_back": "done"
+  },
+  "delivery_base": {
+    ".record/changelog.jsonl": null,
+    ".record/current/config/borrower-config.json": "sha256:18142ff32a4f447e14419465e85b1d1cd3c6b36a202684fc3b1ff89740cf3b38",
+    ".record/current/config/budget-map.json": "sha256:40ca09abf494e0790ceb720491df005a585bcf38455fa98b631b159f0d3aaf51",
+    ".record/current/config/collateral-map.json": "sha256:fa3df4791ed0d70614b68a4fd1d576f937b20dc79c492060410af0e20f32043d",
+    ".record/current/config/covenant-spec.json": "sha256:8d5b0985c8bb2b0998d33d3b97af6d8c2e14c597922f93464836d12aaaa0c977",
+    ".record/current/config/deal-context.json": "sha256:2d2df95223937c97cfe4c6bc0c3f9ce51d53d7db6f0e111199149ed7ac844cf9",
+    ".record/current/config/debt-service-schedule.json": "sha256:e2f24443b02d355020f0bd6b5cfc384e97914a197063580750eb57985d516e32",
+    ".record/current/config/debt-service-schedule.md": "sha256:1ef3a1edd9c48a1c25e0087df73faa459d3bc7525b7e88f43547c0ead74cb400",
+    ".record/current/config/debt-service-spec.json": "sha256:96fe98e522f6d33dae2745382de076782f4008fe88c4bd65119ce7598715f353",
+    ".record/edit-intake.json": null,
+    ".record/manifest.json": null,
+    ".record/published.json": null
+  },
+  "inputs": {
+    "config": "config",
+    "model": "Veyrona Decision Systems Monthly IS-BS-CF.xlsx",
+    "sidecars": [
+      "source-map.json",
+      "restatements.json"
+    ],
+    "execution_config": "execution-config.json"
+  }
+}

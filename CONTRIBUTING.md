@@ -20,19 +20,20 @@ Requirements: Python 3.10+, dependencies from `requirements.txt`, and LibreOffic
 python3 -m pip install -r requirements.txt
 ```
 
-Verify that a deterministic rebuild matches the published checksum:
+Verify that a deterministic rebuild matches the tracked plugin bundle and published checksum:
 
 ```sh
 python3 tools/package.py check
 ```
 
-Build the ignored local artifact when needed:
+After changing packaged files, rebuild the tracked plugin bundle:
 
 ```sh
 python3 tools/package.py build
+python3 tools/package.py check
 ```
 
-Release artifacts are published through GitHub Releases rather than committed to the source tree.
+Commit `credit-monitoring.plugin` and `SHA256SUMS.txt` with the source change. The same bundle is also published through GitHub Releases.
 
 Open a pull request and state the commands and manual checks you ran. By contributing, you agree that your contribution is licensed under Apache-2.0 and you certify its origin by signing off your commits (below).
 

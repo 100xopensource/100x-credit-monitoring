@@ -1,0 +1,34 @@
+{
+  "borrower": "Talvorn Technical Services, LLC",
+  "lien_type": "specific-asset",
+  "security_summary": "Specific-asset security interest (NOT a full blanket lien) granted by Talvorn Technical Services, LLC alone in favor of Blue Mesa Private Credit, LP as Administrative Agent, covering: business receivables, equipment, and proceeds thereof (executed Guaranty and Security Agreement, effective 2025-01-15), PLUS a separate grant of transferable/owned intellectual property (diagnostic procedures and internally used service systems) and proceeds under a standalone executed IP Security Agreement (same effective date; third-party licensed IP explicitly carved out). Secured obligations = funded principal + accrued fixed interest + the agreed closing (origination) fee; the agreement explicitly states it 'does not establish collateral values or a borrowing base.' NO GUARANTORS -- both documents confirm 'no unidentified subsidiary guarantor is certified' and no separate guaranty from any parent/affiliate entity exists anywhere in the deal folder; this is a single-obligor deal. Source: executed Guaranty and Security Agreement and IP Security Agreement (Credit & Legal/Executed/Initial Closing/); executed Credit Agreement (Credit & Legal/Executed/original_agreement.pdf).",
+  "_narrow_lien_note": "JUDGMENT CALL / FLAG: this collateral package is materially NARROWER than a market-standard all-asset blanket lien -- explicitly absent from the security grant: inventory, deposit accounts, and a general-intangibles catch-all (contrast several other borrowers in this portfolio, whose agreements pledge a full blanket package). This means Talvorn's 'Inventory and Other Current Assets' balance-sheet line (see borrower-config analysis_lines) sits entirely OUTSIDE the lender's collateral package -- flagged for the analyst's own credit read, independent of the otherwise strong and improving covenant trend (see deal-context.json our_view).",
+  "funded_debt_source": {
+    "covenant_spec_ref": "covenant-spec.json#/definitions/Funded_Debt",
+    "model_rows": [
+      "Funded Debt"
+    ]
+  },
+  "pledged_components": [
+    {
+      "label": "Accounts receivable",
+      "model_line": "Accounts Receivable",
+      "tier": "liquid"
+    },
+    {
+      "label": "Equipment (net)",
+      "model_line": "Net Property and Equipment",
+      "tier": "fixed"
+    }
+  ],
+  "_ip_omitted_note": "The separately-granted transferable/owned intellectual property is NOT included as a pledged_components entry -- there is no PP&E/intangibles/goodwill row on this borrower's monthly Balance Sheet that corresponds to IP specifically (Net Property and Equipment is physical equipment only, per the Balance Sheet's own row ordering and the IC Memo's asset description) -- same reasoning Orinth Vale's and Selvara's untrackable pledged categories were omitted for. This makes the coverage math below conservative: it tracks two pledged components (A/R and equipment) out of a security package that also includes IP.",
+  "coverage_cuts": {
+    "Liquid (Accounts receivable only)": [
+      "liquid"
+    ],
+    "All trackable pledged assets (A/R + Equipment, net)": [
+      "liquid",
+      "fixed"
+    ]
+  }
+}

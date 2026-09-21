@@ -76,6 +76,19 @@ class RepositoryFormTest(unittest.TestCase):
         for path in ("CHANGELOG.md", "CODE_OF_CONDUCT.md", "SUPPORT.md"):
             self.assertIn(f"]({path})", readme)
 
+    def test_public_documentation_matches_the_release(self):
+        readme = (ROOT / "README.md").read_text().lower()
+        contributing = (ROOT / "CONTRIBUTING.md").read_text().lower()
+        support = (ROOT / "SUPPORT.md").read_text()
+        install = readme.split("## install", 1)[1].split("## start", 1)[0]
+        self.assertIn("add marketplace", install)
+        self.assertNotIn("release file", install)
+        self.assertNotIn("upload", install)
+        self.assertIn("tracked plugin bundle", contributing)
+        self.assertNotIn("ignored local artifact", contributing)
+        self.assertIn("[What it produces](README.md#what-it-produces)", support)
+        self.assertIn("## what it produces", readme)
+
     def test_public_copy_has_no_staging_identity(self):
         files = [ROOT / path for path in PUBLIC_TEXT if (ROOT / path).is_file()]
         files += tracked_github_files()
@@ -189,35 +202,31 @@ class RepositoryFormTest(unittest.TestCase):
                 self.assertIn(phrase, normalized_welcome)
             self.assertNotIn("pass their checks", normalized_welcome)
         self.assertIn(
-            "**[Try sample data (recommended)]** / **[Use my own documents]** / "
+            "**[Explore the completed sample (recommended)]** / **[Use my own documents]** / "
             "**[Not now]**",
             no_name,
         )
         self.assertNotIn("[Use my own documents]", named)
         self.assertNotIn("Help me prepare my folders", no_name)
         self.assertIn(
-            "https://github.com/100xopensource/100x-credit-monitoring-synthetic-dataset",
+            "> [View the live sample](https://100xpartners.ai/credit-monitoring/) · [Download sample results](https://github.com/100xopensource/"
+            "100x-credit-monitoring/tree/main/sample-output)",
             no_name,
         )
+        normalized_no_name = " ".join(no_name.lower().split())
         for phrase in (
-            "full synthetic borrower set",
-            "minified versions",
-            "repository documentation",
-            "do not guess",
+            "do not check the link or search for local sample files",
+            "stop here without opening folders or starting a review",
+            "only if the analyst asks to continue or run",
             "without repeating the welcome",
             "one borrower",
         ):
-            self.assertIn(phrase, no_name.lower())
-        self.assertIn(
-            "The sample download isn't available at that page yet. You can use your own "
-            "documents, use a sample you already downloaded, or pause for now.",
-            no_name,
-        )
-        self.assertIn(
-            "**[Use my own documents]** / **[Use an already-downloaded sample]** / "
-            "**[Not now]**",
-            no_name,
-        )
+            self.assertIn(phrase, normalized_no_name)
+        # This candidate isn't published yet: the welcome must never claim a
+        # release exists before it does, or dangle a "placeholder" excuse for it.
+        self.assertNotIn("publication placeholder", normalized_no_name)
+        self.assertNotIn("that page", no_name)
+        self.assertNotIn("if `sample-output/readme.md` is unavailable", normalized_no_name)
         self.assertNotIn("skill’s rules", entry.lower())
         self.assertNotIn("skill's rules", entry.lower())
         self.assertIn("free text", asking.lower())

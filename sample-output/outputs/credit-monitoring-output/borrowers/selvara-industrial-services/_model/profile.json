@@ -1,0 +1,67 @@
+{
+  "borrower": "Selvara Industrial Services, LLC",
+  "borrower_key": "selvara-industrial-services",
+  "model_output_path": "store:borrowers/selvara-industrial-services/_model/Selvara Industrial Services Monthly IS-BS-CF.xlsx",
+  "last_build": "2026-09-15",
+  "months_covered": {
+    "first": "2024-09",
+    "last": "2026-06",
+    "count": 22
+  },
+  "reporting_packages": {
+    "folder": "source:Selvara Industrial Services/Monthly",
+    "file_pattern": "Archive/<YYYY-MM>/monthly.xlsx for Sep 2024-May 2026 (21 months); Current/2026-06/June_2026_Monthly_Package.xlsx for Jun 2026 (verified same tab shape as Archive)",
+    "core_statement_sheets": ["Income Statement", "Working Capital", "Debt Roll-Forward", "Cash Flow"],
+    "other_tabs_per_month": ["Indicative FCCR", "Budget Comparison", "Operating KPIs", "Close Notes"],
+    "companion_files_per_month": ["ap-ar-aging.xlsx (June: June_2026_AR-AP_Detail.xlsx) -- ap-ar-aging module input, not a statement source", "sales-by-channel.xlsx (June: June_2026_Project_Service-Line_Detail.xlsx) -- not a statement source"],
+    "june_2026_ephemera_excluded": ["certificate.xlsx", "PM_Update_2026-Q2.pdf", "monthly-original.xlsx", "consolidated-revised.xlsx (used ONLY for the Mar 2026 Revenue restatement override)", "March_Reporting_Correction_Notice_2026-07-23.pdf", "Compliance/ subfolder"],
+    "hidden_columns": false,
+    "each_package_is_single_month_snapshot": true,
+    "no_consolidated_by_month_or_ytd_file_for_full_history": "consolidated-revised.xlsx exists but covers ONLY Mar-Jun 2026, used solely to correct the March 2026 Revenue restatement; no full-history consolidated file exists.",
+    "encryption": "none observed",
+    "format": "xlsx (not SpreadsheetML XML)",
+    "row_labels_identical_across_all_22_months": true
+  },
+  "sign_conventions": {
+    "cash_flow_lines": "Cash Flow tab lines are pre-signed as reported (outflows negative: Cash taxes, Capital expenditures, Working-capital increase (when a use of cash), Cash interest, Lease payments, Required principal all negative; inflows positive: Reported EBITDA, Draws, New facility funding, Sponsor equity). Ending cash = SUM of all 12 lines.",
+    "debt_roll_forward": "Debt Roll-Forward tab's 'Required principal' is stored POSITIVE (a reduction subtracted in the roll-forward formula: Ending debt = Beginning debt - Required principal + Draws + PIK) -- opposite sign convention from the same fact on the Cash Flow tab (stored negative there, an outflow). Both tie to the same magnitude every month.",
+    "covenant_support_rows": "Cash Interest Expense and Scheduled Debt Principal Payments are stored POSITIVE (expense/payment magnitude), computed as the negative of the Cash Flow Statement's signed 'Cash interest' / 'Required principal' values."
+  },
+  "model_lines_gaps": {
+    "gross_profit": "blank -- no COGS/Gross Profit line anywhere in the monthly cadence",
+    "operating_cogs": "blank -- same gap",
+    "net_income": "blank -- no accrual Net Income anywhere in the monthly cadence",
+    "depreciation_amortization": "blank -- no D&A anywhere in the monthly cadence (not on IS, not on Cash Flow tab)",
+    "opex_groups": "intentionally empty -- no opex line at all exists",
+    "note": "This is the thinnest borrower onboarded so far per borrower-config.json model_lines._gap_note. three-statement-analysis will report these in lines_not_found with dependent ratios suppressed."
+  },
+  "ebitda_bridge": {
+    "source": "covenant-spec.json#/definitions/EBITDA (compute.ebitda_bridge = 'Reported EBITDA')",
+    "provisional": false,
+    "model_row": "Income Statement!'Reported EBITDA' -- hardcoded (blue) source line, NOT a computed subtotal (no intermediate detail exists between Revenue and Reported EBITDA in this borrower's monthly cadence)",
+    "verified_ties_to_certified_covenant_ebitda": "Mar 2026 both 2,618,535.91; Jun 2026 both 2,696,995.08; May 2026 both 2,588,973.90 -- zero addback gap, unlike Asteron.",
+    "deemed_schedule": "none in covenant-spec.json#/definitions/EBITDA"
+  },
+  "covenant_support": {
+    "debt_service_schedule_path": "store:borrowers/selvara-industrial-services/.record/current/config/debt-service-schedule.json",
+    "override_in_effect": "NATIVE-LEDGER OVERRIDE per covenant-spec.json step7_signoff decision 'fixed_charges_component_source': both covenant-support rows (Cash Interest Expense, Scheduled Debt Principal Payments) are populated for ALL 22 months as live cross-sheet formulas referencing this model's own Cash Flow Statement 'Cash interest' / 'Required principal' rows, NOT from debt-service-schedule.json. Rationale: Selvara carries no debt other than this one facility (no ledger-vs-contract gap to correct for), and the generated schedule is a known, documented approximation (flat amortization base vs. true declining balance; day-count mismatch) that would be LESS precise on the covenant closest to an active breach (two consecutive FCCR breaches, expired waiver, next Test Date 2026-09-30 uncovered as of this build).",
+    "recheck_on_refresh": "Reconfirm on every refresh that the native Cash Flow tab's 'Cash interest' / 'Required principal' lines remain the more precise source (i.e., Selvara has not taken on additional non-facility debt that would reintroduce a ledger-vs-contract gap) before continuing the override.",
+    "pre_facility_months": "None -- the facility (or its predecessor) existed continuously across the full Sep 2024-Jun 2026 model range per the Debt Roll-Forward block.",
+    "non_facility_debt": "None disclosed anywhere in the deal folder for this borrower; nothing added to the principal row beyond the native facility figure."
+  },
+  "materiality_threshold": {
+    "absolute": 25000,
+    "relative_pct": 0.01,
+    "rule": "greater of $25,000 or 1% of the line"
+  },
+  "restatement_history": "One restatement found: Mar 2026 Revenue $13,111,960.23 -> $13,729,801.29 (Archive/2026-03/monthly.xlsx never updated after the 2026-07-22 correction; authoritative figure sourced from consolidated-revised.xlsx). Reported EBITDA unaffected (pure Revenue/Cost gross-up). April/May/June verified NOT restated (identical between consolidated-revised.xlsx and their respective Archive/current files). See restatements.json.",
+  "known_gaps": {
+    "no_balance_sheet_tab_at_all": "This borrower's monthly package carries NO Balance Sheet tab -- only a 'Working Capital' tab (AR/AP/NWC) and a 'Cash Flow' tab. The model's 'Balance Sheet' sheet therefore carries Working Capital detail only, with NO Total Assets/Liabilities/Equity and NO Balance-Check row (nothing to invent from). Supplementary Debt Roll-Forward and covenant-support blocks sit below the Working Capital rows on the same sheet. 'cash' maps to the Cash Flow Statement's 'Ending cash' row instead of a true BS cash line.",
+    "cash_flow_single_blended_waterfall": "Native Cash Flow tab has no Operating/Investing/Financing split -- two DERIVED subtotal rows ('Operating Cash Flow (derived)', 'Financing Cash Flow (derived)') added and verified against two independent months (May, Jun 2026) to the penny. Capital expenditures (native) used directly as Investing CF.",
+    "no_inventory": "Not part of pledged collateral (collateral-map.json) and no monthly row exists to track it against, despite a real $8,640,818.48 FY2024 annual inventory balance (annual-only, not monthly cadence)."
+  },
+  "judgment_calls": {
+    "fy_ytd_column_treatment": "assembling-rules.md's 'Include FY / YTD total columns (SUM formulas)' bullet applied literally to flow rows (IS, CF, Debt Roll-Forward flows, covenant-support rows) via SUM, while true stock/spot rows (AR, AP, NWC, Beginning/Ending debt, Beginning/Ending cash) use period-start or period-end SPOT references instead -- matches the prior canonical builds in this plugin (Asteron, Nemeris) exactly.",
+    "reported_ebitda_not_a_computed_subtotal": "Unlike Asteron/Nemeris, Reported EBITDA is entered as a hardcoded (blue) source line on the Income Statement, not a black formula, because there is no intermediate cost/opex detail in this borrower's monthly cadence to build it up from."
+  }
+}

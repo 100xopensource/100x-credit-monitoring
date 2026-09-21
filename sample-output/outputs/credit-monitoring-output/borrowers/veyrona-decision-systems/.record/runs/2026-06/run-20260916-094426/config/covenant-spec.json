@@ -1,0 +1,326 @@
+{
+  "borrower": "Veyrona Decision Systems, LLC",
+  "agreement": "Executed Credit Agreement (Veyrona 2025 Senior Secured Credit Facility) among Veyrona Decision Systems, LLC, as Borrower; Veyron Holdings, LLC, as Guarantor/co-Grantor; and Granite Harbor Direct Lending, LP, as Administrative Agent and sole Lender. Issued January 10, 2025; effective/closing January 15, 2025; matures January 15, 2030. $250,000,000 total commitment = $187,274,929.89 funded term loan + $62,725,070.11 undrawn revolver (Schedule 1.1), refinancing $179,250,000 of legacy debt at closing. As amended by three executed amendments, each of which states in identical language that 'Net Debt, Covenant EBITDA, Test Date, and other definitions remain unchanged unless expressly modified here' -- confirmed by an independent full-text read of all three amendments: none touches pricing, amortization, day count, fees, or the EBITDA/Net Debt definitions. Only the Maximum Net Leverage Ratio threshold steps down, each amendment paired with one small bundled accommodation.",
+  "as_of_agreement_date": "2025-01-15",
+  "amendments_reflected": [
+    {
+      "date": "2025-08-05",
+      "instrument": "First Amendment to Credit Agreement (executed 2025-08-01, effective 2025-08-05)",
+      "summary": "Tightens the Maximum Net Leverage Ratio from 6.00x to 5.75x. In exchange, adds an unquantified 'limited cloud-migration capital-expenditure basket' -- no dollar amount, percentage-of-EBITDA cap, or expiration is stated anywhere in the executed text. No other term (pricing, amortization, day count, fees, EBITDA/Net Debt definitions) is changed; confirmed by independent read, not taken on the requester's brief alone.",
+      "agreement_ref": {
+        "section": "Amendment to Financial Covenant / Lender Consent",
+        "page": 1,
+        "quote": "Maximum Net Leverage Ratio becomes 5.75x on and after the effective date. ... Lender consent: limited cloud-migration capital-expenditure basket."
+      }
+    },
+    {
+      "date": "2026-01-31",
+      "instrument": "Second Amendment to Credit Agreement (executed 2026-01-20, effective 2026-01-31)",
+      "summary": "Tightens the Maximum Net Leverage Ratio from 5.75x to 5.25x. Borrower undertakes 'enhanced receivables-aging delivery' (no cadence, format, or aging-bucket detail specified beyond the phrase itself). Lender consents to an unquantified 'limited customer-data license investment basket' -- again no dollar amount or cap stated. No other term changed.",
+      "agreement_ref": {
+        "section": "Amendment to Financial Covenant / Borrower Undertakings / Lender Consent",
+        "page": 1,
+        "quote": "Maximum Net Leverage Ratio becomes 5.25x on and after the effective date. ... Borrower agreement: enhanced receivables-aging delivery ... Lender consent: limited customer-data license investment basket."
+      }
+    },
+    {
+      "date": "2026-04-30",
+      "instrument": "Third Amendment to Credit Agreement (executed 2026-04-20, effective 2026-04-30)",
+      "summary": "Tightens the Maximum Net Leverage Ratio from 5.25x to 5.00x -- LOOSER than the unsigned/superseded April 1, 2026 draft proposal's 4.75x (that draft is not authoritative; the recitals expressly disclaim reliance on it). Lender preserves (does not claw back) the $62,725,070.11 undrawn revolver commitment, in exchange for undefined 'revised-reporting controls' -- no specific report, cadence, or format is named anywhere in the executed text.",
+      "agreement_ref": {
+        "section": "Amendment to Financial Covenant / Borrower Undertakings / Lender Consent",
+        "page": 1,
+        "quote": "Maximum Net Leverage Ratio becomes 5.00x on and after the effective date. ... Borrower agreement: revised-reporting controls ... Lender consent: preservation of remaining undrawn commitment."
+      }
+    }
+  ],
+  "threshold_unit": "dollars",
+  "definitions": {
+    "Covenant_EBITDA": {
+      "verbatim": "Net Leverage Ratio means Net Debt divided by trailing-four-quarter Covenant EBITDA.",
+      "agreement_ref": {
+        "section": "Article I -- Definitions",
+        "page": 1,
+        "quote": "Net Leverage Ratio means Net Debt divided by trailing-four-quarter Covenant EBITDA."
+      },
+      "basis": "flow",
+      "compute": {
+        "ebitda_bridge": "Reported EBITDA"
+      },
+      "note": "GENUINE DEFINITIONAL GAP, not a transcription omission: Article I of the Original Credit Agreement (the entirety of the Definitions article is three sentences) never states an EBITDA computation formula or an add-back limb of any kind -- it only NAMES 'Covenant EBITDA' as an input to the Net Leverage Ratio. There is no 'net income plus interest, taxes, D&A' starting formula, no 'adjusted only for permitted, documented items' limiter (contrast a sibling facility in this portfolio whose agreement carries exactly that limiting phrase), and no deemed/stipulated EBITDA schedule (full-text search of every executed document for 'deemed', 'shall be deemed', 'stipulated', 'agreed EBITDA' and 'add-back' returned zero matches). In practice, every one of the six quarterly Covenant_Calculation workbooks filed 2025 Q1 through 2026 Q2 shows 'Permitted add-backs: $0' and 'Reported operating EBITDA' tying exactly to 'Covenant EBITDA' (Tie-to-leverage-summary residual = 0 every quarter), and the FY2024 Reviewed Financial Statements independently show Revenue $213,000,000.00 - Cost of revenue $115,020,000.00 - Operating expenses $64,519,339.31 = Covenant EBITDA $33,460,660.69 exactly, with no add-back line on the statement's face. Bound here to the model's single pinned EBITDA bridge row ('Reported EBITDA', per borrower-config model_lines.ebitda_bridge) on the strength of that six-quarter-and-FY2024 evidence -- but because the agreement itself supplies no textual limiter, there is no contractual guardrail against a future borrower-proposed add-back the way a 'documented items only' clause would provide. No deemed_schedule: none exists in this agreement."
+    },
+    "Funded_Debt": {
+      "verbatim": "Funded Debt excludes undrawn commitments.",
+      "agreement_ref": {
+        "section": "Article I -- Definitions",
+        "page": 1,
+        "quote": "Funded Debt excludes undrawn commitments."
+      },
+      "basis": "spot",
+      "compute": {
+        "model_line": "Funded Debt"
+      },
+      "note": "Balance-sheet principal balance of the facility (borrower-config model_lines.total_debt = 'Funded Debt'). Through Q2 2026 this is the term loan only, amortizing 0.60%/month -- every certified quarterly Funded Debt figure (Q1'25 $183,924,166.39 through Q2'26 $168,048,469.80) is consistent with zero revolver draws to date; the $62,725,070.11 revolver commitment stays excluded as undrawn per this defined term. If the revolver draws, the model row's balance should rise accordingly."
+    },
+    "Unrestricted_Cash": {
+      "verbatim": "Unrestricted Cash excludes restricted cash.",
+      "agreement_ref": {
+        "section": "Article I -- Definitions",
+        "page": 1,
+        "quote": "Unrestricted Cash excludes restricted cash."
+      },
+      "basis": "spot",
+      "compute": {
+        "model_line": "Cash"
+      },
+      "note": "The borrower's monthly Balance Sheet carries a single 'Cash' line with no separate restricted-cash balance disclosed in any period reviewed (Jan 2025 - Jun 2026) -- treated as fully unrestricted absent evidence otherwise. Verified: the Balance Sheet 'Cash' figure at each fiscal-quarter-end month ties exactly to the corresponding Covenant_Calculation workbook's 'Less: Unrestricted Cash' line (e.g. March 2025 Balance Sheet Cash $9,998,329.80 = Q1 2025 Covenant Calculation 'Unrestricted Cash' $9,998,329.80)."
+    },
+    "Net_Debt": {
+      "verbatim": "Net Leverage Ratio means Net Debt divided by trailing-four-quarter Covenant EBITDA. [Net Debt itself is never independently defined as a subtraction formula anywhere in the agreement -- it is only introduced by this sentence, immediately followed by the Funded Debt and Unrestricted Cash sentences below it in the same three-sentence Article I.]",
+      "agreement_ref": {
+        "section": "Article I -- Definitions",
+        "page": 1,
+        "quote": "Net Leverage Ratio means Net Debt divided by trailing-four-quarter Covenant EBITDA. Funded Debt excludes undrawn commitments. Unrestricted Cash excludes restricted cash."
+      },
+      "basis": "spot",
+      "compute": {
+        "model_line": "Net Debt (derived: Funded Debt - Cash)"
+      },
+      "note": "ENGINE-DESIGN NOTE for build-monitoring-model, matching the established pattern used elsewhere in this portfolio for the identical issue: Net Debt is contractually a SUBTRACTION (Funded Debt less Unrestricted Cash) but the covenant engine's 'formula' compute supports only op:'sum' (an unsupported op raises loudly), so it cannot express Funded_Debt minus Unrestricted_Cash directly. This definition is instead bound to a model_line named 'Net Debt' that build-monitoring-model must add to the assembled model as Funded Debt minus Cash. VERIFIED against all six Covenant_Calculation workbooks filed to date (2025 Q1 through 2026 Q2): 'Net Debt' = 'Funded Debt' - 'Less: Unrestricted Cash' exactly every quarter, with both 'Debt check' and 'Ratio check' residual lines equal to 0.00 in every filing -- this is the best-evidenced reading available given the agreement's own text never spells out the subtraction in so many words. RUN-LOCAL BINDING FIX (2026-09-16, covenant-compliance module run for 2026-06): the assembled model's actual Balance Sheet row for this figure is titled 'Net Debt (derived: Funded Debt - Cash)', not the bare 'Net Debt' this note calls for (same derived-row naming convention as this borrower's 'Gross Profit (derived)' row) -- the original binding raised 'model line Net Debt not found in model' for every test date. Repointed compute.model_line to the model's actual label IN THIS RUN'S OWN covenant-spec.json SNAPSHOT ONLY (not the canonical .record/current copy) after verifying the row ties EXACTLY to every quarter's certified Funded Debt/Unrestricted Cash/Net Debt figures. Flagged as an exception for covenant-setup or build-monitoring-model to correct at the data layer (rename the model row to bare 'Net Debt', or update the canonical spec's binding to match) so future runs do not need this repoint."
+    }
+  },
+  "covenants": [
+    {
+      "id": "max_net_leverage",
+      "name": "Maximum Net Leverage Ratio",
+      "primitive": "max_ratio",
+      "numerator": {
+        "ref": "Net_Debt"
+      },
+      "denominator": {
+        "ref": "Covenant_EBITDA"
+      },
+      "window": "ttm",
+      "threshold_schedule": [
+        {
+          "effective": "2025-01-15",
+          "value": 6.0,
+          "agreement_ref": {
+            "section": "Article VIII -- Financial Covenant",
+            "page": 2,
+            "quote": "Maximum Net Leverage Ratio: 6.00x beginning March 31, 2025."
+          }
+        },
+        {
+          "effective": "2025-08-05",
+          "value": 5.75,
+          "agreement_ref": {
+            "section": "First Amendment -- Amendment to Financial Covenant",
+            "page": 1,
+            "quote": "Maximum Net Leverage Ratio becomes 5.75x on and after the effective date."
+          }
+        },
+        {
+          "effective": "2026-01-31",
+          "value": 5.25,
+          "agreement_ref": {
+            "section": "Second Amendment -- Amendment to Financial Covenant",
+            "page": 1,
+            "quote": "Maximum Net Leverage Ratio becomes 5.25x on and after the effective date."
+          }
+        },
+        {
+          "effective": "2026-04-30",
+          "value": 5.0,
+          "agreement_ref": {
+            "section": "Third Amendment -- Amendment to Financial Covenant",
+            "page": 1,
+            "quote": "Maximum Net Leverage Ratio becomes 5.00x on and after the effective date."
+          }
+        }
+      ],
+      "frequency": "quarterly",
+      "first_test_date": "2025-03-31",
+      "cure_rights": "Not specified for the financial covenant. Article IX (Events of Default) refers generically to 'Events of Default ... subject to stated cure periods,' but no actual cure-period length or equity-cure mechanism is spelled out anywhere in the executed document set for this covenant specifically (full-text search for 'cure', 'equity contribution', 'equity cure', 'grace period' across all seven executed documents returns only that generic Article IX phrase and each amendment's boilerplate 'No waiver, cure, forbearance, test suspension, novation, or replacement facility is granted' disclaiming that the amendment itself is a cure). Treated as NO cure right pending confirmation.",
+      "agreement_ref": {
+        "section": "Article VIII -- Financial Covenant",
+        "page": 2,
+        "quote": "Maximum Net Leverage Ratio: 6.00x beginning March 31, 2025. No waiver is effective unless executed in writing by the required lenders."
+      },
+      "cert_ref": "Compliance Certificate 'CALCULATION' section (Funded debt / Unrestricted cash / TTM Covenant EBITDA / Net Leverage vs. maximum), cross-checked against the Covenant_Calculation_QX_YYYY.xlsx 'Leverage Summary' tab rows 'Funded Debt', 'Less: Unrestricted Cash', 'Net Debt', 'TTM Covenant EBITDA', 'Net Leverage', 'Maximum'.",
+      "threshold_unit": "unitless",
+      "at_risk_band": 0.1,
+      "note": "OPEN ITEM for step 7: Q1 2026's certified figure is STALE / pre-restatement. Covenant_Calculation_Q1_2026_AS_FILED.xlsx and its matching Compliance_Certificate_Q1_2026.pdf were signed 2026-04-12, using pre-restatement Q1 2026 Reported EBITDA $8,437,990.42 (TTM Covenant EBITDA $31,376,744.39; Net Leverage 5.1265x vs 5.25x max). The March 2026 restatement (notice dated 2026-06-20; +$39,375.18 to March 2026 EBITDA) was discovered AFTER that certificate was signed, and the corrected Q1 2026 Reported EBITDA of $8,477,365.60 appears only inside the Q2 2026 Covenant_Calculation workbook's TTM Build tab (used to build the Q2 TTM), never in a re-signed Q1 2026 certificate -- confirmed independently: no standalone corrected/re-signed Q1 2026 certificate exists anywhere in the deal folder. The compliance verdict does not flip either way: as-filed TTM Covenant EBITDA $31,376,744.39 gives Net Leverage $160,852,070.94 / $31,376,744.39 = 5.1265x; the corrected TTM Covenant EBITDA of $31,416,119.57 (adding the $39,375.18 restatement delta) gives 5.1200x -- both comfortably under the 5.25x threshold in effect on 2026-03-31. cert_ref consumers should treat the Q1 2026 certified figure as superseded-but-never-reissued rather than as the final word on that quarter, and should read Q2 2026 onward off the corrected TTM Build figures."
+    },
+    {
+      "id": "reporting_monthly_financials",
+      "name": "Monthly financial statement delivery",
+      "type": "reporting",
+      "verbatim": "Monthly statements are due within 30 days.",
+      "agreement_ref": {
+        "section": "Article VI -- Reporting",
+        "page": 2,
+        "quote": "Monthly statements are due within 30 days; quarterly certificates within 45 days."
+      }
+    },
+    {
+      "id": "reporting_quarterly_certificate",
+      "name": "Quarterly compliance certificate delivery",
+      "type": "reporting",
+      "verbatim": "Quarterly certificates within 45 days.",
+      "agreement_ref": {
+        "section": "Article VI -- Reporting",
+        "page": 2,
+        "quote": "Monthly statements are due within 30 days; quarterly certificates within 45 days."
+      }
+    },
+    {
+      "id": "reporting_restatement_notice",
+      "name": "Aging support delivery and restatement notice",
+      "type": "reporting",
+      "verbatim": "Borrower must deliver aging support and promptly identify any restatement and affected period.",
+      "agreement_ref": {
+        "section": "Article VI -- Reporting",
+        "page": 2,
+        "quote": "Borrower must deliver aging support and promptly identify any restatement and affected period."
+      },
+      "note": "Directly relevant to the March 2026 restatement: the borrower's restatement notice is dated 2026-06-20, roughly three months after the affected period (a non-cash, completed-implementation-milestone timing correction carried as a Contract Asset/Accrued Cost adjustment). 'Promptly' is not defined by a day count anywhere in the agreement, so whether a ~3-month gap satisfies this covenant is a reading, not a certainty -- listed as an ambiguity below."
+    },
+    {
+      "id": "neg_cloud_migration_capex_basket",
+      "name": "Cloud-migration capital-expenditure basket (First Amendment)",
+      "type": "negative",
+      "verbatim": "Lender consent: limited cloud-migration capital-expenditure basket.",
+      "agreement_ref": {
+        "section": "First Amendment -- Lender Consent",
+        "page": 1,
+        "quote": "Lender consent: limited cloud-migration capital-expenditure basket. The consent is limited to the described transaction or basket and does not waive any Default or future compliance requirement."
+      },
+      "note": "UNQUANTIFIED: no dollar cap, percentage-of-EBITDA limit, or expiration date is stated anywhere in the executed First Amendment text. Cannot be wired to a tested primitive; flagged as an open election for the analyst (see ambiguities)."
+    },
+    {
+      "id": "neg_customer_data_license_investment_basket",
+      "name": "Customer-data license investment basket (Second Amendment)",
+      "type": "negative",
+      "verbatim": "Lender consent: limited customer-data license investment basket.",
+      "agreement_ref": {
+        "section": "Second Amendment -- Lender Consent",
+        "page": 1,
+        "quote": "Lender consent: limited customer-data license investment basket. The consent is limited to the described transaction or basket and does not waive any Default or future compliance requirement."
+      },
+      "note": "UNQUANTIFIED: no dollar cap, percentage-of-EBITDA limit, or expiration date is stated anywhere in the executed Second Amendment text. Cannot be wired to a tested primitive; flagged as an open election for the analyst (see ambiguities)."
+    },
+    {
+      "id": "reporting_enhanced_ar_aging",
+      "name": "Enhanced receivables-aging delivery (Second Amendment)",
+      "type": "reporting",
+      "verbatim": "Borrower agreement: enhanced receivables-aging delivery.",
+      "agreement_ref": {
+        "section": "Second Amendment -- Borrower Undertakings",
+        "page": 1,
+        "quote": "Borrower agreement: enhanced receivables-aging delivery and the tighter leverage test."
+      },
+      "note": "No specific cadence, bucket structure, or format is defined by this phrase; the deal folder does show an AP_AR_Aging_<Month>.xlsx delivered every month from January 2025 onward, i.e. before and after this amendment, so the amendment's practical effect on the existing aging package (if any) is not independently verifiable from the executed text."
+    },
+    {
+      "id": "affirmative_revised_reporting_controls",
+      "name": "Revised-reporting controls / revolver preservation (Third Amendment)",
+      "type": "affirmative",
+      "verbatim": "Borrower agreement: revised-reporting controls. ... Lender consent: preservation of remaining undrawn commitment.",
+      "agreement_ref": {
+        "section": "Third Amendment -- Borrower Undertakings / Lender Consent",
+        "page": 1,
+        "quote": "Borrower agreement: revised-reporting controls and the tighter leverage test. ... Lender consent: preservation of remaining undrawn commitment."
+      },
+      "note": "UNDEFINED: 'revised-reporting controls' names no specific report, control, or cadence anywhere in the executed Third Amendment text. The bundled consideration is preservation of the $62,725,070.11 undrawn revolver commitment from clawback -- i.e. absent this amendment, the lender could apparently have reduced or terminated the undrawn commitment, though the agreement does not spell out under what triggering condition that clawback right would otherwise have arisen. Flagged as an open election for the analyst (see ambiguities)."
+    }
+  ],
+  "accounting_basis": {
+    "stated": false,
+    "note": "No accounting-basis or 'borrower's historic accounting practices' / 'as calculated in the Model' clause appears anywhere in the Original Credit Agreement's Article VIII (Financial Covenant) preamble, its surrounding articles, or any of the three amendments -- confirmed by a full read of every executed document, not merely a keyword search. The covenant test rests entirely on the bare defined terms in Article I (Covenant EBITDA, Funded Debt, Unrestricted Cash) with no accounting-convention anchor at all. In practice, Reported EBITDA (Revenue - Cost of Revenue - Operating Expenses, per every monthly package and the FY2022-FY2024 Reviewed Financial Statements) has equalled Covenant EBITDA with zero add-backs in every period reviewed, but that is observed borrower practice, not a contractual accounting-basis clause."
+  },
+  "step7_signoff": {
+    "decided_on": "2026-09-16",
+    "decided_by": "onboarding session (auto-decided per analyst's standing instruction not to pause for confirmation during this batch onboarding; every decision below is flagged for prompt analyst review given this borrower's amendment/restatement complexity)",
+    "decisions": [
+      {
+        "id": "amortization_mechanic_declining_balance",
+        "question": "The agreement's '0.60% of beginning principal monthly' phrase is ambiguous between flat-off-original-principal (what the v1 debt-service engine models) and declining balance (0.60% of each month's own opening balance). The borrower's own 18 straight months of certified Debt & Liquidity figures resolve this as declining balance, and the generated schedule is already ~5.2% too high cumulative by June 2026, growing every month after.",
+        "options_considered": [
+          "Accept as parsed: use the generated (flat) schedule's principal/balance figures as specified",
+          "Bind to the borrower's own certified Debt & Liquidity tab figures directly, since they are demonstrably the true declining-balance mechanic"
+        ],
+        "decision": "Bind Funded_Debt and any principal/balance figure used downstream to the borrower's certified Debt & Liquidity tab (and the model's own Funded Debt row built from it), NOT the generated debt-service-schedule's principal/balance figures.",
+        "rationale": "This mirrors the same decision already made for a sibling facility in this portfolio with the identical ambiguous amortization clause and the identical engine gap. The generated schedule is a known, quantified flat-base approximation; the certified figures tie to a real declining-balance mechanic in every one of 18 months checked. Since the sole covenant here is a leverage test (not a coverage test), this decision affects the Funded_Debt/Net_Debt inputs directly, not a Fixed_Charges formula."
+      },
+      {
+        "id": "interest_rate_placeholder",
+        "question": "No executed document states any interest rate, index, margin, or PIK mechanic, and the borrower's own monthly packages carry no interest-expense line to reverse-engineer a rate from -- a genuine drafting gap, not merely an omission from this data room. The debt-service engine requires a non-zero rate to generate a schedule at all.",
+        "options_considered": [
+          "Refuse to generate a debt-service schedule at all until a real rate is sourced",
+          "Generate the schedule with a clearly-labeled 1bp non-contractual placeholder rate, so the schedule's shape (amortization, maturity) is still usable while every cash-interest figure is understood to be void"
+        ],
+        "decision": "Accept the 1bp placeholder rate for schedule generation, but flag every cash-interest figure derived from it as VOID and non-contractual until the true rate is confirmed directly with Granite Harbor Direct Lending, LP.",
+        "rationale": "The sole covenant is a leverage test with no Fixed Charges/coverage component, so no covenant verdict in this batch depends on the interest rate. Generating a schedule with a labeled placeholder preserves the amortization and maturity shape for reference while making the interest gap impossible to miss, rather than blocking the whole debt-service-spec on a term the executed documents simply do not contain. This is the single highest-priority open item for the analyst to resolve directly with the lender."
+      },
+      {
+        "id": "unquantified_baskets_no_informal_cap",
+        "question": "The cloud-migration capex basket (First Amendment) and customer-data-license investment basket (Second Amendment) both carry no dollar cap, percentage-of-EBITDA limit, or expiration date anywhere in the executed text. Should an informal monitoring cap be imposed for tracking purposes?",
+        "options_considered": [
+          "Leave both as reference-only negative-covenant entries with no tested primitive and no informal cap",
+          "Impose an analyst-elected informal cap (e.g., a round dollar figure) purely for monitoring purposes"
+        ],
+        "decision": "Leave both as reference-only entries, untracked against any numeric limit.",
+        "rationale": "Neither amendment states a cap of any kind. Fabricating an informal monitoring threshold the agreement itself does not impose would create a false sense of a bright-line test where none exists, and could cause the monitor to flag a covenant breach that has no contractual basis. Both baskets are captured in the spec so the analyst knows they exist and can ask the borrower for actual usage if material capex or investment activity appears in the financials."
+      },
+      {
+        "id": "revised_reporting_controls_reading",
+        "question": "The Third Amendment's 'revised-reporting controls' (traded for revolver preservation) names no specific deliverable, cadence, or format anywhere in the executed text.",
+        "options_considered": [
+          "Accept as parsed: record as an open, undefined affirmative obligation with no way to test satisfaction",
+          "Assume it is already satisfied by the existing monthly package and AR-aging cadence"
+        ],
+        "decision": "Accept as parsed: record as an open, undefined affirmative obligation. Do not assume satisfaction.",
+        "rationale": "The executed text gives no basis to conclude what would satisfy this obligation, so neither declaring it met nor unmet is well-supported. Flagging it as an open item for the analyst to raise directly with the lender is the honest reading, especially since the bundled consideration (revolver preservation) is a real, valuable accommodation the borrower received for an obligation whose content is undefined."
+      },
+      {
+        "id": "restatement_notice_timeliness",
+        "question": "The agreement requires the borrower to 'promptly' identify any restatement and affected period, with no day-count defined. The March 2026 restatement notice is dated 2026-06-20, roughly three months after the affected period.",
+        "options_considered": [
+          "Record a view on whether ~3 months satisfies 'promptly'",
+          "Record the gap neutrally with no verdict on Event-of-Default classification"
+        ],
+        "decision": "Record the gap neutrally: the fact and the elapsed time, with no verdict on whether it satisfies 'promptly'.",
+        "rationale": "The agreement's own text supplies no day-count or standard against which to judge timeliness, so asserting a breach or compliance would be a legal conclusion this spec is not positioned to make. The fact is preserved for the analyst's and, if needed, counsel's own judgment."
+      },
+      {
+        "id": "q1_2026_stale_certificate_handling",
+        "question": "The Q1 2026 compliance certificate (signed 2026-04-12) was never re-issued after the March 2026 restatement was discovered (notice dated 2026-06-20); it certifies pre-restatement EBITDA. No standalone corrected Q1 2026 certificate exists anywhere in the deal folder.",
+        "options_considered": [
+          "Treat the as-filed Q1 2026 certificate as the final word for that quarter",
+          "Treat it as superseded-but-never-reissued, and read Q1 2026 (for trend/cross-check purposes going forward) off the corrected TTM Build figures embedded in the Q2 2026 workbook"
+        ],
+        "decision": "Treat the Q1 2026 certificate as superseded-but-never-reissued; covenant-compliance and the monitor should read Q1 2026's corrected figures from the Q2 2026 workbook's TTM Build tab for trend purposes, while still reporting the as-filed certified figure as the historical certified-of-record value for that quarter.",
+        "rationale": "The compliance verdict does not change either way (5.1265x as-filed vs. 5.1200x corrected, both under the 5.25x threshold then in effect), so this is a documentation-hygiene question, not a covenant-outcome question. Reporting both figures, with the corrected one used for trend continuity, is more transparent than silently substituting one for the other or ignoring the gap."
+      },
+      {
+        "id": "cure_rights_none",
+        "question": "Article IX references 'stated cure periods' generically, but no actual cure-period length or equity-cure mechanism is spelled out anywhere for this specific covenant.",
+        "options_considered": [
+          "Accept as parsed: no cure right exists for this covenant",
+          "Infer a market-standard cure period despite the absence of specific text"
+        ],
+        "decision": "Accept as parsed: no cure right.",
+        "rationale": "Inferring a cure mechanism the agreement does not actually spell out would overstate the borrower's contractual protection. Absent explicit cure-period language for this covenant, none is assumed."
+      }
+    ],
+    "open_items_for_analyst": [
+      "HIGHEST PRIORITY: confirm the facility's true interest rate, index/margin, and day-count convention directly with Granite Harbor Direct Lending, LP -- no executed document states any of this, and the generated debt-service schedule's cash-interest figures are void placeholders until a real rate is sourced.",
+      "Confirm whether the Third Amendment's 'revised-reporting controls' obligation has been defined or satisfied in any side correspondence not in this deal folder.",
+      "Ask the borrower for actual usage/dollar activity under the two unquantified baskets (cloud-migration capex, customer-data-license investment) if material capex or investment line items appear in the financials.",
+      "No re-signed Q1 2026 compliance certificate exists after the March 2026 restatement was discovered -- consider requesting one from the borrower for the file, even though the verdict does not change.",
+      "The executed Third Amendment settled at a looser 5.00x threshold than its own unsigned April 1, 2026 draft's proposed 4.75x -- the negotiation history behind that change is not documented in this deal folder and may be worth asking the deal team about directly.",
+      "Covenant headroom has compressed from ~13% (Q1 2025) to ~2% (Q2 2026) across three tightening amendments even as absolute leverage and EBITDA have been roughly stable-to-improving -- each amendment has cut the ceiling faster than operating performance has improved it. This is the central credit story for this borrower going into the next several test dates."
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "borrower": "Selvara Industrial Services, LLC",
+  "lien_type": "blanket",
+  "security_summary": "Blanket security interest granted by Selvara Industrial Services, LLC and its (unnamed) parent guarantor in favor of Northstar Ridge Credit Partners, LP as Administrative Agent, covering: accounts, equipment, contract rights, deposit accounts, general intangibles, records, and proceeds -- per the executed Guaranty and Security Agreement (effective 2025-01-15). Remedies: after an Event of Default, the Agent may collect and dispose of collateral under the agreed waterfall. Guaranty is unconditional as to payment and performance of the secured obligations. Source: executed Guaranty and Security Agreement (Deal Docs/Executed/Initial Closing/guaranty-and-security.pdf); executed Information Certificate (organizational facts, deposit accounts, insurance -- not itemized by name in the available fictional summary text); executed Credit Agreement.",
+  "_inventory_exclusion_note": "JUDGMENT CALL: Inventory is deliberately EXCLUDED from pledged_components below for two independent reasons. (1) The executed Guaranty and Security Agreement's own collateral list -- 'accounts, equipment, contract rights, deposit accounts, general intangibles, records, and proceeds' -- does NOT name inventory (contrast Orinth Vale's agreement, which explicitly lists 'inventory and materials'); inventory appears to genuinely sit outside this borrower's granted lien. (2) Even if it were pledged, there is no monthly model row to track it against -- inventory appears ONLY on the ANNUAL statements (FY2024: $8,640,818.48, about 5.5% of total assets) and never in the monthly Working Capital tab (see borrower-config analysis_lines._omitted_note). Flagged for the analyst/covenant-setup to confirm against the agreement's own defined 'Collateral' term when it is parsed in full (not run in this task) -- if inventory IS in fact pledged under the operative agreement text, this borrower carries an uncollateralized-on-paper asset class the monthly monitoring model cannot currently see either way.",
+  "_untrackable_pledged_assets_note": "'Equipment', 'contract rights', 'general intangibles', and 'records' ARE named in the security grant but have NO corresponding row anywhere in the monthly monitoring model (no Balance Sheet tab exists at all -- see borrower-config analysis_lines._omitted_note) -- they are omitted from pledged_components below for the same reason Orinth Vale's IP collateral was omitted (no model row to track it against), not because they are unpledged. This means the Collateral box's coverage math below is conservative -- it tracks only the two components (cash, receivables) that happen to have a monthly figure, out of a materially broader blanket lien.",
+  "funded_debt_source": {
+    "covenant_spec_ref": "covenant-spec.json#/definitions/Funded_Debt",
+    "model_rows": [
+      "Ending debt"
+    ]
+  },
+  "pledged_components": [
+    {
+      "label": "Cash (controlled accounts)",
+      "model_line": "Ending cash",
+      "tier": "liquid"
+    },
+    {
+      "label": "Accounts receivable",
+      "model_line": "Accounts receivable",
+      "tier": "liquid"
+    }
+  ],
+  "_no_tangible_ip_or_goodwill_note": "No 'tangible_ip' or 'goodwill' tier component is defined -- this borrower's monthly model has no PP&E/equipment, intangibles, or goodwill row at all to map the security grant's 'equipment' and 'general intangibles' language onto (see _untrackable_pledged_assets_note above). 'All pledged assets' and 'Liquid (cash + A/R)' would therefore be identical, so only one all-inclusive cut is defined below, following the same convention Orinth Vale used when its tiers coincided.",
+  "coverage_cuts": {
+    "Liquid (cash + A/R) -- all trackable pledged assets": [
+      "liquid"
+    ]
+  }
+}

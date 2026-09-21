@@ -1,0 +1,85 @@
+{
+  "module": "coverage",
+  "period": "2026-06",
+  "run_id": "run-20260916-094426",
+  "run_id_from": "run",
+  "produced_at": "2026-09-16T10:06:25+00:00",
+  "produced_by": {
+    "engine": "coverage",
+    "plugin_version": "1.0.0"
+  },
+  "source_files": [],
+  "results": [],
+  "exceptions": [],
+  "borrower": "Veyrona Decision Systems, LLC",
+  "modules": [
+    {
+      "module": "covenant-compliance",
+      "state": "reported",
+      "figures": 6,
+      "exceptions": 5,
+      "reason": null,
+      "run_id": "run-20260916-094426",
+      "produced_at": "2026-09-16T09:53:57+00:00",
+      "source_ref_reach": {
+        "cell": 8,
+        "file": 20,
+        "unlocated": 0,
+        "borrower_doc": 28
+      },
+      "archived": "covenant-compliance-2026-06.json"
+    },
+    {
+      "module": "budget-vs-actual",
+      "state": "reported",
+      "figures": 12,
+      "exceptions": 1,
+      "reason": null,
+      "run_id": "run-20260916-094426",
+      "produced_at": "2026-09-16T09:53:20+00:00",
+      "source_ref_reach": {
+        "cell": 16,
+        "file": 10,
+        "unlocated": 0,
+        "borrower_doc": 18
+      },
+      "archived": "budget-vs-actual-2026-06.json"
+    },
+    {
+      "module": "ap-ar-aging",
+      "state": "reported",
+      "figures": 2,
+      "exceptions": 3,
+      "reason": null,
+      "run_id": "run-20260916-094426",
+      "produced_at": "2026-09-16T09:59:34+00:00",
+      "source_ref_reach": {
+        "cell": 36,
+        "file": 0,
+        "unlocated": 0,
+        "borrower_doc": 6
+      },
+      "archived": "ap-ar-aging-2026-06.json"
+    },
+    {
+      "module": "three-statement-analysis",
+      "state": "reported",
+      "figures": 58,
+      "exceptions": 15,
+      "reason": null,
+      "run_id": "run-20260916-094426",
+      "produced_at": "2026-09-16T09:48:56+00:00",
+      "source_ref_reach": {
+        "cell": 62,
+        "file": 5,
+        "unlocated": 0,
+        "borrower_doc": 64
+      },
+      "archived": "three-statement-analysis-2026-06.json"
+    }
+  ],
+  "tally": {
+    "reported": 4
+  },
+  "readable": true
+}

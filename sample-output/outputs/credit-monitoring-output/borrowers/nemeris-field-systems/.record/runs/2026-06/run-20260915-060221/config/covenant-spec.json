@@ -1,0 +1,208 @@
+{
+  "borrower": "Nemeris Field Systems, LLC",
+  "agreement": "Credit Agreement (Nemeris 2025 Senior Secured Facility) among Nemeris Field Systems, LLC, as Borrower; Nemeris Holdings, LLC and Nemeris Service Operations, LLC, as Guarantors; the lenders on Schedule 2.01; and Northlake Example Credit Partners, LP, as Administrative Agent and Collateral Agent. Dated January 10, 2025; effective / closing January 15, 2025. As amended by the First Amendment to Credit Agreement dated January 25, 2026, effective January 31, 2026 (reporting-delivery mechanics only).",
+  "as_of_agreement_date": "2025-01-15",
+  "amendments_reflected": [
+    {
+      "date": "2026-01-31",
+      "instrument": "First Amendment to Credit Agreement (executed January 25, 2026)",
+      "summary": "Reporting-delivery mechanics only: monthly statements may be delivered through the approved borrower reporting folder; the 30-day monthly / 45-day quarterly deadlines are unchanged. The amendment states expressly that the Net Leverage Ratio cap and its definition are unchanged. Confirmed by an independent read of the amendment text (not taken on the requester's word): no other section of the amendment touches pricing, fees, amortization, maturity, the EBITDA/Net Debt definitions, or any other covenant.",
+      "agreement_ref": {
+        "section": "Amendments to Reporting",
+        "page": 3,
+        "quote": "Monthly statements may be delivered through the approved borrower reporting folder. Delivery remains due within 30 days after each fiscal month end. Quarterly compliance certificates remain due within 45 days. The maximum 5.00x Net Leverage Ratio and its definition are unchanged."
+      }
+    }
+  ],
+  "threshold_unit": "dollars",
+  "definitions": {
+    "Covenant_EBITDA": {
+      "verbatim": "Covenant EBITDA — Reported EBITDA from delivered management accounts, adjusted only for specifically permitted, documented items and subject to stated caps.",
+      "agreement_ref": {
+        "section": "Article I — Definitions and Accounting Terms",
+        "page": 2,
+        "quote": "Covenant EBITDA  Reported EBITDA from delivered management accounts, adjusted only for specifically permitted, documented items and subject to stated caps."
+      },
+      "basis": "flow",
+      "compute": {
+        "ebitda_bridge": "Reported EBITDA"
+      },
+      "note": "Bound to the model's single pinned EBITDA bridge row ('Reported EBITDA'), which on the borrower's own monthly package is Net Revenue less Cost of Revenue less Operating Expenses with no add-back/adjustment lines on its face (see top-level accounting_basis). No deemed-EBITDA schedule exists in this agreement: Article I gives the formula above with no per-month override table, and a full-text search of the Credit Agreement and the First Amendment for 'deemed', 'shall be deemed', 'stipulated' and 'agreed EBITDA' returned no matches. This is consistent with the facility structure -- the borrower's own pre-closing monthly management accounts (folder begins 2024-04) already cover the entire trailing-12-month window needed for the first Test Date (2025-03-31: 2024-04 through 2025-03), so no pre-close deemed run is needed for the earliest test to compute. An unsupported borrower add-back proposed at Q2 2026 ($110,000 of prospective/unfilled-position savings) was rejected by the lender as not a 'specifically permitted, documented item' under this definition and is NOT reflected here -- see notes to the analyst below."
+    },
+    "Funded_Debt": {
+      "verbatim": "Funded Debt — Principal obligations for borrowed money, capitalized leases and similar funded obligations, excluding undrawn commitments.",
+      "agreement_ref": {
+        "section": "Article I — Definitions and Accounting Terms",
+        "page": 2,
+        "quote": "Funded Debt  Principal obligations for borrowed money, capitalized leases and similar funded obligations, excluding undrawn commitments."
+      },
+      "basis": "spot",
+      "compute": {
+        "model_line": "Senior secured term loan"
+      },
+      "note": "Balance-sheet principal balance of the facility. Through 2026-06 this is the Closing Date Term Loan only (no delayed-draw funding has occurred, so the $8,697,217.66 DDTL commitment stays excluded as an undrawn commitment per the defined term -- see Article II 2.01: 'Undrawn commitments do not constitute funded debt'). If a DDTL draw funds, the model row's balance rises accordingly and this definition is unchanged."
+    },
+    "Unrestricted_Cash": {
+      "verbatim": "Unrestricted Cash — Cash of domestic Loan Parties available for debt service and not subject to another control, restriction or designated use.",
+      "agreement_ref": {
+        "section": "Article I — Definitions and Accounting Terms",
+        "page": 2,
+        "quote": "Unrestricted Cash  Cash of domestic Loan Parties available for debt service and not subject to another control, restriction or designated use."
+      },
+      "basis": "spot",
+      "compute": {
+        "model_line": "Cash and cash equivalents"
+      },
+      "note": "All three Loan Parties are domestic entities (Nemeris Field Systems, LLC -- Colorado; Nemeris Holdings, LLC -- Delaware; Nemeris Service Operations, LLC -- Texas; Security Agreement Schedule 1). No cash-netting cap or restricted/trapped-cash exclusion has been invoked in any certificate through 2026-06 ('No restricted or trapped cash is netted' -- Q2 2026 certificate)."
+    },
+    "Net_Debt": {
+      "verbatim": "Net Debt — Funded Debt less Unrestricted Cash, subject to a cash netting cap and exclusions for restricted or trapped cash.",
+      "agreement_ref": {
+        "section": "Article I — Definitions and Accounting Terms",
+        "page": 2,
+        "quote": "Net Debt  Funded Debt less Unrestricted Cash, subject to a cash netting cap and exclusions for restricted or trapped cash."
+      },
+      "basis": "spot",
+      "compute": {
+        "model_line": "Net Debt"
+      },
+      "note": "DESIGN NOTE for step 7 / build-monitoring-model: Net Debt is contractually a SUBTRACTION (Funded Debt less Unrestricted Cash). The covenant engine's 'formula' compute supports only op:'sum' (unsupported ops raise loudly), so it cannot express this subtraction directly over the Funded_Debt/Unrestricted_Cash definitions above. Instead this definition is bound to a model_line named 'Net Debt', because the borrower's own monthly reporting package already carries that exact row: the 'Debt & Liquidity' tab of each Monthly_Financial_Package_YYYY-MM.xlsx independently computes 'Ending Debt', 'Cash', 'Net Debt', 'TTM Covenant EBITDA' and 'Net Leverage Ratio' every month (an informational calculation per Section 7.11: 'A monthly package may show an informational calculation, but formal compliance status arises only on a Test Date'). Verified: the June 2026 package's Debt & Liquidity tab reproduces the CORRECTED Q2 2026 certificate exactly -- Ending Debt $23,602,424.11 = certified Funded Debt; Cash $5,318,177.16 = certified Unrestricted Cash; Net Debt $18,284,246.95 = certified Net Debt; TTM Covenant EBITDA $13,861,947.33 and Net Leverage Ratio 1.3190x both match. build-monitoring-model must carry this tab's 'Net Debt' row into the assembled model as its own line (it is a source figure the borrower reports, not something the covenant engine derives); if that row is not surfaced, this input will read as an unresolved model line, which is the visible failure mode rather than a silently wrong figure."
+    }
+  },
+  "covenants": [
+    {
+      "id": "max_net_leverage",
+      "name": "Maximum Net Leverage Ratio",
+      "primitive": "max_ratio",
+      "numerator": {
+        "ref": "Net_Debt"
+      },
+      "denominator": {
+        "ref": "Covenant_EBITDA"
+      },
+      "window": "ttm",
+      "threshold": 5.0,
+      "frequency": "quarterly",
+      "first_test_date": "2025-03-31",
+      "cure_rights": "None stated for the financial covenant. Article VIII's Events of Default table treats 'Covenant breach' for the 'Financial covenant as stated' -- i.e. no grace period or equity-cure right is referenced for this covenant -- while separately noting that 'selected affirmative covenants' receive a notice/cure period. No equity-cure mechanism appears anywhere in the agreement (full-text search for 'cure', 'equity contribution', 'equity cure' returns only the Article VIII table heading and unrelated hits).",
+      "agreement_ref": {
+        "section": "7.11",
+        "page": 6,
+        "quote": "The Net Leverage Ratio may not exceed 5.00x on each fiscal quarter end beginning March 31, 2025. The calculation uses quarter-end Net Debt and Covenant EBITDA for the trailing four fiscal quarters."
+      },
+      "cert_ref": "Compliance Certificate -- 'Net Leverage Ratio' section (Q2 2026 cert labels it 'Schedule 1 -- Net Leverage Ratio'), lines 'Funded Debt', 'Less: Unrestricted Cash', 'Net Debt', 'Covenant EBITDA', 'Net Leverage Ratio', 'Maximum'.",
+      "threshold_unit": "unitless",
+      "at_risk_band": 0.1
+    },
+    {
+      "id": "reporting_monthly_financials",
+      "name": "Monthly financial package delivery",
+      "type": "reporting",
+      "verbatim": "Monthly financial package -- 30 days after month end -- Detailed income statement, balance sheet, cash flow, debt and management commentary.",
+      "agreement_ref": {
+        "section": "Article VI -- Affirmative Covenants (reporting table)",
+        "page": 5,
+        "quote": "Monthly financial package  30 days after month end  Detailed income statement, balance sheet, cash flow, debt and management commentary"
+      },
+      "note": "First Amendment (2026-01-31) changes DELIVERY MECHANICS only -- may now be delivered through the approved borrower reporting folder -- the 30-day deadline is unchanged."
+    },
+    {
+      "id": "reporting_quarterly_certificate",
+      "name": "Quarterly compliance certificate delivery",
+      "type": "reporting",
+      "verbatim": "Quarterly compliance certificate -- 45 days after quarter end -- Officer certification and covenant calculation.",
+      "agreement_ref": {
+        "section": "Article VI -- Affirmative Covenants (reporting table)",
+        "page": 5,
+        "quote": "Quarterly compliance certificate  45 days after quarter end  Officer certification and covenant calculation"
+      },
+      "note": "Unchanged by the First Amendment ('Quarterly compliance certificates remain due within 45 days')."
+    },
+    {
+      "id": "reporting_annual_financials",
+      "name": "Annual financial statements delivery",
+      "type": "reporting",
+      "verbatim": "Annual financial statements -- 120 days after fiscal year end -- Annual statements with comparative information.",
+      "agreement_ref": {
+        "section": "Article VI -- Affirmative Covenants (reporting table)",
+        "page": 5,
+        "quote": "Annual financial statements  120 days after fiscal year end  Annual statements with comparative information"
+      }
+    },
+    {
+      "id": "reporting_annual_budget",
+      "name": "Annual budget delivery",
+      "type": "reporting",
+      "verbatim": "Annual budget -- 30 days before fiscal year -- Monthly operating plan, assumptions, cash and debt.",
+      "agreement_ref": {
+        "section": "Article VI -- Affirmative Covenants (reporting table)",
+        "page": 5,
+        "quote": "Annual budget  30 days before fiscal year  Monthly operating plan, assumptions, cash and debt"
+      }
+    },
+    {
+      "id": "reporting_event_notice",
+      "name": "Event notice delivery",
+      "type": "reporting",
+      "verbatim": "Event notice -- Promptly after awareness -- Default, litigation, material loss, reporting change or collateral event.",
+      "agreement_ref": {
+        "section": "Article VI -- Affirmative Covenants (reporting table)",
+        "page": 5,
+        "quote": "Event notice  Promptly after awareness  Default, litigation, material loss, reporting change or collateral event"
+      }
+    },
+    {
+      "id": "neg_capex_cap",
+      "name": "Capital Expenditures cap",
+      "type": "negative",
+      "verbatim": "Capital Expenditures may not exceed $4,500,000 in any fiscal year, with a 25% carry-forward of unused capacity if no Default exists.",
+      "agreement_ref": {
+        "section": "7.10",
+        "page": 6,
+        "quote": "Capital Expenditures may not exceed $4,500,000 in any fiscal year, with a 25% carry-forward of unused capacity if no Default exists."
+      },
+      "note": "Recorded as a reference-only negative covenant rather than a tested financial primitive: the spec's three primitives (min_level / max_ratio / min_coverage) have no 'maximum annual spend with carry-forward' shape. Annual cap $4,500,000; unused-capacity carry-forward 25%, forfeited if a Default exists during the carry-forward year. threshold_unit for this figure is dollars, as the agreement states it -- $4,500,000, not 4500000 divided onto any other scale."
+    },
+    {
+      "id": "neg_restricted_payments_leverage_condition",
+      "name": "Restricted Payments -- pro forma leverage condition (not the maintenance covenant)",
+      "type": "negative",
+      "verbatim": "Distributions and affiliate payments are limited to tax distributions, ordinary compensation, approved management arrangements and a $500,000 annual general basket, subject to no Default and pro forma Net Leverage below 4.50x.",
+      "agreement_ref": {
+        "section": "7.05",
+        "page": 6,
+        "quote": "Distributions and affiliate payments are limited to ... a $500,000 annual general basket, subject to no Default and pro forma Net Leverage below 4.50x."
+      },
+      "note": "IMPORTANT -- do not conflate with the 5.00x maintenance covenant (id max_net_leverage, Section 7.11). This 4.50x figure is a CONDITION PRECEDENT to using the Restricted Payments general basket (tested only if/when a restricted payment is made), not a periodically-tested financial maintenance covenant with its own test date. It is recorded here for completeness and is not wired to a primitive."
+    }
+  ],
+  "accounting_basis": {
+    "stated": true,
+    "clause_verbatim": "Calculations use the accounting principles and classification practices applied in the financial statements delivered at closing, consistently applied. A material change in accounting treatment does not automatically change covenant economics; the parties will negotiate a good-faith conforming adjustment. Amounts are calculated without double counting.",
+    "agreement_ref": {
+      "section": "Article I -- Accounting conventions",
+      "page": 3,
+      "quote": "Calculations use the accounting principles and classification practices applied in the financial statements delivered at closing, consistently applied."
+    },
+    "reference_financials": {
+      "described_as": "the financial statements delivered at closing (i.e. the Borrower's most recent financial statements delivered to the Agent on or before the January 15, 2025 Closing Date). Article IV's closing-conditions table separately lists 'Financial information -- Historical statements, approved budget, Sources & Uses and closing capitalization' as a required closing deliverable, corroborating that a set of historical statements was in fact delivered at closing.",
+      "document": "Reviewed_Financial_Statements_FY2024.pdf and its native support workbook Reviewed_Financial_Support_FY2024.xlsx (year ended December 31, 2024), at source:Nemeris Field Systems/1_Borrower Information/2_Financials/Financial Statements/2024/. This is the only FY2024 (i.e. most-recent-year-end-before-closing) financial statement set in the deal folder.",
+      "resolved": true,
+      "ebitda_build_note": "The FY2024 statements show EBITDA as a single 'Reported EBITDA' line = Net Revenue less Cost of Revenue less Operating Expenses (Income Statement tab of the support workbook); no add-back, adjustment, or one-time-item line appears anywhere on the face of the statement. That is the baseline every subsequent monthly reconstruction and any borrower-proposed 'documented item' add-back should be checked against, consistent with the Covenant EBITDA definition's own limitation to 'specifically permitted, documented items'."
+    },
+    "note": "OPEN ITEM for step 7 (also listed in ambiguities below): the resolved document's issue date is March 20, 2025 -- 64 days AFTER the January 15, 2025 Closing Date -- so what was literally in the Agent's hands at closing may have been an earlier draft/unreviewed cut of the same FY2024 figures rather than this exact reviewed PDF. No other FY2024 statement exists in the deal folder, so this is the best-supported resolution, but it is a reading, not a certainty."
+  },
+  "step7_signoff": {
+    "reviewed_on": "2026-09-15",
+    "reviewed_by": "onboarding session (auto-decided per analyst's standing instruction not to pause for confirmation on this onboarding batch; each decision below remains open to analyst override at the next review)",
+    "decisions": [
+      {"item": "accounting_basis reference document (64-day post-closing issue date on the only available FY2024 statement)", "decision": "Accept as parsed — Reviewed_Financial_Statements_FY2024.pdf remains the resolved reference document; no earlier draft exists in the deal folder to compare against."},
+      {"item": "Net_Debt bound to model_line 'Net Debt' (Debt & Liquidity tab) instead of a Funded_Debt-minus-Unrestricted_Cash formula", "decision": "Accept as parsed — verified to reproduce the corrected Q2 2026 certificate exactly. build-monitoring-model must carry the Debt & Liquidity tab's 'Net Debt', 'Ending Debt' (Funded Debt) and 'TTM Covenant EBITDA' rows into the assembled model unchanged."},
+      {"item": "day_count.count_both_endpoints = true (agreement doesn't spell out the stub convention)", "decision": "Accept as parsed — immaterial to the Net Leverage test either way; only moves the funding- and maturity-month interest by about a day's accrual."},
+      {"item": "SOFR observation pinned at 4.33% as an assumption (no rate notice in the deal folder)", "decision": "Accept as parsed for now, flagged — replace with the Agent's actual rate-notice prints as they become available; does not affect the leverage covenant, only the schedule's projected cash-interest column."},
+      {"item": "Unused/undrawn commitment fee referenced in CA §3.02 but not stated anywhere in the executed Fee Letter", "decision": "Leave open — genuine documentation gap, not resolvable from the deal folder. Flagged for the relationship team to confirm with the Administrative Agent; does not block monitoring since no fee schedule depends on it today."},
+      {"item": "Closing fee (1.50%) and annual admin fee ($75,000) omitted from debt-service-spec fees[] (engine has no one-time/annual cadence)", "decision": "Accept as parsed — correctly left out rather than mis-modeled; neither fee is a covenant Fixed Charge in this agreement."},
+      {"item": "Amortization-base engine limitation (flat vs. certified declining-balance schedule)", "decision": "See debt-service-spec.json amortization_base.analyst_decision — use the certified Debt & Liquidity tab for actual scheduled principal/balance, not this generated schedule's flat approximation."}
+    ]
+  }
+}

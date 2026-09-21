@@ -1,0 +1,121 @@
+{
+  "borrower": "Veyrona Decision Systems, LLC",
+  "agreement": "Executed Credit Agreement (Veyrona 2025 Senior Secured Credit Facility), issued January 10, 2025, effective/closing January 15, 2025, between Veyrona Decision Systems, LLC (Borrower) and Granite Harbor Direct Lending, LP (Administrative Agent and sole Lender); no Fee Letter exists in the deal folder. As amended by the First (eff. 2025-08-05), Second (eff. 2026-01-31), and Third (eff. 2026-04-30) Amendments -- each states 'Net Debt, Covenant EBITDA, Test Date, and other definitions remain unchanged unless expressly modified here' and none touches pricing, amortization, day count, or fees; confirmed by an independent full-text read of all three amendments.",
+  "as_of_agreement_date": "2025-01-15",
+  "amendments_reflected": [
+    { "date": "2025-08-05", "instrument": "First Amendment", "summary": "Covenant threshold only (5.75x) plus an unquantified cloud-migration capex basket; no change to pricing, amortization, day count or fees -- confirmed by independent read." },
+    { "date": "2026-01-31", "instrument": "Second Amendment", "summary": "Covenant threshold only (5.25x) plus an unquantified customer-data-license investment basket and enhanced AR-aging reporting; no change to pricing, amortization, day count or fees -- confirmed by independent read." },
+    { "date": "2026-04-30", "instrument": "Third Amendment", "summary": "Covenant threshold only (5.00x); preserves the undrawn revolver from clawback in exchange for undefined 'revised-reporting controls'; no change to pricing, amortization, day count or fees -- confirmed by independent read." }
+  ],
+
+  "facility": {
+    "name": "Veyrona 2025 Senior Secured Credit Facility",
+    "maturity_date": "2030-01-15",
+    "agreement_ref": {
+      "section": "Cover / Article II",
+      "page": 1,
+      "quote": "Issued January 10, 2025; effective January 15, 2025; maturity January 15, 2030."
+    }
+  },
+
+  "tranches": [
+    {
+      "id": "term_loan",
+      "fundings": [
+        {
+          "date": "2025-01-15",
+          "amount": 187274929.89,
+          "agreement_ref": {
+            "section": "Schedule 1.1 -- Commitments",
+            "page": 3,
+            "quote": "Granite Harbor Direct Lending, LP: funded term loan $187,274,929.89; undrawn commitment $62,725,070.11; total $250,000,000.00."
+          }
+        }
+      ],
+      "undrawn_commitment": {
+        "amount": 62725070.11,
+        "availability": "Revolving capacity, not a delayed-draw upsize of the term loan: 'Undrawn revolver capacity may fund permitted working capital and approved investments subject to no Default' (Article II); no sublimit, ticking fee, or unused-commitment fee is stated anywhere in the executed set. Preserved from clawback by the Third Amendment (eff. 2026-04-30) in exchange for undefined 'revised-reporting controls.' Zero draws confirmed through Q2 2026 -- every certified quarterly Funded Debt figure is consistent with term-loan-only amortization at 0.60%/month declining balance, with no incremental balance from a revolver draw. ENGINE LIMITATION: debt_service.py v1 has no revolving-facility mechanic (repeated draw/paydown cycles) -- it only supports one-time tranche 'fundings'. If/when the revolver draws, a real draw would need to be modeled as an added funding entry (permanent, non-revolving in the engine's eyes) or the schedule would understate covenant-support cash interest/principal from that point on.",
+        "agreement_ref": {
+          "section": "Article II -- Facility / Third Amendment -- Lender Consent",
+          "page": 1,
+          "quote": "Undrawn revolver capacity may fund permitted working capital and approved investments subject to no Default. ... Lender consent: preservation of remaining undrawn commitment."
+        }
+      }
+    }
+  ],
+
+  "amortization_base": {
+    "definition_verbatim": "Scheduled principal amortization is 0.60% of beginning principal monthly.",
+    "agreement_ref": {
+      "section": "Article II -- Facility",
+      "page": 1,
+      "quote": "Scheduled principal amortization is 0.60% of beginning principal monthly."
+    },
+    "engine_limitation_note": "ENGINE LIMITATION -- READ BEFORE RELYING ON THIS SCHEDULE'S scheduled_principal FIGURES. The agreement's own phrase ('0.60% of BEGINNING principal monthly') and the borrower's own certified monthly Debt & Liquidity schedules (every Monthly_Financial_Package reviewed, Jan 2025 - Jun 2026) both show a DECLINING-BALANCE mechanic: 0.60% is applied to that month's own opening balance, so the dollar amortization shrinks every month -- verified Jan 2025 $1,123,649.58 (= 0.60% x $187,274,929.89, ties by coincidence since month 1's opening balance equals original principal under either reading), Feb 2025 $1,116,907.68 (= 0.60% x $186,151,280.31, the DECLINED balance, not $187,274,929.89), Mar 2025 $1,110,206.24 (= 0.60% x $185,034,372.63). debt_service.py v1's amortization base is instead fixed at 'the aggregate original principal of all fundings dated strictly before the payment date' -- constant at $187,274,929.89 absent a new draw -- which produces a FLAT $1,123,649.58 installment every month rather than the true shrinking one. The two readings tie ONLY in month 1 (Jan 2025) and diverge every month after, with the gap widening: over the 18 certified months Jan 2025 - Jun 2026, the borrower's actual cumulative principal reduction is $187,274,929.89 - $168,048,469.80 (Q2 2026 certified Funded Debt) = $19,226,460.09, versus this engine's flat-base cumulative of 18 x $1,123,649.58 = $20,225,692.44 -- about $999,232 (5.2%) too high, and increasing every subsequent month. This is a v1 engine capability gap (no declining-balance base is supported), not a data-entry error.",
+    "open_question": "Because the agreement's ENTIRE amortization provision is this one sentence -- no separate 'base' definition, no worked example, no schedule -- 'beginning principal' is also textually capable of meaning the ORIGINAL principal at inception (which the engine models) rather than each month's own opening balance (which the borrower's books actually use). Given 18 straight months of the borrower's own contemporaneous, internally-tying accounting apply the declining-balance reading, that is the reading recorded as governing the facts; the flat reading is what this generated schedule can mechanically produce. Recommendation for step 7: DO NOT rely on this generated schedule's scheduled_principal / month_end_balance / balloon figures for Veyrona -- read the borrower's own certified Debt & Liquidity tab (Beginning Debt / Scheduled Principal / Ending Debt) for actual monthly principal and outstanding balance, exactly as is already done for a sibling facility in this portfolio with the identical clause and the identical engine gap."
+  },
+
+  "cash_interest": {
+    "index": null,
+    "margin_grid": [
+      {
+        "above": null,
+        "rate": 0.0001,
+        "when": "PLACEHOLDER ONLY -- NOT A CONTRACTUAL RATE. No index, margin, floor, or fixed cash-pay rate is stated anywhere in the Original Credit Agreement, the First/Second/Third Amendments, the Guaranty, the Security Agreement, or the Closing Certificate. Confirmed by a full-text sweep of every executed document for 'interest', 'rate', 'LIBOR', 'SOFR', 'Prime', 'margin', 'index', 'PIK', 'per annum', and 'basis point' -- zero matches outside this note. No Fee Letter or pricing-side-letter exists anywhere in the deal folder to reconcile against (unlike a sibling facility in this portfolio, where an actual Fee Letter exists). The borrower's own monthly financial packages carry NO interest-expense line at all (the Income Statement stops at Revenue / Cost of Revenue / Operating Expenses / Reported EBITDA) and no Debt & Liquidity column for interest either -- so there is also no certified figure to reverse-engineer a rate from. This 1-basis-point rate exists ONLY because the engine refuses a rate of exactly zero on a fixed-rate (index: null) facility ('would mean an interest-free loan'); it is not a market estimate and should not be read as one. EVERY cash_interest_accrued / cash_paid_total figure in the generated schedule is therefore void pending confirmation of actual pricing with Granite Harbor Direct Lending, LP -- this is a genuine, prominent drafting gap, not an extraction miss."
+      }
+    ],
+    "adjustment": "None stated -- no rate-reset or adjustment mechanism of any kind appears anywhere in the executed document set.",
+    "first_payment_date": "2025-02-01",
+    "payment_day": 1,
+    "agreement_ref": {
+      "section": "NONE -- no interest-rate provision found in Articles I-X or Schedules 1.1/4.1/7.1-7.4 of the Original Credit Agreement, nor in the First, Second, or Third Amendments, the Guaranty, the Security Agreement, or the Closing Certificate",
+      "quote": "No interest rate, index, margin, floor, or PIK provision appears anywhere in the executed document set -- confirmed by full-text search for 'interest', 'rate', 'LIBOR', 'SOFR', 'Prime', 'margin', 'index', 'PIK', 'per annum', and 'basis point' across all seven executed documents, all returning zero matches relevant to pricing."
+    }
+  },
+
+  "amortization": {
+    "start_date": "2025-02-01",
+    "annual_pct_of_base_grid": [
+      {
+        "above": null,
+        "rate": 0.072,
+        "when": "flat 0.60%/month (7.20%/year) of the base -- see amortization_base.engine_limitation_note: this is the engine's constant-original-principal-base approximation of the agreement's own declining-balance mechanic; it ties the certified figure only in month 1 (Feb-1-2025 payment, servicing January) and reads increasingly high every month thereafter."
+      }
+    ],
+    "payments_per_year": 12,
+    "balloon_at_maturity": true,
+    "fixed_charges_attribution": "accrued",
+    "agreement_ref": {
+      "section": "Article II -- Facility",
+      "page": 1,
+      "quote": "Scheduled principal amortization is 0.60% of beginning principal monthly."
+    }
+  },
+
+  "day_count": {
+    "convention": "actual/360",
+    "count_both_endpoints": true,
+    "verbatim": "NOT STATED. No day-count language ('actual/360', 'actual/365', 'per annum', a 360-day or 365-day year, or any variant) appears anywhere in the executed document set.",
+    "agreement_ref": {
+      "section": "NONE -- no day-count provision found in any executed document",
+      "quote": "No day-count convention is stated anywhere in the Original Credit Agreement or any of the three Amendments; confirmed by full-text search."
+    },
+    "ambiguities": [
+      "Day count is completely unstated (unlike a sibling facility in this portfolio whose agreement at least says 'actual days elapsed over a 360-day year' without specifying stub treatment -- Veyrona's agreement says nothing at all about day count). actual/360 with both endpoints counted is used here as the market-standard direct-lending default, purely so the generator can run; it is not sourced from the agreement. Because the interest RATE itself is also an undisclosed placeholder (see cash_interest.margin_grid), this convention choice has no real financial consequence today -- both gaps should be resolved together once actual pricing terms are confirmed with the Administrative Agent."
+    ]
+  },
+
+  "fees": [],
+  "_fees_note": "No fee of any kind (commitment fee, unused-commitment fee, closing fee, administrative/agency fee, monitoring fee) is stated in any executed document, and no Fee Letter or pricing side-letter exists anywhere in the Veyrona deal folder (Executed/ contains only the Original Credit Agreement, three Amendments, Guaranty, Security Agreement, and Closing Certificate). Per the Method's discrepancy rule, the full executed set was swept before concluding this -- there is no additive fee-letter layer to reconcile against here, unlike a sibling facility in this portfolio. Genuine documentation gap.",
+
+  "observations": {
+    "index_rates": [],
+    "grid_state": []
+  },
+
+  "covenant_support_rows": {
+    "cash_interest": "Cash Interest Expense",
+    "scheduled_principal": "Scheduled Debt Principal Payments"
+  },
+  "_covenant_support_rows_note": "Veyrona's only financial covenant (covenant-spec.json id 'max_net_leverage') is a leverage test (Net Debt / Covenant EBITDA), not a Fixed-Charges/coverage test, so no covenant-spec definition currently binds to these two row labels -- they are captured per Method step 3b so build-monitoring-model can populate a cash-interest and scheduled-principal view for the debt schedule / any future coverage analysis. The borrower's own monthly package has no interest-expense or amortization line at all (see borrower-config.json model_lines, which leaves interest_expense blank). Given BOTH the cash_interest rate (placeholder 1bp) AND the scheduled_principal base (flat vs. the borrower's true declining balance) are known-divergent from the facts for this borrower, these two generated rows should be treated as illustrative only, not relied upon, until the underlying gaps are resolved -- read the borrower's own certified Debt & Liquidity tab for actual figures in the meantime."
+}

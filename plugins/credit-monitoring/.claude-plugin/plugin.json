@@ -1,7 +1,7 @@
 {
   "name": "credit-monitoring",
   "displayName": "Credit Monitoring",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Turn borrower reporting and loan documents into a structured financial workbook and a review-ready monitoring memo, in Claude Cowork.",
   "author": {
     "name": "100x",

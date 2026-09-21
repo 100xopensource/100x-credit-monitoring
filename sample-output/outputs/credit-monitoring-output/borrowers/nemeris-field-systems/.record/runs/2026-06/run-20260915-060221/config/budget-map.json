@@ -1,0 +1,39 @@
+{
+  "borrower": "Nemeris Field Systems, LLC",
+  "file": "source:Nemeris Field Systems/4_Budgets/Approved/Approved_Budget_FY2025_H1_2026.xlsx",
+  "sheet": "Monthly Operating Plan",
+
+  "period_columns": {
+    "2025-01-31": 2, "2025-02-28": 3, "2025-03-31": 4, "2025-04-30": 5,
+    "2025-05-31": 6, "2025-06-30": 7, "2025-07-31": 8, "2025-08-31": 9,
+    "2025-09-30": 10, "2025-10-31": 11, "2025-11-30": 12, "2025-12-31": 13,
+    "2026-01-31": 14, "2026-02-28": 15, "2026-03-31": 16, "2026-04-30": 17,
+    "2026-05-31": 18, "2026-06-30": 19
+  },
+
+  "metric_rows": {
+    "_workaround_note": "This budget is only built down to a direct 'Budget EBITDA' row (40) — it does not break out net income, interest expense, taxes or D&A separately (matches the gap in the actuals model, see borrower-config model_lines._gap_note). Row 5 is a genuinely blank spacer row (verified: all 18 month columns are None) used as a zero proxy so the engine's fixed Net Income + Interest + Taxes + D&A bridge reconstructs to exactly Budget EBITDA. 'net_income' below is really 'Budget EBITDA' — do not read it as a true net-income budget.",
+    "revenue": 13,
+    "gross_profit": 23,
+    "net_income": 40,
+    "interest_expense": 5,
+    "taxes": 5,
+    "depreciation_amortization": 5
+  },
+
+  "opex_groups": {
+    "Sales compensation": 27,
+    "Marketing programs": 28,
+    "Operations payroll": 29,
+    "Product and engineering": 30,
+    "Corporate payroll": 31,
+    "Facilities and occupancy": 32,
+    "Technology and communications": 33,
+    "Insurance": 34,
+    "Professional fees": 35,
+    "Travel and training": 36,
+    "Other operating expense": 37
+  },
+
+  "_balance_sheet_rows_note": "Omitted. The budget's AR/Inventory/AP planning figures live on the separate 'Working Capital & Debt' sheet, not on this 'Monthly Operating Plan' sheet that period_columns/metric_rows are bound to — the engine reads one sheet only. Collateral 'vs Budget' will render '—' for this borrower."
+}

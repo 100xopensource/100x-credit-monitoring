@@ -1,0 +1,473 @@
+{
+  "module": "ap-ar-aging",
+  "period": "2026-06",
+  "run_id": "run-20260915-094514",
+  "run_id_from": "run",
+  "produced_at": "2026-09-15T09:54:51+00:00",
+  "produced_by": {
+    "engine": "ap-ar-aging",
+    "plugin_version": null
+  },
+  "reporting_unit": {
+    "scale": 1.0,
+    "currency": "USD",
+    "verbatim": "USD | internally titled source",
+    "plain": "USD"
+  },
+  "stores": {
+    "source": {
+      "url_base": null
+    },
+    "store": {
+      "url_base": null
+    }
+  },
+  "source_ref_reach": {
+    "cell": 20,
+    "file": 0,
+    "unlocated": 0,
+    "borrower_doc": 6
+  },
+  "source_files": [
+    "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/06/b.xlsx",
+    "source:Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/05/b.xlsx",
+    "store:borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/Orinth Vale Infrastructure Monthly IS-BS-CF.xlsx"
+  ],
+  "results": [
+    {
+      "side": "AR",
+      "latest": {
+        "month": "June 2026",
+        "as_of": null,
+        "total": 18094752.03,
+        "pct_over_90": 0.06,
+        "bucket_distribution": {
+          "current": {
+            "amount": 10856851.22,
+            "pct_of_total": 0.6
+          },
+          "1-30": {
+            "amount": 0.0,
+            "pct_of_total": 0.0
+          },
+          "31-60": {
+            "amount": 4161792.97,
+            "pct_of_total": 0.23
+          },
+          "61-90": {
+            "amount": 1990422.72,
+            "pct_of_total": 0.11
+          },
+          ">90": {
+            "amount": 1085685.12,
+            "pct_of_total": 0.06
+          }
+        },
+        "top5_concentration": [],
+        "dso_days": 41.24,
+        "days_basis": 30,
+        "n_counterparties": 0,
+        "rows_reconciliation": {
+          "grand_total": 18094752.03,
+          "counterparty_rows_total": 18094752.03,
+          "difference": 0.0,
+          "reconciles": true,
+          "n_counterparties": 0,
+          "rolled_up_rows": []
+        },
+        "source_ref": [
+          {
+            "file": 0,
+            "store": "source",
+            "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/06/b.xlsx",
+            "sheet": "Accounts Receivable",
+            "row": 9
+          },
+          {
+            "file": 0,
+            "store": "source",
+            "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/06/b.xlsx",
+            "sheet": "Accounts Receivable",
+            "row": "5-8"
+          },
+          {
+            "file": 2,
+            "store": "store",
+            "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/Orinth Vale Infrastructure Monthly IS-BS-CF.xlsx",
+            "sheet": "Income Statement",
+            "row": 7,
+            "label": "Revenue",
+            "cells": "W7",
+            "period": "2026-06",
+            "upstream": [
+              {
+                "store": "source",
+                "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/06/a.xlsx",
+                "sheet": "Income Statement"
+              }
+            ]
+          }
+        ],
+        "calc": "June 2026 AR aging snapshot: total 18,094,752.03 = the aging export's TOTAL row (row 9, Total column); bucket amounts = each aging bucket's own row in the export's Bucket/Amount grid (no per-counterparty breakdown in this export -- it reports one dollar figure per bucket, not per customer/vendor, rows 5-8); those rows sum to 18,094,752.03, which reconciles to the grand total, so every share below divides by a total its parts add up to; pct_over_90 = >90 bucket 1,085,685.12 / total; dso_days 41.24 = total / monthly revenue ('Revenue' = 13,161,734.09 for June 2026, model 'Income Statement' row 7 cell W7) * 30 (calendar days in June 2026)"
+      },
+      "prior": {
+        "month": "May 2026",
+        "as_of": null,
+        "total": 16770418.57,
+        "pct_over_90": 0.05,
+        "bucket_distribution": {
+          "current": {
+            "amount": 9726842.77,
+            "pct_of_total": 0.58
+          },
+          "1-30": {
+            "amount": 0.0,
+            "pct_of_total": 0.0
+          },
+          "31-60": {
+            "amount": 4024900.46,
+            "pct_of_total": 0.24
+          },
+          "61-90": {
+            "amount": 2180154.41,
+            "pct_of_total": 0.13
+          },
+          ">90": {
+            "amount": 838520.93,
+            "pct_of_total": 0.05
+          }
+        },
+        "top5_concentration": [],
+        "dso_days": 41.92,
+        "days_basis": 31,
+        "n_counterparties": 0,
+        "rows_reconciliation": {
+          "grand_total": 16770418.57,
+          "counterparty_rows_total": 16770418.57,
+          "difference": 0.0,
+          "reconciles": true,
+          "n_counterparties": 0,
+          "rolled_up_rows": []
+        },
+        "source_ref": [
+          {
+            "file": 1,
+            "store": "source",
+            "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/05/b.xlsx",
+            "sheet": "Accounts Receivable",
+            "row": 9
+          },
+          {
+            "file": 1,
+            "store": "source",
+            "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/05/b.xlsx",
+            "sheet": "Accounts Receivable",
+            "row": "5-8"
+          },
+          {
+            "file": 2,
+            "store": "store",
+            "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/Orinth Vale Infrastructure Monthly IS-BS-CF.xlsx",
+            "sheet": "Income Statement",
+            "row": 7,
+            "label": "Revenue",
+            "cells": "V7",
+            "period": "2026-05",
+            "upstream": [
+              {
+                "store": "source",
+                "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/05/a.xlsx",
+                "sheet": "Income Statement"
+              }
+            ]
+          }
+        ],
+        "calc": "May 2026 AR aging snapshot: total 16,770,418.57 = the aging export's TOTAL row (row 9, Total column); bucket amounts = each aging bucket's own row in the export's Bucket/Amount grid (no per-counterparty breakdown in this export -- it reports one dollar figure per bucket, not per customer/vendor, rows 5-8); those rows sum to 16,770,418.57, which reconciles to the grand total, so every share below divides by a total its parts add up to; pct_over_90 = >90 bucket 838,520.93 / total; dso_days 41.92 = total / monthly revenue ('Revenue' = 12,402,932.58 for May 2026, model 'Income Statement' row 7 cell V7) * 31 (calendar days in May 2026)"
+      },
+      "trend": {
+        "total_change": 1324333.46,
+        "dso_days_prior": 41.92,
+        "dso_days_latest": 41.24,
+        "note": "Single-month aging snapshots; DSO/DPO use one month of flow and are volatile month to month. Each month's days metric uses that month's calendar days.",
+        "source_ref": [
+          {
+            "file": 0,
+            "store": "source",
+            "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/06/b.xlsx",
+            "sheet": "Accounts Receivable",
+            "row": 9
+          },
+          {
+            "file": 1,
+            "store": "source",
+            "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/05/b.xlsx",
+            "sheet": "Accounts Receivable",
+            "row": 9
+          }
+        ],
+        "calc": "total_change = June 2026 AR aging total 18,094,752.03 (from the aging export's TOTAL row (row 9, Total column)) - May 2026 total 16,770,418.57 (from the aging export's TOTAL row (row 9, Total column)); dso_days_latest/_prior repeated from this side's latest/prior records"
+      },
+      "tie_out": {
+        "what": "A/R aging total vs BS 'Accounts Receivable'",
+        "aging_total": 18094752.03,
+        "balance_sheet": 18094752.03,
+        "difference": 0.0,
+        "ties": true,
+        "source_ref": [
+          {
+            "file": 0,
+            "store": "source",
+            "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/06/b.xlsx",
+            "sheet": "Accounts Receivable",
+            "row": 9
+          },
+          {
+            "file": 2,
+            "store": "store",
+            "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/Orinth Vale Infrastructure Monthly IS-BS-CF.xlsx",
+            "sheet": "Balance Sheet",
+            "row": 8,
+            "label": "Accounts Receivable",
+            "cells": "W8",
+            "period": "2026-06",
+            "upstream": [
+              {
+                "store": "source",
+                "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/06/a.xlsx",
+                "sheet": "Balance Sheet"
+              }
+            ]
+          }
+        ],
+        "calc": "difference 0.00 = aging total 18,094,752.03 (from the aging export's TOTAL row (row 9, Total column)) - balance-sheet 'Accounts Receivable' 18,094,752.03 (model 'Balance Sheet' row 8 cell W8, June 2026); ties when |difference| <= 1.00"
+      }
+    },
+    {
+      "side": "AP",
+      "latest": {
+        "month": "June 2026",
+        "as_of": null,
+        "total": 8704117.99,
+        "pct_over_90": 0.06,
+        "bucket_distribution": {
+          "current": {
+            "amount": 5483594.33,
+            "pct_of_total": 0.63
+          },
+          "1-30": {
+            "amount": 0.0,
+            "pct_of_total": 0.0
+          },
+          "31-60": {
+            "amount": 1827864.78,
+            "pct_of_total": 0.21
+          },
+          "61-90": {
+            "amount": 870411.8,
+            "pct_of_total": 0.1
+          },
+          ">90": {
+            "amount": 522247.08,
+            "pct_of_total": 0.06
+          }
+        },
+        "top5_concentration": [],
+        "dpo_days": 36.0,
+        "days_basis": 30,
+        "n_counterparties": 0,
+        "rows_reconciliation": {
+          "grand_total": 8704117.99,
+          "counterparty_rows_total": 8704117.99,
+          "difference": 0.0,
+          "reconciles": true,
+          "n_counterparties": 0,
+          "rolled_up_rows": []
+        },
+        "source_ref": [
+          {
+            "file": 0,
+            "store": "source",
+            "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/06/b.xlsx",
+            "sheet": "Accounts Payable",
+            "row": 9
+          },
+          {
+            "file": 0,
+            "store": "source",
+            "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/06/b.xlsx",
+            "sheet": "Accounts Payable",
+            "row": "5-8"
+          },
+          {
+            "file": 2,
+            "store": "store",
+            "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/Orinth Vale Infrastructure Monthly IS-BS-CF.xlsx",
+            "sheet": "Income Statement",
+            "row": 8,
+            "label": "Costs",
+            "cells": "W8",
+            "period": "2026-06",
+            "upstream": [
+              {
+                "store": "source",
+                "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/06/a.xlsx",
+                "sheet": "Income Statement"
+              }
+            ]
+          }
+        ],
+        "calc": "June 2026 AP aging snapshot: total 8,704,117.99 = the aging export's TOTAL row (row 9, Total column); bucket amounts = each aging bucket's own row in the export's Bucket/Amount grid (no per-counterparty breakdown in this export -- it reports one dollar figure per bucket, not per customer/vendor, rows 5-8); those rows sum to 8,704,117.99, which reconciles to the grand total, so every share below divides by a total its parts add up to; pct_over_90 = >90 bucket 522,247.08 / total; dpo_days 36.00 = total / the monthly DPO basis ('Costs' = 7,253,431.66 for June 2026, model 'Income Statement' row 8 cell W8) * 30 (calendar days in June 2026)",
+        "dpo_basis": "DPO denominator = configured model line 'Costs' (operating_cogs) = 7253431.66."
+      },
+      "prior": {
+        "month": "May 2026",
+        "as_of": null,
+        "total": 8111517.91,
+        "pct_over_90": 0.06,
+        "bucket_distribution": {
+          "current": {
+            "amount": 4623565.21,
+            "pct_of_total": 0.57
+          },
+          "1-30": {
+            "amount": 0.0,
+            "pct_of_total": 0.0
+          },
+          "31-60": {
+            "amount": 2027879.48,
+            "pct_of_total": 0.25
+          },
+          "61-90": {
+            "amount": 973382.15,
+            "pct_of_total": 0.12
+          },
+          ">90": {
+            "amount": 486691.07,
+            "pct_of_total": 0.06
+          }
+        },
+        "top5_concentration": [],
+        "dpo_days": 37.2,
+        "days_basis": 31,
+        "n_counterparties": 0,
+        "rows_reconciliation": {
+          "grand_total": 8111517.91,
+          "counterparty_rows_total": 8111517.91,
+          "difference": 0.0,
+          "reconciles": true,
+          "n_counterparties": 0,
+          "rolled_up_rows": []
+        },
+        "source_ref": [
+          {
+            "file": 1,
+            "store": "source",
+            "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/05/b.xlsx",
+            "sheet": "Accounts Payable",
+            "row": 9
+          },
+          {
+            "file": 1,
+            "store": "source",
+            "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/05/b.xlsx",
+            "sheet": "Accounts Payable",
+            "row": "5-8"
+          },
+          {
+            "file": 2,
+            "store": "store",
+            "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/Orinth Vale Infrastructure Monthly IS-BS-CF.xlsx",
+            "sheet": "Income Statement",
+            "row": 8,
+            "label": "Costs",
+            "cells": "V8",
+            "period": "2026-05",
+            "upstream": [
+              {
+                "store": "source",
+                "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/05/a.xlsx",
+                "sheet": "Income Statement"
+              }
+            ]
+          }
+        ],
+        "calc": "May 2026 AP aging snapshot: total 8,111,517.91 = the aging export's TOTAL row (row 9, Total column); bucket amounts = each aging bucket's own row in the export's Bucket/Amount grid (no per-counterparty breakdown in this export -- it reports one dollar figure per bucket, not per customer/vendor, rows 5-8); those rows sum to 8,111,517.91, which reconciles to the grand total, so every share below divides by a total its parts add up to; pct_over_90 = >90 bucket 486,691.07 / total; dpo_days 37.20 = total / the monthly DPO basis ('Costs' = 6,759,598.26 for May 2026, model 'Income Statement' row 8 cell V8) * 31 (calendar days in May 2026)"
+      },
+      "trend": {
+        "total_change": 592600.08,
+        "dpo_days_prior": 37.2,
+        "dpo_days_latest": 36.0,
+        "note": "Single-month aging snapshots; DSO/DPO use one month of flow and are volatile month to month. Each month's days metric uses that month's calendar days.",
+        "source_ref": [
+          {
+            "file": 0,
+            "store": "source",
+            "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/06/b.xlsx",
+            "sheet": "Accounts Payable",
+            "row": 9
+          },
+          {
+            "file": 1,
+            "store": "source",
+            "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/05/b.xlsx",
+            "sheet": "Accounts Payable",
+            "row": 9
+          }
+        ],
+        "calc": "total_change = June 2026 AP aging total 8,704,117.99 (from the aging export's TOTAL row (row 9, Total column)) - May 2026 total 8,111,517.91 (from the aging export's TOTAL row (row 9, Total column)); dpo_days_latest/_prior repeated from this side's latest/prior records"
+      },
+      "tie_out": {
+        "what": "A/P aging total vs BS 'Accounts Payable and Accruals'",
+        "aging_total": 8704117.99,
+        "balance_sheet": 8704117.99,
+        "difference": 0.0,
+        "ties": true,
+        "source_ref": [
+          {
+            "file": 0,
+            "store": "source",
+            "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/06/b.xlsx",
+            "sheet": "Accounts Payable",
+            "row": 9
+          },
+          {
+            "file": 2,
+            "store": "store",
+            "path_in_store": "borrowers/orinth-vale-infrastructure/.record/runs/2026-06/run-20260915-094514/Orinth Vale Infrastructure Monthly IS-BS-CF.xlsx",
+            "sheet": "Balance Sheet",
+            "row": 21,
+            "label": "Accounts Payable and Accruals",
+            "cells": "W21",
+            "period": "2026-06",
+            "upstream": [
+              {
+                "store": "source",
+                "path_in_store": "Orinth Vale Infrastructure/04 Reporting/Period Archive/2026/06/a.xlsx",
+                "sheet": "Balance Sheet"
+              }
+            ]
+          }
+        ],
+        "calc": "difference 0.00 = aging total 8,704,117.99 (from the aging export's TOTAL row (row 9, Total column)) - balance-sheet 'Accounts Payable and Accruals' 8,704,117.99 (model 'Balance Sheet' row 21 cell W21, June 2026); ties when |difference| <= 1.00"
+      }
+    }
+  ],
+  "exceptions": [
+    {
+      "type": "concentration_not_available",
+      "what": "June 2026 A/R top-5 concentration",
+      "detail": "The June 2026 A/R aging export is a pre-bucketed summary (one Amount per aging bucket, with a single illustrative 'representative' project/vendor label per bucket rather than a per-counterparty dollar breakdown) -- there is no genuine counterparty-level data in this export to rank. Bucket distribution, total, tie-out and days-metric are unaffected and reported normally; top-N concentration is reported as empty because none exists in the source, not because no concentration risk was found."
+    },
+    {
+      "type": "concentration_not_available",
+      "what": "June 2026 A/P top-5 concentration",
+      "detail": "The June 2026 A/P aging export is a pre-bucketed summary (one Amount per aging bucket, with a single illustrative 'representative' project/vendor label per bucket rather than a per-counterparty dollar breakdown) -- there is no genuine counterparty-level data in this export to rank. Bucket distribution, total, tie-out and days-metric are unaffected and reported normally; top-N concentration is reported as empty because none exists in the source, not because no concentration risk was found."
+    }
+  ],
+  "engine": "ap-ar-aging v5 (config-driven, borrower-agnostic) + per-figure source refs/calc + rows-vs-TOTAL reconciliation",
+  "borrower": "Orinth Vale Infrastructure, LLC",
+  "latest_month": "June 2026",
+  "prior_month": "May 2026",
+  "note": "DSO/DPO are single-month and volatile. DPO uses configured basis 'operating_cogs' (model line 'Costs').",
+  "methodology": "Company-prepared aging exports (unaudited). Balance-sheet AR/AP, revenue, and the configured DPO-basis line are read from the canonical monthly financials model via monitor_lib."
+}
