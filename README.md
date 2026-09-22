@@ -30,6 +30,28 @@ Explore six fictional borrowers' June 2026 workbooks, memos, and portfolio dashb
 
 The [sample guide](sample-output/README.md) includes the complete ZIP and dashboard download. Saved-store continuation is blocked by the current candidate's folder validator; the reports remain independently viewable. Running a fresh review takes the normal time.
 
+## What it looks like
+
+Screenshots of the [live sample](https://100xpartners.ai/credit-monitoring/) — six borrowers' June 2026 reviews, as the plugin produced them.
+
+**The portfolio, thinnest headroom first.** Every monitored borrower on one screen: who is in breach, who is close to one, who could not be tested, and how revenue, EBITDA, and cash have moved.
+
+![Portfolio view for June 2026 listing six borrowers with counts for in breach, at risk, not testable, and on the watchlist, sorted by thinnest covenant headroom, with revenue, EBITDA, and cash trends beside each borrower](docs/assets/screenshot-portfolio.png)
+
+**One borrower's monitoring memo.** Covenant compliance, performance and collateral metrics, deal summary, financial performance, and the files behind them — each on its own tab.
+
+![Monitoring report for Selvara Industrial Services, June 2026, marked on watchlist and deteriorating, showing a fixed charge coverage ratio breach under covenant compliance and net revenue year to date up 9.0% against prior year](docs/assets/screenshot-borrower-memo.png)
+
+**Every covenant tested, with the arithmetic shown.** Required against actual, the headroom between them, the basis the test runs on, and how the borrower's own compliance certificate compares.
+
+![Covenant test table as at 30 June 2026: minimum fixed charge coverage ratio on an LTM basis, 1.20x required against 0.93x actual, headroom of -22.2%, result breach, linked to the income statement cells in the model, with reading notes on the compliance certificate below](docs/assets/screenshot-covenant-tests.png)
+
+**Any figure traces back to where it came from.** Hover a number and the memo says which model row, which period, and which document it was read from — so a reviewer can check a figure without rebuilding it.
+
+![Pledged collateral table with a tooltip open on accounts receivable reading "How this figure was arrived at": the reported accounts receivable at June 2026, taken from the model row of the same name, a period-end level read from the model balance sheet](docs/assets/screenshot-figure-trace.png)
+
+The borrowers, figures, and documents shown are synthetic. Nothing above is a real company or a real credit.
+
 ## What it produces
 
 | Output | Purpose |
