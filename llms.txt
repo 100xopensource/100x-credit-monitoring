@@ -12,6 +12,10 @@
 - SECURITY.md: private vulnerability reporting
 - CONTRIBUTING.md: contribution expectations
 
+## Related learning resources
+
+- https://100xopensource.github.io/credit-monitoring-crash-course/: standalone private-credit course with twelve lessons and reference cards using fictional synthetic borrowers. Separate from the plugin; not required for monitoring.
+
 ## Output taxonomy
 
 A borrower run produces two person-facing deliverables: a financial workbook and a monitoring memo. The optional portfolio dashboard is a derived aggregate view of selected completed runs, not a third borrower-run deliverable.

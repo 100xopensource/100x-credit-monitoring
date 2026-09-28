@@ -159,6 +159,7 @@ The plugin does not replace professional judgment. Verify source evidence, formu
 ## Repository guide
 
 - [Getting started](docs/GETTING_STARTED.md)
+- [Private-credit crash course](https://100xopensource.github.io/credit-monitoring-crash-course/) — standalone learning website, separate from the plugin
 - [How it works](docs/HOW_IT_WORKS.md)
 - [Security and privacy](docs/SECURITY_AND_PRIVACY.md)
 - [Limitations](docs/LIMITATIONS.md)

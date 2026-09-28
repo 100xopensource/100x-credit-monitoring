@@ -70,4 +70,4 @@ The dashboard distinguishes accepted results from the visible draft and prior ac
 
 ## Finance guidance
 
-The interactive crash course is unavailable in v1. Ask Claude a finance question directly and consult this repository's [How it works](HOW_IT_WORKS.md) and [Limitations](LIMITATIONS.md) guidance. Monitoring does not depend on the course.
+For an introduction to private-credit concepts and monitoring terminology, explore the [Private-credit crash course](https://100xopensource.github.io/credit-monitoring-crash-course/). It includes twelve lessons and reference cards using fictional synthetic borrowers. The course is a standalone website, not a bundled plugin feature; monitoring does not depend on it. You can also ask Claude a finance question directly and consult this repository's [How it works](HOW_IT_WORKS.md) and [Limitations](LIMITATIONS.md) guidance.
