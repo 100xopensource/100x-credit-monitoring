@@ -14,7 +14,7 @@ workaround. Prints a one-line JSON verdict and sets an exit code to branch on:
                         (skip with a plain reason); the connect steps don't apply
     2  usage error      no path given / bad args
 
-(The remedies are spelled out in references/connecting-folders.md.)
+(The remedies are spelled out in references/runtime/cowork/files.md.)
 
 The JSON always carries {verdict, reason, guide, path}. This tool never writes
 anything and never reads file contents — it only checks whether the path is

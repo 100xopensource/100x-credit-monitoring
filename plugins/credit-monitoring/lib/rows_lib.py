@@ -307,7 +307,7 @@ def store_path(path, store_leaves, monitoring_store=None, deal_folder=None):
 
     The store is found by matching a catalog folder name as a whole path segment
     or the END of one after a separator, which is what makes both
-    `.../3_Current Portfolio/Example Borrower` and `... - Credit - Other - 3_Current Portfolio`
+    `.../Portfolio/Example Borrower` and `... - Shared Documents - Portfolio`
     resolve to the same store. A leaf that merely trails inside a longer word is
     a different folder that happens to end in the same letters.
 
@@ -484,7 +484,7 @@ SHAPE_FIELDS = {
         "threshold_kind": None,     # scalar | schedule | declared_budget | unresolved
         "threshold_source": None,
         "threshold_effective": None,
-        "status": None,             # pass | breach | at_risk | not_evaluable
+        "status": None,             # pass | breach | at_risk | not_evaluable | unresolved
         "headroom_abs": None,
         "headroom_pct": None,       # a FRACTION of the threshold, not a percentage
         "headroom_unit": "fraction_of_threshold",

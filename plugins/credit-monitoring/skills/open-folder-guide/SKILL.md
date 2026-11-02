@@ -10,6 +10,8 @@ metadata:
 
 # Open Folder Guide
 
+Read `../../CLAUDE.md` before anything else; it holds the rules shared by every skill.
+
 Give one clearly labelled link to the public
 [Folder guide](https://github.com/100xopensource/credit-monitoring-folder-guide). If its documentation
 is unavailable, say so plainly and use the packaged guide below without inventing public steps.

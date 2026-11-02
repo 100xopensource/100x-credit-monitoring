@@ -35,8 +35,10 @@ import re
 
 try:
     import rows_lib as rl
+    from covenant_status import presented_results
 except ModuleNotFoundError:  # pragma: no cover - package import path
     from . import rows_lib as rl
+    from .covenant_status import presented_results
 
 # The `unit` a three-statement figure carries is what KIND of quantity it is,
 # not the borrower's reporting unit. These are the money kinds; a ratio, a
@@ -50,14 +52,15 @@ MONEY_KINDS = ("usd", "$", "dollars", "money")
 # key here but one has. Adding a ratio series means adding it to this map.
 DEEP_SERIES = {"revenue": ("is", True), "gross_margin": ("is", False),
                "ebitda": ("is", True), "cash": ("bs", True),
-               "total_equity": ("bs", True)}
+               "total_equity": ("bs", True), "dso_days": ("bs", False),
+               "dpo_days": ("bs", False), "dio_days": ("bs", False)}
 
 
 # ---------------------------------------------------------------------------
 # shape 1 — test
 # ---------------------------------------------------------------------------
 def read_covenant(out, ctx, rows, core):
-    for result in out.get("results") or []:
+    for result in presented_results(out):
         if not isinstance(result, dict):
             continue
         # A group row carries the group's own id; a leg points back at it.

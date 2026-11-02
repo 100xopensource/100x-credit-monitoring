@@ -53,6 +53,7 @@ Usage:
                          [--archive <dir>] [--model <path>] [--trend-months 18]
 """
 import argparse
+from contextlib import closing as closing_book
 import json
 import os
 import re
@@ -72,13 +73,18 @@ def _plugin_lib():
 
 _plugin_lib()
 import monitor_lib as ml  # noqa: E402
-import openpyxl           # noqa: E402
-from openpyxl.utils import get_column_letter  # noqa: E402
+from covenant_status import presented_results
+from judgment import (JUDGMENT_FIELDS, RETIRED_JUDGMENT_FIELDS,
+                      settled as _settled, settled_view)
+openpyxl = ml.prerequisites.openpyxl
+get_column_letter = ml.prerequisites.get_column_letter
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _HERE)
 import period_windows  # noqa: E402
 import performance_views  # noqa: E402
+import statement_lines  # noqa: E402
+import statement_values  # noqa: E402
 
 SCHEMA = "credit-monitor-memo-payload/v1"
 
@@ -360,6 +366,14 @@ def _month_offset(period, months):
     return f"{n // 12:04d}-{n % 12 + 1:02d}"
 
 
+def _model_ref(model, ref):
+    """Attach identity only where the caller knows which workbook was read."""
+    if ref is None:
+        return None
+    path = recorded_path(model.given_path)
+    return dict(ref, store=_store_of(path), path_in_store=_in_store(path))
+
+
 def read_pledged(model, spec, period, to_usd=None):
     """One pledged component's reported value, whether it is a row or a sum of rows.
 
@@ -375,7 +389,7 @@ def read_pledged(model, spec, period, to_usd=None):
         return None, None, []
     if isinstance(spec, str):
         v = to_usd(_num(model.get_line(spec, month=period, sheet="Balance Sheet")))
-        ref = model.provenance(spec, sheet="Balance Sheet", month=period)
+        ref = _model_ref(model, model.provenance(spec, sheet="Balance Sheet", month=period))
         return v, ([ref] if ref else None), ([] if v is not None else [spec])
     if not isinstance(spec, dict):
         return None, None, []
@@ -387,7 +401,7 @@ def read_pledged(model, spec, period, to_usd=None):
                 missing.append(row)
                 continue
             total += sign * v
-            ref = model.provenance(row, sheet="Balance Sheet", month=period)
+            ref = _model_ref(model, model.provenance(row, sheet="Balance Sheet", month=period))
             if ref:
                 refs.append(ref)
     if missing or not refs:
@@ -402,79 +416,6 @@ def _rows_of(spec):
     if isinstance(spec, dict):
         return [r for k in ("add", "subtract") for r in (spec.get(k) or [])]
     return []
-
-
-def _settled(v):
-    """A control-file value, or None when it is still a note-to-self.
-
-    Deal context is drafted before it is signed off, and an unsettled field says so
-    in its own text ("AGENT PLACEHOLDER - watchlist / trajectory"). Printing that
-    into a credit memo states a view the fund has not given, so an unsettled
-    value is treated as no value.
-    """
-    if not isinstance(v, str):
-        return v
-    flag = ("placeholder", "tbd", "tbu", "to be updated", "fill in", "xxx",
-            "no analyst", "not a credit opinion", "must be replaced",
-            "auto-set", "provisional")
-    return None if any(f in v.lower() for f in flag) else v
-
-
-# The three fields of the deal record that state the fund's own view of the credit.
-JUDGMENT_FIELDS = ("watchlist", "trajectory", "thesis_status")
-
-# Fields retired from the judgment record. An older deal-context can still carry
-# these -- the field and its own disclaimer note -- from before they were retired.
-# Both are dropped before sign-off classification runs: left in, an old retired
-# note that reads as unsettled (e.g. "provisional; no analyst sign-off") is not
-# recognised as belonging to any current field, so it is read as a WHOLE-BLOCK
-# warning and silently suppresses every field the analyst actually did sign off.
-RETIRED_JUDGMENT_FIELDS = ("risk_rating",)
-
-
-def _drop_retired(ov):
-    """A deal record's `our_view` with retired fields and their notes removed."""
-    retired_notes = {f"_{f}_note" for f in RETIRED_JUDGMENT_FIELDS}
-    return {k: v for k, v in ov.items()
-            if k not in RETIRED_JUDGMENT_FIELDS and k not in retired_notes}
-
-
-def settled_view(ov):
-    """The fund's standing view, keeping only the fields that have been signed off.
-
-    Onboarding writes this block before an analyst has seen it, and it says so in a
-    note BESIDE the fields -- `_WARNING` for the whole block, `_trajectory_note` for
-    one of them -- rather than inside every value. So the long fields carried the
-    marker in their own text and were dropped, while the one-word fields ("on",
-    "stable") printed on page one as the fund's view of the credit. A note that
-    disclaims a field disclaims it whether the disclaimer sits in the value or
-    beside it: a block-level warning governs all three, a `_<field>_note` governs
-    that field.
-
-    Returns the view and the names of the fields a disclaimer removed, so the memo
-    can say why it shows no view instead of simply showing none.
-    """
-    ov = _drop_retired(ov or {})
-    notes = {k: v for k, v in ov.items() if str(k).startswith("_")}
-    whole_block = any(isinstance(v, str) and _settled(v) is None
-                      for k, v in notes.items() if not _names_a_field(k))
-    out, disclaimed = {}, []
-    for k in JUDGMENT_FIELDS:
-        note = notes.get(f"_{k}_note")
-        if whole_block or (isinstance(note, str) and _settled(note) is None):
-            out[k] = None
-            if ov.get(k) not in (None, ""):
-                disclaimed.append(k)
-            continue
-        out[k] = _settled(ov.get(k))
-        if out[k] is None and ov.get(k) not in (None, ""):
-            disclaimed.append(k)
-    return out, disclaimed
-
-
-def _names_a_field(key):
-    """Whether a note key belongs to one judgment field rather than the block."""
-    return any(str(key) == f"_{f}_note" for f in JUDGMENT_FIELDS)
 
 
 # What the deal record's `static.deal_team_provenance` says when the analyst
@@ -655,14 +596,16 @@ def _figure(fid, section, label, value, unit, ref, calc, env, extra=None):
             if uwhy:
                 degrade.append(uwhy)
             ups.append({k: u.get(k) for k in
-                        ("store", "path_in_store", "sheet", "section", "quote")
-                        if u.get(k) is not None} | {"url": uurl})
+                        ("store", "path_in_store", "sheet", "section", "cells", "page",
+                         "quote", "period", "status", "kind", "unlocated_reason")
+                        if u.get(k) is not None} | {"url": u.get("url") or uurl})
         if not r.get("upstream"):
             degrade.append("no_upstream")
         hops.append({k: r.get(k) for k in
                      ("store", "path_in_store", "sheet", "row", "label",
-                      "cells", "section", "period")
-                     if r.get(k) is not None} | {"url": url, "upstream": ups})
+                      "cells", "section", "period", "page", "quote", "status", "kind",
+                       "unlocated_reason", "coverage", "coverage_error")
+                     if r.get(k) is not None} | {"url": r.get("url") or url, "upstream": ups})
     out = {
         "id": fid,
         "section": section,
@@ -843,7 +786,7 @@ def _covenant_figures(mod, env, period):
             return n
         return n * scale
 
-    for i, r in enumerate(env.get("results") or []):
+    for i, r in enumerate(presented_results(env)):
         if not isinstance(r, dict):
             continue
         cid = r.get("id") or f"covenant-{i}"
@@ -898,13 +841,19 @@ def _covenant_figures(mod, env, period):
                 u = "ratio"
             else:
                 u = "usd"
+            refs = r.get("source_ref") or []
+            calc = r.get("calc")
+            if key == "cert_value":
+                refs = [ref for ref in refs if ref.get("kind") == "certified-transcription"]
+                calc = "Borrower-certified value transcribed from the compliance certificate; not our model calculation."
             f, dg = _figure(
                 f"{stem}.{key}", "covenant_detail",
                 f"{r.get('name') or cid} — {key.replace('_', ' ')}"
                 + (f" ({td})" if td else ""),
-                r.get(key), u, r.get("source_ref"), r.get("calc"), env,
+                r.get(key), u, refs, calc, env,
                 extra={"covenant_id": cid, "field": key, "test_date": td,
                        "current": is_current, "status": r.get("status"),
+                       "reconciliation_reason": r.get("reconciliation_reason"),
                        "cert_status": r.get("cert_status"),
                        "cert_agrees": r.get("cert_agrees"),
                        "cert_delta": _num(r.get("delta_model_vs_cert")),
@@ -917,6 +866,8 @@ def _covenant_figures(mod, env, period):
         hist["tests"].append({
             "test_date": td, "status": r.get("status"),
             "cert_status": r.get("cert_status"),
+            "cert_value": money(r.get("cert_value"), primitive),
+            "reason": r.get("reconciliation_reason"),
             "actual": money(r.get("actual"), primitive),
             "required": money(r.get("required"), primitive),
         })
@@ -945,7 +896,7 @@ def _covenant_figures(mod, env, period):
         h["tests"].sort(key=lambda t: t.get("test_date") or "")
         h["tally"] = {
             k: sum(1 for t in h["tests"] if str(t.get("status") or "").lower() == k)
-            for k in ("pass", "at_risk", "breach", "not_evaluable")
+            for k in ("pass", "at_risk", "breach", "not_evaluable", "unresolved")
         }
     if not chips and current_end:
         absent.append({
@@ -1052,6 +1003,20 @@ def liquidity_block(liq, figs):
              "figure_id": have.get(key, {}).get("id")}
             for key, label, unit in LIQUIDITY_FIELDS
             if liq.get(key) is not None]
+    # No floor is a fact about the deal, not a figure that failed: the agreement
+    # sets no minimum cash and the setup pins none. Say so on the rows a reader
+    # would otherwise find missing, instead of leaving the block silent.
+    if liq.get("cash_floor") is None and rows:
+        words = "Floor unresolved"
+        have_ids = {r["id"] for r in rows}
+        for key, label, unit in LIQUIDITY_FIELDS:
+            if key == "cash_floor" or (key.startswith("months_to_floor")
+                                       and liq.get(key.replace("months_to_floor", "burn")
+                                                   .replace("burn_3m", "burn_3m_avg")) is not None):
+                if _slug(key) not in have_ids:
+                    rows.append({"id": _slug(key), "field": key, "label": label,
+                                 "unit": unit, "value": None, "figure_id": None,
+                                 "words": words})
     if not rows:
         return None
     return {"rows": rows, "calc": liq.get("calc"),
@@ -1067,6 +1032,9 @@ def _runway_gaps(liq):
     have a figure.
     """
     out = []
+    if liq.get("cash_floor") is None:
+        return [{'kind': 'runway_not_measured', 'section': 'balance_review',
+                 'what': 'Cash floor', 'reason': 'No usable floor was resolved; verify the covenant specification and setup.'}]
     for burn, months, said in (("burn_1m", "months_to_floor_1m", "last month's burn"),
                                ("burn_3m_avg", "months_to_floor_3m",
                                 "the three-month burn")):
@@ -1077,7 +1045,8 @@ def _runway_gaps(liq):
             "kind": "runway_not_measured", "section": "balance_review",
             "what": f"Months to the floor, on {said}",
             "reason": ("cash grew on this basis, so it never reaches the floor"
-                       if b <= 0 else
+                       if b < 0 else
+                       "cash was flat on this basis" if b == 0 else
                        "cash is already at or below the floor on this basis")})
     return out
 
@@ -1679,6 +1648,7 @@ def _curate_income(body, work, tol):
         if rev:
             margin = {
                 "label": "EBITDA margin %", "row": eb.get("row"),
+                "input_rows": [eb.get("row"), rev.get("row")], "trace_generated_ratio": True,
                 "sheet": eb.get("sheet"), "unit": "pct", "sub": True,
                 "method": ("EBITDA (bridge) over revenue, month by month; the "
                            "year to date is the ratio of the two year-to-date "
@@ -1811,123 +1781,150 @@ def _row_is_share(model, sheet, row_no):
     return bool(formats) and all("%" in f for f in formats)
 
 
-def statement_tables(model, period, months_back=5, unit=None):
-    """One table per statement sheet: the trailing months, plus a year-to-date
-    column on the flow statements only (balances do not sum).
+def performance_trace_refs(perf, model, cfg, plans=None):
+    """Trace the same configured rows and month windows the performance reader uses.
 
-    Each row carries the method the memo's trace box states and, per month, the
-    workbook cell the figure came from -- the row store and column store
-    report-structure's coverage contract asks for, so the renderer stores a trace
-    once per row and once per column rather than per cell.
-
-    Every money cell is stated in dollars. A statement row is money, and a model
-    kept in thousands would otherwise print a borrower at a thousandth of its size.
-
-    A statement sheet also carries SHARE rows -- a gross margin, an expense as a
-    percentage of revenue. The workbook says which they are: the cell's own number
-    format is a percentage one. That is read rather than guessed from the label,
-    because a row is a share when the borrower formatted it as a share, and a
-    label heuristic mistags a dollar row on the next borrower. A share is not
-    money, so it is neither scaled nor added down a year (0.30 + 0.31 is not a
-    margin), and it prints as a percentage.
+    A cell traces every window it reads: its own months, the year-earlier months it
+    is compared with, and the reported window a comparison column measures against
+    it. A plan column's level is the budget's, so it traces to the budget workbook
+    cells budget-vs-actual read (`plans[column id]["refs"]`), never to the model.
     """
-    to_usd = (lambda v: v) if unit is None else unit.to_dollars
-    scale = float(getattr(unit, "scale", 1) or 1)
-    # Small enough that it can only print as a zero: 2.5 of the model's own units,
-    # in dollars. A row of nothing but that is left off the table.
-    floor = 2.5 * scale
-    tol = 2.0 * scale
-    axis = list(model.months or [])
-    if period:
-        try:
-            end = _period_label(period)
-            if end in axis:
-                axis = axis[:axis.index(end) + 1]
-        except (ValueError, IndexError):
-            pass
-    shown = axis[-months_back:]
-    ytd_year = shown[-1].split()[-1] if shown else None
-    ytd_months = [m for m in axis if m.split()[-1] == ytd_year] if ytd_year else []
+    plans = plans or {}
+    lines = cfg.get("model_lines") or {}
+    groups = cfg.get("opex_groups") or {}
+    revenue, gross, ebitda = (lines.get(k) for k in ("revenue", "gross_profit", "ebitda_bridge"))
+    opex = [v for k, v in groups.items() if not k.startswith("_") and v]
+    inputs = {"revenue": [revenue], "gross_profit": [gross], "ebitda": [ebitda],
+              "opex": opex, "gross_margin": [gross, revenue],
+              "ebitda_margin": [ebitda, revenue], "opex_pct": opex + [revenue]}
+    for view in perf.get("views") or []:
+        for row in view.get("rows") or []:
+            for column, cell in zip(view.get("columns") or [], row.get("cells") or []):
+                refs = []
+                if cell.get("na"):
+                    cell["source_ref"] = refs
+                    continue
+                if column.get("plan"):
+                    plan_refs = (plans.get(column.get("id")) or {}).get("refs") or {}
+                    for line in performance_views.NEEDS.get(row.get("id"), ()):
+                        refs.extend(plan_refs.get(line) or [])
+                windows = ((column.get("against"),) if column.get("plan") else
+                           (column.get("months"), column.get("base_months"), column.get("against")))
+                for months in windows:
+                    if not months:
+                        continue
+                    for label in inputs.get(row.get("id"), []):
+                        if label:
+                            ref = model.provenance(label, month=months[-1], window=len(months))
+                            if ref:
+                                refs.append(_model_ref(model, ref))
+                cell["source_ref"] = refs
+
+
+def statement_tables(model, period, months_back=None, unit=None, cfg=None, archive=None, spec=None):
+    """Statement-only fiscal display; values/signs and original row refs stay intact.
+
+    `months_back` remains accepted for callers; the standard view uses fiscal windows.
+    Working rows stay out except the explicitly configured EBITDA bridge.
+    """
+    cfg = cfg or {}
+    scale = float(getattr(unit, 'scale', 1) or 1)
+    windows = period_windows.statement_windows(period or ml.period_stamp(model.months[-1]),
+        (cfg.get('analysis') or {}).get('fiscal_year_start_month', 1))
     out = {}
-    for sheet, section, is_flow in STATEMENT_SHEETS:
-        rows = model.sheets.get(sheet)
-        if not rows:
-            continue
-        table = {"sheet": sheet, "months": shown, "flow": is_flow,
-                 "ytd_months": ytd_months if is_flow else [], "rows": []}
-        if scale != 1:
-            table["display"] = {"scale": scale}
-        body, work = [], []
-        for orig, row_no, in_working in statement_rows(model, sheet):
-            label = orig
-            share = _row_is_share(model, sheet, row_no)
-            keep = (lambda v: v) if share else to_usd
-            cells = [keep(_num(v)) for v in
-                     [model.get_line(label, month=mo, sheet=sheet) for mo in shown]]
-            if all(v is None for v in cells):
+    with closing_book(openpyxl.load_workbook(model.path, data_only=False, read_only=True)) as formula_book:
+        reader = statement_values.Reader(model, formula_book, cfg, _model_ref, scale)
+        for sheet, section, is_flow in STATEMENT_SHEETS:
+            if not model.sheets.get(sheet):
                 continue
-            if all((v or 0) == 0 for v in cells):
+            wanted = [_period_label(mo) for mo in windows['display_months' if is_flow else 'balance_months']]
+            shown = [mo for mo in wanted if mo in model.months]
+            if not shown:
                 continue
-            entry = {
-                "label": orig, "row": row_no, "sheet": sheet,
-                "unit": "pct" if share else "usd",
-                "method": (f"The share the borrower states on its {sheet.lower()}."
-                           if share else
-                           f"As the borrower reported it on its {sheet.lower()}."),
-                "cells": cells,
-            }
-            if share:
-                entry["sub"] = True
-            if is_flow and ytd_months and not share:
-                low0 = str(orig).strip().lower()
-                if not low0.startswith(POSITION_ROWS):
-                    vals = [to_usd(_num(model.get_line(label, month=mo,
-                                                       sheet=sheet)))
-                            for mo in ytd_months]
-                    got = [v for v in vals if v is not None]
-                    entry["ytd"] = sum(got) if got else None
-                    entry["ytd_months_covered"] = len(got)
-                    entry["ytd_months_requested"] = len(ytd_months)
-                elif low0.startswith(("cash at the end", "cash, end")):
-                    # The year to date ENDS at this balance: the column repeats
-                    # the period's own closing cash rather than a nonsense sum.
-                    entry["ytd"] = cells[-1]
-            (work if in_working else body).append(entry)
-        body = _fold_aliases(body)
-        body = [r for r in body
-                if not _is_money(r)
-                or any(abs(v) >= floor for v in r["cells"] if v is not None)
-                or (r.get("ytd") is not None and abs(r["ytd"]) >= floor)]
-        if section == "income_review":
-            body = _curate_income(body, work, tol)
-        elif section == "cashflow_review":
-            body = _curate_cashflow(body, tol)
-        elif section == "balance_review":
-            body = _curate_balance(body, tol)
-        # A share row prints its own year-to-date ratio when the rows it is built
-        # from are on the table -- a margin's year is a ratio, never a sum.
-        money = [r for r in body if _is_money(r)]
-        for srow in body:
-            if not _is_money(srow) and srow.get("ytd") is None:
-                pair = next(
-                    ((num, den) for num in money for den in money
-                     if den is not num
-                     and num.get("ytd") is not None and den.get("ytd")
-                     and all(sv is None
-                             or (nv is not None and dv
-                                 and abs(nv / dv - sv) <= 0.002)
-                             for sv, nv, dv in zip(srow["cells"], num["cells"],
-                                                   den["cells"]))), None)
-                if pair:
-                    num, den = pair
-                    srow["ytd"] = num["ytd"] / den["ytd"]
-                    srow["method"] += (
-                        f' The year to date is year-to-date {num["label"]} over '
-                        f'year-to-date {den["label"]}.')
-            if not _is_money(srow) and not srow["label"].rstrip().endswith("%"):
-                srow["label"] = srow["label"].rstrip() + " %"
-        table["rows"] = _display_labels(body)
-        if table["rows"]:
+            totals = [dict(col, months=[_period_label(mo) for mo in col['months']]) for col in windows['totals']] if is_flow else []
+            totals = [col for col in totals if col['id'] == 'ytd' or all(mo in model.months for mo in col['months'])]
+            ytd = next((col['months'] for col in totals if col['id'] == 'ytd'), [])
+            table = {'sheet': sheet, 'months': shown, 'flow': is_flow, 'totals': totals,
+                     'ytd_months': ytd, 'missing_months': [mo for mo in wanted if mo not in shown], 'rows': []}
+            if table['missing_months']:
+                table['window_note'] = 'The model does not carry ' + ', '.join(table['missing_months']) + '.'
+            if scale != 1:
+                table['display'] = {'scale': scale}
+            for orig, row_no, working in statement_rows(model, sheet):
+                if working and orig != (cfg.get('model_lines') or {}).get('ebitda_bridge'):
+                    continue
+                loc = (sheet, row_no, orig)
+                share = _row_is_share(model, sheet, row_no)
+                cells = reader.values(loc, shown) if share else reader.money(loc, shown)
+                low = orig.strip().lower()
+                closing = sheet == 'Cash Flow Statement' and (low.startswith(('cash at the end', 'cash, end')) or low == 'ending cash')
+                opening = sheet == 'Cash Flow Statement' and (low.startswith(('cash at the beginning', 'cash, beginning')) or low == 'beginning cash')
+                kind = 'closing' if closing else 'opening' if opening else 'flow' if is_flow else 'stock'
+                row = {'label': orig, 'row': row_no, 'sheet': sheet, 'unit': 'pct' if share else 'usd',
+                       'kind': kind, 'cells': cells, 'method': 'As reported on the model; supplied signs are unchanged.',
+                       'trace_refs': {}, 'fold_signs': {}, 'unavailable': {}, 'ytd_is_closing_balance': closing}
+                row['ambiguous'] = any(ml.norm_label(name) == ml.norm_label(orig)
+                    for name in getattr(model, 'duplicate_labels', {}).get(sheet, []))
+                for mo in shown:
+                    col = model.layout[sheet]['first_data_col'] + model.months.index(mo)
+                    terms = statement_values.additive_refs(formula_book[sheet].cell(row_no, col).value, sheet)
+                    if terms and all(sn == sheet and c == col for _sign, sn, _r, c in terms):
+                        row['fold_signs'][mo] = {str(r): sign for sign, _sn, r, _c in terms}
+                # Formula coordinates, not coincidental ratios, identify a share's inputs.
+                ratio_inputs = {}
+                if share:
+                    for month in model.months:
+                        column = model.layout[sheet]['first_data_col'] + model.months.index(month)
+                        ratio_inputs[month] = statement_values.plain_ratio(
+                            formula_book[sheet].cell(row_no, column).value, sheet, column, model)
+                    row['input_rows'] = [source[1] for source in (ratio_inputs.get(shown[-1]) or [loc])]
+                    row['sub'] = True
+                    if not row['label'].rstrip().endswith('%'):
+                        row['label'] += ' %'
+                for key, months in {**{mo: [mo] for mo in shown}, **{col['id']: col['months'] for col in totals}}.items():
+                    pairs = [ratio_inputs.get(month) for month in months] if share else []
+                    inputs = pairs[0] if pairs and pairs[0] and all(pair == pairs[0] for pair in pairs) else [loc]
+                    selected = [months[0]] if kind == 'opening' else [months[-1]] if kind in ('stock', 'closing') else months
+                    ref_months = selected if not share else months
+                    row['trace_refs'][statement_values.trace_key(key)] = (
+                        [ref for month, pair in zip(months, pairs) for source in (pair or [loc]) for ref in reader.refs(source, [month])]
+                        if share and len(inputs) != 2 else [ref for source in inputs for ref in reader.refs(source, ref_months)])
+                    if key in shown:
+                        continue
+                    if share:
+                        vals = [reader.money(source, months) for source in inputs] if len(inputs) == 2 else []
+                        supported = len(vals) == 2 and all(v is not None for series in vals for v in series)
+                        if supported:
+                            actual = reader.money(loc, months)
+                            supported = all(d != 0 and cached is not None and abs(n/d-cached/scale) <= 1e-9
+                                            for n, d, cached in zip(vals[0], vals[1], actual))
+                        value = sum(vals[0])/sum(vals[1]) if supported and sum(vals[1]) else None
+                        row[key] = value
+                        if value is None:
+                            row['unavailable'][statement_values.trace_key(key)] = 'Unsupported or inconsistent ratio expression/operand identity, missing input, zero denominator, or cached ratio mismatch in this period.'
+                        else:
+                            row['method'] += f' {key}: {inputs[0][2]} over {inputs[1][2]}, ratio of supporting totals.'
+                    else:
+                        values = reader.money(loc, selected)
+                        got = [v for v in values if v is not None]
+                        row[key] = (values[0] if values else None) if kind in ('stock', 'closing', 'opening') else sum(got) if got else None
+                        if kind == 'flow':
+                            row[key+'_months_covered'] = len(got)
+                            row[key+'_months_requested'] = len(months)
+                table['rows'].append(row)
+            # Explicit memo tie-outs remain aliases; unrelated equal amounts are not identities.
+            body = []
+            for row in table['rows']:
+                alias = next((other for other in body if row['label'].lower().startswith('memo:')
+                    and row['unit'] == other['unit'] and row['cells'] == other['cells']
+                    and any(value is not None for value in row['cells'])), None)
+                if alias:
+                    alias['method'] += ' The model also states this explicit tie-out as "' + row['label'] + '".'
+                else:
+                    body.append(row)
+            table['rows'] = _display_labels(body)
+            statement_values.add_computed(table, reader, cfg, archive or {}, spec or {})
+            table['standard'] = statement_lines.assign(table['rows'], sheet, cfg, shown, 2.0*scale)
             out[section] = table
     return out
 
@@ -2211,7 +2208,7 @@ def build_collateral(cfg, model, period, funded_debt, absent, unit=None):
                              + ", ".join(f'"{r}"' for r, _v in got)
                              + f" at {_period_label(period)}, per the borrower's "
                              "pledged-asset map.")
-            secured_ref = [model.provenance(r, sheet="Balance Sheet", month=period)
+            secured_ref = [_model_ref(model, model.provenance(r, sheet="Balance Sheet", month=period))
                            for r, _v in got]
             miss = [r for r, v in vals if v is None]
             if miss:
@@ -2247,8 +2244,8 @@ def build_collateral(cfg, model, period, funded_debt, absent, unit=None):
         v, refs, missing = read_pledged(model, spec, period, to_usd)
         # Collateral is read for movement as well as level: a reader needs to know
         # whether inventory built or ran down, not only where it stands.
-        prior = read_pledged(model, spec, prior_m, to_usd)[0] if prior_m else None
-        year = read_pledged(model, spec, year_m, to_usd)[0] if year_m else None
+        prior, prior_refs, _ = read_pledged(model, spec, prior_m, to_usd) if prior_m else (None, [], [])
+        year, year_refs, _ = read_pledged(model, spec, year_m, to_usd) if year_m else (None, [], [])
         # The plan for the SAME month, in the same dollars as the level beside it:
         # the budget states its figures on the model's own unit, so it converts the
         # same way the reported level does.
@@ -2263,6 +2260,8 @@ def build_collateral(cfg, model, period, funded_debt, absent, unit=None):
         priced.append({"label": label, "tier": tier,
                        "model_rows": rows, "value": v, "source_ref": refs,
                        "prior_month": prior, "prior_year": year,
+                       "mom_ref": (refs or []) + (prior_refs or []),
+                       "yoy_ref": (refs or []) + (year_refs or []),
                        "plan": plan, "plan_ref": plan_refs,
                        "plan_abs": (None if (v is None or plan is None)
                                     else v - plan),
@@ -2355,13 +2354,15 @@ def build_collateral(cfg, model, period, funded_debt, absent, unit=None):
             f"The pledged components' total of {tv:,.0f} against the {tp:,.0f} "
             f"the pinned budget plans for the same month.",
             "plan_ref": [r for c in with_values
-                         for r in (c.get("plan_ref") or [])][:4],
+                         for r in (c.get("plan_ref") or [])],
             "mom": (None if (tv is None or tm is None or tv == tm)
                     else tm / (tv - tm)),
             "yoy": (None if (tv is None or ty is None or tv == ty)
                     else ty / (tv - ty)),
             "source_ref": [r for c in with_values
-                           for r in (c.get("source_ref") or [])][:4],
+                           for r in (c.get("source_ref") or [])],
+            "mom_ref": [r for c in with_values for r in (c.get("mom_ref") or [])],
+            "yoy_ref": [r for c in with_values for r in (c.get("yoy_ref") or [])],
             "calc": (f"The {len(with_values)} pledged components above, added up "
                      f"at each period end."),
         }
@@ -2515,7 +2516,7 @@ def collateral_figures(col):
                 "value": c[key], "unit": "%", "scaled_by": 1.0,
                 "calc": f"{c.get('label')} of {c['value']:,.0f} against "
                         f"{base:,.0f} {window}.",
-                "source_ref": c.get("source_ref") or [], "hops": [],
+                "source_ref": c.get(key + "_ref") or [], "hops": [],
             })
         # The plan is read from the budget workbook, so its figures carry the
         # budget's own cells rather than the model row beside them.
@@ -2538,7 +2539,7 @@ def collateral_figures(col):
                 "label": f"{total.get('label')} against {window}",
                 "value": total[key], "unit": "%", "scaled_by": 1.0,
                 "calc": f"The pledged components' total against {window}.",
-                "source_ref": total.get("source_ref") or [], "hops": [],
+                "source_ref": total.get(key + "_ref") or [], "hops": [],
             })
         figs.extend(_plan_figures("collateral.pledged-total",
                                   total.get("label"), total))
@@ -3064,8 +3065,8 @@ def build_deal_capstructure(dc, cfg, model, period, group, stores, absent,
     if model is not None and equity_line:
         equity = to_usd(_num(model.get_line(equity_line, month=period,
                                             sheet="Balance Sheet")))
-        equity_ref = model.provenance(equity_line, sheet="Balance Sheet",
-                                      month=period)
+        equity_ref = _model_ref(model, model.provenance(equity_line, sheet="Balance Sheet",
+                                                       month=period))
     if equity is None:
         absent.append({
             "kind": "equity_absent", "section": "deal_capstructure",
@@ -3204,14 +3205,26 @@ def covenant_preamble(env, spec, cfg, certified, stores, absent):
         d = doc_ref(path, stores)
         if d:
             amendments.append({"id": f"amendment-{i + 1}", **d})
-    stated = [flatten_value(a) for a in ((spec or {}).get("amendments_reflected") or [])]
-    for i, text in enumerate([t for t in stated if t]):
+    for i, entry in enumerate((spec or {}).get("amendments_reflected") or []):
+        text = flatten_value(entry)
+        if not text:
+            continue
         if i < len(amendments):
-            amendments[i]["text"] = text
+            amendment = amendments[i]
         else:
-            amendments.append({"id": f"amendment-{i + 1}", "name": text, "text": text,
-                              "dated": None, "store": None, "path_in_store": None,
-                               "url": None})
+            amendment = {"id": f"amendment-{i + 1}", "name": text, "text": text,
+                         "dated": None, "store": None, "path_in_store": None,
+                         "url": None}
+            amendments.append(amendment)
+        amendment["text"] = text
+        if isinstance(entry, dict):
+            label = flatten_value(first_value(entry, "name", "instrument"))
+            dated = flatten_value(first_value(entry, "date", "effective", "issued"))
+            if label:
+                amendment["label"] = label
+            if dated:
+                amendment["dated"] = dated
+            amendment["text"] = flatten_value(first_value(entry, "effect", "summary")) or text
     covs = [c for c in ((spec or {}).get("covenants") or [])
             if isinstance(c, dict) and c.get("primitive")]
     labels = either_or_labels(env, spec)
@@ -3252,6 +3265,7 @@ def covenant_preamble(env, spec, cfg, certified, stores, absent):
                           "source_ref": agreement_ref},
             "amendments": amendments,
             "rule_plain": rule,
+            "either_or": bool(grouped),
             "certificate": cert}
 
 
@@ -3273,7 +3287,7 @@ def covenant_grid(env, spec, cfg, period, stores, absent):
     agreement_ref = doc_ref((cfg.get("paths") or {}).get("credit_agreement_path"),
                             stores)
     grid = []
-    for r in (env.get("results") or []):
+    for r in presented_results(env):
         if not isinstance(r, dict) or str(r.get("test_date") or "") != current_end:
             continue
         cov = by_id.get(str(r.get("id"))) or {}
@@ -3316,7 +3330,8 @@ def covenant_grid(env, spec, cfg, period, stores, absent):
                       "headroom": {"abs": money(r.get("headroom_abs")),
                                    "pct": _num(r.get("headroom_pct"))},
                       "figure_id": f"{stem}.actual"},
-            "result_word": RESULT_WORDS.get(worst),
+            "result_word": "UNRESOLVED" if m_status == "unresolved" else RESULT_WORDS.get(worst),
+            "reconciliation_reason": r.get("reconciliation_reason"),
         })
         if r.get("cert_value") is None:
             absent.append({
@@ -3621,7 +3636,7 @@ def aging_block(env):
 # ---------------------------------------------------------- the Files & audit tab
 # The registry's groups, in the order the tab prints them.
 FILE_GROUPS = ["loan_documentation", "underwriting", "monthly_reporting", "budget",
-               "working_analysis"]
+               "borrower_submissions", "working_analysis"]
 
 
 def _first_sentence(text):
@@ -3645,6 +3660,93 @@ def _after_first_sentence(text):
     first = _first_sentence(s)
     rest = s[len(first):].strip() if first else ""
     return rest or None
+
+
+_PERIOD_IN_PATH = re.compile(r"(?<!\d)(20\d{2})[-_/](0[1-9]|1[0-2])(?!\d)")
+_SKIP_FILES = {".DS_Store", "Thumbs.db", "desktop.ini"}
+
+
+def _period_in_path(rel):
+    """A YYYY-MM the path itself states (an Archive/2025-07 folder, a 2026/06
+    folder), or None. The month a document covers is what the registry prints
+    beside it, and the borrower's own folder names are the only record of it."""
+    s = str(rel or "").replace("\\", "/")
+    m = _PERIOD_IN_PATH.search(s)
+    if m:
+        return f"{m.group(1)}-{m.group(2)}"
+    m = re.search(r"(?<!\d)(20\d{2})/(0[1-9]|1[0-2])(?!\d)", s)
+    return f"{m.group(1)}-{m.group(2)}" if m else None
+
+
+def _walk_borrower_files(folders):
+    """Every regular file under the given store folders, as (logical path, dated)
+    pairs in sorted order. Hidden files and desktop litter are skipped; a folder
+    that is not connected or does not exist contributes nothing rather than an
+    error, because the registry is a listing and not a gate."""
+    out, seen = [], set()
+    for folder in folders or []:
+        if not folder:
+            continue
+        try:
+            m = re.match(r"^(source|store):/*$", str(folder).strip())
+            root = ml.store_root(m.group(1)) if m else ml.resolve_path(folder)
+        except (OSError, ValueError):
+            continue
+        if not root or not os.path.isdir(root):
+            continue
+        for dirpath, dirnames, filenames in os.walk(root):
+            dirnames[:] = sorted(d for d in dirnames if not d.startswith("."))
+            for fn in sorted(filenames):
+                if fn.startswith(".") or fn in _SKIP_FILES or fn.startswith("~$"):
+                    continue
+                full = os.path.join(dirpath, fn)
+                logical = ml.unresolve_path(full)
+                if not logical or ":" not in str(logical) or logical in seen:
+                    continue
+                seen.add(logical)
+                rel = os.path.relpath(full, root)
+                out.append((logical, _period_in_path(rel)))
+    return out
+
+
+def _find_named_file(name, folders, period=None):
+    """Resolve one recorded file only when all supplied period clues agree."""
+    import calendar
+    named = str(name).replace("\\", "/")
+    explicit = named.startswith(("source:", "store:"))
+    hits = [(logical, dated) for logical, dated in _walk_borrower_files(folders)
+            if (str(logical).casefold() == named.casefold() if explicit else
+                os.path.basename(str(logical).replace("\\", "/")).casefold() == named.casefold())]
+    if not period:
+        unique = list(dict.fromkeys(logical for logical, _ in hits))
+        return unique[0] if len(unique) == 1 else None
+    if not re.fullmatch(r"\d{4}-(?:0[1-9]|1[0-2])", str(period)):
+        return None
+    year, month = map(int, period.split("-"))
+    quarter = (month - 1) // 3 + 1
+    matches = []
+    for logical, dated in hits:
+        text = str(logical)
+        months = set(re.findall(r"(?<!\d)(20\d{2})[-_/](0[1-9]|1[0-2])(?!\d)", text))
+        for number in range(1, 13):
+            word = calendar.month_name[number]
+            for y in re.findall(r"(?<![A-Za-z])(?:" + word + "|" + word[:3]
+                                + r")[ _-]+(20\d{2})(?!\d)", text, re.I):
+                months.add((y, f"{number:02d}"))
+        if dated:
+            months.add(tuple(str(dated)[:7].split("-")))
+        quarters = {(int(y), int(q)) for y, q in
+                    re.findall(r"(20\d{2})[ _-]+Q([1-4])", text, re.I)}
+        quarters.update((int(y), int(q)) for q, y in
+                        re.findall(r"Q([1-4])[ _-]+(20\d{2})", text, re.I))
+        if months and months != {(str(year), f"{month:02d}")}:
+            continue
+        if quarters and quarters != {(year, quarter)}:
+            continue
+        if months or quarters or explicit:
+            matches.append(logical)
+    matches = list(dict.fromkeys(matches))
+    return matches[0] if len(matches) == 1 else None
 
 
 def build_files_registry(cfg, archive, archive_dir, period, stores, absent, spec=None):
@@ -3708,10 +3810,17 @@ def build_files_registry(cfg, archive, archive_dir, period, stores, absent, spec
                       "not name one for this month, so the package is not listed."})
     cert_name = _certificate_name(archive)
     if cert_name:
+        cert_path = _find_named_file(
+            cert_name, [paths.get("compliance_certificate_folder"),
+                        paths.get("reporting_packages_folder")], period)
+        d = doc_ref(cert_path, stores, name=cert_name) if cert_path else None
         docs.append({
             "id": "monthly_reporting.compliance_certificate",
             "group": "monthly_reporting", "name": cert_name, "dated": period,
-            "store": None, "path_in_store": None, "url": None, "linked": False})
+            "store": (d or {}).get("store"),
+            "path_in_store": (d or {}).get("path_in_store"),
+            "url": (d or {}).get("url"), "linked": bool((d or {}).get("url")),
+            "unlocated_reason": None if d else "No unique period-consistent certificate located"})
 
     add("budget", paths.get("budget_path"),
         covers=_first_sentence(paths.get("budget_version_note")),
@@ -3721,9 +3830,27 @@ def build_files_registry(cfg, archive, archive_dir, period, stores, absent, spec
         absent.append({
             "kind": "budget_absent", "section": "files_registry",
             "what": "The year's plan",
-            "reason": "no budget is on file for this borrower, so the registry lists "
-                      "none and the memo compares the month against earlier months "
-                      "only."})
+            "reason": "no budget file is pinned in the configuration, so the registry "
+                      "cannot link one. This does not establish that no budget exists."})
+
+    # Every raw file the borrower submitted, so a reader can open any document
+    # the memo rests on -- not only the one month's package the figures hop to.
+    # The folders come from paths.borrower_document_folders when the setup
+    # names them (a whole deal folder is a fine answer); otherwise the reporting
+    # and certificate folders. Files another group already lists are skipped,
+    # so each document has exactly one row.
+    listed = {d.get("path_in_store") for d in docs if d.get("path_in_store")}
+    folders = paths.get("borrower_document_folders")
+    if not isinstance(folders, list):
+        folders = [paths.get("reporting_packages_folder"),
+                   paths.get("compliance_certificate_folder")]
+    for logical, dated in _walk_borrower_files(folders):
+        in_store = _in_store(logical)
+        if not in_store or in_store in listed:
+            continue
+        listed.add(in_store)
+        add("borrower_submissions", logical, dated=dated,
+            doc_id="borrower_submissions." + logical)
 
     add("working_analysis", paths.get("model_output_path"),
         doc_id="working_analysis.model")
@@ -3748,8 +3875,8 @@ def build_files_registry(cfg, archive, archive_dir, period, stores, absent, spec
             "kind": "document_not_linked", "section": "files_registry",
             "what": "Documents the registry cannot open",
             "reason": "the registry lists " + ", ".join(sorted(unlinked))
-                      + " without a link, because the memo knows the document by "
-                        "name but not where it sits in a shared folder."})
+                      + " without a web address. Use the recorded relative location "
+                        "where available; unresolved sources are identified separately."})
     order = {g: i for i, g in enumerate(FILE_GROUPS)}
     return sorted(docs, key=lambda d: (order.get(d["group"], len(FILE_GROUPS)),
                                        str(d["name"])))
@@ -3771,7 +3898,34 @@ def _certificate_name(archive):
     return env.get("certified_source") or None
 
 
-def build_data_quality(cfg, period, degrade, absent, stores, budget_present):
+def budget_disclosure(cfg, budget_present, entry=None):
+    """A missing comparison is not evidence that the borrower supplied no plan."""
+    if budget_present:
+        return None
+    paths = cfg.get("paths") or {}
+    declared = paths.get("budget_path")
+    if declared:
+        if entry and entry.get("skipped"):
+            reason = "the budget-vs-actual module was skipped"
+        elif "budget-vs-actual" not in cfg.get("modules", []):
+            reason = "the budget-vs-actual module is not selected"
+        else:
+            reason = "no usable budget-vs-actual result is available"
+        return ("plan.not-processed", "Plan comparison unavailable",
+                f"The configuration names a budget at {declared}, but {reason}. "
+                "The automatic Performance box has no against-plan figures; this "
+                "does not mean no budget is on file or rule out company-prepared comparisons.")
+    if entry is not None:
+        return ("plan.unavailable", "Plan comparison unavailable",
+                "The budget-vs-actual run has no usable figures for the automatic "
+                "Performance box. No budget file is pinned in the configuration; "
+                "this does not establish that no budget exists.")
+    return ("plan.none-on-file", "No plan to compare against",
+            "No budget is on file in this borrower's configuration, so the automatic "
+            "Performance box compares earlier periods only, not plan.")
+
+
+def build_data_quality(cfg, period, degrade, absent, stores, budget_present, budget_entry=None):
     """The notes the RUN itself knows, written for whoever reads the credit.
 
     Everything here is mechanical: which links could not be built, whether a plan
@@ -3812,10 +3966,9 @@ def build_data_quality(cfg, period, degrade, absent, stores, budget_present):
              "Some figures trace to the cell of the monitoring workbook they were read "
              "from but not on to the borrower's own monthly file for that month. The "
              "workbook cell is the furthest the trail goes for those figures.")
-    if not budget_present:
-        note("plan.none-on-file", "No plan to compare against",
-             "No budget for this year is on file, so every comparison on this memo is "
-             "against earlier months and the same months last year, never against plan.")
+    disclosure = budget_disclosure(cfg, budget_present, budget_entry)
+    if disclosure:
+        note(*disclosure)
 
     for a in absent:
         kind = a.get("kind")
@@ -3845,6 +3998,8 @@ def build_data_quality(cfg, period, degrade, absent, stores, budget_present):
             note(f"chart.quarter-missing.{_slug(a.get('what'))}",
                  "A quarter total is missing from the trend chart",
                  plain_reason(a.get("reason")))
+        elif kind == "column_absent" and a.get("id") == "performance.budget-ytd":
+            note("plan.no-budget-ytd", "No Budget YTD column", a.get("reason"))
         elif kind == "document_not_linked":
             note("links.documents-cannot-be-opened",
                  "Some source documents are listed but do not open",
@@ -3989,9 +4144,38 @@ BUDGET_METRICS = (
     ("opex", "total opex"),
 )
 
+# Why a line the plan does not have shows no plan figure. One sentence per line,
+# naming the rows of the Performance box that line feeds, so the box states it once.
+BUDGET_GAPS = {
+    "revenue": "The plan on file has no revenue line, so nothing is compared against plan.",
+    "gross_profit": ("The plan on file has no gross profit line, so gross profit and gross "
+                     "margin are not compared against plan."),
+    "ebitda": ("The plan on file has no EBITDA figure, so EBITDA and EBITDA margin are not "
+               "compared against plan."),
+    "opex": ("The plan on file has no operating expense lines, so operating expense and its "
+             "share of revenue are not compared against plan."),
+}
+
+
+def plan_refs(source_ref, data):
+    """The plan side of a budget-vs-actual result's refs: the budget workbook cells it
+    read and the budget-map section that chose them, never the model's cells."""
+    plan_file = str(((data.get("budget_source") or {}).get("file")) or "")
+    plan_path = plan_file.split(":", 1)[-1] if plan_file else None
+    refs = [source_ref] if isinstance(source_ref, dict) else (source_ref or [])
+    return [r for r in refs if isinstance(r, dict)
+            and (r.get("section") or (plan_path and r.get("path_in_store") == plan_path))]
+
 
 def latest_month_budget(archive):
-    """The reported month's plan figures, in the shape `performance_views` wants.
+    """The reported month's plan figures (see `plan_figures`)."""
+    return plan_figures(archive, "latest")
+
+
+def plan_figures(archive, scope):
+    """The plan figures at one scope, "latest" (the reported month) or "YTD", in the
+    shape `performance_views` wants. A YTD plan also carries `months`: the months
+    budget-vs-actual summed on both sides, which are the plan's own months.
 
     Stated on the MODEL'S OWN UNIT, which is how budget-vs-actual archived them.
     `performance_views.build` converts the plan beside the actual it is compared
@@ -4000,24 +4184,39 @@ def latest_month_budget(archive):
 
     Metric names carry the basis they were measured on ("EBITDA (as-reported)",
     "Total Opex (normalized)"), so each key matches on the metric's opening words
-    rather than the whole string. Returns None when budget-vs-actual did not run,
-    which is the honest "no budget on file" case the column is allowed to drop for.
+    rather than the whole string. Returns None when no usable budget-vs-actual
+    result exists; this does not establish that no budget is on file.
+
+    A line budget-vs-actual compared with no plan figure is a line the plan does not
+    have: it comes back under `gaps` with the sentence the box shows for it, never
+    as a $0 plan.
     """
     entry = archive.get("budget-vs-actual")
     if not entry or entry.get("skipped"):
         return None
-    out = {}
-    for r in ((entry.get("data") or {}).get("results") or []):
-        if not isinstance(r, dict) or str(r.get("scope") or "").lower() != "latest":
+    data = entry.get("data") or {}
+    out, seen, refs = {}, set(), {}
+    want = str(scope).lower()
+    for r in (data.get("results") or []):
+        if not isinstance(r, dict) or str(r.get("scope") or "").lower() != want:
             continue
         name = str(r.get("metric") or "").strip().lower()
         for key, prefix in BUDGET_METRICS:
-            if key not in out and name.startswith(prefix):
+            if key not in seen and name.startswith(prefix):
+                seen.add(key)
                 v = _num(r.get("budget"))
                 if v is not None:
                     out[key] = v
+                    refs[key] = plan_refs(r.get("source_ref"), data)
     if not out:
         return None
+    out["refs"] = refs
+    if want == "ytd":
+        out["months"] = [str(m) for m in (data.get("ytd_months") or [])]
+    gaps = {key: BUDGET_GAPS[key] for key, _p in BUDGET_METRICS
+            if key in seen and key not in out}
+    if gaps:
+        out["gaps"] = gaps
     rev = out.get("revenue")
     if rev:
         if "gross_profit" in out:
@@ -4029,8 +4228,44 @@ def latest_month_budget(archive):
     return out
 
 
+def budget_ytd_absence(cfg, ytd_months, bva):
+    """Why the Annual view has no Budget YTD column beside a year to date, in one sentence.
+
+    Read only when the box has a year-to-date column and no plan column beside it.
+    The plan's own months come from the budget map, so a plan that covers none of
+    the year to date names both sets of months.
+    """
+    plan = plan_figures({"budget-vs-actual": bva}, "YTD") if bva else None
+    _months, mismatch = performance_views.budget_ytd_window(plan, ytd_months)
+    if mismatch:
+        return mismatch
+    span = f"{ytd_months[0]} to {ytd_months[-1]}" if ytd_months else "the year to date"
+    tail = "so the Annual view has no Budget YTD column."
+    path = (cfg.get("paths") or {}).get("budget_map_path")
+    bmap = _maybe_json(ml.resolve_path(path)) if path else None
+    months = sorted({ml.month_label(k) for k in ((bmap or {}).get("period_columns") or {})
+                     if ml.month_label(k)}, key=lambda m: ml._parse_label(m))
+    if bmap is None:
+        if (cfg.get("paths") or {}).get("budget_path") or bva is not None:
+            return budget_disclosure(cfg, False, bva)[2] + " The Annual view has no Budget YTD column."
+        return f"No plan is on file, {tail}"
+    if not months:
+        return (f"The plan on file names no month, so there is no plan for {span} and the "
+                "Annual view has no Budget YTD column.")
+    if not set(months) & set(ytd_months or []):
+        return (f"The plan on file covers {months[0]} to {months[-1]} and the year to date "
+                f"is {span}: no plan month falls inside the year to date, {tail}")
+    if bva is None or bva.get("skipped"):
+        why = plain_reason((bva or {}).get("data", {}).get("reason")) if bva else ""
+        return ("The plan comparison did not run this month"
+                + (f" ({why.rstrip('.')})" if why else "") + f", {tail}")
+    return ("The plan on file carries no year-to-date figure for the lines Performance "
+            f"shows, {tail}")
+
+
 # ------------------------------------------------------------------ Performance box
-def build_performance(cfg_path, period, absent, budget=None):
+def build_performance(cfg_path, period, absent, budget=None, model_path=None,
+                      budget_ytd=None):
     """The Performance box, from the engine that already owns it.
 
     `performance_views.build` writes its payload to a file, so it gets a temp file
@@ -4039,12 +4274,14 @@ def build_performance(cfg_path, period, absent, budget=None):
     `generated` date is dropped: the memo has to re-render byte-identically from
     the same run, and a date stamp would make every re-render differ.
 
-    `budget` carries the month's plan so the box keeps its `vs Budget` column.
+    `budget` carries the month's plan and `budget_ytd` the year-to-date plan, so the
+    box keeps its two plan columns.
     """
     fd, tmp = tempfile.mkstemp(prefix="memo-perf-", suffix=".json")
     os.close(fd)
     try:
-        perf = performance_views.build(cfg_path, tmp, period=period, budget=budget)
+        perf = performance_views.build(cfg_path, tmp, period=period, budget=budget,
+                                       model_path=model_path, budget_ytd=budget_ytd)
     except Exception as e:                       # noqa: BLE001 - degrade, never fail
         absent.append({"kind": "section_unavailable",
                        "section": "snapshot_performance",
@@ -4081,6 +4318,10 @@ def build(cfg_path, period, out_path, archive_dir=None, model_path=None,
     model_path = model_path or recorded_model_path
     recorded_model_path = recorded_path(recorded_model_path, model_path)
     model = ml.open_model(ml.resolve_path(model_path)) if model_path else None
+    if model is not None:
+        recorded_model_path = recorded_path(model_path)
+        cfg = dict(cfg, paths=dict(paths, model_output_path=recorded_model_path))
+        paths = cfg["paths"]
 
     # Every figure read straight from the model is stated in dollars, which needs
     # the unit the model is kept in. A borrower whose config does not declare it
@@ -4096,19 +4337,25 @@ def build(cfg_path, period, out_path, archive_dir=None, model_path=None,
 
     # The store table every link on this memo is joined from. It comes from the
     # run's own results rather than the local machine, so the same archive gives
-    # the same links wherever the memo is rendered.
-    stores = next((archive[m]["data"].get("stores") for m in sorted(archive)
-                   if not archive[m]["skipped"]
-                   and archive[m]["data"].get("stores")), {}) or {}
+    # the same links wherever the memo is rendered. Each module names only the
+    # stores its own refs land in, so the table is every module's, joined: the
+    # first module may read only the results folder while a later one reads the
+    # borrower's documents.
+    stores = {}
+    for m in sorted(archive):
+        if archive[m]["skipped"]:
+            continue
+        for sid, entry in (archive[m]["data"].get("stores") or {}).items():
+            if not isinstance(stores.get(sid), dict) or not stores[sid].get("url_base"):
+                stores[sid] = entry
 
     for mod in sorted(archive):
         entry = archive[mod]
         env = entry["data"]
         # A result file written before the envelope carried the model's unit says
         # nothing about what one of its figures stands for, and every money figure
-        # in it would then be published unscaled -- Example Borrower's cash reading $10,700
-        # against a $3,000 covenant floor rather than $10.7MM against $3.0MM. The
-        # borrower's own settings DECLARE the unit, so that declaration stands in;
+        # in it would then be published unscaled. The borrower's own settings
+        # DECLARE the unit, so that declaration stands in;
         # a file that states its own unit is never overridden, because a module may
         # deliberately publish in dollars whatever the model is kept in.
         if not (env.get("reporting_unit") or {}).get("scale"):
@@ -4218,15 +4465,22 @@ def build(cfg_path, period, out_path, archive_dir=None, model_path=None,
         absent.append({
             "kind": "column_absent", "section": "snapshot_performance",
             "what": "The against-plan column",
-            "reason": ("no plan for this month was on file, so Performance compares "
-                       "the month against earlier months only"
-                       if bva is None or bva.get("skipped") else
-                       "the plan on file carries no figure for any of the lines "
-                       "Performance shows, so it compares the month against earlier "
-                       "months only")})
-    perf = build_performance(cfg_path, period, absent, budget=budget)
+            "reason": budget_disclosure(cfg, False, bva)[2]})
+    budget_ytd = plan_figures(archive, "YTD")
+    perf = build_performance(cfg_path, period, absent, budget=budget, model_path=model_path,
+                             budget_ytd=budget_ytd)
     if perf is not None:
         sections["snapshot_performance"]["performance_views"] = perf
+        # The Budget YTD column stands beside a year to date; with a year to date and no
+        # plan column the memo says why. December has no year to date, so nothing is owed.
+        annual = next((v for v in perf.get("views") or [] if v.get("id") == "annual"), {})
+        ids = {c.get("id"): c for c in annual.get("columns") or []}
+        if "ytd" in ids and "budget_ytd" not in ids:
+            absent.append({
+                "kind": "column_absent", "section": "snapshot_performance",
+                "id": "performance.budget-ytd", "what": "The Budget YTD column",
+                "reason": budget_ytd_absence(cfg, ids["ytd"].get("months"),
+                                             archive.get("budget-vs-actual"))})
 
     # What secures the loan, from the control file that was on disk all along.
     fdg = next((g for g in sections["deal_capstructure"]["groups"]
@@ -4334,8 +4588,12 @@ def build(cfg_path, period, out_path, archive_dir=None, model_path=None,
         sections["snapshot_performance"]["figures"].append(growth)
 
     if model is not None:
+        perf = sections["snapshot_performance"].get("performance_views")
+        if perf:
+            performance_trace_refs(perf, model, cfg,
+                                   plans={"budget": budget, "budget_ytd": budget_ytd})
         for section, table in statement_tables(model, period,
-                                               unit=unit).items():
+                                               unit=unit, cfg=cfg, archive=archive, spec=spec).items():
             sections[section]["table"] = table
         for _sheet, section, _flow in STATEMENT_SHEETS:
             if not sections[section].get("table"):
@@ -4385,7 +4643,8 @@ def build(cfg_path, period, out_path, archive_dir=None, model_path=None,
 
     # Written last, because the notes are about everything above them.
     sections["data_quality"]["notes"] = build_data_quality(
-        cfg, period, set(degrade), absent, stores, budget is not None)
+        cfg, period, set(degrade), absent, stores, budget is not None,
+        archive.get("budget-vs-actual"))
 
     # A record naming a section the memo does not carry would silently disappear
     # from the page, so it stops the run the same way a stray figure does.
@@ -4416,11 +4675,254 @@ def build(cfg_path, period, out_path, archive_dir=None, model_path=None,
         "degrade": sorted(set(degrade)),
         "stores": stores,
     }
+    complete_links(payload, cfg, period)
     text = json.dumps(payload, indent=2, sort_keys=True, ensure_ascii=False)
     if out_path:
         with open(out_path, "w", encoding="utf-8", newline="\n") as fh:
             fh.write(text + "\n")
     return payload
+
+
+
+# ------------------------------------------------------------- every figure links
+_MONTH_LABEL = re.compile(r"^([A-Z][a-z]{2}) (\d{4})$")
+_MONTHS = {m: i for i, m in enumerate(
+    ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"], 1)}
+
+
+def _label_to_period(label):
+    m = _MONTH_LABEL.match(str(label or "").strip())
+    return f"{m.group(2)}-{_MONTHS[m.group(1)]:02d}" if m and m.group(1) in _MONTHS else None
+
+
+def complete_links(payload, cfg, period):
+    """Complete recorded identities with supported links and mapping coverage.
+
+    Known model references gain missing package hops for their own periods;
+    supplied evidence is preserved. Sheet names alone never identify a workbook.
+    Unique registry locations can resolve named documents without a web address.
+    Tables keep month-specific sources and cells, and unsourced key terms retain
+    the configured governing agreement. Mapping is not verification or access.
+    No machine-local URL fallback is introduced.
+    """
+    stores = payload.get("stores") or {}
+    paths = (cfg or {}).get("paths") or {}
+    sections = payload.get("sections") or {}
+
+    model_logical = recorded_path(paths.get("model_output_path")) if paths.get("model_output_path") else None
+    model_store, model_in = (_store_of(model_logical), _in_store(model_logical)) if model_logical else (None, None)
+    model_url, _ = _url(model_store, model_in, stores) if model_store else (None, None)
+    try:
+        smap = ml.model_source_map(ml.resolve_path(paths["model_output_path"])) if paths.get("model_output_path") else None
+    except (OSError, ValueError, KeyError):
+        smap = None
+
+    by_name = {}
+    for d in (sections.get("files_registry") or {}).get("documents") or []:
+        if d.get("name"):
+            by_name.setdefault(str(d["name"]), []).append(d)
+
+    def upstream_for(sheet, per):
+        out = []
+        try:
+            months = [r["period"] for r in ml.source_coverage(smap, sheet, per)]
+        except ValueError:
+            return out
+        entries = [(month, entry) for month in months
+                   for entry in ml.upstream_sources(smap, sheet, month)]
+        for month, e in entries:
+            if not isinstance(e, dict) or not e.get("file"):
+                continue
+            logical = recorded_path(e["file"]) or str(e["file"])
+            st, pin = _store_of(logical), _in_store(logical)
+            if not st:
+                continue
+            u, _w = _url(st, pin, stores)
+            out.append({k: e[k] for k in ("section", "cells", "page", "quote", "period", "status",
+                                          "kind", "unlocated_reason") if k in e}
+                       | {"store": st, "path_in_store": pin, "sheet": e.get("sheet") or sheet,
+                          "period": e.get("period") or month, "url": e.get("url") or u})
+        return out
+
+    def fill_ref(r):
+        """A ref or hop dict, linked in place."""
+        if not isinstance(r, dict):
+            return
+        if r.get("kind") == "certified-transcription":
+            certificate = next((d for d in (sections.get("files_registry") or {}).get("documents") or []
+                                if d.get("id") == "monthly_reporting.compliance_certificate"), None)
+            ref_period = r.get("period")
+            if not ref_period:
+                dated_section = re.search(r"(\d{4}-\d{2})-\d{2}$", str(r.get("section") or ""))
+                ref_period = dated_section.group(1) if dated_section else None
+            already_located = any(u.get("path_in_store") for u in r.get("upstream") or []
+                                  if isinstance(u, dict))
+            if certificate and certificate.get("path_in_store") and not already_located \
+                    and ref_period == str(certificate.get("dated") or "")[:7]:
+                upstream = r.setdefault("upstream", [])
+                location = {k: certificate[k] for k in ("store", "path_in_store", "url")
+                            if certificate.get(k) is not None}
+                location["period"] = certificate.get("dated")
+                if not any(u.get("path_in_store") == location["path_in_store"] for u in upstream):
+                    upstream.append(location)
+            elif certificate and certificate.get("unlocated_reason") and not already_located \
+                    and ref_period == str(certificate.get("dated") or "")[:7]:
+                reason = certificate["unlocated_reason"]
+                upstream = r.setdefault("upstream", [])
+                if not any(u.get("unlocated_reason") == reason for u in upstream if isinstance(u, dict)):
+                    upstream.append({"period": ref_period, "unlocated_reason": reason})
+        if not r.get("store") and not r.get("path_in_store"):
+            nm = r.get("name")
+            candidates = by_name.get(str(nm), []) if nm else []
+            located = {(d.get("store"), d.get("path_in_store")) for d in candidates
+                       if d.get("store") and d.get("path_in_store")}
+            if len(located) == 1:
+                d = next(d for d in candidates if (d.get("store"), d.get("path_in_store")) in located)
+                r["store"], r["path_in_store"], r["url"] = d["store"], d["path_in_store"], d["url"]
+
+        if r.get("store") and r.get("path_in_store") and not r.get("url"):
+            r["url"], _w = _url(r["store"], r["path_in_store"], stores)
+        if model_store and r.get("store") == model_store and r.get("path_in_store") == model_in \
+                and r.get("sheet"):
+            per = r.get("period")
+            if "coverage" not in r:
+                try:
+                    r["coverage"] = ml.source_coverage(smap, r["sheet"], per)
+                except ValueError as exc:
+                    r["coverage_error"] = str(exc)
+            if not r.get("upstream"):
+                if r.get('cells'):
+                    # One month at a time: file-level map entries carry no month of their own.
+                    index = ml.SourceIndex(source_map=smap, model_path=paths['model_output_path'])
+                    # Only validated months: a rejected period gets coverage_error, never a hop.
+                    months = [c["period"] for c in r.get("coverage") or []]
+                    ups = [dict(u, period=u.get("period") or month) for month in months
+                           for u in index._upstream(paths['model_output_path'], dict(r, period=month))]
+                else:
+                    ups = upstream_for(r['sheet'], per)
+                if ups:
+                    r["upstream"] = ups
+        for u in (r.get("upstream") or []):
+            if isinstance(u, dict) and u.get("store") and u.get("path_in_store") and not u.get("url"):
+                u["url"], _w = _url(u["store"], u["path_in_store"], stores)
+
+    def hop_from_ref(r):
+        h = {k: r.get(k) for k in ("store", "path_in_store", "sheet", "row", "label",
+                                   "cells", "section", "period", "name", "page", "quote", "status",
+                                   "kind", "unlocated_reason", "coverage", "coverage_error") if r.get(k) is not None}
+        h["url"] = r.get("url")
+        h["upstream"] = [dict(u) for u in (r.get("upstream") or []) if isinstance(u, dict)]
+        return h
+
+    def walk(o):
+        if isinstance(o, dict):
+            # a figure-like node: hops + source_ref
+            if "hops" in o and isinstance(o.get("hops"), list):
+                refs = o.get("source_ref")
+                refs = [refs] if isinstance(refs, dict) else (refs or [])
+                for r in refs:
+                    fill_ref(r)
+                if not o["hops"] and refs:
+                    o["hops"] = [hop_from_ref(r) for r in refs if isinstance(r, dict)]
+                for h in o["hops"]:
+                    fill_ref(h)
+            for k, v in list(o.items()):
+                if k in ("source_ref", "secured_ref", "plan_ref", "mom_ref", "yoy_ref", "threshold_ref", "source_refs"):
+                    for r in ([v] if isinstance(v, dict) else (v or [])):
+                        fill_ref(r)
+                elif k == "upstream":
+                    for u in (v or []):
+                        fill_ref(u)
+                elif k == "table" and isinstance(v, dict) and v.get("months"):
+                    table_months = dict.fromkeys(list(v['months']) + list(v.get('ytd_months') or []))
+                    v["column_sources"] = {m: upstream_for(v.get("sheet"), _label_to_period(m))
+                                           for m in table_months}
+                    v["column_coverage"] = {}
+                    for month in table_months:
+                        try:
+                            v["column_coverage"][month] = ml.source_coverage(smap, v.get("sheet"), _label_to_period(month))
+                        except ValueError as exc:
+                            v["coverage_error"] = str(exc)
+                    v["model_url"] = model_url
+                    v["model_store"], v["model_path_in_store"] = model_store, model_in
+                    for row in v.get("rows") or []:
+                        for refs in (row.get("trace_refs") or {}).values():
+                            for ref in refs:
+                                fill_ref(ref)
+                elif isinstance(v, (dict, list)):
+                    walk(v)
+        elif isinstance(o, list):
+            for x in o:
+                walk(x)
+
+    walk(sections)
+
+    coverage_gaps = set()
+    coverage_unavailable = set()
+    def collect_coverage(obj):
+        if isinstance(obj, dict):
+            records = obj.get("coverage")
+            for record in records if isinstance(records, list) else []:
+                if not isinstance(record, dict):
+                    continue
+                if record.get("status") == "unmapped":
+                    coverage_gaps.add(f"{record['period']}: no package mapping recorded")
+                elif record.get("status") == "dependency_missing":
+                    coverage_gaps.add(f"{record['period']}: missing dependency mapping for "
+                                      + ", ".join(record.get("missing_sheets") or []))
+            if obj.get("coverage_error"):
+                coverage_unavailable.add(str(obj["coverage_error"]))
+            for value in obj.values():
+                if isinstance(value, (dict, list)):
+                    collect_coverage(value)
+        elif isinstance(obj, list):
+            for value in obj:
+                collect_coverage(value)
+    collect_coverage(sections)
+    notes = sections.setdefault("data_quality", {}).setdefault("notes", [])
+    if coverage_gaps:
+        notes.append({"id": "model.source-coverage", "lead": "Source mapping is incomplete",
+                      "text": "; ".join(sorted(coverage_gaps))
+                      + ". Model inputs are unchanged; mapping coverage is not evidence verification."})
+    if coverage_unavailable:
+        notes.append({"id": "model.source-coverage-unavailable", "lead": "Source mapping coverage unavailable",
+                      "text": "; ".join(sorted(coverage_unavailable))})
+
+    # key terms read off the deal record: the agreement and the record itself
+    agreement = doc_ref(paths.get("credit_agreement_path"), stores) if paths.get("credit_agreement_path") else None
+    record = doc_ref(paths.get("deal_context_path"), stores) if paths.get("deal_context_path") else None
+    for row in (sections.get("deal_terms") or {}).get("rows") or []:
+        if not row.get("present"):
+            continue
+        refs = row.get("source_ref")
+        refs = [refs] if isinstance(refs, dict) else list(refs or [])
+        have = {(x.get("store"), x.get("path_in_store")) for x in refs if isinstance(x, dict)}
+        for extra in ((agreement,) if not refs else ()):
+            if extra and (extra.get("store"), extra.get("path_in_store")) not in have:
+                refs.append(extra)
+        row["source_ref"] = refs
+    perf = (sections.get("snapshot_performance") or {}).get("performance_views")
+    if isinstance(perf, dict):
+        months = set()
+        for v in perf.get("views") or []:
+            for c in v.get("columns") or []:
+                months.update(c.get("months") or [])
+                months.update(c.get("base_months") or [])
+        perf["month_refs"] = {}
+        for month in sorted(months):
+            ref = {"store": model_store, "path_in_store": model_in, "sheet": "Income Statement",
+                   "period": _label_to_period(month), "url": model_url}
+            fill_ref(ref)
+            perf["month_refs"][month] = ref
+        model_name = os.path.basename(str(model_in or "the model"))
+        perf["links"] = {
+            "model": {"t": f"{model_name} — Income Statement", "h": model_url},
+            "months": {m: [{"t": f"{os.path.basename(str(u.get('path_in_store') or ''))} — {u.get('sheet') or 'Income Statement'}",
+                            "h": u.get("url")}
+                           for u in upstream_for("Income Statement", _label_to_period(m))]
+                       for m in sorted(months)}}
+    payload.setdefault("links", {})["model_url"] = model_url
+    payload["links"]["model_store"], payload["links"]["model_path_in_store"] = model_store, model_in
 
 
 def main():
@@ -4433,6 +4935,7 @@ def main():
     ap.add_argument("--model", help="the model workbook (defaults to the configured path)")
     ap.add_argument("--trend-months", type=int, default=18)
     a = ap.parse_args()
+    ml.prerequisites.require_workbook()
     if not re.fullmatch(r"\d{4}-\d{2}", a.period):
         print(f'--period must be "YYYY-MM" (got {a.period!r})', file=sys.stderr)
         return 2

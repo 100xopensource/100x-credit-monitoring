@@ -155,8 +155,16 @@ import uuid
 from datetime import date, datetime, timezone
 from urllib.parse import quote, unquote, urlsplit
 
-import openpyxl
-from openpyxl.utils import get_column_letter
+try:
+    from plugin.lib import requirements as prerequisites
+except ModuleNotFoundError:
+    import requirements as prerequisites
+
+openpyxl = prerequisites.openpyxl
+get_column_letter = prerequisites.get_column_letter
+if openpyxl is not None:
+    from openpyxl.formula.tokenizer import Token, Tokenizer
+    from openpyxl.utils import range_boundaries
 import xml.etree.ElementTree as ET
 
 # ---------------------------------------------------------------------------
@@ -612,7 +620,26 @@ def store_of(path, catalog=None):
     sid, rel = parsed
     if sid not in ("source", "store"):
         return None, None, None
-    return sid, rel, None
+    return sid, rel, store_url_base(sid, catalog)
+
+
+def store_url_base(store_id, catalog=None):
+    """The URL a store's paths hang off, or None when nothing can open them.
+
+    Use the configured shared library address from the baked catalog, else the
+    web address the runtime bound beside the store's root: a Claude Tag worker
+    reads each folder's address from SharePoint and exports it, the way it
+    exports the root. Without either, return None: portable reports show
+    relative locations, not local roots.
+    """
+    entry = store_catalog_entry(store_id, catalog)
+    if entry and str(entry.get("url_base") or "").strip():
+        return str(entry["url_base"]).strip()
+    env = {"source": "CREDIT_MONITOR_SOURCE_URL",
+           "store": "CREDIT_MONITOR_STORE_URL"}.get(store_id)
+    url = (os.environ.get(env) or "").strip() if env else ""
+    # Persist only shared web addresses, never a machine-local root.
+    return url if url.lower().startswith("https://") else None
 
 
 # The three file kinds SharePoint opens in an Office viewer, and the prefix each
@@ -665,14 +692,21 @@ def store_link(url_base, path_in_store):
     m = re.match(r"^(https?://[^/]+)(/sites/[^/]+)/([^/]+)/?(.*)$", base)
     if not m:
         return _path_url(path_in_store, base)
-    host, site, library, inside = m.groups()
+    # SharePoint hands out its own addresses encoded ("Shared%20Documents"), the
+    # catalog writes names plain; decode both so the quote below encodes once.
+    host, site, library, inside = (unquote(g) for g in m.groups())
     parts = [p for p in inside.split("/") if p]
     parts += [p for p in str(path_in_store or "").split("/") if p]
     if not parts:
         return _path_url(path_in_store, base)
 
-    server_rel = site + "/" + library + "/" + "/".join(parts)
     viewer = _OFFICE_VIEWER.get(os.path.splitext(parts[-1])[1].lower())
+    if viewer and ".record" in parts:
+        # Excel Online re-saves a workbook it opens, even unedited, and a changed
+        # record copy stops the borrower's next review. Open the same-named file
+        # at the top of the borrower's folder, the one the analyst works in.
+        parts = parts[:parts.index(".record")] + parts[-1:]
+    server_rel = site + "/" + library + "/" + "/".join(parts)
     if viewer:
         return host + "/" + viewer + "/r" + quote(server_rel, safe="/") + "?web=1"
     parent = site + "/" + library
@@ -786,7 +820,7 @@ class StoreAccessError(ValueError):
     in it, or the file is a cloud-only placeholder. A ValueError subclass so a
     module's bad-input guard (except ValueError) treats it as a plain-worded
     SKIP, never a crash. Carries the machine verdict and the remedy id (which
-    fix steps to show — spelled out in references/connecting-folders.md)."""
+    fix steps to show — spelled out in references/runtime/cowork/files.md)."""
 
     def __init__(self, message, verdict=None, guide=None, path=None):
         super().__init__(message)
@@ -985,7 +1019,7 @@ def ensure_readable(path):
     read costs nothing and was about to happen anyway, but it cannot be counted
     on. A file that stays a stub raises with the keep-on-device remedy; the
     caller sends the analyst to the guide's keep-on-device step (see
-    connecting-folders.md) instead of retrying."""
+    references/runtime/cowork/files.md) instead of retrying."""
     v = classify_store_access(path)
     if v["verdict"] == "cloud_only_stub" and hydrate(path):
         v = classify_store_access(path)
@@ -1083,6 +1117,51 @@ def _iter_iso_months(start, end):
             y, mo = y + 1, 1
 
 
+def source_coverage(source_map, sheet, period):
+    """Monthly column mapping coverage, not file access or evidence verification.
+
+    Derived cash flow follows its same-month statement dependencies once.
+    Invalid requests raise rather than masquerading as complete coverage.
+    """
+    if not isinstance(period, str) or not re.fullmatch(
+            r"\d{4}-\d{2}(?:\.\.\d{4}-\d{2})?", period):
+        raise ValueError("Coverage requires YYYY-MM or YYYY-MM..YYYY-MM")
+    start, _, end = period.partition("..")
+    end = end or start
+    for month in (start, end):
+        if not (1 <= int(month[:4]) <= 9999 and 1 <= int(month[5:]) <= 12):
+            raise ValueError("Invalid coverage month")
+    if start > end:
+        raise ValueError("Coverage range ends before it starts")
+    columns = source_map.get("columns") if isinstance(source_map, dict) else None
+    columns = columns if isinstance(columns, dict) else {}
+    indexes = {}
+    for name in (sheet, "Income Statement", "Balance Sheet"):
+        entries = columns.get(name)
+        indexed = {}
+        for key, entry in entries.items() if isinstance(entries, dict) else ():
+            if re.fullmatch(r"\d{4}-\d{2}(?:-\d{2})?", str(key)):
+                indexed.setdefault(str(key)[:7], entry)
+        indexes[name] = indexed
+
+    def mapped(entry):
+        return (isinstance(entry, dict) and not entry.get("derived")
+                and isinstance(entry.get("file"), str) and bool(entry["file"].strip()))
+
+    out = []
+    for month in _iter_iso_months(start, end):
+        entry = indexes[sheet].get(month)
+        record = {"period": month, "status": "mapped" if mapped(entry) else "unmapped"}
+        if sheet == "Cash Flow Statement" and isinstance(entry, dict) and entry.get("derived"):
+            missing = [name for name in ("Income Statement", "Balance Sheet")
+                       if not mapped(indexes[name].get(month))]
+            record["status"] = "dependency_missing" if missing else "mapped"
+            if missing:
+                record["missing_sheets"] = missing
+        out.append(record)
+    return out
+
+
 def upstream_sources(source_map, sheet, period):
     """The original reporting-package file(s) behind a model figure — the
     second hop of the trace (report figure -> model cell -> package).
@@ -1097,7 +1176,9 @@ def upstream_sources(source_map, sheet, period):
     path>}); [] when the map covers none of it. An empty list is a contract:
     the caller degrades that figure to the model-only trace + an appendix-F
     flag, never a guessed upstream link. Months a partial map does not cover
-    are simply skipped — what IS covered still returns.
+    are simply skipped — what IS covered still returns. Row-aware entries retain
+    their period and row metadata rather than merging distinct month evidence;
+    SourceIndex selects the exact model cells before emitting borrower locations.
     """
     if not isinstance(source_map, dict):
         return []
@@ -1140,12 +1221,13 @@ def upstream_sources(source_map, sheet, period):
                     add(month_map(s).get(month), month, 1)
             return
         f = str(entry.get("file") or "").strip()
-        if not f:
+        precise = 'rows' in entry or 'not_found' in entry
+        if not f and not precise:
             return
-        key = (f, str(entry.get("sheet") or ""))
+        key = (f, str(entry.get("sheet") or ""), month if precise else None)
         if key not in seen:
             seen.add(key)
-            out.append(entry)
+            out.append(dict(entry, period=month) if precise else entry)
 
     for month in _iter_iso_months(start, end):
         add(month_map(sheet).get(month), month, 0)
@@ -1196,10 +1278,9 @@ def norm_label(s):
 # ---------------------------------------------------------------------------
 # People — who is one of ours
 #
-# The memo header names the deal team, and the deal team is the borrower's own
-# people. The names in a deal folder are the borrower's: one setup read a
-# borrower's CFO out of the documents into the header, on the first line a
-# partner reads. Setup infers a name and the renderer prints one, so both ask
+# The memo header names the lender's deal team, not borrower officers.
+# Setup proposes names for analyst confirmation and the renderer prints them;
+# both ask
 # the same two questions here -- does this name carry an officer title, and is
 # it the same person as one already on the book.
 # ---------------------------------------------------------------------------
@@ -1351,6 +1432,24 @@ class _AmbiguousHeader(ValueError):
     header to break the tie (see Model._find_header)."""
 
 
+def _reads_other_rows(value, row):
+    """Whether a cell holds a formula that reads another row of its own sheet:
+    "=SUM(B7:B10)" or "=B28-B29" in row 11 does; "='Data'!C5", "=W10" in
+    row 10 and a typed number do not."""
+    if not (isinstance(value, str) and value.startswith("=")):
+        return False
+    for tok in Tokenizer(value).items:
+        if tok.type != Token.OPERAND or tok.subtype != Token.RANGE or "!" in tok.value:
+            continue
+        try:
+            _, top, _, bottom = range_boundaries(tok.value)
+        except ValueError:
+            continue  # a defined name, not a cell reference
+        if top is not None and (top, bottom) != (row, row):
+            return True
+    return False
+
+
 class Model:
     """Reads cached values from the monthly financials workbook.
 
@@ -1373,6 +1472,7 @@ class Model:
     """
 
     def __init__(self, path):
+        prerequisites.check_workbook()
         self.given_path = str(path)   # as configured — what source refs record
         # Gate the read: a cloud-only stub or a not-connected folder raises a
         # plain-worded StoreAccessError (a skip), never an openpyxl traceback.
@@ -1502,6 +1602,35 @@ class Model:
                  for sheet, labels in self.duplicate_labels.items()]
         return ("The model has more than one row with the same name, so reading a "
                 "figure by that name may not pick the row you expect: " + "; ".join(parts))
+
+    def computed_rows(self):
+        """{sheet: {normalized label}} of the rows the model works out from
+        other rows of the same sheet, judged by their month cells' formulas.
+        The build types its inputs and writes its subtotals as formulas, so
+        this tells a subtotal, a check row or a copy of another row from a
+        leaf line whatever the label says: "Net Income" and "Operating
+        Income" add up rows above them, "Net Property and Equipment" is typed.
+
+        A row counts when any month cell is such a formula, so a subtotal with
+        one month set by hand stays a subtotal. A label counts only when every
+        row carrying it does: "Cash" typed in row 8 and copied as "=B8" into a
+        covenant block further down is still a leaf, though its values are
+        served from the copy."""
+        wb_f = openpyxl.load_workbook(self.path, data_only=False)
+        out = {}
+        for sn, lay in self.layout.items():
+            ws, first = wb_f[sn], lay["first_data_col"]
+            computed = {}  # label -> whether every row carrying it is computed
+            for r in range(lay["header_row"] + 1, ws.max_row + 1):
+                lab = ws.cell(row=r, column=LABEL_COL).value
+                cells = [ws.cell(row=r, column=first + i).value for i in range(len(self.months))]
+                if lab is None or all(c is None for c in cells):
+                    continue
+                key = self._norm(lab)
+                computed[key] = (computed.get(key, True)
+                                 and any(_reads_other_rows(c, r) for c in cells))
+            out[sn] = {key for key, is_computed in computed.items() if is_computed}
+        return out
 
     # -- header / label parsing -------------------------------------------
     @staticmethod
@@ -1973,8 +2102,40 @@ class SourceIndex:
         out = []
         for entry in upstream_sources(self._smap, sheet, period):
             f = entry.get("file")
-            if f:
-                out.append(self._address(f, sheet=entry.get("sheet")))
+            if 'rows' not in entry and 'not_found' not in entry:
+                out.append(self._address(f, sheet=entry.get('sheet')))
+                continue
+            cells = str(fields.get('cells') or '')
+            selected = set()
+            try:
+                from openpyxl.utils.cell import range_boundaries, get_column_letter
+                for span in cells.split(','):
+                    lo, first, hi, last = range_boundaries(span.strip().replace('$', ''))
+                    if lo and hi and first and last and (hi-lo+1)*(last-first+1) <= 10000:
+                        selected.update(f'{get_column_letter(c)}{r}' for c in range(lo, hi+1) for r in range(first, last+1))
+            except (ValueError, TypeError):
+                pass
+            rows = entry.get('rows') or {}
+            hits = [rows[cell] for cell in sorted(selected) if cell in rows]
+            label = fields.get('label')
+            if not hits and label in rows:
+                hits = [rows[label]]
+            reason = (entry.get('not_found') or {}).get(label)
+            if not hits:
+                hits = [{'status': 'unresolved', 'unlocated_reason': reason or 'Precise row location unavailable'}]
+            for hit in hits:
+                hit = {'cells': hit} if isinstance(hit, str) else hit
+                if not isinstance(hit, dict):
+                    continue
+                allowed = ('sheet', 'section', 'cells', 'page', 'quote', 'status', 'kind', 'unlocated_reason', 'url')
+                location = {key: hit[key] for key in allowed if key in hit}
+                if hit.get('reason') and 'unlocated_reason' not in location:
+                    location['unlocated_reason'] = hit['reason']
+                location['period'] = entry['period']
+                if 'sheet' not in location and not hit.get('file'):
+                    location['sheet'] = entry.get('sheet')
+                source = hit.get('file') or f
+                out.append(self._address(source, **location) if source else location)
         return out
 
     def add(self, path):

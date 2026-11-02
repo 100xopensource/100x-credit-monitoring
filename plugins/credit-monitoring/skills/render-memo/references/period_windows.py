@@ -30,6 +30,27 @@ Usage:
     w = windows("2026-05")   # -> dict; see keys below
 """
 
+def statement_windows(period, fy_start=1):
+    """Statement display only; leave the performance/analysis windows unchanged."""
+    year, month = int(period[:4]), int(period[5:7])
+    fy_start = int(fy_start)
+    if not 1 <= fy_start <= 12 or not 1 <= month <= 12:
+        raise ValueError('statement fiscal start and period must name real months')
+    start = year if month >= fy_start else year - 1
+    first = start * 12 + fy_start - 1
+    last = year * 12 + month - 1
+    label = lambda n: f'{n // 12:04d}-{n % 12 + 1:02d}'
+    prior = [label(n) for n in range(first - 12, first)]
+    ytd = [label(n) for n in range(first, last + 1)]
+    fy = start if fy_start == 1 else start + 1
+    return {'display_months': prior + ytd,
+            'balance_months': [prior[i] for i in (2, 5, 8, 11)] + ytd,
+            'totals': [{'id': 'fy_prior', 'label': f'FY{fy - 1}', 'months': prior},
+                       *([] if [label(n) for n in range(last - 11, last + 1)] == ytd else
+                         [{'id': 'ttm', 'label': 'TTM', 'months': [label(n) for n in range(last - 11, last + 1)]}]),
+                       {'id': 'ytd', 'label': f'YTD {fy}', 'months': ytd}]}
+
+
 def _q_months(year, q):
     start = (q - 1) * 3 + 1
     return [f"{year}-{start + i:02d}" for i in range(3)]

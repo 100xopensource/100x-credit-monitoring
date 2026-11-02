@@ -9,6 +9,7 @@ import re
 import stat
 import tempfile
 import time
+import zipfile
 
 RECORD_DIR = ".record"
 RUNS_DIR = "runs"
@@ -24,6 +25,7 @@ PAGES_DIR = "pages"
 SCHEMA_NAME = "store-schema.json"
 JOURNAL_NAME = "journal.json"
 LOCK_NAME = "store.lock"
+EDIT_INTAKE_NAME = "edit-intake.json"
 STORE_SCHEMA_VERSION = 1
 STORE_SCHEMA = "credit-monitoring-store/v1"
 PUBLISHED_SCHEMA = "credit-monitoring-published/v1"
@@ -62,7 +64,7 @@ class StoreAccessError(ValueError):
     in it, or the file is a cloud-only placeholder. A ValueError subclass so a
     module's bad-input guard (except ValueError) treats it as a plain-worded
     SKIP, never a crash. Carries the machine verdict and the remedy id (which
-    fix steps to show — spelled out in references/connecting-folders.md)."""
+    fix steps to show — spelled out in references/runtime/cowork/files.md)."""
 
     def __init__(self, message, verdict=None, guide=None, path=None):
         super().__init__(message)
@@ -138,7 +140,7 @@ def ensure_readable(path):
     read costs nothing and was about to happen anyway, but it cannot be counted
     on. A file that stays a stub raises with the keep-on-device remedy; the
     caller sends the analyst to the guide's keep-on-device step (see
-    connecting-folders.md) instead of retrying."""
+    references/runtime/cowork/files.md) instead of retrying."""
     v = classify_store_access(path)
     if v["verdict"] == "cloud_only_stub" and hydrate(path):
         v = classify_store_access(path)
@@ -323,6 +325,44 @@ def file_sha256(path):
     return "sha256:" + digest.hexdigest()
 
 
+# SharePoint re-wraps every Office file it stores: it adds `customXml/` parts
+# and rewrites `docProps/custom.xml`, `[Content_Types].xml` and the `.rels`,
+# and leaves every other part under `xl/` as it was sent. So a workbook is
+# signed by those `xl/` parts alone.
+_WORKBOOK_SUFFIXES = (".xlsx", ".xlsm")
+
+
+def file_id(path):
+    """The checksum a manifest signs a file with. A workbook: `xlsx:<hex>`
+    over its `xl/` parts other than the `.rels`, name then bytes, in name
+    order. Any other file, or a workbook that is not a zip: `file_sha256`."""
+    if not str(path).lower().endswith(_WORKBOOK_SUFFIXES):
+        return file_sha256(path)
+    digest = hashlib.sha256()
+    try:
+        with zipfile.ZipFile(ensure_readable(path)) as book:
+            for name in sorted(book.namelist()):
+                if name.startswith("xl/") and not name.endswith(".rels"):
+                    digest.update(name.encode("utf-8") + b"\0")
+                    digest.update(book.read(name))
+                    digest.update(b"\0")
+    except zipfile.BadZipFile:
+        return file_sha256(path)
+    return "xlsx:" + digest.hexdigest()
+
+
+def same_id(path, want):
+    """Whether `path` is the file the checksum `want` signs. A `sha256:` is
+    compared byte for byte, so a manifest written before `xlsx:` still
+    verifies where its bytes are untouched; an `xlsx:` by the workbook's
+    parts."""
+    if not want:
+        return False
+    if str(want).startswith("xlsx:"):
+        return file_id(path) == want
+    return file_sha256(path) == want
+
+
 def folder_files(folder, skip=()):
     """Every file under `folder`, as relative forward-slash paths, sorted.
 
@@ -356,7 +396,7 @@ def build_manifest(folder, run_id, period, by=None, finished_at=None,
     files = {}
     for rel in folder_files(folder, skip=(MANIFEST_NAME,)):
         try:
-            files[rel] = file_sha256(os.path.join(folder, *rel.split("/")))
+            files[rel] = file_id(os.path.join(folder, *rel.split("/")))
         except (OSError, StoreAccessError) as problem:
             raise ValueError(
                 f"{rel} in the run folder {folder!r} cannot be read, so the "
@@ -480,11 +520,11 @@ def verify_manifest(folder):
             missing.append(rel)
             continue
         try:
-            got = file_sha256(full)
+            same = same_id(full, digest)
         except (OSError, StoreAccessError):
             unreadable.append(rel)
             continue
-        (matched if got == digest else changed).append(rel)
+        (matched if same else changed).append(rel)
     extra = [rel for rel in folder_files(folder, skip=(MANIFEST_NAME,))
              if rel not in want]
     if changed or missing or extra or header_wrong:

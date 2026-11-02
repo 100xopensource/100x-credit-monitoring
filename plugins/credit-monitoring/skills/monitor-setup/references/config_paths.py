@@ -16,14 +16,16 @@ reader has connected — including when they connected a folder ABOVE it.
 Two commands:
 
     name   <local path> [...]   what to write in the config for a file you picked
-    check  <borrower-config.json>   every path in it that still names a machine
+    check  <borrower-config.json>   every path in it that still names a machine,
+                                    and every input it points into the store
 
 Usage:
     python config_paths.py name "/sessions/<id>/mnt/<folder>/Example Borrower/_model/spec.json"
     python config_paths.py check "<the borrower-config.json you just wrote>"
 
 Both print JSON to stdout. `check` exits 1 when a path still names a machine, so
-setup cannot finish on a config that only works where it was written.
+setup cannot finish on a config that only works where it was written, or when an
+input points into the store, where nobody files the borrower's documents.
 
 Deterministic; stdlib only (monitor_lib for the folder catalog); no network.
 """
@@ -94,22 +96,46 @@ def _names_a_machine(value):
 _PATH_KEY_SUFFIXES = ("_path", "_paths", "_folder", "_folders")
 
 
-def _is_path_key(key):
-    """True when the key names a path. List indices ('sources.0') are not the
-    name, so read past them to the key that is."""
+def _key_name(key):
+    """The key's own name. List indices ('sources.0') are not the name, so read
+    past them to the key that is."""
     named = [part for part in key.split(".") if not part.isdigit()]
-    return bool(named) and named[-1].endswith(_PATH_KEY_SUFFIXES)
+    return named[-1] if named else ""
+
+
+# The documents a review reads. They stay in the borrower's source folder: a
+# copy in the store is one nobody updates when the borrower files a new one.
+_INPUT_KEYS = ("reporting_packages_folder", "compliance_certificate_folder",
+               "credit_agreement_path", "ic_uw_memo_path", "budget_path")
+
+_MACHINE = ("this path names one computer, so it works only where it was written. "
+            "Write it as source: or store: and the path inside that folder.")
+_INPUT_IN_STORE = ("this file stays in the borrower's source folder, and the config cites it "
+                   "there as source: and its path. Point this at the original; never copy "
+                   "it into the store.")
+
+
+def _problem(key, value):
+    """Why a configured value cannot stay as it is, or None."""
+    name = _key_name(key)
+    if not name.endswith(_PATH_KEY_SUFFIXES):
+        return None
+    if _names_a_machine(value):
+        return _MACHINE
+    if name in _INPUT_KEYS and str(value).startswith("store:"):
+        return _INPUT_IN_STORE
+    return None
 
 
 def check(config_path):
-    """Every configured path in a borrower-config that still names a machine, as
-    {"config", "ok", "problems": [{"key", "value"}]}."""
+    """Every configured path in a borrower-config that cannot stay as it is, as
+    {"config", "ok", "problems": [{"key", "value", "reason"}]}."""
     with open(ml.resolve_path(config_path), "r", encoding="utf-8") as fh:
         cfg = json.load(fh)
     found = []
     _walk(cfg, [], found)
-    problems = [{"key": k, "value": v} for k, v in found
-                if _is_path_key(k) and _names_a_machine(v)]
+    problems = [{"key": k, "value": v, "reason": reason} for k, v in found
+                for reason in (_problem(k, v),) if reason]
     return {"config": str(config_path), "ok": not problems, "problems": problems}
 
 
@@ -118,7 +144,8 @@ def _cli(argv=None):
     sub = ap.add_subparsers(dest="cmd", required=True)
     n = sub.add_parser("name", help="what to record for a file you picked")
     n.add_argument("path", nargs="+")
-    c = sub.add_parser("check", help="paths in a borrower-config that name a machine")
+    c = sub.add_parser("check", help="paths in a borrower-config that name a machine "
+                                     "or point an input into the store")
     c.add_argument("config")
     a = ap.parse_args(argv)
 

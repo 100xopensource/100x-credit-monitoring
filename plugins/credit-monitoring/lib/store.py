@@ -32,7 +32,7 @@ HOSTED_ARTIFACT_NAME = "hosted-artifact.json"
 _DS_STORE_NAME = ".DS_Store"
 # Mirrors refresh-dashboard's build_artifact.py foreign_names(): the only names
 # that skill (and portfolio-artifact) ever write into an Artifact folder.
-_ARTIFACT_KEPT_NAMES = {"index.json", "fonts.html", ".dashboard", "desktop.ini", "thumbs.db"}
+_ARTIFACT_KEPT_NAMES = {"index.json", "fonts.html", ".dashboard", "views", "desktop.ini", "thumbs.db"}
 _ARTIFACT_PAGE_SUFFIXES = ("--deal.json", "--memo.html", "--workbook.json")
 _PERIOD = re.compile(r"^\d{4}-(0[1-9]|1[0-2])$")
 _RUN = re.compile(r"^run-\d{8}-\d{6}$")
@@ -52,6 +52,16 @@ class StoreError(ValueError):
     """The selected parent folder cannot safely hold a monitoring store."""
 
 
+# Why the check refuses a path, in the words store-setup passes to the analyst.
+_LINK = "is a symbolic link"
+_UNKNOWN = "is not something the plugin keeps here"
+_DAMAGED = "is damaged or not in the format the plugin writes"
+_NOT_MONTH = "is not named for a month (YYYY-MM)"
+_NOT_RUN = "is not named for a run (run-YYYYMMDD-HHMMSS)"
+# A refusal names this many paths, then counts the rest.
+_NAMED_AT_MOST = 10
+
+
 def _contains(parent, child):
     parent, child = Path(parent).resolve(), Path(child).resolve()
     return parent == child or parent in child.parents
@@ -61,24 +71,50 @@ def _plain(path, kind):
     return not path.is_symlink() and getattr(path, f"is_{kind}")()
 
 
+def _wrong_kind(path, kind):
+    """Why `path` is not a plain folder (`kind` "dir") or file, else None."""
+    if path.is_symlink():
+        return _LINK
+    if not getattr(path, f"is_{kind}")():
+        return "is not a folder" if kind == "dir" else "is not a file"
+    return None
+
+
+def _bad_file(path, readable):
+    """Why `path` is not a plain file that `readable` accepts, else None."""
+    return _wrong_kind(path, "file") or (None if readable(path) else _DAMAGED)
+
+
 def _present(path):
     """True if something occupies `path`, including a dangling symlink.
 
     `Path.exists()` follows symlinks and reports False for a dangling one,
     which would let a broken symlink slip through an `if slot.exists(): ...`
     gate as if the slot were simply empty. Callers that need "is this slot
-    occupied at all" (before handing it to a `_plain()`-based validator that
-    will correctly reject the symlink) should use this instead.
+    occupied at all" (before handing it to a `_wrong_kind()`-based check that
+    will correctly refuse the symlink) should use this instead.
     """
     return path.is_symlink() or path.exists()
 
 
-def _plain_tree(root):
-    return all(not item.is_symlink() for item in root.rglob("*"))
+def _links_in(folder):
+    # rglob lists a symlink but never descends into one.
+    for item in folder.rglob("*"):
+        if item.is_symlink():
+            yield item, _LINK
 
 
 def _benign_ds_store(item):
     return item.name == _DS_STORE_NAME and _plain(item, "file")
+
+
+_BENIGN_VIEW_NAMES = {_DS_STORE_NAME.lower(), "desktop.ini", "thumbs.db"}
+
+
+def _benign_view_metadata(item):
+    """The Artifact root's allowance for OS metadata, inside `views/` too.
+    A symlink is not a plain file, so it is still refused."""
+    return item.name.lower() in _BENIGN_VIEW_NAMES and _plain(item, "file")
 
 
 def _json_dict(path):
@@ -89,8 +125,6 @@ def _json_dict(path):
 
 
 def _json_lines(path):
-    if not _plain(path, "file"):
-        return False
     try:
         return all(
             isinstance(json.loads(line), dict)
@@ -101,88 +135,95 @@ def _json_lines(path):
         return False
 
 
+# Each `_production_*` check yields (path, why) for every path it refuses.
+# Symbolic links inside a borrower folder are found by `_production_borrower`.
 def _production_runs(runs):
-    if not _plain(runs, "dir"):
-        return False
+    if why := _wrong_kind(runs, "dir"):
+        yield runs, why
+        return
     for period in runs.iterdir():
         if _benign_ds_store(period):
             continue
-        if not _plain(period, "dir") or not _PERIOD.fullmatch(period.name):
-            return False
+        if why := _wrong_kind(period, "dir") or (
+                None if _PERIOD.fullmatch(period.name) else _NOT_MONTH):
+            yield period, why
+            continue
         for run in period.iterdir():
             if _benign_ds_store(run):
                 continue
-            if not _plain(run, "dir") or not _RUN.fullmatch(run.name):
-                return False
-            if not _plain_tree(run):
-                return False
-            if (run / MANIFEST_NAME).exists() and read_manifest(run) is None:
-                return False
-    return True
+            if why := _wrong_kind(run, "dir") or (
+                    None if _RUN.fullmatch(run.name) else _NOT_RUN):
+                yield run, why
+            elif (run / MANIFEST_NAME).exists() and read_manifest(run) is None:
+                yield run / MANIFEST_NAME, _DAMAGED
 
 
-def _production_current(current):
-    if not _plain(current, "dir") or not _plain_tree(current):
-        return False
-    return True
+# The files a borrower's `.record/` may hold, each with what makes it readable.
+_RECORD_FILES = {
+    MANIFEST_NAME: lambda path: read_manifest(path.parent) is not None,
+    CHANGELOG_NAME: _json_lines,
+    PUBLISHED_NAME: _json_dict,
+    LEDGER_NAME: _json_dict,
+    # Present between edit intake and finish, and left behind for good where
+    # the store's host can write but not delete files. run_lib ignores an
+    # acceptance bound to a superseded run or already consumed by a frozen run.
+    EDIT_INTAKE_NAME: _json_dict,
+    LOCK_NAME: lambda path: True,
+}
 
 
 def _production_record(record):
-    if not _plain(record, "dir") or not _plain_tree(record):
-        return False
+    if why := _wrong_kind(record, "dir"):
+        yield record, why
+        return
     current = record / CURRENT_DIR
-    allowed = {CURRENT_DIR, RUNS_DIR, MANIFEST_NAME, CHANGELOG_NAME,
-               PUBLISHED_NAME, LEDGER_NAME, PAGES_DIR, LOCK_NAME}
     for item in record.iterdir():
-        if item.name in allowed or _benign_ds_store(item):
+        if (item.name in _RECORD_FILES or item.name in (CURRENT_DIR, RUNS_DIR, PAGES_DIR)
+                or _benign_ds_store(item)):
             continue
+        if not _RETIRING_CURRENT.fullmatch(item.name):
+            yield item, _UNKNOWN
         # Only tolerated once the swap it came from has finished (`current`
         # is present); a retiring dir with no `current` means the crash hit
         # mid-swap and the store needs a person, not a silent guess here.
-        if (
-            current.exists()
-            and _RETIRING_CURRENT.fullmatch(item.name)
-            and _production_current(item)
-        ):
-            continue
-        return False
-    if _present(current) and not _production_current(current):
-        return False
+        elif not current.exists():
+            yield item, "is left from an interrupted update, with no current folder beside it"
+        elif why := _wrong_kind(item, "dir"):
+            yield item, why
+    for folder in (current, record / PAGES_DIR):
+        if _present(folder) and (why := _wrong_kind(folder, "dir")):
+            yield folder, why
     runs = record / RUNS_DIR
-    if _present(runs) and not _production_runs(runs):
-        return False
-    manifest = record / MANIFEST_NAME
-    if _present(manifest) and (
-        not _plain(manifest, "file") or read_manifest(record) is None
-    ):
-        return False
-    changelog = record / CHANGELOG_NAME
-    if _present(changelog) and not _json_lines(changelog):
-        return False
-    published = record / PUBLISHED_NAME
-    if _present(published) and (not _plain(published, "file") or not _json_dict(published)):
-        return False
-    ledger = record / LEDGER_NAME
-    if _present(ledger) and (not _plain(ledger, "file") or not _json_dict(ledger)):
-        return False
-    pages = record / PAGES_DIR
-    if _present(pages) and (not _plain(pages, "dir") or not _plain_tree(pages)):
-        return False
-    lock = record / LOCK_NAME
-    return not _present(lock) or _plain(lock, "file")
+    if _present(runs):
+        yield from _production_runs(runs)
+    for name, readable in _RECORD_FILES.items():
+        path = record / name
+        if _present(path) and (why := _bad_file(path, readable)):
+            yield path, why
 
 
 def _production_borrower(borrower):
-    model = borrower / "_model"
+    """`borrowers/<key>/`. The plugin owns `.record/` and `_model/` and checks
+    them. Anything else is the analyst's own, which the plugin never reads or
+    writes, so the check ignores it unless a symbolic link or a second
+    `.record` hides in it."""
+    if why := _wrong_kind(borrower, "dir"):
+        yield borrower, why
+        return
+    for item in borrower.rglob("*"):
+        if item.is_symlink():
+            yield item, _LINK
+        elif item.name == RECORD_DIR and item.parent != borrower and item.is_dir():
+            yield item, (f"is a .record folder in the wrong place: only "
+                         f"{BORROWERS_DIR}/{borrower.name}/{RECORD_DIR} holds this borrower's records")
     record = borrower / RECORD_DIR
-    return (
-        borrower.is_dir()
-        and not borrower.is_symlink()
-        and all(_plain(item, "file") or item.name in (RECORD_DIR, "_model")
-                for item in borrower.iterdir())
-        and _production_record(borrower / RECORD_DIR)
-        and (not _present(model) or (_plain(model, "dir") and _plain_tree(model)))
-    )
+    if _present(record):
+        yield from _production_record(record)
+    else:
+        yield borrower, f"is not a borrower folder (it has no {RECORD_DIR} folder)"
+    model = borrower / "_model"
+    if _present(model) and (why := _wrong_kind(model, "dir")):
+        yield model, why
 
 
 def _artifact_page_name(name):
@@ -193,90 +234,123 @@ def _artifact_page_name(name):
     return any(name.endswith(suffix) for suffix in _ARTIFACT_PAGE_SUFFIXES)
 
 
+def _production_views(views):
+    """`views/<borrower>/<run id>/`: one folder per run, holding only its pages."""
+    if why := _wrong_kind(views, "dir"):
+        yield views, why
+        return
+    for borrower in views.iterdir():
+        if _benign_view_metadata(borrower):
+            continue
+        if why := _wrong_kind(borrower, "dir"):
+            yield borrower, why
+            continue
+        for run in borrower.iterdir():
+            if _benign_view_metadata(run):
+                continue
+            if why := _wrong_kind(run, "dir") or (
+                    None if _RUN.fullmatch(run.name) else _NOT_RUN):
+                yield run, why
+                continue
+            for page in run.iterdir():
+                if _benign_view_metadata(page):
+                    continue
+                if why := _wrong_kind(page, "file") or (
+                        None if page.name.endswith(_ARTIFACT_PAGE_SUFFIXES)
+                        else "is not a dashboard page"):
+                    yield page, why
+
+
 def _production_artifact_folder(folder):
-    if not _plain(folder, "dir"):
-        return False
+    if why := _wrong_kind(folder, "dir"):
+        yield folder, why
+        return
     for item in folder.iterdir():
         if _benign_ds_store(item):
             continue
+        name = item.name.lower()
         if not _artifact_page_name(item.name):
-            return False
-        if item.name.lower() == ".dashboard":
-            if not _plain(item, "dir") or not _plain_tree(item):
-                return False
-        elif item.name.lower() == "index.json":
-            if not _plain(item, "file") or not _json_dict(item):
-                return False
-        elif not _plain(item, "file"):
-            return False
-    return True
+            yield item, "is not a dashboard file"
+        elif name == ".dashboard":
+            if why := _wrong_kind(item, "dir"):
+                yield item, why
+            else:
+                yield from _links_in(item)
+        elif name == "views":
+            yield from _production_views(item)
+        elif why := _bad_file(item, _json_dict if name == "index.json" else lambda path: True):
+            yield item, why
 
 
 def _production_portfolio(portfolio):
-    if not _plain(portfolio, "dir"):
-        return False
+    if why := _wrong_kind(portfolio, "dir"):
+        yield portfolio, why
+        return
     hosted = portfolio / HOSTED_ARTIFACT_NAME
-    allowed = {ARTIFACT_DIR, HOSTED_ARTIFACT_NAME}
     for item in portfolio.iterdir():
-        if item.name in allowed or _benign_ds_store(item):
+        if item.name in (ARTIFACT_DIR, HOSTED_ARTIFACT_NAME) or _benign_ds_store(item):
             continue
         # Backups of a prior hosted-artifact.json, in the two naming shapes
         # seen in the wild. No current writer produces them; only tolerated
         # alongside a live primary file, and only if they carry the same
         # inert JSON-dict shape as that primary — never promoted or read.
-        if (
-            hosted.exists()
-            and _HOSTED_ARTIFACT_BACKUP.fullmatch(item.name)
-            and _plain(item, "file")
-            and _json_dict(item)
-        ):
-            continue
-        return False
+        if not _HOSTED_ARTIFACT_BACKUP.fullmatch(item.name):
+            yield item, _UNKNOWN
+        elif not hosted.exists():
+            yield item, f"is a backup with no {HOSTED_ARTIFACT_NAME} beside it"
+        elif why := _bad_file(item, _json_dict):
+            yield item, why
     artifact = portfolio / ARTIFACT_DIR
-    if _present(artifact) and not _production_artifact_folder(artifact):
-        return False
-    return not _present(hosted) or (_plain(hosted, "file") and _json_dict(hosted))
+    if _present(artifact):
+        yield from _production_artifact_folder(artifact)
+    if _present(hosted) and (why := _bad_file(hosted, _json_dict)):
+        yield hosted, why
 
 
 def _production_artifacts(artifacts):
-    if not _plain(artifacts, "dir"):
-        return False
-    if any(
-        item.name != PORTFOLIO_DIR and not _benign_ds_store(item)
-        for item in artifacts.iterdir()
-    ):
-        return False
+    if why := _wrong_kind(artifacts, "dir"):
+        yield artifacts, why
+        return
+    for item in artifacts.iterdir():
+        if item.name != PORTFOLIO_DIR and not _benign_ds_store(item):
+            yield item, _UNKNOWN
     portfolio = artifacts / PORTFOLIO_DIR
-    return not _present(portfolio) or _production_portfolio(portfolio)
+    if _present(portfolio):
+        yield from _production_portfolio(portfolio)
 
 
 def _production_store(root):
-    if not _plain(root, "dir"):
-        return False
-    items = [item for item in root.iterdir() if not _benign_ds_store(item)]
-    if not items:
-        return True
-    if (root / PUBLISHED_NAME).exists():
-        return False
     allowed = {REGISTRY_NAME, BORROWERS_DIR, ARTIFACTS_DIR, SCHEMA_NAME}
-    if any(item.name not in allowed for item in items):
-        return False
+    for item in root.iterdir():
+        if item.name not in allowed and not _benign_ds_store(item):
+            yield item, _UNKNOWN
     registry = root / REGISTRY_NAME
-    if _present(registry) and (not _plain(registry, "file") or not _json_dict(registry)):
-        return False
+    if _present(registry) and (why := _bad_file(registry, _json_dict)):
+        yield registry, why
     artifacts = root / ARTIFACTS_DIR
-    if _present(artifacts) and not _production_artifacts(artifacts):
-        return False
+    if _present(artifacts):
+        yield from _production_artifacts(artifacts)
     borrowers = root / BORROWERS_DIR
-    if _present(borrowers):
-        if not _plain(borrowers, "dir"):
-            return False
-        for item in borrowers.iterdir():
-            if _benign_ds_store(item):
-                continue
-            if not _production_borrower(item):
-                return False
-    return True
+    if not _present(borrowers):
+        return
+    if why := _wrong_kind(borrowers, "dir"):
+        yield borrowers, why
+        return
+    for item in borrowers.iterdir():
+        if not _benign_ds_store(item):
+            yield from _production_borrower(item)
+
+
+def _refusal(root, problems):
+    """The analyst-facing refusal: each refused path inside the store, and why."""
+    named = {}
+    for path, why in problems:
+        named.setdefault(path.relative_to(root).as_posix(), why)
+    lines = [f"- {path} {why}" for path, why in sorted(named.items())]
+    if len(lines) > _NAMED_AT_MOST:
+        lines[_NAMED_AT_MOST:] = [f"- and {len(lines) - _NAMED_AT_MOST} more"]
+    return (f"{STORE_NAME} is not a monitoring store this plugin can use, "
+            "so it was left unchanged:\n" + "\n".join(lines))
 
 
 def prepare_store_root(selected_parent, source_root=None):
@@ -308,13 +382,16 @@ def prepare_store_root(selected_parent, source_root=None):
     if any(root.iterdir()):
         if (root / PUBLISHED_NAME).exists():
             raise StoreError(
-                f"{STORE_NAME} has an unsupported old store layout with a root published pointer. "
+                f"{STORE_NAME} has an unsupported old store layout with a root published pointer "
+                f"({PUBLISHED_NAME}). "
                 "Only new stores with per-borrower accepted records are supported."
             )
-        if any(item.is_dir() and (item / RECORD_DIR).is_dir() for item in root.iterdir() if item.name != BORROWERS_DIR):
+        flat = sorted(item.name for item in root.iterdir()
+                      if item.name != BORROWERS_DIR and item.is_dir() and (item / RECORD_DIR).is_dir())
+        if flat:
             raise StoreError(
-                f"{STORE_NAME} has an unsupported old store layout with flat borrower folders at root. "
-                "Only new stores under borrowers/ are supported."
+                f"{STORE_NAME} has an unsupported old store layout with flat borrower folders at root "
+                f"({', '.join(flat)}). Only new stores under borrowers/ are supported."
             )
         marker = root / SCHEMA_NAME
         try:
@@ -322,11 +399,13 @@ def prepare_store_root(selected_parent, source_root=None):
         except (OSError, ValueError):
             version = None
         if version != {"schema": STORE_SCHEMA, "schema_version": STORE_SCHEMA_VERSION}:
-            raise StoreError("Unsupported or unversioned store; create a new store. This folder was not changed.")
-        if not _production_store(root):
             raise StoreError(
-                f"{STORE_NAME} is not empty and is not a valid monitoring store."
+                f"Unsupported or unversioned store: {SCHEMA_NAME} is missing or names another store "
+                "version. Create a new store; this folder was not changed."
             )
+        problems = list(_production_store(root))
+        if problems:
+            raise StoreError(_refusal(root, problems))
     else:
         write_output({"schema": STORE_SCHEMA, "schema_version": STORE_SCHEMA_VERSION},
                      root / SCHEMA_NAME)

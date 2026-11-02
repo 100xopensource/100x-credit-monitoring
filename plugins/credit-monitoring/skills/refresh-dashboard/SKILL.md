@@ -10,16 +10,20 @@ metadata:
 
 # Refresh the portfolio artifact
 
-The dashboard reads a flat local folder. Accepted figures come from verified runs selected in
-`published.json`; separately labelled previews come from verified visible drafts. This skill computes no monitoring result.
+Read `../../CLAUDE.md` before anything else; it holds the rules shared by every skill.
+
+The dashboard reads one local folder: `index.json` and the pages it names. Each run's pages sit in
+their own folder under `views/`, and neither a new run nor a refresh changes an older run's pages. Accepted
+figures come from verified runs selected in `published.json`; separately labelled previews come
+from verified visible drafts. This skill computes no monitoring result.
 
 ## Boundaries
 
-- File synchronization is outside this skill. A local folder may be synced by the user's own tool.
-- Cowork registration is a separate step. This skill writes and validates the files Cowork will read.
 - Artifact pages are derived views, not additional person-facing monitoring outputs.
 - A local draft preview is allowed, but must never replace accepted figures. Refresh only on request;
   local generation is neither acceptance nor proof of a hosted update.
+- What else holds for the dashboard in this runtime, including sync and registration, is in
+  `../../references/runtime/<runtime>/dashboard.md`.
 
 ## Accepted, draft, and prior periods
 
@@ -85,4 +89,5 @@ failed build are not verified current. No hosted upload is performed.
 ## What to report
 
 Say which borrower pages changed and name every flagged borrower. Say “updated the local portfolio
-artifact,” not “published” or “deployed.” Mention that sync and Cowork registration remain separate.
+artifact,” not “published” or “deployed,” and add what `../../references/runtime/<runtime>/dashboard.md`
+says a refresh report mentions.

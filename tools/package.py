@@ -17,13 +17,17 @@ FIXED = (1980, 1, 1, 0, 0, 0)
 
 
 def members():
+    for path in (PLUGIN, ROOT / 'LICENSE', ROOT / 'NOTICE', *PLUGIN.rglob('*')):
+        if path.is_symlink() or '.git' in path.relative_to(ROOT).parts:
+            raise ValueError(f'unsafe package path: {path}')
     yield "LICENSE", ROOT / "LICENSE"
     yield "NOTICE", ROOT / "NOTICE"
     yield "README.md", PLUGIN / "README.md"
+    yield "CLAUDE.md", PLUGIN / "CLAUDE.md"
     for directory in INCLUDED:
         for path in sorted((PLUGIN / directory).rglob("*")):
             name = path.relative_to(PLUGIN).as_posix()
-            if path.is_file() and "__pycache__" not in path.parts and path.suffix not in {".pyc", ".pyo"}:
+            if path.is_file() and path.name != '.DS_Store' and "__pycache__" not in path.parts and path.suffix not in {".pyc", ".pyo"}:
                 yield name, path
 
 

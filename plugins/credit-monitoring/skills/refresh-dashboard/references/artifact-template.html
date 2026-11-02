@@ -1025,8 +1025,13 @@ body.resizing{cursor:col-resize; user-select:none}
 
 
 .waiting.news{display:flex; align-items:center; gap:var(--s3); padding:11px 12px 11px 15px; bottom:72px}
-.waiting.news .btn{padding:5px 11px; font-size:var(--t-xs)}
-.waiting.news .btn.quiet{background:transparent; color:var(--dark-ink); border-color:rgba(255,255,255,.35)}
+.waiting.news .btn,.waiting.live .btn{padding:5px 11px; font-size:var(--t-xs)}
+.waiting.news .btn.quiet,.waiting.live .btn.quiet{background:transparent; color:var(--dark-ink); border-color:rgba(255,255,255,.35)}
+.waiting.live{max-width:420px}
+.waiting.live p{margin:0 0 6px}
+.waiting.live .acts{display:flex; gap:var(--s2); margin-top:8px}
+.waiting.live .said{display:block; margin-top:6px; color:var(--dark-ink-3); font-size:var(--t-xs); overflow-wrap:anywhere}
+.empty .said{display:block; margin-top:6px; color:var(--ink-2); font-size:var(--t-xs); overflow-wrap:anywhere}
 
 .btn{
   appearance:none; border:1px solid var(--line-2); background:var(--paper); color:var(--ink);
@@ -1354,7 +1359,7 @@ PM.uri = (function () {
 window.PM = window.PM || {};
 PM.http = {
   readText: function (name) {
-    return fetch(encodeURIComponent(name), { cache: 'no-store' }).then(function (r) {
+    return fetch(name.split('/').map(encodeURIComponent).join('/'), { cache: 'no-store' }).then(function (r) {
       if (!r.ok) { var e = new Error('http ' + r.status + ' for ' + name); e.kind = 'unavailable'; throw e; }
       return r.text();
     });
@@ -1470,6 +1475,11 @@ PM.data = (function () {
   var mem = new Map();
   var stamp = null;               // the build the figures on the screen came from
   var news = [], told = false;
+  // A live page's source carries the book baked into it as `first`. Only then
+  // does the page draw that first and take a newer build from the store.
+  var bakedStamp = null;          // the build baked into the page
+  var live = false;               // whether the store confirmed the build on the screen
+  var checks = [];
 
 
   function keeping() {
@@ -1495,6 +1505,7 @@ PM.data = (function () {
     }, function () {});           // offline or rate-limited: the kept book stands
   }
   function text(kind, name) {
+    if (PM.source().first) return liveText(PM.source(), kind, name);
     var hit = keeping() ? PM.keep.page(stamp, kind + name) : null;
     if (hit != null) return Promise.resolve(hit);
     return PM.source().readText(name).then(function (t) {
@@ -1502,9 +1513,81 @@ PM.data = (function () {
       return t;
     });
   }
+  function liveText(src, kind, name) {
+    // A rerun keeps its file names, so only the baked build reads the baked copy.
+    if (stamp === bakedStamp) return src.first.readText(name);
+    var at = stamp;
+    var hit = PM.keep.page(at, kind + name);
+    if (hit != null) return Promise.resolve(hit);
+    return src.readText(name).then(function (t) {
+      if (at !== stamp) return text(kind, name);         // a newer build landed meanwhile
+      PM.keep.putPage(at, kind + name, t);
+      return t;
+    });
+  }
+
+  function newer(a, b) {
+    var x = Date.parse(a), y = Date.parse(b);
+    if (isFinite(x) && isFinite(y)) return x > y;
+    return String(a) > String(b);
+  }
+  function tell(state) {
+    checks.forEach(function (fn) { try { fn(state); } catch (e) {} });
+  }
+
+  /* The store's index against the build on the screen: the same build is
+     confirmed, a newer one is taken at once, and an older one is ignored. */
+  function check(src) {
+    return src.readText('index.json').then(function (t) {
+      var fresh = null;
+      try { fresh = JSON.parse(t); } catch (e) { fresh = null; }
+      if (!fresh || !fresh.generated_at) {
+        var bad = new Error('the folder\'s copy of index.json is not readable');
+        bad.kind = 'unreadable'; bad.live = true;
+        throw bad;
+      }
+      if (fresh.generated_at === stamp) {
+        live = true;
+        PM.keep.putIndex(t);
+        tell({ live: true, changed: false });
+        return;
+      }
+      if (!newer(fresh.generated_at, stamp)) {
+        tell({ live: false, changed: false, older: true });
+        return;
+      }
+      PM.keep.putIndex(t);
+      mem.clear();
+      mem.set('index', Promise.resolve(fresh));
+      stamp = fresh.generated_at;
+      live = true;
+      PM.keep.sweep(stamp);
+      tell({ live: true, changed: true, index: fresh });
+    }).catch(function (e) {
+      tell({ live: false, changed: false, error: e });
+    });
+  }
+
+  /* The newest book already here, then the store. The baked book, or one kept
+     from an earlier live read when it is newer. */
+  function firstScreen(src) {
+    return src.first.readText('index.json').then(function (t) {
+      var baked = JSON.parse(t);
+      bakedStamp = baked.generated_at;
+      var kept = PM.keep.index();
+      var here = (kept && newer(kept.parsed.generated_at, bakedStamp)) ? kept.parsed : baked;
+      stamp = here.generated_at;
+      live = false;
+      PM.keep.sweep(stamp);
+      check(src);
+      return here;
+    });
+  }
+
   return {
     index: function () {
       return once('index', function () {
+        if (PM.source().first) return firstScreen(PM.source());
         var kept = keeping() ? PM.keep.index() : null;
         if (kept) {
           stamp = kept.parsed.generated_at;
@@ -1522,6 +1605,11 @@ PM.data = (function () {
     },
 
     onNews: function (fn) { news.push(fn); },
+
+    // A live page only: what the store said, as {live, changed, older, error, index}.
+    onCheck: function (fn) { checks.push(fn); },
+    recheck: function () { return PM.source().first ? check(PM.source()) : Promise.resolve(); },
+    live: function () { return live; },
 
     take: function () {
       mem.clear();
@@ -1809,7 +1897,7 @@ PM.views = PM.views || {};
   function statusOf(counts) {
     if (!counts || !counts.total) return 'flat';
     if (counts.breach) return 'bad';
-    if (counts.at_risk) return 'warn';
+    if (counts.at_risk || counts.unresolved) return 'warn';
     return 'ok';
   }
 
@@ -1827,6 +1915,7 @@ PM.views = PM.views || {};
   function covText(counts) {
     if (!counts || !counts.total) return 'no covenant test';
     if (counts.breach) return counts.breach + ' of ' + counts.total + ' in breach';
+    if (counts.unresolved) return counts.unresolved + ' of ' + counts.total + ' unresolved';
     if (counts.at_risk) return counts.at_risk + ' of ' + counts.total + ' at risk';
     return (counts.pass || 0) + ' of ' + counts.total + ' passing';
   }
@@ -1906,8 +1995,19 @@ PM.views = PM.views || {};
     var tail;
     if (bare) {
       tail = '<div class="d"></div>';                    // the chip is up with the standings
+    } else if (liq.cash != null && liq.cash_floor != null && liq.cash < liq.cash_floor) {
+      tail = '<div class="d"><span class="chip bad sm">cash below floor</span></div>';
     } else if (chip) {
       tail = '<div class="d">' + chip + '</div>';
+    } else if (liq.cash_floor != null && liq.burn_3m_avg != null && liq.burn_3m_avg < 0
+               && liq.burn_1m != null && liq.burn_1m < 0) {
+      tail = '<div class="d"><span class="none" data-tip="Cash grew on both burn bases this '
+        + 'month, so it is moving away from the floor and months to the floor are not a number.">'
+        + 'cash growing</span></div>';
+    } else if (liq.cash_floor == null) {
+      tail = '<div class="d"><span class="none" data-tip="No usable cash floor was resolved. '
+        + 'This does not establish that the agreement has no minimum cash requirement. '
+        + 'Check the covenant specification and setup.">floor unresolved</span></div>';
     } else {
 
       tail = '<div class="d"><span class="none" data-tip="This month produced no '
@@ -2138,7 +2238,7 @@ PM.views = PM.views || {};
 
 
 
-  var DEF = { q: '', f: 'all', sort: 'headroom', dir: 'asc', shape: 'table' };
+  var DEF = { q: '', f: 'all', sort: 'deal', dir: 'asc', shape: 'table' };
   var S = null, IX = null;
   var SHAPE_KEY = 'credit-monitor.dashboard.shape';
 
@@ -2173,7 +2273,7 @@ PM.views = PM.views || {};
     covenants: { dir: 'asc',  key: function (r) {
         var c = (r.covenants || {}).counts;
         if (!c || !c.total) return 9;
-        return c.breach ? 0 : (c.at_risk ? 1 : (c.not_evaluable ? 2 : 3)); } },
+        return c.breach ? 0 : (c.at_risk || c.unresolved ? 1 : (c.not_evaluable ? 2 : 3)); } },
     headroom:  { dir: 'asc',  key: function (r) {
         var t = (r.covenants || {}).thinnest; return t ? t.headroom_pct : null; } },
     revenue:   { dir: 'desc', key: function (r) {
@@ -2572,9 +2672,8 @@ PM.views = PM.views || {};
     { id: 'list', heading: 'How to read the deal list', words:
       '<ul>' +
       '<li><b>The colour on the left of a row</b> — the key is beside the section above. ' +
-      'The book opens with the least room first, so the rows that need somebody are the ' +
-      'rows at the top. A borrower with no figures this month has nothing to order by, ' +
-      'and sits at the end of the list.</li>' +
+      'The book opens by deal name, A to Z. Choose Least room first from the order ' +
+      'control to compare headroom; borrowers without a headroom figure then appear last.</li>' +
       '<li><b>Covenants</b> — how many promises in the credit agreement were tested ' +
       'this month, and how they came out. A promise the month could not test is counted ' +
       'separately and never counted as passing.</li>' +
@@ -2914,7 +3013,7 @@ PM.views = PM.views || {};
     var list = rows.map(function (r) {
       var cov = r.covenants || {}, counts = cov.counts;
       var cls = !r.readable ? '' : (counts && counts.breach ? ' bad'
-        : (counts && counts.at_risk ? ' warn' : ''));
+        : (counts && (counts.at_risk || counts.unresolved) ? ' warn' : ''));
       var said = r.readable ? PM.views.covText(counts) : 'no results this month';
       return '<a href="' + to(r) + '" data-nav="' + to(r) + '"' +
         (r.slug === row.slug ? ' aria-current="page"' : '') +
@@ -3183,10 +3282,10 @@ PM.views = PM.views || {};
       frame.srcdoc = withShim(html);
       size();
       window.addEventListener('resize', function () { if (frame.isConnected) size(); });
-    }, function () {
+    }, function (e) {
       if (!host.isConnected) return;
-      host.innerHTML = '<div class="empty">The memo could not be opened just now. ' +
-        'That usually means the folder is still syncing — try again in a minute.</div>';
+      host.innerHTML = PM.boot.readFailure(e, 'The memo could not be opened just now. ' +
+        'That usually means the folder is still syncing — try again in a minute.');
     });
   }
 
@@ -3219,7 +3318,7 @@ PM.views = PM.views || {};
 
   function covRow(c, row, sharedDate, byId, version) {
     var cls = c.status === 'breach' ? 'bad'
-      : (c.status === 'at_risk' ? 'warn' : (c.status === 'pass' ? 'ok' : 'flat'));
+      : (c.status === 'at_risk' || c.status === 'unresolved' ? 'warn' : (c.status === 'pass' ? 'ok' : 'flat'));
     var label = { pass: 'pass', breach: 'breach', at_risk: 'at risk',
                   not_evaluable: 'not testable' }[c.status] || c.status || '—';
     var modelRef = (c.source_ref || []).filter(function (r) { return r && r.sheet; })[0];
@@ -3238,7 +3337,7 @@ PM.views = PM.views || {};
           : 'this was not checked against our figure.') + '</div>';
       }
     }
-    var calc = c.calc || c.source || '';
+    var calc = (c.reconciliation_reason ? c.reconciliation_reason + ' ' : '') + (c.calc || c.source || '');
     var how = calc ? '<details class="howto"><summary>How this was worked out</summary>' +
       '<div class="calc">' + F.esc(calc) + '</div></details>' : '';
 
@@ -3307,9 +3406,9 @@ PM.views = PM.views || {};
             '</div></div></details>'
           : '') +
         '</div>';
-    }, function () {
+    }, function (e) {
       if (!host.isConnected) return;
-      host.innerHTML = '<div class="empty">The covenant results could not be read just now.</div>';
+      host.innerHTML = PM.boot.readFailure(e, 'The covenant results could not be read just now.');
     });
   }
 
@@ -3326,9 +3425,9 @@ PM.views = PM.views || {};
     PM.data.page(files.workbook).then(function (wb) {
       if (!host.isConnected) return;
       PM.views.workbook(host, wb, row, sheetName, cellRef, version);
-    }, function () {
+    }, function (e) {
       if (!host.isConnected) return;
-      host.innerHTML = '<div class="empty">The model could not be read just now.</div>';
+      host.innerHTML = PM.boot.readFailure(e, 'The model could not be read just now.');
     });
   }
 
@@ -3836,6 +3935,82 @@ PM.boot = (function () {
       '</p><p><a class="btn" data-nav="#/" href="#/">Back to every deal</a></p></div>';
   }
 
+  // A live page's reads from SharePoint, each failure named for the reader.
+  var LIVE = {
+    'needs-approval': 'Microsoft 365 is set to ask before every read, and this page cannot ask. ' +
+      'Whoever runs your Claude workspace can set its file reads to Always allow.',
+    'not-linked': 'Microsoft 365 is not connected for you. Connect it in Claude under Settings, ' +
+      'then Connectors, and open this page again.',
+    'not-granted': 'This page has not been allowed to use Microsoft 365 for you. Allow it in ' +
+      'this page’s permissions, then open it again.',
+    'no-access': 'Your Microsoft account cannot open the dashboard’s folder in SharePoint. ' +
+      'Ask for access to it.',
+    'missing': 'The dashboard’s folder in SharePoint does not hold a file this page needs.',
+    'cut-short': 'SharePoint handed over only part of a file. Open the page again in a minute.',
+    'unavailable': 'The dashboard’s folder in SharePoint could not be read just now. ' +
+      'Open the page again in a minute.',
+    'unreadable': 'The dashboard’s folder in SharePoint holds a file this page cannot read.',
+    'no-bridge': 'This copy is open outside Claude, so it cannot reach SharePoint.',
+    'unpinned': 'This page was built without its SharePoint folder. Tell the team; this is ours to fix.',
+    'refused': 'This page asked for a file it never reads. Tell the team; this is ours to fix.'
+  };
+  function liveWords(e) {
+    if (!(e && e.live)) return '';
+    var said = e.said ? String(e.said).slice(0, 300) : '';
+    return F.esc(LIVE[e.kind] || LIVE.unavailable) +
+      (said ? '<span class="said">Microsoft 365 said: ' + F.esc(said) + '</span>' : '');
+  }
+  function readFailure(e, fallback) {
+    return '<div class="empty">' + (liveWords(e) || F.esc(fallback)) + '</div>';
+  }
+
+  function stampLine(ix) {
+    var line = F.month(ix.period) + ' · built ' + String(ix.generated_at || '').slice(0, 10);
+    if (!PM.source().first) return line;
+    return line + (PM.data.live() ? ' · live' : ' · saved copy');
+  }
+
+  function liveNote(e) {
+    var box = document.getElementById('pm-live');
+    if (!e) {
+      if (box) box.remove();
+      return;
+    }
+    if (!box) {
+      box = document.createElement('div');
+      box.id = 'pm-live';
+      box.className = 'waiting live';
+      box.setAttribute('role', 'status');
+      document.body.appendChild(box);
+      requestAnimationFrame(function () { box.classList.add('up'); });
+    }
+    box.innerHTML = '<p>' + liveWords(e) + '</p>' +
+      '<p>Showing the saved copy, built ' + F.esc(String((INDEX && INDEX.generated_at) || '').slice(0, 10)) +
+      '.</p><div class="acts">' +
+      '<button type="button" class="btn small" id="pm-live-again">Try again</button>' +
+      '<button type="button" class="btn small quiet" id="pm-live-hide">Hide</button></div>';
+    document.getElementById('pm-live-again').addEventListener('click', function () {
+      box.remove();
+      PM.data.recheck();
+    });
+    document.getElementById('pm-live-hide').addEventListener('click', function () {
+      box.classList.remove('up');
+      setTimeout(function () { if (box.parentNode) box.remove(); }, 220);
+    });
+  }
+
+  function checked(state) {
+    if (state.changed) {
+      INDEX = state.index;
+      crumbs(PM.router.at());
+      golinks(PM.router.at());
+      PM.router.refresh();
+    }
+    if (INDEX) document.getElementById('stamp').textContent = stampLine(INDEX);
+    liveNote(state.error ? (state.error.live ? state.error : { live: true, kind: 'unavailable',
+      said: state.error.message }) : null);
+  }
+
 
   var TABNAME = { memo: 'Memo', covenants: 'Covenant tests', model: 'Financial model' };
 
@@ -3960,17 +4135,19 @@ PM.boot = (function () {
 
     keepPlace();
     PM.data.onNews(function () { newBuild(); });
+    var early = null;                                  // the store answered before the first screen
+    PM.data.onCheck(function (state) { if (INDEX) checked(state); else early = state; });
 
 
     PM.fonts.load();
     PM.data.index().then(function (ix) {
       INDEX = ix;
-      document.getElementById('stamp').textContent =
-        F.month(ix.period) + ' · built ' + String(ix.generated_at || '').slice(0, 10);
+      document.getElementById('stamp').textContent = stampLine(ix);
       lastPlace();
       crumbs(location.hash || '#/');
       golinks(location.hash || '#/');
       PM.router.dispatch();
+      if (early) { checked(early); early = null; }
     }, function (e) { selfCheck(e); });
   }
 
@@ -4024,8 +4201,7 @@ PM.boot = (function () {
       box.remove();
       PM.data.index().then(function (ix) {
         INDEX = ix;
-        document.getElementById('stamp').textContent =
-          F.month(ix.period) + ' · built ' + String(ix.generated_at || '').slice(0, 10);
+        document.getElementById('stamp').textContent = stampLine(ix);
         crumbs(PM.router.at());
         golinks(PM.router.at());
         PM.router.refresh();
@@ -4038,7 +4214,7 @@ PM.boot = (function () {
   }
 
   return { start: start, selfCheck: selfCheck, viewError: viewError,
-           landed: landed, nameOf: nameOf };
+           readFailure: readFailure, landed: landed, nameOf: nameOf };
 })();
 PM.boot.start();
 </script>

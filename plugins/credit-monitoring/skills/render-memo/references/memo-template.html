@@ -222,6 +222,38 @@
   span.pmark:hover{background:var(--spot)}
   table.traced td{cursor:pointer}
   table.traced tbody td:hover{background:var(--accent-soft)}
+  .statement-controls{display:flex;align-items:center;gap:12px;margin:8px 0;font-size:11px;color:var(--muted)}
+  .statement-controls button,.statement-toggle{font:inherit;color:var(--navy);cursor:pointer}
+  .statement-controls button{border:1px solid var(--line);border-radius:4px;background:var(--wash);padding:5px 9px}
+  .statement-toggle{border:0;background:transparent;padding:2px 0;text-align:left;font-weight:700}
+  .statement-toggle:before{content:'▸';display:inline-block;width:16px}
+  .statement-toggle[aria-expanded="true"]:before{content:'▾'}
+  .statement button:focus-visible{outline:2px solid var(--navy);outline-offset:3px}
+  .statement-frame{overflow-x:auto;max-width:100%;border:1px solid var(--line)}
+  .statement-table{width:max-content;min-width:100%;border-collapse:separate;border-spacing:0}
+  .statement-table th,.statement-table td{min-width:88px;white-space:nowrap}
+  .statement-table th:first-child,.statement-table td:first-child{position:sticky;left:0;z-index:1;min-width:220px;max-width:300px;white-space:normal;background:var(--paper,#fff)}
+  .statement-table tr[data-role="standard"] td:first-child{font-weight:700}
+  .statement-table tr[data-role="child"] td:first-child{padding-left:22px}
+  .statement-table tr[data-role="other"] td:first-child:after{content:' · unplaced';font-size:10px;color:var(--muted)}
+  .statement-table .cmp{display:block;font-size:10px;color:var(--muted)}
+  .statement-scope,.statement-notes{font-size:11px;line-height:1.45;color:var(--ink-2)}
+  .statement-print{display:none}
+  @media print{
+    @page{size:A4 landscape;margin:9mm}
+    .hrow,.hrow.w60{display:block !important}
+    .statement-screen{display:none !important}
+    .statement-print{display:block !important}
+    .statement-print-panel{break-before:page}
+    .statement-print-panel h3{font-size:11pt}
+    .statement-print .statement-table{width:100%;min-width:0;table-layout:fixed;font-size:9pt}
+    .statement-print .statement-table th,.statement-print .statement-table td{min-width:0;padding:4px 5px}
+    .statement-print .statement-table th:first-child,.statement-print .statement-table td:first-child{position:static;width:36%;max-width:none;white-space:normal;overflow-wrap:anywhere}
+    .statement-print .statement-table thead{display:table-header-group}
+    .statement-print .statement-table tr{break-inside:avoid}
+    .statement-notes,.statement-scope{font-size:9pt}
+    #trcpop{display:none !important}
+  }
   /* selected: the container whose trace box is open stays highlighted */
   td.trc-sel,th.trc-sel{background:var(--sel);box-shadow:inset 0 0 0 1.5px var(--accent)}
   .cc.trc-sel{background:var(--sel);box-shadow:inset 0 0 0 1.5px var(--accent)}
@@ -316,7 +348,20 @@
   .cov-rest{display:flex;flex-wrap:wrap;gap:10px}
   /* Snapshot collapsible boxes — persistent header bar (title + one teaser figure + chevron),
      body hidden until click. Native <details>/<summary>; print force-expands every box. */
-  details.snapbox{padding:0;overflow:hidden}
+  .basis-heading{display:flex;align-items:baseline;gap:6px}
+  .basis-wrap{display:inline-block;position:relative;font-size:13px;font-weight:400;text-transform:none;letter-spacing:normal}
+  .basis-toggle{border:0;background:transparent;color:var(--muted);cursor:pointer;font:inherit;padding:3px 6px}
+  .basis-note{position:absolute;z-index:7;top:100%;left:0;width:min(520px,75vw);padding:12px;background:var(--navy);color:white;border-radius:6px;line-height:1.5;box-shadow:0 3px 12px #0003}
+  .basis-note[hidden]{display:none}
+  .basis-toggle:focus-visible{outline:2px solid var(--navy);outline-offset:2px}
+  .tcell:focus-visible,.pmark:focus-visible{outline:2px solid var(--navy);outline-offset:-2px}
+  @media print{
+    .basis-heading{display:block}
+    .basis-wrap{display:block}
+    .basis-toggle{display:none}
+    .basis-note,.basis-note[hidden]{display:block;position:static;width:auto;background:none;color:inherit;box-shadow:none;padding:6px 0}
+  }
+  details.snapbox{padding:0;overflow:visible}
   details.snapbox>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:12px;padding:16px 18px;user-select:none}
   details.snapbox>summary::-webkit-details-marker{display:none}
   details.snapbox>summary h3{margin:0;flex:0 0 auto}
@@ -339,13 +384,15 @@
   .perfbar button:last-child{border-right:0}
   .perfbar button:hover{background:var(--accent-soft);color:var(--navy)}
   .perfbar button[aria-selected="true"]{background:var(--navy);color:#fff}
-  .perfbasis{margin-top:7px;font-size:11px}
+  .perfbasis{margin-top:7px;font-size:11px} .perfbasis p{margin:3px 0 0}
+  .perfgaps{font-size:11px} .perfgaps p{margin:3px 0 0}
   #perf-table th.pbasis{color:var(--amber)}
   /* No column shading in the Performance table: shading implied a primary basis, and choosing the
      basis is the judgment the toggle hands back to the reader. */
   #perf-table td.spot,#perf-table th.spot{background:transparent;font-weight:inherit;color:inherit}
   #perf-table .lvl{font-variant-numeric:tabular-nums}
   #perf-table .cmp{display:block;font-size:10.5px;color:var(--muted);letter-spacing:.02em}
+  #perf-table .cmp.up{color:var(--green);font-weight:700} #perf-table .cmp.down{color:var(--red);font-weight:700}
 
   /* ---------- TABS (report-structure.md -> Tabs) ---------- */
   /* Slim sticky strip: pale-green ground, dark-green labels, and a strong
@@ -438,9 +485,8 @@
 {{COVENANT_STRIP}}
 
 <h2 id="sec-snapshot">Performance &amp; collateral metrics</h2>
-<div class="hrow">
-<div>
-<!-- PERFORMANCE (% change only) -->
+<!-- PERFORMANCE: six level columns in the Monthly view, so it takes the full width;
+     Collateral sits beneath it, also full width. -->
 <details class="card snapbox" id="box-performance" open>
   <summary>
     <h3>Performance</h3>
@@ -455,11 +501,11 @@
   <div class="perfbar" role="tablist" aria-label="Performance time basis"></div>
   <div class="tblwrap"><table class="traced" id="perf-table"><thead></thead><tbody></tbody></table></div>
   <div class="perfbasis small muted"></div>
+  <div class="perfgaps small muted"></div>
   </div>
 </details>
-</div>
-<div>
-<!-- COLLATERAL METRICS -->
+
+<!-- COLLATERAL METRICS: full width, beneath Performance. -->
 <details class="card snapbox" id="box-collateral" open>
   <summary>
     <h3>Collateral metrics</h3>
@@ -467,15 +513,11 @@
     <span class="chev" aria-hidden="true">&#9656;</span>
   </summary>
   <div class="sbx-body">
-  <h3>Collateral metrics
-    <span class="small muted" style="font-weight:400;text-transform:none;letter-spacing:0">&middot; pledged assets tracked via the financials &middot; click a line for detail</span>
-  </h3>
+  <div class="basis-heading"><span class="small muted">Collateral metrics &middot; pledged assets tracked via the financials &middot; open a line for detail</span> {{COLLATERAL_BASIS}}</div>
 {{SNAP_COLLATERAL}}
   <div class="foot">{{COLLATERAL_READ}}</div>
   </div>
 </details>
-</div>
-</div>
 
 <!-- EXECUTIVE SUMMARY — the analyst's one-pager for the deal team (report-structure.md ->
      Executive summary). Five labeled prose blocks in a fixed order: the period update
@@ -614,7 +656,7 @@
      gets no grid seat, no chip and no list, and appears in Flags & follow-ups when broken.
      Breaches and at-risk tests lead. Covenants whose next scheduled test is more than 12
      months out render only in the closing block. -->
-<h2 id="sec-covenant">Covenant detail &amp; stress</h2>
+<div class="basis-heading"><h2 id="sec-covenant">Covenant detail &amp; stress</h2> {{COVENANT_BASIS}}</div>
 <div class="card">
   <div class="flow" style="margin-top:0">{{COVENANT_PREAMBLE}}</div>
   <div class="tblwrap">
@@ -633,7 +675,7 @@
 
 <!-- FORWARD STRESS — scenarios are DERIVED from the confirmed menu, never invented, and
      every row traces its arithmetic. -->
-<h2 id="sec-stress">Forward stress</h2>
+<div class="basis-heading"><h2 id="sec-stress">Forward stress</h2> {{STRESS_BASIS}}</div>
 <div class="card">
 {{STRESS_FACTS}}
   <div class="foot">{{FORWARD_STRESS}}</div>
@@ -722,7 +764,7 @@
 <!-- DATA QUALITY — the run's own mechanical notes first, then the analyst's judgment notes,
      in one list. Each note names the figures it affects and what to trust, in plain words
      the credit reader can act on. -->
-<h2 id="sec-data">Data quality &amp; basis notes</h2>
+<h2 id="sec-data">Data quality</h2>
 <div class="card">
   <ul class="small" style="margin-top:0">
 {{DATA_QUALITY}}
@@ -749,6 +791,48 @@
 </footer>
 </div>
 <script>
+(function(){
+  let closedForPrint = null;
+  window.addEventListener('beforeprint', function(){
+    if (closedForPrint !== null) return;
+    // Native closed details hide their contents even when print CSS shows the body.
+    closedForPrint = Array.from(document.querySelectorAll('details.snapbox:not([open])'));
+    closedForPrint.forEach(box => { box.open = true; });
+  });
+  window.addEventListener('afterprint', function(){
+    if (closedForPrint === null) return;
+    closedForPrint.forEach(box => { box.open = false; });
+    closedForPrint = null;
+  });
+})();
+(function(){
+  function close(wrap){
+    wrap.querySelector('.basis-toggle').setAttribute('aria-expanded','false');
+    wrap.querySelector('.basis-note').hidden=true;
+    wrap.dataset.pinned='false';
+  }
+  document.querySelectorAll('.basis-wrap').forEach(function(wrap){
+    var button=wrap.querySelector('.basis-toggle'), note=wrap.querySelector('.basis-note');
+    function show(){
+      document.querySelectorAll('.basis-wrap').forEach(function(other){if(other!==wrap)close(other)});
+      note.hidden=false;button.setAttribute('aria-expanded','true');
+    }
+    button.addEventListener('click',function(){
+      if(wrap.dataset.pinned==='true'){close(wrap)}else{show();wrap.dataset.pinned='true'}
+    });
+    wrap.addEventListener('pointerenter',function(e){if(e.pointerType==='mouse')show()});
+    wrap.addEventListener('pointerleave',function(){if(wrap.dataset.pinned!=='true'&&!wrap.contains(document.activeElement))close(wrap)});
+    wrap.addEventListener('keydown',function(e){
+      if(e.key==='Escape'){
+        var trace=document.getElementById('trcpop');if(trace&&trace.style.display==='block')return;
+        close(wrap);button.focus();e.stopPropagation();
+      }
+    });
+  });
+  document.addEventListener('click',function(e){
+    if(!e.target.closest('.basis-wrap'))document.querySelectorAll('.basis-wrap').forEach(close);
+  });
+})();
 const TREND=(function(){
   /* The chart's series come from the payload, never from this file. render_memo.py writes
      #trend-data; a missing or empty island leaves every series empty and the chart blank,
@@ -961,6 +1045,12 @@ render();
 (function(){
   var pop=document.createElement('div');pop.id='trcpop';document.body.appendChild(pop);
   var sel=null;
+  var announcement=document.createElement('div');
+  announcement.setAttribute('role','status');announcement.setAttribute('aria-live','polite');
+  announcement.style.cssText='position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)';
+  document.body.appendChild(announcement);
+  pop.setAttribute('role','region');pop.setAttribute('aria-label','Figure trace');
+  function targets(table){return Array.from(table.querySelectorAll('td.tcell,th.tcell,td[data-hops],table.traced td.tcell')).filter(function(c){return c.closest('table')===table})}
   // Classification is a named function and exposed, because the Performance box repaints its own
   // thead/tbody when the reader switches time basis: those fresh spans need classifying too, or a
   // toggled view's column headers stop answering. Cell clicks are delegated on document, so only
@@ -973,6 +1063,23 @@ render();
       if(cell){if(!cell.closest('table.traced')||cell.tagName==='TH')cell.classList.add('tcell');return}
       s.classList.add('pmark');
     });
+    document.querySelectorAll('table.traced td').forEach(function(c){
+      var table=c.closest('table');
+      if(table.tHead||c.querySelector('span.trc,span.srclink,span.srcmiss'))c.classList.add('tcell');
+    });
+    document.querySelectorAll('table').forEach(function(table){
+      if(table.closest('#trcpop'))return;
+      var cells=targets(table), active=cells.find(function(c){return c.tabIndex===0&&c.getClientRects().length})||cells.find(function(c){return c.getClientRects().length})||cells[0];
+      if(cells.length){
+        table.setAttribute('role','grid');
+        Array.from(table.rows).forEach(function(row){
+          row.setAttribute('role','row');
+          Array.from(row.cells).forEach(function(c){c.setAttribute('role',c.tagName==='TH'?'columnheader':'gridcell')});
+        });
+      }
+      cells.forEach(function(c){c.tabIndex=c===active?0:-1});
+    });
+    document.querySelectorAll('.pmark,.cc.tcell').forEach(function(c){c.tabIndex=0;c.setAttribute('role','button')});
   }
   window.traceInit=classify;
   classify(document);
@@ -1005,6 +1112,8 @@ render();
     var r=anchor.getBoundingClientRect(),
         left=Math.max(8,Math.min(window.scrollX+r.left,window.scrollX+document.documentElement.clientWidth-pop.offsetWidth-8));
     pop.style.left=left+'px';pop.style.top=(window.scrollY+r.bottom+6)+'px';
+    announcement.textContent='';
+    requestAnimationFrame(function(){announcement.textContent=pop.textContent});
   }
   function open(s,anchor){
     if(s.classList.contains('srclink')||s.classList.contains('srcmiss')){
@@ -1015,6 +1124,7 @@ render();
     }
   }
   document.addEventListener('click',function(e){
+    if(e.target.closest('[data-statement-group],[data-statement-view]')){hide();return}
     if(pop.contains(e.target)){if(e.target.closest('a'))hide();return}  // box hops navigate; box body stays open
     if(e.target.closest('a')){hide();return}  // jump chips & links navigate
     var m=e.target.closest('span.pmark');
@@ -1026,6 +1136,8 @@ render();
     }
     var cell=e.target.closest('table.traced td');
     if(!cell){hide();return}
+    var ownTrace=cell.querySelector('span.trc');
+    if(ownTrace){open(ownTrace,cell);return}
     var tr=cell.parentElement,table=cell.closest('table');
     /* A traced table with NO heading row: the forward-stress table is label and
        figure, nothing above them. Its figures carry their own arithmetic, so the
@@ -1044,13 +1156,94 @@ render();
     var isSpot=head[ci]&&head[ci].className.indexOf('spot')>=0;
     var own=parse(cell.dataset.steps);
     var steps=own.length?own:(isSpot?parse(tr.dataset.steps):[]);
-    render(cell,[tr.cells[0].textContent.trim()+' \u00b7 '+(head[ci]?head[ci].textContent.trim():''),method,hs?hs.dataset.calc:null],
-           steps,hs?parse(hs.dataset.hops):[]);
+    render(cell,[tr.cells[0].textContent.trim()+' \u00b7 '+(head[ci]?head[ci].textContent.trim():''),method,cell.dataset.calc||(hs?hs.dataset.calc:null)],
+           steps,cell.dataset.hops?parse(cell.dataset.hops):(hs?parse(hs.dataset.hops):[]));
   });
-  window.addEventListener('keydown',function(e){if(e.key==='Escape')hide()});
+  document.addEventListener('focusin',function(e){
+    var table=e.target.closest('table');
+    if(table&&!table.closest('#trcpop')&&targets(table).includes(e.target))targets(table).forEach(function(c){c.tabIndex=c===e.target?0:-1});
+  });
+  window.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){
+      if(sel){var origin=sel;hide();origin.focus()}
+      return;
+    }
+    if(pop.contains(e.target)){
+      var links=Array.from(pop.querySelectorAll('a'));
+      if(e.key==='Tab'&&sel){
+        if(e.shiftKey&&e.target===links[0]){e.preventDefault();sel.focus()}
+        else if(!e.shiftKey&&e.target===links[links.length-1]){
+          e.preventDefault();
+          var origin=sel;hide();origin.focus();
+          var stops=Array.from(document.querySelectorAll('a[href],button,[tabindex="0"],summary')).filter(function(c){return c.getClientRects().length&&!c.closest('#trcpop')});
+          var next=stops[stops.indexOf(origin)+1];if(next)next.focus();
+        }
+      }
+      return;
+    }
+    var anchor=e.target.closest('.tcell,.pmark');
+    if(!anchor)return;
+    if(e.target!==anchor&&e.target.closest('a,button,input,select,summary'))return;
+    if(e.key==='Enter'||e.key===' '){e.preventDefault();anchor.click();return}
+    if(e.key==='Tab'&&!e.shiftKey&&sel===anchor){
+      var link=pop.querySelector('a');if(link){e.preventDefault();link.focus()}return;
+    }
+    if(e.altKey||e.ctrlKey||e.metaKey)return;
+    var table=anchor.closest('table');if(!table)return;
+    var keys=['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End'];
+    if(!keys.includes(e.key))return;
+    e.preventDefault();
+    var cells=targets(table).filter(function(c){return c.getClientRects().length}),row=anchor.parentElement;
+    var sameRow=cells.filter(function(c){return c.parentElement===row}),next=null;
+    if(e.key==='Home')next=sameRow[0];
+    if(e.key==='End')next=sameRow[sameRow.length-1];
+    if(e.key==='ArrowLeft')next=sameRow[sameRow.indexOf(anchor)-1];
+    if(e.key==='ArrowRight')next=sameRow[sameRow.indexOf(anchor)+1];
+    if(e.key==='ArrowUp'||e.key==='ArrowDown'){
+      var rows=Array.from(table.rows),direction=e.key==='ArrowDown'?1:-1;
+      for(var index=rows.indexOf(row)+direction;index>=0&&index<rows.length;index+=direction){
+        var candidates=cells.filter(function(c){return c.parentElement===rows[index]});
+        if(candidates.length){
+          next=candidates.reduce(function(best,c){return Math.abs(c.cellIndex-anchor.cellIndex)<Math.abs(best.cellIndex-anchor.cellIndex)?c:best});
+          break;
+        }
+      }
+    }
+    if(next){next.focus();if(sel)next.click()}
+  });
 })();
 </script>
 
+<script>
+/* Native buttons provide Enter/Space activation; only presentation state changes. */
+(function(){
+  document.querySelectorAll('.statement').forEach(function(root){
+    var screen=root.querySelector('.statement-screen'),view=screen.querySelector('[data-statement-view]');
+    var groups=Array.from(screen.querySelectorAll('[data-statement-group]'));
+    function apply(){
+      screen.querySelectorAll('tr[data-role="child"]').forEach(function(row){
+        var control=groups.find(function(button){return button.dataset.statementGroup===row.dataset.group});
+        row.hidden=!!control&&control.getAttribute('aria-expanded')!=='true';
+      });
+      if(window.traceInit)window.traceInit();
+    }
+    groups.forEach(function(button){button.addEventListener('click',function(){
+      if(view&&view.getAttribute('aria-pressed')==='true'){
+        view.setAttribute('aria-pressed','false');view.textContent='Every line';
+        groups.forEach(function(other){other.setAttribute('aria-expanded','false')});
+      }
+      button.setAttribute('aria-expanded',button.getAttribute('aria-expanded')==='true'?'false':'true');apply();
+    })});
+    if(view)view.addEventListener('click',function(){
+      var every=view.getAttribute('aria-pressed')!=='true';view.setAttribute('aria-pressed',String(every));
+      view.textContent=every?'Standard view':'Every line';
+      groups.forEach(function(button){button.setAttribute('aria-expanded',String(every))});apply();
+    });
+    apply();
+    var frame=screen.querySelector('.statement-frame');if(frame)frame.scrollLeft=frame.scrollWidth;
+  });
+})();
+</script>
 <script type="application/json" id="perf-data">{{PERF_DATA}}</script>
 <script>
 /* Performance box renderer. Reads the pre-computed payload, paints the active view, and re-binds
@@ -1061,14 +1254,14 @@ render();
   var data; try{ data=JSON.parse(el.textContent); }catch(e){ return; }
   if(!data.views || !data.views.length) return;
   var bar=document.querySelector('.perfbar'), tbl=document.getElementById('perf-table');
-  var basisEl=document.querySelector('.perfbasis'); if(!bar||!tbl) return;
+  var basisEl=document.querySelector('.perfbasis'), gapsEl=document.querySelector('.perfgaps'); if(!bar||!tbl) return;
 
   function usd(v){ if(v==null) return '—';
     var n=Math.round(v), s=Math.abs(n).toLocaleString('en-US');
     return n<0 ? '('+s+')' : s; }
   function pct(v,d){ return v==null ? '—' : (v>=0?'+':'')+(v*100).toFixed(d==null?1:d)+'%'; }
   function bps(v){ return v==null ? '—' : (v>=0?'+':'')+Math.round(v).toLocaleString('en-US'); } function share(v,d){ return v==null ? '—' : (v*100).toFixed(d==null?1:d)+'%'; }
-  function esc(x){ return String(x==null?'':x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
+  function esc(x){ return String(x==null?'':x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
 
   /* favourable/unfavourable: opex growth is neutral (it grows with revenue) */
   function tone(rowId,v){
@@ -1088,16 +1281,19 @@ render();
     }
     return row.unit==='pct' ? share(cell.v,1) : usd(cell.v); /* a level margin is a share, not a change: +38.3% reads as a move that never happened */
   }
+  function span(ms){ return !ms||!ms.length ? '' : (ms.length>1 ? ms[0]+' to '+ms[ms.length-1] : ms[0]); }
   function cellSub(view,row,cell){
     if(view.kind!=='level') return '';
     if(cell.flip)       return 'sign change';
-    if(cell.small_base) return 'off a near-zero base';
+    /* the dollar move stands in for a percentage off a near-zero base */
+    if(cell.small_base) return (cell.delta==null?'':(cell.delta>=0?'+':'−')+usd(Math.abs(cell.delta))+' · ')+'off a near-zero base';
     if(cell.cmp==null)  return '';
     return row.unit==='pct' ? bps(cell.cmp)+' bps' : pct(cell.cmp);
   }
   /* operand lines for the trace box — the same shape data-steps uses elsewhere */
   function steps(view,row,col,cell){
     var out=[];
+    if(cell.na) return out;   /* no figure: the cell's own reason answers instead (data-calc) */
     if(view.kind==='change'){
       out.push({l:row.label+', '+(col.months.length>1?col.months[0]+' to '+col.months[col.months.length-1]:col.months[0]),
                 v:row.unit==='bps'?pct(cell.a,1):usd(cell.a)});
@@ -1109,21 +1305,42 @@ render();
                 :(row.unit==='bps'?'Change (basis points)':'Change')),
                 v:cellText(view,row,cell), res:true});
     }else{
-      out.push({l:row.label+', '+col.window, v:cellText(view,row,cell)});
+      out.push({l:row.label+', '+(col.against?(col.plan?'the plan for '+span(col.months):span(col.months)):col.window), v:cellText(view,row,cell)});
       if(col.factor && col.factor!==1) out.push({l:'Scaled to a twelve-month rate', v:'x '+(Math.round(col.factor*100)/100)});
       if(cell.b!=null) out.push({l:'Comparable window', v:row.unit==='pct'?pct(cell.b,1):usd(cell.b)});
-      var sub=cellSub(view,row,cell); if(sub) out.push({l:'Change', v:sub, res:true});
+      /* a comparison column: the reported window and its figure, then the change between the two */
+      if(cell.cur!=null) out.push({l:row.label+', '+span(col.against)+', the window reported', v:row.unit==='pct'?share(cell.cur,1):usd(cell.cur)});
+      var sub=cellSub(view,row,cell);
+      if(sub) out.push({l:cell.cur!=null?'Change, '+span(col.against)+' against '+(col.plan?'the plan':span(col.months)):'Change', v:sub, res:true});
     }
     return out;
   }
 
+  /* the column's trail: the model's income statement, then the package file behind each month
+     the window reads (its own months first, then the months it is compared against) */
+  var MONTH_TOKENS=/(?<![A-Za-z0-9])(?:(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)[ _-]?20\d{2}|20\d{2}[-_](?:0[1-9]|1[0-2])(?:[-_](?:0[1-9]|[12]\d|3[01]))?)(?![A-Za-z0-9])/gi;
+  function seriesLabel(t){
+    /* "September_2024_Monthly_Package.xlsx" and "October_2024_Monthly_Package.xlsx" are one series */
+    var s=String(t||'').replace(MONTH_TOKENS,'');
+    s=s.replace(/[ _-]{2,}/g,function(m){return m.indexOf(' ')>-1?' ':m.charAt(0);});
+    s=s.replace(/[ _-]+(?=\.[A-Za-z0-9]{1,5}\b)/g,'').replace(/^[ _-]+/,'');
+    return s.trim();
+  }
+  function colHops(c){
+    var L=data.links||{}, out=[], seen={};
+    if(L.model) out.push(L.model);
+    (c.months||[]).concat(c.base_months||[]).forEach(function(m){
+      ((L.months||{})[m]||[]).forEach(function(hp){ var k=JSON.stringify([m,hp.t,hp.h]); if(!seen[k]){ seen[k]=true; out.push({t:m+' — '+hp.t,h:hp.h}); } });
+    });
+    return out;
+  }
   function paint(vid){
     var view=null,i; for(i=0;i<data.views.length;i++) if(data.views[i].id===vid) view=data.views[i];
     if(!view) return;
     var h='<tr><th>Metric</th>',c,r,cell;
     for(i=0;i<view.columns.length;i++){ c=view.columns[i];
       h+='<th class="n'+(c.basis?' pbasis':'')+'"><span class="trc" data-calc="'+esc(c.window+(c.basis?' — '+c.basis:''))+'"'
-        +' data-hops=\'[{"t":"Model — monthly financials, income statement","h":null}]\'>'+esc(c.label)+(c.basis?'*':'')+'</span></th>';
+        +' data-hops=\''+esc(JSON.stringify(colHops(c)))+'\'>'+esc(c.label)+(c.basis?'*':'')+'</span></th>';
     }
     tbl.tHead.innerHTML=h+'</tr>';
     var b='';
@@ -1133,16 +1350,29 @@ render();
         +'<td>'+(sub?esc(r.label):'<a class="jumpname" href="#sec-is">'+esc(r.label)+' <span class="arw">&#8599;</span></a>')+'</td>';
       for(i=0;i<view.columns.length;i++){ c=view.columns[i]; cell=r.cells[i]||{};
         var t=cellText(view,r,cell), sb=cellSub(view,r,cell);
-        var kls=view.kind==='change'?tone(r.id,cell.v):(cell.cmp!=null?tone(r.id,cell.cmp):'neu');
-        b+='<td class="n '+kls+'" data-steps=\''+esc(JSON.stringify(steps(view,r,c,cell)))+'\'>'
-          +'<span class="lvl">'+t+'</span>'+(sb?'<span class="cmp">'+sb+'</span>':'')+'</td>';
+        /* A level view colours the CHANGE beneath a level and never the level itself: a red
+           May figure reads as May being bad, when it is June against May that fell. */
+        var kls=view.kind==='change'?tone(r.id,cell.v):'';
+        var subTone=view.kind==='level'?(cell.tone||(cell.cmp!=null?tone(r.id,cell.cmp):'')):'';
+        b+='<td class="n'+(kls?' '+kls:'')+'"'+(cell.na?' data-calc="'+esc(cell.na)+'"':'')+' data-hops=\''+esc(JSON.stringify(cell.trace_hops||colHops(c)))+'\' data-steps=\''+esc(JSON.stringify(steps(view,r,c,cell)))+'\'>'
+          +'<span class="lvl">'+t+'</span>'+(sb?'<span class="cmp'+(subTone?' '+subTone:'')+'">'+sb+'</span>':'')+'</td>';
       }
       b+='</tr>';
     }
     tbl.tBodies[0].innerHTML=b;
     if(basisEl){
-      var tagged=view.columns.filter(function(x){return x.basis;}).map(function(x){return x.label;});
-      basisEl.textContent = tagged.length ? ('* '+tagged.join(', ')+' — '+data.basis_note) : '';
+      /* one line per flagged column: its own note (a plan covering fewer months than the year
+         to date) or the box's reporting-basis note */
+      basisEl.innerHTML=view.columns.filter(function(x){return x.basis;}).map(function(x){
+        return '<p>'+esc('* '+x.label+': '+(x.note||data.basis_note||x.basis))+'</p>';
+      }).join('');
+    }
+    if(gapsEl){
+      /* one line per reason a figure is missing, named once for every cell it empties */
+      gapsEl.innerHTML=(view.gaps||[]).map(function(g){
+        var names=view.columns.filter(function(x){return (g.columns||[]).indexOf(x.id)>-1;}).map(function(x){return x.label;});
+        return '<p>'+(names.length?'<b>'+esc(names.join(', '))+':</b> ':'')+esc(g.text)+'</p>';
+      }).join('');
     }
     Array.prototype.forEach.call(bar.children,function(btn){
       btn.setAttribute('aria-selected', btn.dataset.view===vid ? 'true':'false'); });

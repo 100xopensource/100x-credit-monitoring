@@ -43,7 +43,7 @@ import json
 import os
 import re
 import sys
-from urllib.parse import quote
+from urllib.parse import quote, unquote, urlsplit
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_TEMPLATE = os.path.join(_HERE, "memo-template.html")
@@ -108,11 +108,11 @@ COLLAPSE_EMPTY = {"REVENUE_QUALITY_NOTES": "REVENUE_QUALITY",
 EMPTY_SENTENCE = "The analyst wrote nothing here for this month."
 
 STATUS_CLASS = {"pass": "pass", "at_risk": "atrisk", "at-risk": "atrisk",
-                "breach": "breach", "not_evaluable": "neu", "n/e": "neu"}
+                "breach": "breach", "not_evaluable": "neu", "n/e": "neu", "unresolved": "atrisk"}
 STATUS_WORD = {"pass": "Pass", "at_risk": "At-risk", "at-risk": "At-risk",
-               "breach": "Breach", "not_evaluable": "Not tested", "n/e": "Not tested"}
+               "breach": "Breach", "not_evaluable": "Not tested", "n/e": "Not tested", "unresolved": "Unresolved"}
 # The fixed vocabulary the grid's Result column prints, and the chip it wears.
-RESULT_CLASS = {"PASS": "pass", "PASS (at-risk)": "atrisk", "NOT PASSED": "breach"}
+RESULT_CLASS = {"PASS": "pass", "PASS (at-risk)": "atrisk", "NOT PASSED": "breach", "UNRESOLVED": "atrisk"}
 RESULT_RANK = {"NOT PASSED": 0, "PASS (at-risk)": 1, "PASS": 2}
 
 
@@ -222,6 +222,13 @@ def fig_text(f, sign=False):
     return dollars(f.get("value")) if sign else usd(f.get("value"))
 
 
+def _model_hops(payload, sheet):
+    """One hop to the run's own workbook, for a header whose figures are read off it."""
+    links = payload.get("links") or {}
+    name = os.path.basename(str(links.get("model_path_in_store") or "the model"))
+    return [{"t": f"{name} — {sheet}", "h": links.get("model_url")}]
+
+
 def hops_attr(f):
     """The `data-hops` payload the trace box reads: one entry per hop, each with the
     text a MEMO READER can act on and its link, or a null link when the store did
@@ -242,6 +249,33 @@ _INTERNAL_FILE = re.compile(
 _INTERNAL_WORDS = "the deal's own record of this term, kept with the monitoring files"
 
 
+def _web_url(value):
+    if not isinstance(value, str) or any(ord(c) < 32 for c in value):
+        return None
+    try:
+        parsed = urlsplit(value)
+        return value if parsed.scheme in ("http", "https") and parsed.netloc else None
+    except ValueError:
+        return None
+
+
+def _reference_text(ref):
+    path = str(ref.get("path_in_store") or "")
+    root = {"source": "Source folder", "store": "Results folder"}.get(ref.get("store"))
+    name = (f"{root} › {path}" if root and path else path) or "Source unresolved"
+    if ref.get("kind") == "certified-transcription":
+        name = "Borrower-certified value — " + name
+    details = [str(ref[k]) for k in ("sheet", "section", "period") if ref.get(k)]
+    if ref.get("page") is not None:
+        details.append(f"page {ref['page']}")
+    for key in ("quote", "status", "kind", "unlocated_reason"):
+        if ref.get(key) is not None:
+            details.append(f"{key.replace('_', ' ')}: {ref[key]}")
+    if path and not _web_url(ref.get("url")):
+        details.append("No supported web address configured")
+    return " — ".join([name] + details)
+
+
 def hop_list(hops):
     out = []
     for h in hops:
@@ -256,17 +290,53 @@ def hop_list(hops):
             if not (h.get("upstream") or []):
                 out.append({"t": _INTERNAL_WORDS, "h": None})
         else:
-            t = name + (f" — {where}" if where else "")
-            if h.get("cells"):
-                t += f" ({h['cells']})"
-            out.append({"t": t, "h": h.get("url")})
+            t = _reference_text(h)
+            out.append({"t": t, "h": h.get("url"), "_c": str(h.get("cells") or ""),
+                        "_p": str(h.get("path_in_store") or "")})
         for u in (h.get("upstream") or []):
             if not isinstance(u, dict):
                 continue
-            un = os.path.basename(str(u.get("path_in_store") or ""))
-            uw = u.get("sheet") or u.get("section")
-            out.append({"t": (un or "the borrower's own file") + (f" — {uw}" if uw else ""),
-                        "h": u.get("url")})
+            out.append({"t": _reference_text(u), "_c": str(u.get("cells") or ""),
+                        "h": u.get("url"), "_p": str(u.get("path_in_store") or "")})
+        for coverage in h.get("coverage") or []:
+            status = coverage.get("status")
+            if status == "unmapped":
+                out.append({"t": f"{coverage['period']}: no package mapping recorded", "h": None})
+            elif status == "dependency_missing":
+                out.append({"t": f"{coverage['period']}: missing dependency mapping — "
+                            + ", ".join(coverage.get("missing_sheets") or []), "h": None})
+        if h.get("coverage_error"):
+            out.append({"t": "Mapping coverage unavailable: " + str(h["coverage_error"]), "h": None})
+    return collapse_hops(out)
+
+
+def collapse_hops(hops):
+    """Combine cells only for identical document, period and evidence descriptions."""
+    seen, groups, order = set(), {}, []
+    for h in hops:
+        key = (h.get("t"), h.get("h"), h.get('_c'), h.get('_p'))
+        if key in seen:
+            continue
+        seen.add(key)
+        # Preserve distinct documents; only combine cells within the same file.
+        series = (h.get('t'), h.get('h'), h.get('_p'))
+        g = groups.setdefault(series, [])
+        if not g:
+            order.append(series)
+        g.append(h)
+    out = []
+    for t in order:
+        g = groups[t]
+        cells = []
+        for x in g:
+            for c in str(x.get("_c") or "").split(","):
+                c = c.strip()
+                if c and c not in cells:
+                    cells.append(c)
+        cell_note = ""
+        if cells:
+            cell_note = " (" + ", ".join(cells) + ")"
+        out.append({"t": g[0]["t"] + cell_note, "h": _web_url(g[0].get("h"))})
     return out
 
 
@@ -307,11 +377,17 @@ def store_url(store, path_in_store, stores):
         for seg in tail:
             url += "/" + quote(seg, safe="")
         return url
-    host, site, library, inside = m.groups()
+    # SharePoint's own addresses come encoded ("Shared%20Documents"); decode them
+    # so the quote below encodes once.
+    host, site, library, inside = (unquote(g) for g in m.groups())
     parts = [p for p in inside.split("/") if p] + tail
+    viewer = _OFFICE_VIEWER.get(os.path.splitext(parts[-1])[1].lower())
+    if viewer and ".record" in parts:
+        # Opening a record copy in Office re-saves it and stops the next review;
+        # open the same-named file at the top of the borrower's folder instead.
+        parts = parts[:parts.index(".record")] + parts[-1:]
     server_rel = site + "/" + library + "/" + "/".join(parts)
 
-    viewer = _OFFICE_VIEWER.get(os.path.splitext(parts[-1])[1].lower())
     if viewer:
         return host + "/" + viewer + "/r" + quote(server_rel, safe="/") + "?web=1"
     parent = site + "/" + library
@@ -323,16 +399,9 @@ def store_url(store, path_in_store, stores):
 
 
 def relink(node, stores):
-    """Rebuild every link the payload carries, from the store and the path beside
-    it. Returns the payload.
+    """Preserve supplied links except exact legacy plain paths; fill missing links.
 
-    Run ONCE on the loaded payload, so no part of the memo can print a link this
-    engine did not build. The payload's own links were built by whatever version
-    wrote it, and every payload written before this said the file's plain path,
-    which SharePoint downloads: a reader tracing a figure to the model got the
-    workbook in their Downloads folder rather than the sheet on screen. A link
-    whose store the payload does not carry is left as it stands -- it is the one
-    shape this cannot rebuild.
+    Unsafe schemes never become document links. No machine-root fallback exists.
     """
     if isinstance(node, list):
         for item in node:
@@ -340,10 +409,19 @@ def relink(node, stores):
     elif isinstance(node, dict):
         if "url" in node and node.get("store"):
             built = store_url(node.get("store"), node.get("path_in_store"), stores)
-            if built:
-                node["url"] = built
-                if "linked" in node:
-                    node["linked"] = True
+            supplied = _web_url(node.get("url"))
+            entry = (stores or {}).get(node["store"])
+            base = entry.get("url_base") if isinstance(entry, dict) else None
+            path = node.get("path_in_store")
+            if base and path:
+                parts = [p for p in str(path).replace("\\", "/").split("/") if p]
+                plain = str(base).rstrip("/") + "".join("/" + quote(p, safe="") for p in parts)
+                # Only the old deterministic join is replaceable; signed/exact URLs stay intact.
+                if supplied == plain and not urlsplit(supplied).query and not urlsplit(supplied).fragment:
+                    supplied = None
+            node["url"] = supplied or _web_url(built)
+            if "linked" in node:
+                node["linked"] = bool(node["url"])
         for value in node.values():
             relink(value, stores)
     return node
@@ -362,14 +440,17 @@ def refs_to_hops(refs, stores):
         if not isinstance(r, dict):
             continue
         h = {k: r.get(k) for k in ("store", "path_in_store", "sheet", "row", "label",
-                                   "cells", "section", "period") if r.get(k) is not None}
+                                   "cells", "section", "period", "page", "quote", "status",
+                                   "kind", "unlocated_reason", "coverage", "coverage_error") if r.get(k) is not None}
         h["url"] = r.get("url") or store_url(r.get("store"), r.get("path_in_store"),
                                              stores)
         ups = []
         for u in (r.get("upstream") or []):
             if not isinstance(u, dict):
                 continue
-            uu = {k: u.get(k) for k in ("store", "path_in_store", "sheet", "section")
+            uu = {k: u.get(k) for k in ("store", "path_in_store", "sheet", "section",
+                                        "cells", "page", "quote", "period", "status",
+                                        "kind", "unlocated_reason")
                   if u.get(k) is not None}
             uu["url"] = u.get("url") or store_url(u.get("store"),
                                                   u.get("path_in_store"), stores)
@@ -746,7 +827,7 @@ def _chip_word(c):
 # it is not, where a single covenant passes or breaches.
 GROUP_WORD = {"pass": "Compliant", "at_risk": "Compliant · at-risk",
               "breach": "Breach", "not_evaluable": "Not tested",
-              "indeterminate": "Not settled"}
+              "indeterminate": "Not settled", "unresolved": "Unresolved"}
 
 
 def render_strip(payload):
@@ -844,10 +925,8 @@ def _performance_teaser(payload):
 def _collateral_teaser(payload):
     """The widest coverage cut the map defines, and the debt it is measured against.
 
-    A bare "0.89x cover" reads as cover over the whole loan. Here it is cover over
-    the slice of debt this lien stands behind, which is a different and smaller
-    number than funded debt -- so the teaser says which debt, and the reader who
-    holds a 1.10x figure from the credit file can see why the two differ.
+    State the debt denominator explicitly: lien-secured debt can differ from
+    total funded debt, so their coverage ratios are not interchangeable.
     """
     col = payload["sections"]["snapshot_collateral"].get("collateral")
     if not col:
@@ -883,7 +962,7 @@ def _mm(v):
 
 
 def _mm_move(delta, rel, calc=None, hops=None):
-    """A move as "+$3.79MM (+132.3%)", toned by its sign — flat when it prints
+    """A signed dollar move in millions and percentage, toned by its sign — flat when it prints
     as zero at this precision. Traced when the caller has a source to give it."""
     if delta is None:
         return '<td class="n small muted">&mdash;</td>'
@@ -931,7 +1010,10 @@ def render_collateral(payload):
         if c.get("coverage") is None:
             continue
         cls = " bad" if c["coverage"] < 1.0 else (" warn" if c["coverage"] < 1.25 else "")
-        hops = hop_list(refs_to_hops(col.get("secured_ref") or [], stores))
+        refs = [ref for component in col.get("pledged_components") or []
+                if component.get("tier") in (c.get("counts") or [])
+                for ref in component.get("source_ref") or []]
+        hops = hop_list(refs_to_hops(refs + (col.get("secured_ref") or []), stores))
         chips.append(
             f'    <div class="cc{cls}">'
             f'<div class="v">{trc_raw(ratio(c["coverage"]), c.get("calc"), hops)}</div>'
@@ -958,7 +1040,7 @@ def render_collateral(payload):
     hdr = "".join(
         f'<th class="n{" spot" if h == f"{mon} $MM" else ""}">'
         + (esc(h) if calc is None else
-           f'<span class="trc" data-calc="{esc(calc)}" data-hops=\'[]\'>{esc(h)}</span>')
+           f"<span class=\"trc\" data-calc=\"{esc(calc)}\" data-hops='{esc(json.dumps([] if h == 'vs Budget' else _model_hops(payload, 'Balance Sheet'), sort_keys=True))}'>{esc(h)}</span>")
         + '</th>'
         if h != "Pledged component" else f'<th>{esc(h)}</th>'
         for h, calc in heads)
@@ -976,8 +1058,10 @@ def render_collateral(payload):
             f'<tr data-method="{mth(c.get("calc"))}">'
             f'<td>{label}</td>'
             f'<td class="n spot">{trc_raw(_mm(c.get("value")), c.get("calc"), hops)}</td>'
-            + _mm_move(c.get("mom_abs"), c.get("mom"))
-            + _mm_move(c.get("yoy_abs"), c.get("yoy"))
+            + _mm_move(c.get("mom_abs"), c.get("mom"), "Current month against prior month.",
+                       hop_list(refs_to_hops(c.get("mom_ref") or [], stores)))
+            + _mm_move(c.get("yoy_abs"), c.get("yoy"), "Current month against the same month last year.",
+                       hop_list(refs_to_hops(c.get("yoy_ref") or [], stores)))
             + _plan_cell(c, stores) + '</tr>')
     total = col.get("pledged_total")
     if total and total.get("value") is not None:
@@ -986,8 +1070,10 @@ def render_collateral(payload):
             f'<tr data-method="{mth(total.get("calc"))}">'
             f'<td><b>{esc(total.get("label"))}</b></td>'
             f'<td class="n spot"><b>{trc_raw(_mm(total.get("value")), total.get("calc"), hops)}</b></td>'
-            + _mm_move(total.get("mom_abs"), total.get("mom"))
-            + _mm_move(total.get("yoy_abs"), total.get("yoy"))
+            + _mm_move(total.get("mom_abs"), total.get("mom"), "Current total against prior month.",
+                       hop_list(refs_to_hops(total.get("mom_ref") or [], stores)))
+            + _mm_move(total.get("yoy_abs"), total.get("yoy"), "Current total against the same month last year.",
+                       hop_list(refs_to_hops(total.get("yoy_ref") or [], stores)))
             + _plan_cell(total, stores) + '</tr>')
     table = ("" if not rows else
              '  <div class="tblwrap">\n  <table class="traced" data-money="mm">\n'
@@ -995,14 +1081,9 @@ def render_collateral(payload):
              '    <tbody>\n      '
              + "\n      ".join(rows) + "\n    </tbody>\n  </table>\n  </div>\n")
 
-    # The security package first, in the map's own words, with the debt the cover
-    # is measured against bolded inside it: the reader who holds a different
-    # coverage figure from the credit file needs the denominator before the chips.
+    # Keep the denominator visible; the security summary lives in its basis note.
     head = ""
-    summary = reader_prose(col.get("security_summary"))
     lead_bits = []
-    if summary:
-        lead_bits.append(esc(summary if summary.endswith(".") else summary + "."))
     if col.get("secured_debt") is not None:
         lead_bits.append(f'Coverage is measured against '
                          f'<b>{_mm(col["secured_debt"])}MM '
@@ -1139,7 +1220,10 @@ def render_deal_terms(payload, stores):
         # The term is read off the deal background rather than computed, and the
         # trace says so when clicked -- a figure with no answer is one a reader
         # cannot check. The background file itself is never named to the reader.
-        traced = trc_raw(cell, _term_method(row), [])
+        refs = row.get("source_ref")
+        refs = [refs] if isinstance(refs, dict) else (refs or [])
+        traced = trc_raw(cell, _term_method(row),
+                         hop_list(refs_to_hops(refs, payload.get("stores") or {})))
         return (f'      <tr><td class="muted">{esc(row.get("label"))}</td>'
                 f'<td>{traced}</td></tr>')
 
@@ -1287,6 +1371,18 @@ def render_capstructure(payload, stores, keyed, empties):
             '    <tbody>\n' + "\n".join(body) + parts + '\n    </tbody>\n  </table>')
 
 
+def basis_note(key, content):
+    """A linked disclosure; empty sections have no control."""
+    if not content:
+        return ""
+    label = {"collateral": "Collateral metrics", "covenant": "Covenant detail & stress",
+             "history": "Covenant history", "stress": "Forward stress"}[key]
+    return (f'<div class="basis-wrap"><button type="button" class="basis-toggle" '
+            f'aria-label="Basis note: {esc(label)}" aria-expanded="false" aria-controls="basis-{key}">'
+            f'ⓘ</button><div class="basis-note" id="basis-{key}" hidden>'
+            f'{content}</div></div>')
+
+
 # ========================================================== covenant producers
 def render_preamble(payload, stores):
     pre = payload["sections"]["covenant_detail"].get("preamble") or {}
@@ -1299,10 +1395,12 @@ def render_preamble(payload, stores):
         bits.append(srclink(agreement.get("source_ref") or {}, label, stores,
                             detail="the financial-covenant section"))
     for a in (pre.get("amendments") or []):
-        name = a.get("name") or a.get("id")
-        bits.append(srclink(a.get("source_ref") or {}, esc(name), stores))
+        name = a.get("label") or a.get("name") or a.get("id")
+        label = " ".join(str(x) for x in (a.get("dated"), name) if x)
+        bits.append(srclink(a.get("source_ref") or {**a, "name": a.get("name") if a.get("path_in_store") else name}, esc(label), stores,
+                            detail=a.get("text")))
     lead = ("" if not bits else ", ".join(bits) + ". ")
-    rule = esc(pre.get("rule_plain") or "")
+    rule = "" if pre.get("either_or") else esc(pre.get("rule_plain") or "")
     cert = pre.get("certificate") or {}
     cert_words = ""
     ref = cert.get("source_ref") or {}
@@ -1317,8 +1415,7 @@ def render_preamble(payload, stores):
             cert_words = (f' The certified figures come from {named}, signed by '
                           f'{esc(who)}.')
         else:
-            cert_words = (f' The certified figures come from {named}; who signed it '
-                          f'and on what date was not captured with its figures.')
+            cert_words = f' The certified figures come from {named}.'
     return f'{lead}{rule}{cert_words}'
 
 
@@ -1361,7 +1458,13 @@ def render_covenant_grid(payload, stores, keyed, empties):
                          'covenant</span>')
         else:
             st = str(cert.get("status") or "").lower()
-            cert_cell = (srclink(cert_ref, by_unit(cert["value"], unit), stores)
+            certified_figure = next((f for f in sec.get("figures") or []
+                                     if f.get("covenant_id") == g.get("id")
+                                     and f.get("field") == "cert_value" and f.get("current")), None)
+            cert_trace = (trc(certified_figure, by_unit(cert["value"], unit)) if certified_figure else
+                          trc_raw(by_unit(cert["value"], unit), "Borrower-certified value.",
+                                  hop_list(refs_to_hops([dict(cert_ref, kind="certified-transcription")], stores))))
+            cert_cell = (cert_trace
                          + (f' <span class="tag {STATUS_CLASS.get(st, "neu")}">'
                             f'{STATUS_WORD.get(st, esc(cert.get("status")))}</span>'
                             if st else "")
@@ -1385,6 +1488,8 @@ def render_covenant_grid(payload, stores, keyed, empties):
                 model_cell += f'<br><span class="small muted">{hw}</span>'
         word = g.get("result_word") or "&mdash;"
         delta_text = (keyed.get("COVENANT_DELTAS") or {}).get(str(g.get("id")))
+        if g.get("reconciliation_reason"):
+            delta_text = esc(g["reconciliation_reason"]) + (" " + delta_text if delta_text else "")
         if not delta_text:
             empties.append(f"COVENANT_DELTAS[{g.get('id')}]")
             delta = '<span class="muted" data-box="COVENANT_DELTAS">&mdash;</span>'
@@ -1495,11 +1600,7 @@ def render_stress_facts(payload, stores):
             {"what": "The stress arithmetic",
              "reason": "no covenant result for this month carries a level to measure "
                        "a move against."})
-    return ('  <p class="small muted" style="margin:0 0 6px">What a forward read has '
-            'to agree with: where the agreement\'s own schedule goes next, the room '
-            'the tightest test has today, and the move that lands each test on its '
-            'threshold. <b>Click any figure</b> for its arithmetic.</p>\n'
-            '  <div class="tblwrap">\n  <table class="traced">\n'
+    return ('  <div class="tblwrap">\n  <table class="traced">\n'
             '    <tbody>\n' + "\n".join(rows) + '\n    </tbody>\n  </table>\n  </div>')
 
 
@@ -1508,7 +1609,7 @@ def render_stress_facts(payload, stores):
 # above it and the figures one click inside every cell.
 HISTORY_MARK = {"pass": ("P", "g"), "at_risk": ("A", "a"), "at-risk": ("A", "a"),
                 "breach": ("B", "rd"), "not_evaluable": ("n/e", "muted"),
-                "n/e": ("n/e", "muted")}
+                "n/e": ("n/e", "muted"), "unresolved": ("Unresolved", "a")}
 # Reasons a test could not be evaluated, in the reader's words rather than the
 # engine's own tag.
 NOT_EVALUABLE_WORDS = {
@@ -1551,7 +1652,12 @@ def render_covenant_history(payload):
         # The lead states the tally's own arithmetic. A row of six untestable
         # months once read "passed all 6 tests" -- a false statement over its own
         # n/e cells -- because anything short of a breach was called a pass.
-        if tally.get("breach"):
+        if tally.get("unresolved"):
+            lead = (f'{tally["unresolved"]} of {n} tests unresolved; '
+                    f'{tally.get("pass", 0)} passed, {tally.get("at_risk", 0)} at-risk, '
+                    f'{tally.get("breach", 0)} breached, '
+                    f'{tally.get("not_evaluable", 0)} could not be measured')
+        elif tally.get("breach"):
             lead = f'breached {tally["breach"]} of {n} tests'
         elif tally.get("pass", 0) == n:
             lead = f'passed all {n} tests'
@@ -1578,6 +1684,9 @@ def render_covenant_history(payload):
             if t.get("actual") is not None:
                 steps.append({"l": "Our figure",
                               "v": _steps_text(by_unit(t["actual"], unit))})
+            if t.get("cert_value") is not None:
+                steps.append({"l": "Borrower-certified figure",
+                              "v": _steps_text(by_unit(t["cert_value"], unit))})
             steps.append({"l": "Result",
                           "v": STATUS_WORD.get(st, st), "res": True})
             why = _plain_reason(t.get("reason"))
@@ -1585,7 +1694,8 @@ def render_covenant_history(payload):
                     + (f' — {why}' if why else '')
                     + ('. The borrower certified this date as well.'
                        if t.get("cert_status") else ''))
-            cell = trc_raw(f'<span class="{colour}">{mark}</span>', calc, [], steps)
+            cell = trc_raw(f'<span class="{colour}">{mark}</span>', calc,
+                           _model_hops(payload, None), steps)
             cells.append(f'<td class="n">{cell}</td>')
         body.append(f'      <tr><td>{esc(h["name"])} '
                     f'<span class="small muted">({esc(lead)})</span></td>'
@@ -1593,18 +1703,21 @@ def render_covenant_history(payload):
     legend = ('  <p class="small muted" style="margin:0 0 8px"><b class="g">P</b> '
               'passed &middot; <b class="a">A</b> passed within 15% of the level '
               '&middot; <b class="rd">B</b> below what the agreement requires '
-              '&middot; <b class="muted">n/e</b> could not be evaluated. '
-              '<b>Click any cell</b> for that test\'s required level and our '
+              '&middot; <b class="muted">n/e</b> could not be evaluated '
+              '&middot; <b class="a">Unresolved</b> requires reconciliation. '
+              '<b>Open any cell</b> for that test\'s required level and our '
               'figure.</p>\n')
     return ('\n<details class="card snapbox" id="box-cov-history">\n'
             '  <summary><h3>Covenant history</h3>'
             f'<span class="sbx-teaser">{esc(teaser)}</span>'
             '<span class="chev" aria-hidden="true">&#9656;</span></summary>\n'
-            f'  <div class="sbx-body">\n{legend}{_certified_note(hist, dates)}'
+            f'  <div class="sbx-body">\n'
+            + basis_note("history", _certified_note(hist, dates)) + legend +
             '<div class="tblwrap">\n  <table>\n'
             f'    <thead><tr><th>Covenant</th>{head}</tr></thead>\n'
             '    <tbody>\n' + "\n".join(body) +
             '\n    </tbody>\n  </table>\n  </div></div>\n</details>')
+
 
 
 def _certified_note(hist, dates):
@@ -1669,22 +1782,20 @@ def _basis_line(payload, section, kind):
         return ""
     months = t.get("months") or []
     ytd = t.get("ytd_months") or []
-    bits = [f'Displayed: trailing {len(months)} months ({_span_words(months)})']
+    bits = [f'Displayed: statement history ({_span_words(months)})']
     if kind == "balance":
         bits[0] += ", period-end balances"
         bits.append("No year-to-date column &mdash; balances do not sum")
     else:
-        if ytd:
+        if t.get('totals'):
+            bits.append('Summary columns: ' + ', '.join(esc(col['label']) for col in t['totals']))
+        elif ytd:
             bits[0] += f' plus the year to date ({_span_words(ytd)})'
-        bits.append("Analysis basis: the full year to date")
+        bits.append('Flow summaries add supported months; positions use their exact endpoints and margins use supporting totals')
+    if t.get('window_note'):
+        bits.append(esc(t['window_note']))
     if kind == "cashflow":
-        methods = [str(r.get("method") or "") for r in (t.get("rows") or [])]
-        as_reported = sum(1 for m in methods if m.startswith("As the borrower reported"))
-        bits.append("The borrower files its own indirect cash-flow statement each "
-                    "month and these are its figures as reported"
-                    if as_reported * 2 >= max(1, len(methods)) else
-                    "This is an indirect statement derived from the balance sheet "
-                    "and the income statement")
+        bits.append('Read from the model; the trace records upstream reporting or derivation where supplied')
     scale = _display_scale(t)
     if scale == 1000:
         # A worked example makes the unit stick: the reader sees 6,018 and the
@@ -1698,10 +1809,10 @@ def _basis_line(payload, section, kind):
     elif scale != 1:
         bits.append(f"Figures in US dollars divided by {scale:g}")
     else:
-        bits.append("All figures in US dollars")
+        bits.append("Money figures in US dollars; percentages, multiples and days keep their own units")
     cited = srclink(ref, esc(ref["name"]), stores,
                     detail=f'{t.get("sheet")}, {_span_words(months)}')
-    return (". ".join(bits) + f'. Source: {cited}. <b>Click any figure</b> for its '
+    return (". ".join(bits) + f'. Source: {cited}. <b>Open any figure</b> for its '
             'calculation and source.')
 
 
@@ -1722,65 +1833,95 @@ def _unit_word(scale):
 
 
 def render_table(payload, section, title):
-    """One statement's trailing months, with every cell answering when clicked.
-
-    Every figure the payload carries is in dollars; the table prints in the
-    borrower's own reporting unit, said in the corner header and the basis line.
-    """
-    t = payload["sections"][section].get("table")
+    """One flat statement and its exact print panels; folding never changes values."""
+    t = payload['sections'][section].get('table')
     if not t:
-        recs = absent_for(payload, section, {"table_absent"})
-        return "".join(absent_note(r) for r in recs) or absent_note(
-            {"what": title, "reason": "the borrower's reporting for these months "
-                                      "carries no rows for this statement."})
-    months = t["months"]
+        recs = absent_for(payload, section, {'table_absent'})
+        return ''.join(absent_note(r) for r in recs) or absent_note(
+            {'what': title, 'reason': 'the reporting carries no rows for this statement.'})
+    months = t['months']
     scale = _display_scale(t)
-    ytd_year = (t.get("ytd_months") or months or ["? ?"])[-1].split()[-1]
-    ytd_head = f"YTD {ytd_year}"
-    cols = list(months) + ([ytd_head] if t.get("flow") and t.get("ytd_months")
-                           else [])
+    totals = t.get('totals')
+    if totals is None:
+        year = (t.get('ytd_months') or months or ['? ?'])[-1].split()[-1]
+        totals = [{'id': 'ytd', 'label': 'YTD '+year, 'months': t['ytd_months']}] if t.get('flow') and t.get('ytd_months') else []
+    columns = [(mo, mo) for mo in months] + [(col['id'], col['label']) for col in totals]
+    groups = {r['group'] for r in t['rows'] if r.get('role') == 'child'}
+    notes = {}
+    prefix = 'statement-' + section
 
-    def money(v):
-        return usd(None if v is None else v / scale)
+    def col_hops(key):
+        col_months = [key] if key in months else next(col['months'] for col in totals if col['id'] == key)
+        hops = []
+        for mo in col_months:
+            ref = {'store': t.get('model_store'), 'path_in_store': t.get('model_path_in_store'),
+                   'sheet': t['sheet'], 'url': t.get('model_url'), 'period': mo,
+                   'upstream': [dict(u, period=u.get('period') or mo) for u in (t.get('column_sources') or {}).get(mo) or []],
+                   'coverage': (t.get('column_coverage') or {}).get(mo) or [], 'coverage_error': t.get('coverage_error')}
+            hops.extend(hop_list([ref]))
+        return hops
 
-    head = "".join(
-        f'<th class="n"><span class="trc" data-calc="{esc(_col_calc(t, c, ytd_head))}" '
-        f'data-hops=\'[{{"t":"The borrower&apos;s {esc(t["sheet"].lower())}","h":null}}]\'>'
-        f'{esc(_short(c) if c in months else c)}</span></th>' for c in cols)
-    body = []
-    for r in t["rows"]:
-        is_share = (r.get("unit") or "usd") in ("pct", "%", "percent")
-        show = share if is_share else money
-        cells = []
-        for i, mo in enumerate(months):
-            cells.append(f'<td class="n">{show(r["cells"][i])}</td>')
-        if ytd_head in cols:
-            if is_share:
-                # A share is not added down a year: January's 30% plus February's
-                # 31% is not a margin. When the run worked out the year's own
-                # ratio it prints; otherwise the cell says why not.
-                if r.get("ytd") is not None:
-                    cells.append(f'<td class="n spot">{share(r["ytd"])}</td>')
-                else:
-                    cells.append('<td class="n muted">&mdash;'
-                                 '<span class="cmp">a share is not added up</span>'
-                                 '</td>')
-            else:
-                # A year to date that covers fewer months than it asked for says so:
-                # a partial sum must not be presented as a full year.
-                cov = ""
-                if r.get("ytd_months_covered") is not None and \
-                        r["ytd_months_covered"] < (r.get("ytd_months_requested") or 0):
-                    cov = (f' <span class="cmp">({r["ytd_months_covered"]} of '
-                           f'{r["ytd_months_requested"]} months carried data)</span>')
-                cells.append(f'<td class="n spot">{money(r.get("ytd"))}{cov}</td>')
-        klass = ' class="sub"' if r.get("sub") else ""
-        body.append(f'      <tr{klass} data-method="{mth(r["method"])}">'
-                    f'<td>{esc(r["label"])}</td>' + "".join(cells) + '</tr>')
-    return ('  <table class="traced">\n'
-            f'    <thead><tr><th>{esc(title)} {_unit_word(scale)}</th>{head}</tr>'
-            '</thead>\n'
-            '    <tbody>\n' + "\n".join(body) + '\n    </tbody>\n  </table>')
+    def table_html(cols, printing=False):
+        heading = ''.join('<th class="n"><span class="trc" data-hops=\'' + esc(json.dumps(col_hops(key))) +
+                          '\' data-calc="' + esc('Reported month '+label if key in months else 'The declared '+label+' statement window.') +
+                          '">' + esc(label) + '</span></th>' for key, label in cols)
+        body = []
+        for index, row in enumerate(t['rows']):
+            row_id = prefix + '-row-' + str(index)
+            label = esc(row['label'])
+            if not printing and row.get('role') == 'standard' and row.get('group') in groups:
+                controls = ' '.join(prefix+'-row-'+str(i) for i,r in enumerate(t['rows']) if r.get('role') == 'child' and r.get('group') == row['group'])
+                label = '<button type="button" class="statement-toggle" data-statement-group="' + esc(row['group']) + '" aria-expanded="false" aria-controls="' + controls + '">' + label + '</button>'
+            cells = []
+            for key, _label in cols:
+                value = row['cells'][months.index(key)] if key in months else row.get(key)
+                unit = (row.get('unit') or 'usd').lower()
+                shown = (share(value) if unit in ('pct', '%', 'percent') else ratio(value) if unit in ('x', 'ratio') else
+                         '&mdash;' if value is None else f'{value:.1f} days' if unit == 'days' else usd(value/scale))
+                trace_key = 'YTD' if key == 'ytd' else key
+                why = (row.get('unavailable') or {}).get(trace_key)
+                if value is None:
+                    why = why or 'No reported value at the named model input/period.'
+                if why:
+                    note = notes.setdefault(why, len(notes)+1)
+                    shown += '<sup title="' + esc(why) + '"> [' + str(note) + ']</sup>'
+                covered, requested = row.get(key+'_months_covered'), row.get(key+'_months_requested')
+                if covered is not None and covered < (requested or 0):
+                    shown += f' <span class="cmp">({covered} of {requested} months carried data)</span>'
+                refs = (row.get('trace_refs') or {}).get(trace_key)
+                hops = hop_list(refs_to_hops(refs, payload.get('stores') or {})) if refs is not None else col_hops(key)
+                calc = row.get('method') or 'As reported.'
+                if key not in months:
+                    if row.get('ytd_is_closing_balance'):
+                        calc += " The closing month's balance, not the sum of monthly balances."
+                    elif row.get('kind') in ('stock', 'opening'):
+                        calc += ' The exact opening/closing endpoint, not a sum of balances.'
+                    elif unit in ('pct','%','percent'):
+                        calc += ' The ratio of supporting totals, not the sum of monthly percentages.'
+                    elif unit == 'usd':
+                        calc += ' The monthly inputs, added up.'
+                if why:
+                    calc += ' '+why
+                cells.append('<td class="n' + (' spot' if key not in months else '') + '" data-calc="' + esc(calc) +
+                    '" data-hops=\'' + esc(json.dumps(hops, sort_keys=True)) + '\'>' + shown + '</td>')
+            attrs = ' data-role="' + esc(row.get('role') or 'other') + '" data-group="' + esc(row.get('group') or '') + '"'
+            if not printing:
+                attrs += ' id="' + row_id + '"'
+            body.append('<tr' + attrs + ' data-method="' + mth(row.get('method') or 'As reported.') + '"><td>' + label + '</td>' + ''.join(cells) + '</tr>')
+        return ('<table class="traced statement-table" data-statement-section="' + section + '" data-statement-layout="' +
+                ('print' if printing else 'screen') + '" data-statement-columns=\'' + esc(json.dumps([key for key,_ in cols])) +
+                '\'><thead><tr><th>' + esc(title) + ' ' + _unit_word(scale) + '</th>' + heading + '</tr></thead><tbody>' + ''.join(body) + '</tbody></table>')
+
+    controls = ('<div class="statement-controls"><button type="button" data-statement-view aria-pressed="false">Every line</button>'
+                '<span>Open a standard line for supported detail. Unplaced rows remain visible.</span></div>') if groups else ''
+    screen = '<div class="statement-screen">' + controls + '<div class="statement-frame">' + table_html(columns) + '</div></div>'
+    panels = ''.join('<section class="statement-print-panel"><h3>' + esc(title) + ' — columns ' + str(start+1) + '–' +
+        str(min(start+6,len(columns))) + ' of ' + str(len(columns)) + '</h3>' + table_html(columns[start:start+6], True) + '</section>'
+        for start in range(0,len(columns),6))
+    footnotes = '<ol class="statement-notes">' + ''.join('<li value="' + str(index) + '">' + esc(reason) + '</li>' for reason,index in notes.items()) + '</ol>' if notes else ''
+    coverage = [r for r in t['rows'] if r.get('fold_coverage')]
+    scope = ''.join('<p class="statement-scope">' + esc(r['label'] + ': ' + r['method']) + '</p>' for r in coverage)
+    return '<div class="statement" data-statement="' + section + '">' + screen + '<div class="statement-print">' + panels + '</div>' + scope + footnotes + '</div>'
 
 
 def _col_calc(t, col, ytd_head="YTD"):
@@ -1848,11 +1989,15 @@ def render_liquidity(payload, stores):
     for row in sorted(rows, key=lambda r: (order.get(str(r.get("id")), 99),
                                            str(r.get("id")))):
         f = figs.get(row.get("figure_id"))
-        text = by_unit(row.get("value"), row.get("unit"))
-        cell = (trc(f, text) if f is not None
-                else trc_raw(text, block.get("calc"),
-                             hop_list(refs_to_hops(block.get("source_ref") or [],
-                                                   stores))))
+        if row.get("value") is None and row.get("words"):
+            # a stated fact, not a figure: no trace, no number to click
+            cell = f'<span class="small muted">{esc(row["words"])}</span>'
+        else:
+            text = by_unit(row.get("value"), row.get("unit"))
+            cell = (trc(f, text) if f is not None
+                    else trc_raw(text, block.get("calc"),
+                                 hop_list(refs_to_hops(block.get("source_ref") or [],
+                                                       stores))))
         trs.append(f'      <tr><td>{esc(row.get("label"))}</td>'
                    f'<td class="n">{cell}</td></tr>')
     gaps = "".join(
@@ -1860,7 +2005,7 @@ def render_liquidity(payload, stores):
         f'<b>{esc(a.get("what"))}:</b> {esc(a.get("reason"))}.</p>\n'
         for a in absent_for(payload, "balance_review", {"runway_not_measured"}))
     return ('  <p class="small muted" style="margin:0 0 6px">Two ways of measuring '
-            'the burn, because they answer differently. <b>Click any figure</b> to '
+            'the burn, because they answer differently. <b>Open any figure</b> to '
             'see how it was worked out.</p>\n'
             '  <div class="tblwrap">\n  <table>\n'
             '    <tbody>\n' + "\n".join(trs) + '\n    </tbody>\n  </table>\n  </div>\n'
@@ -1910,6 +2055,7 @@ FILE_GROUP_WORDS = [
     ("underwriting", "Underwriting &amp; diligence"),
     ("monthly_reporting", "Monthly reporting"),
     ("budget", "Budget &amp; forecast"),
+    ("borrower_submissions", "All borrower submissions"),
     ("working_analysis", "Working analysis artifacts"),
 ]
 ARCHIVE_ROW_ID = "working_analysis.archived_outputs"
@@ -1956,17 +2102,20 @@ def render_files_registry(payload, keyed, empties):
             head = dict(FILE_GROUP_WORDS).get(seen, str(seen).replace("_", " ").title())
             out.append(f'      <tr><td class="grp" colspan="3">{head}</td></tr>')
         name = esc(d.get("name"))
-        if d.get("url"):
+        if _web_url(d.get("url")):
             cell = (f'<a class="doclink" target="_blank" rel="noopener" '
-                    f'href="{esc(d["url"])}">{name}</a>')
+                    f'href="{esc(_web_url(d["url"]))}">{name}</a>')
         else:
             cell = name
         if d.get("words"):
             cell += f' <span class="small muted">&mdash; {esc(d["words"])}</span>'
+        if d.get("path_in_store") or d.get("unlocated_reason"):
+            cell += f' <span class="small muted">&mdash; {esc(_reference_text(d))}</span>'
         elif not d.get("url"):
-            cell += (' <span class="small muted">&mdash; named in this report; the '
-                     'folder it sits in is not one this memo can open</span>')
-        note = keyed_cell(keyed, "DOCUMENT_NOTES", str(d.get("id")), empties)
+            cell += ' <span class="small muted">&mdash; Source unresolved: no recorded location</span>'
+        note = ("Borrower submission; not independently assessed."
+                if d.get('group') == 'borrower_submissions' else
+                keyed_cell(keyed, "DOCUMENT_NOTES", str(d.get("id")), empties))
         dated = d.get("dated")
         dated_cell = ("&mdash;" if not dated else
                       f'<span class="small">{esc(_pretty_when(dated))}</span>')
@@ -1975,7 +2124,9 @@ def render_files_registry(payload, keyed, empties):
     return ('  <table>\n'
             '    <thead><tr><th style="width:32%">Document</th><th>What it is</th>'
             '<th style="width:16%">Dated / covers</th></tr></thead>\n'
-            '    <tbody>\n' + "\n".join(out) + '\n    </tbody>\n  </table>')
+            '    <tbody>\n' + "\n".join(out) + '\n    </tbody>\n  </table>'
+            + "".join(absent_note(r) for r in absent_for(
+                payload, "files_registry", {"document_not_linked"})))
 
 
 # The families the run's own notes fall into, in the order the tab reads them, with
@@ -2168,6 +2319,7 @@ FOOTER_GROUP_WORDS = {
     "monthly_reporting": "the monthly reporting packages with the compliance "
                          "certificate",
     "budget": "the pinned budget",
+    "borrower_submissions": "every file in the borrower's submission folders",
 }
 
 
@@ -2195,7 +2347,8 @@ def keyed_ids(payload):
            (payload["sections"]["covenant_detail"].get("grid") or [])]
     caps = [str(r.get("id")) for r in
             (payload["sections"]["deal_capstructure"].get("rows") or [])]
-    docs = [str(d.get("id")) for d in registry_rows(payload)]
+    docs = [str(d.get("id")) for d in registry_rows(payload)
+            if d.get('group') != 'borrower_submissions']
     return {"COVENANT_DELTAS": cov, "CAPSTRUCTURE_NOTES": caps,
             "DOCUMENT_NOTES": docs}
 
@@ -2264,6 +2417,16 @@ def render(payload, prose, template, run_date, version=None):
     stores = payload.get("stores") or {}
     empties = []
     strip = render_strip(payload)
+    perf = json.loads(json.dumps(payload["sections"]["snapshot_performance"].get("performance_views") or {"views": []}))
+    month_refs = perf.pop("month_refs", None)
+    if month_refs is not None:
+        perf["links"] = {"months": {month: hop_list(refs_to_hops([ref], stores))
+                                     for month, ref in month_refs.items()}}
+    for view in perf.get("views") or []:
+        for row in view.get("rows") or []:
+            for cell in row.get("cells") or []:
+                if "source_ref" in cell:
+                    cell["trace_hops"] = hop_list(refs_to_hops(cell.pop("source_ref"), stores))
     values = {
         "TITLE": render_title(payload),
         "H1_BORROWER": render_h1(payload),
@@ -2274,11 +2437,11 @@ def render(payload, prose, template, run_date, version=None):
         "COVENANT_STRIP": strip,
         "COVENANT_STRIP_REPEAT": strip,
         "SNAP_PERFORMANCE_TEASER": _performance_teaser(payload),
-        "PERF_DATA": json.dumps(
-            payload["sections"]["snapshot_performance"].get("performance_views")
-            or {"views": []}, sort_keys=True),
+        "PERF_DATA": json.dumps(perf, sort_keys=True).replace("<", "\\u003c"),
         "SNAP_COLLATERAL_TEASER": _collateral_teaser(payload),
         "SNAP_COLLATERAL": render_collateral(payload),
+        "COLLATERAL_BASIS": basis_note("collateral", esc(reader_prose(
+            ((payload["sections"]["snapshot_collateral"].get("collateral") or {}).get("security_summary"))))),
         "TREND_RANGE": render_trend_range(payload),
         "TREND_DATA": render_trend_data(payload),
         "TREND_CAPTION": render_trend_caption(payload),
@@ -2289,7 +2452,12 @@ def render(payload, prose, template, run_date, version=None):
         "DEAL_SECURITY_ASOF": render_security_asof(payload),
         "DEAL_SECURITY_TABLE": render_security_table(payload, stores),
         "DEAL_CAPSTRUCTURE": render_capstructure(payload, stores, keyed, empties),
-        "COVENANT_PREAMBLE": render_preamble(payload, stores),
+        "COVENANT_PREAMBLE": (esc((payload["sections"]["covenant_detail"].get("preamble") or {}).get("rule_plain"))
+                              if (payload["sections"]["covenant_detail"].get("preamble") or {}).get("either_or") else ""),
+        "COVENANT_BASIS": basis_note("covenant", render_preamble(payload, stores)),
+        "STRESS_BASIS": basis_note("stress", "What a forward read has to agree with: where the agreement's own schedule goes next, the room the tightest test has today, and the move that lands each test on its threshold. Open any figure for its arithmetic."
+                                   if any((payload["sections"]["covenant_detail"].get("stress_inputs") or {}).get(k)
+                                          for k in ("schedule_steps", "headroom_now", "breakevens")) else ""),
         "COVENANT_GRID": render_covenant_grid(payload, stores, keyed, empties),
         "STRESS_FACTS": render_stress_facts(payload, stores),
         "COVENANT_HISTORY": render_covenant_history(payload),

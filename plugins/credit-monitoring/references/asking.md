@@ -33,8 +33,6 @@ one reach them in our words.
 |---|---|
 | the input folder, the deal documents folder | the folder that holds the company's paperwork |
 | the output folder, the monitoring folder | the folder where I keep my work for this company |
-| connect a folder, grant access, a mount | let me open a folder, give me permission to look inside |
-| the file is a cloud only placeholder | the file is still online and has not come down to your computer yet |
 | a real run versus just a look | saving it with the team's files, or stopping before saving |
 | the model, the workbook | the financial summary I build from their reporting |
 | the covenant spec, covenant compliance | the promises the company made in their loan agreement |
@@ -43,21 +41,8 @@ one reach them in our words.
 | validate, gate, engine, config, registry | check, or say nothing at all |
 | the run failed, an error occurred | I could not do X, and here is what that means |
 
-## Explaining the two folders, and why
-
-Say what is in each folder and what you will do with it. Never name them by their job.
-
-> "There are two folders I need. One holds the company's paperwork, the statements and reports they
-> send us. I only read from that one and I never change anything in it. The other is where I keep my
-> work for this company. Your finished financial workbook and monitoring memo will be saved there so
-> the team can find them."
-
-Explaining folder approval when it comes up:
-
-> "Credit Monitoring works directly with folders already on your computer, including folders synced
-> through OneDrive, SharePoint, or Google Drive for desktop. There is no separate manual upload or migration. Claude processes connected content under your Anthropic terms, privacy controls, and retention settings.
-> The source, output parent, or both may be synced. A new Cowork conversation may ask you to approve
-> the folders again. That is normal and does not repeat the borrower setup."
+The words for the folders themselves, and what to say when one cannot be opened, depend on the
+runtime: see `runtime/<runtime>/files.md`.
 
 ## Explaining a long quiet
 
@@ -87,13 +72,13 @@ The exception is the credit judgment, which is theirs alone: whether it belongs 
 the watchlist, whether things are getting better or worse, whether the reason we made the loan still
 holds. Lay out what you found and leave the choice to them without a recommendation.
 
-**4. Put real choices to them as a menu.** `AskUserQuestion` is the only way you ask when the answer
-is a choice. The one exception is a company name that cannot be established from the bounded visible
-company-folder candidates: ask “What company should this review cover?” as a normal free text
-question and wait for the name. Do not turn that into a **Type the name** / **Not sure yet** menu.
-Never use a form, a page to fill in, or a path to type. Every real choice includes a way to stop, such
-as "Not now" or "Pause, and we can pick this up later". The Other box always accepts a typed answer,
-and a bare company name typed there is a company name, not a command.
+**4. Put real choices to them as a menu.** A menu is the only way you ask when the answer is a
+choice; how a menu reaches the analyst is in `runtime/<runtime>/asking.md`. The one exception is a
+company name that cannot be established from the bounded visible company-folder candidates: ask
+“What company should this review cover?” as a normal free text question and wait for the name. Do
+not turn that into a **Type the name** / **Not sure yet** menu. Never use a form, a page to fill in,
+or a path to type. Every real choice includes a way to stop, such as "Not now" or "Pause, and we can
+pick this up later".
 
 Ask settings in their units, with the number in front of them. "I will point out anything that moves
 by more than about $250,000" is a question they can answer in a second. The name of the setting is
@@ -113,45 +98,15 @@ nobody, and the work lands with the answer blank.
 Say these as written and fill in the blanks. Everything else follows the rules above.
 
 **Saying hello, and what this is** (the first thing they read): choose the exact state-aware welcome
-from `${CLAUDE_PLUGIN_ROOT}/references/entry-routing.md`. It always explains the financial workbook
-and monitoring memo before asking for folders or permission. Never add text before or another summary
-after it.
+from `entry-routing.md`. It always explains the financial workbook and monitoring memo before asking
+for folders or permission. Never add text before or another summary after it.
 
 **Saving it, or stopping before saving** (asked every time): use the matching exact permission menu
-from `entry-routing.md`. On a new or disconnected entry it says what continuing means:
-> "Before I open any folders, would you like me to continue and save this review in a folder you
-> choose, or stop without changing anything?"
-> **[Continue and choose folders]** / **[Stop without making changes]**
+from `entry-routing.md`. On a new or disconnected entry, that menu is in `runtime/<runtime>/files.md`
+and says what continuing means.
 
-**Before asking for the folders** (attach the folder guide on first setup, then say this before the
-readiness question and before opening either folder picker):
-Say the following before opening either folder picker:
-> "Credit Monitoring works directly with folders already on your computer, including folders synced
-> through OneDrive, SharePoint, or Google Drive for desktop. There is no separate manual upload or
-> migration. Claude processes connected content under your Anthropic terms, privacy controls, and
-> retention settings. Local folders are the simplest option.
->
-> I need two folders:
->
-> - **Company documents:** the folder holding {name}'s financial reporting and loan documents. I only read it and never change it.
-> - **Results:** a separate folder you approve for the financial workbook and credit monitoring memo.
->
-> [Read the folder guide](https://github.com/100xopensource/credit-monitoring-folder-guide). I have
-> also attached a packaged copy. Cowork will ask you to approve each folder, and nothing on your
-> computer is moved."
-
-**When the request does not work**, send the folder guide in the same message:
-> "That did not work, and it is not something you did wrong. I could not open that folder in this
-> Cowork conversation. This folder step is paused, your original documents are unchanged, and any
-> saved monitoring progress remains available. I have attached a short guide for making a local or
-> synced folder available."
-> **[Try choosing again]** / **[Choose another folder]** / **[Stop for now]**
-
-**When files are not locally readable**, send the same guide:
-> "I can see {name}'s folder, but one or more files are not available on this computer yet, so I
-> cannot read them. Your original documents are unchanged, and any saved monitoring progress remains
-> available. Use the relevant section of the attached guide, then retry when the files are available."
-> **[Try again]** / **[Choose another folder]** / **[Stop for now]**
+**Asking for the folders, and when a folder or file cannot be opened**: say the moments in
+`runtime/<runtime>/files.md`.
 
 **Before the long quiet** (the last thing they read before the wait):
 > "{name} is all set, so I am going to start. This takes about 45 minutes. You will not see much from
@@ -182,14 +137,7 @@ Say the following before opening either folder picker:
 > and nothing you have done is lost. {What it means for their memo, in one sentence.} {What you are
 > doing about it, or what you need from them.}"
 
-**When you are finished**:
-> "All done. {The one most important thing this month, in a single sentence.} Your financial
-> workbook and monitoring memo are saved in the folder where I keep my work for {name}, and here
-> they are as files you can open now. {Anything you had to leave out, said plainly, and what would
-> fill it in next time.}"
-
-Use “All done” only after both files pass their checks and are attached. If either file is missing or
-fails a check, explain the partial result and next step without claiming the review is complete.
+**When you are finished**: say the finished message in `runtime/<runtime>/delivery.md`.
 
 **When you stop before saving**:
 > "All done. Nothing has been added to the team's files. If you want me to save it, say so and I will

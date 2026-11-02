@@ -7,6 +7,8 @@ metadata:
 
 # Set up the monitoring folders
 
+Read `../../CLAUDE.md` before anything else; it holds the rules shared by every skill.
+
 Locate the installed plugin root from `${CLAUDE_PLUGIN_ROOT}`. If it is unavailable in Cowork,
 search only `$HOME/mnt/.remote-plugins` for this plugin's `references/render_guide.py`; never search
 user-selected folders. Use that root for all commands below and do not mention its internal mount
@@ -38,7 +40,7 @@ On first use after the analyst consents, render and attach the illustrated guide
 python ${CLAUDE_PLUGIN_ROOT}/references/render_guide.py
 ```
 
-Say **Before asking for the folders** from `${CLAUDE_PLUGIN_ROOT}/references/asking.md`. Do not ask
+Say **Before asking for the folders** from `../../references/runtime/cowork/files.md`. Do not ask
 which provider the analyst uses, infer one from a path, or explain provider setup in chat. The guide
 owns those details. When no company name is known yet, substitute “the company” for `{name}`; do not
 ask for or invent a name before source access.
@@ -129,7 +131,8 @@ right point. When none was named, say next that you will check saved monitoring 
 company to review. Do not imply that a review started or that files were generated. Return both roots
 to the caller so it can run the normal state classification; do not classify from chat history.
 
-If preparation refuses an existing folder, explain that it contains unknown data or an unsupported store layout and was left unchanged. Offer:
+If preparation refuses an existing folder, say it was left unchanged and pass on what the command
+printed: each path inside `credit-monitoring-output` it refused and why. Offer:
 
 - **Choose a different parent folder**
 - **Review the files myself, then retry**
@@ -137,6 +140,6 @@ If preparation refuses an existing folder, explain that it contains unknown data
 
 If the user chooses to review the files, pause without changing anything and retry only when they say they are ready. Never offer to delete, clean up, rename, move, or overwrite unknown data, and never create a suffixed alternative such as `credit-monitoring-output-2`.
 
-Do not resend the guide when both valid folders are already reachable. Attach it again only when the analyst explicitly asks, is unsure, either folder cannot be reached, or files are not locally readable. Explain only the local access problem and use the provider-neutral wording in `references/asking.md`; do not troubleshoot the sync provider in chat.
+Do not resend the guide when both valid folders are already reachable. Attach it again only when the analyst explicitly asks, is unsure, either folder cannot be reached, or files are not locally readable. Explain only the local access problem and use the provider-neutral wording in `../../references/runtime/cowork/files.md`; do not troubleshoot the sync provider in chat.
 
 This skill prepares only the store root. It does not create a deal, registry, model, monitoring run, or artifact.

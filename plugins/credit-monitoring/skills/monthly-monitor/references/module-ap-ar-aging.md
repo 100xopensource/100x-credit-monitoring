@@ -31,6 +31,13 @@ plus `At Date` (not yet due) and `Older`. The grand-total row is recognised as `
 `Total - Customer`, `Aged Receivable` or `Aged Payable`. The `As of ...` caption is read from anywhere in
 the top rows, not only the first cell.
 
+An export with one row per aging bucket (an `Aging Bucket` column, an `Amount` column, then a `Total`
+row) and no customer or vendor rows also parses. Buckets, % over 90, DSO/DPO and the balance-sheet
+tie-out are computed, and the bucket rows are reconciled to the `Total` row. Top-N concentration is
+empty, and the engine raises `aging_bucket_totals_only` for each side in the latest month. Say in the
+memo that the borrower's aging names no counterparty, so concentration cannot be read; it is not a
+parse failure.
+
 ## Purpose
 Assess receivables/payables quality and liquidity stress: bucket aging, concentration, trend.
 
@@ -51,9 +58,8 @@ python ap_ar_aging.py --borrower-config <borrower-config.json> --out <output .js
 
 Pass each path **as the borrower-config writes it** (`source:...`) — the same string as in borrower-config, not a
 `/sessions/…` path. That string is what the memo's figure links are built from.
-To open an export yourself first, use the connected-folder path with Read (the file tools refuse a
-`/sessions/…/mnt/…` string) and the sandbox path with bash — your agent contract's "Three path forms"
-(`${CLAUDE_PLUGIN_ROOT}/agents/module-analyst.md`).
+To open an export yourself first, use the path forms in **Paths a worker uses**
+(`../../../references/runtime/<runtime>/files.md`).
 
 A file that has not arrived: leave the flag off. Without a prior month the trend is omitted;
 without a latest A/R or A/P the module reports as not applicable this month and the run

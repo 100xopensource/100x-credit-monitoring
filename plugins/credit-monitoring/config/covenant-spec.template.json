@@ -114,7 +114,7 @@
     "_note": "Worked example of each primitive, and of the either/or pair. Remove or keep for reference. Not read by the module (the module reads 'covenants' and 'either_or_groups').",
     "definitions_example": {
       "EBITDA": {
-        "verbatim": "net income/loss before interest, income taxes, depreciation and amortization, GAAP consistently applied; provided further that, for each of the calendar months set forth below, EBITDA shall be deemed to be the amount set forth below opposite such month",
+        "verbatim": "<transcribe the definition and any deemed-month provisions from the signed agreement>",
         "agreement_ref": "Section 1",
         "basis": "flow",
         "compute": {
@@ -130,9 +130,9 @@
           },
           "stated_in": "dollars",
           "agreement_ref": {
-            "section": "1.1",
-            "page": 18,
-            "quote": "for each of the calendar months set forth below, EBITDA shall be deemed to be the amount set forth below opposite such month"
+            "section": "<deemed-month clause>",
+            "page": 0,
+            "quote": "<transcribe the deemed-month provision>"
           }
         },
         "note": "Use the model's single pinned EBITDA bridge row; do not recompute. basis flow: a TTM covenant sums 12 monthly bridge values. The deemed months are the agreement's own figures for the pre-close run and govern over the bridge row through the last month listed; pre-model months let an early TTM test compute."
@@ -242,9 +242,9 @@
           "rule": "any_pass",
           "rule_plain": "Compliant in any month where either the T3M EBITDA floor or the liquidity floor is met.",
           "agreement_ref": {
-            "section": "6.8(b)",
-            "page": 51,
-            "quote": "Borrower shall maintain either (i) Consolidated EBITDA for the trailing three months of not less than $2,000,000 or (ii) Liquidity of not less than $1,500,000"
+            "section": "<either/or clause>",
+            "page": 0,
+            "quote": "<transcribe the alternative tests and their thresholds>"
           },
           "members": [
             "min_t3m_ebitda",
@@ -266,9 +266,9 @@
           "first_test_date": "2025-03-31",
           "cure_rights": "none",
           "agreement_ref": {
-            "section": "6.8(b)(i)",
-            "page": 51,
-            "quote": "Consolidated EBITDA for the trailing three months of not less than $2,000,000"
+            "section": "<earnings leg>",
+            "page": 0,
+            "quote": "<transcribe the earnings test>"
           },
           "cert_ref": "Compliance Certificate line 'T3M EBITDA'",
           "either_or_group": "s6_8_b"
@@ -286,9 +286,9 @@
           "first_test_date": "2025-03-31",
           "cure_rights": "none",
           "agreement_ref": {
-            "section": "6.8(b)(ii)",
-            "page": 51,
-            "quote": "Liquidity of not less than $1,500,000"
+            "section": "<liquidity leg>",
+            "page": 0,
+            "quote": "<transcribe the liquidity test>"
           },
           "cert_ref": "Compliance Certificate line 'Unrestricted Cash'",
           "either_or_group": "s6_8_b"

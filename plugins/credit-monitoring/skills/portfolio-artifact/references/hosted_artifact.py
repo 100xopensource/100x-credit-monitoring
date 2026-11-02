@@ -21,6 +21,14 @@ INDEX_SCHEMA = "credit-monitor-artifact-index/v1"
 SOURCE_BEGIN = "/* HOSTED_SOURCE_BEGIN */"
 SOURCE_END = "/* HOSTED_SOURCE_END */"
 CANDIDATE = ".dashboard/credit-monitoring-portfolio.baked.html"
+# A live page reads the store in SharePoint on every open. Its source block and
+# the publish declaration it needs; the drive and folder are stamped per build.
+LIVE_CANDIDATE = ".dashboard/credit-monitoring-portfolio.live.html"
+LIVE_SOURCE = Path(__file__).with_name("live-source.js")
+LIVE_CAPABILITIES = {
+    "mcp": {"servers": [{"server": "Microsoft 365", "tools": ["read_resource"]}]},
+}
+_DRIVE_ID = re.compile(r"^[A-Za-z0-9!_-]+$")
 _STATE_KEYS = {"artifact_id", "artifact_url", "title", "candidate_sha256"}
 _NETWORK_API = re.compile(
     r"\b(?:fetch|XMLHttpRequest|WebSocket|EventSource|sendBeacon|importScripts|serviceWorker)\b|"
@@ -145,8 +153,12 @@ def read_state(path):
     return {"state": "malformed"}
 
 
-def decide_action(path, candidate_sha256):
-    """Choose the safe next hosted-artifact operation."""
+def decide_action(path, candidate_sha256=None):
+    """Choose the safe next hosted-artifact operation.
+
+    Without a candidate hash, a complete record is `linked`: a page exists and
+    this is its link. It does not say the page matches any local build.
+    """
     saved = read_state(path)
     if saved["state"] == "absent":
         return {"action": "create"}
@@ -156,6 +168,8 @@ def decide_action(path, candidate_sha256):
         "artifact_id": saved["artifact_id"],
         "artifact_url": saved["artifact_url"],
     }
+    if candidate_sha256 is None:
+        return {"action": "linked", **identity}
     action = "current" if saved["candidate_sha256"] == candidate_sha256 else "stale"
     return {"action": action, **identity}
 
@@ -217,8 +231,41 @@ def record_identity(path, artifact_id, artifact_url, title, candidate_sha256):
     return complete
 
 
-def build_candidate(artifact, template, max_bytes=16_775_000):
-    """Build one deterministic, self-contained hosted candidate."""
+def _live_pins(drive_id, folder):
+    """Check the SharePoint location a live page reads, or refuse it."""
+    if drive_id is None and folder is None:
+        return None
+    if not isinstance(drive_id, str) or not _DRIVE_ID.match(drive_id):
+        raise ValueError("a live build needs a SharePoint drive ID")
+    folder = folder.strip("/") if isinstance(folder, str) else ""
+    if (not folder or "\\" in folder or re.search(r"[\x00-\x1f]", folder)
+            or any(part in ("", ".", "..") for part in folder.split("/"))):
+        raise ValueError("a live build needs the dashboard folder's path from the drive root")
+    return drive_id, folder
+
+
+def _live_source(data, drive_id, folder):
+    """The live source block: the embedded book plus the stamped reader."""
+    source = LIVE_SOURCE.read_text(encoding="utf-8")
+    pins = {
+        "  var DRIVE_ID = '';": "  var DRIVE_ID = %s;" % json.dumps(drive_id),
+        "  var FOLDER = '';": "  var FOLDER = %s;" % json.dumps(folder, ensure_ascii=False),
+        "PM.embedded = {};": "PM.embedded = %s;" % data,
+    }
+    for placeholder, value in pins.items():
+        if source.count(placeholder) != 1:
+            raise ValueError("live source block has no single %r" % placeholder)
+        source = source.replace(placeholder, value.replace("<", "\\u003c"))
+    return source.strip()
+
+
+def build_candidate(artifact, template, max_bytes=16_775_000, drive_id=None, folder=None):
+    """Build one deterministic, self-contained hosted candidate.
+
+    With a drive ID and folder, build the live page instead: the same embedded
+    book as its first screen, read again from SharePoint on every open.
+    """
+    live = _live_pins(drive_id, folder)
     artifact = Path(artifact)
     template = Path(template)
     if artifact.is_symlink() or not artifact.is_dir():
@@ -286,8 +333,8 @@ def build_candidate(artifact, template, max_bytes=16_775_000):
 
     pages = {}
     for name in sorted(names):
-        if (not isinstance(name, str) or Path(name).name != name
-                or "/" in name or "\\" in name):
+        if (not isinstance(name, str) or "\\" in name
+                or any(part in ("", ".", "..") for part in name.split("/"))):
             raise ValueError("index.json names an unsafe file: %r" % name)
         path = artifact_file(name)
         try:
@@ -318,6 +365,8 @@ PM.source = function () {
   };
 };
 /* HOSTED_SOURCE_END */""" % data
+    if live:
+        source = _live_source(data, *live)
 
     html = template.read_text(encoding="utf-8")
     start = html.find(SOURCE_BEGIN)
@@ -346,7 +395,7 @@ PM.source = function () {
         dashboard.relative_to(artifact)
     except ValueError as exc:
         raise ValueError("candidate output directory escapes the artifact root") from exc
-    candidate = dashboard / Path(CANDIDATE).name
+    candidate = dashboard / Path(LIVE_CANDIDATE if live else CANDIDATE).name
     if candidate.is_symlink():
         raise ValueError("candidate output must not be a symlink")
     temporary = None
@@ -359,13 +408,16 @@ PM.source = function () {
         if temporary is not None:
             temporary.unlink(missing_ok=True)
 
-    return {
+    result = {
         "candidate": candidate,
         "sha256": hashlib.sha256(payload).hexdigest(),
         "bytes": len(payload),
         "included_borrowers": included,
         "unavailable_borrowers": unavailable,
     }
+    if live:
+        result["capabilities"] = LIVE_CAPABILITIES
+    return result
 
 
 def main(argv=None):
@@ -376,10 +428,14 @@ def main(argv=None):
     build.add_argument("--artifact", required=True)
     build.add_argument("--template", required=True)
     build.add_argument("--max-bytes", type=int, default=16_775_000)
+    build.add_argument("--drive-id", help="build the live page: the SharePoint drive it reads")
+    build.add_argument("--folder", help="build the live page: the dashboard folder's path "
+                                        "from the drive root")
 
     status = commands.add_parser("status")
     status.add_argument("--state", required=True)
-    status.add_argument("--candidate-sha256", required=True)
+    status.add_argument("--candidate-sha256", help="compare the record with this build; "
+                        "omit it to ask only whether a page is recorded")
 
     prepare = commands.add_parser("prepare-create")
     prepare.add_argument("--state", required=True)
@@ -395,7 +451,8 @@ def main(argv=None):
 
     args = parser.parse_args(argv)
     if args.command == "build":
-        result = build_candidate(args.artifact, args.template, args.max_bytes)
+        result = build_candidate(args.artifact, args.template, args.max_bytes,
+                                 args.drive_id, args.folder)
     elif args.command == "status":
         result = decide_action(args.state, args.candidate_sha256)
     elif args.command == "prepare-create":

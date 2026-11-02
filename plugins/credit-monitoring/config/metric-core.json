@@ -49,5 +49,62 @@
     "capex": "capex",
     "operating cash flow": "operating_cash_flow",
     "free cash flow": "free_cash_flow"
+  },
+  "statement_lines": {
+    "Income Statement": [
+      {"key":"revenue","label":"Revenue","config":"model_lines.revenue"},
+      {"key":"cogs","label":"Cost of goods sold","config":"model_lines.operating_cogs"},
+      {"key":"gross_profit","label":"Gross profit","config":"model_lines.gross_profit"},
+      {"key":"opex","label":"Operating expenses"},
+      {"key":"operating_income","label":"Operating income"},
+      {"key":"other_expense","label":"Other (income) / expense"},
+      {"key":"interest_expense","label":"Interest expense","config":"model_lines.interest_expense"},
+      {"key":"taxes","label":"Taxes","config":"model_lines.taxes"},
+      {"key":"net_income","label":"Net income","config":"model_lines.net_income"},
+      {"key":"ebitda","label":"EBITDA (covenant basis)","config":"model_lines.ebitda_bridge"},
+      {"key":"statement.revenue_growth","label":"Revenue growth (YoY)","computed":true},
+      {"key":"statement.gross_margin","label":"Gross margin","computed":true},
+      {"key":"statement.ebitda_margin","label":"EBITDA margin","computed":true},
+      {"key":"statement.cash_capex","label":"Unfinanced cash capex (signed)","computed":true},
+      {"key":"statement.cash_tax","label":"Cash tax paid (signed)","computed":true},
+      {"key":"statement.cash_interest","label":"Cash interest paid","computed":true},
+      {"key":"statement.scheduled_principal","label":"Scheduled principal paid","computed":true},
+      {"key":"statement.cash_after_debt_service","label":"Cash after debt service (defined)","computed":true},
+      {"key":"statement.cash_after_debt_service_margin","label":"Cash after debt service margin","computed":true},
+      {"key":"statement.total_debt","label":"Total debt","computed":true},
+      {"key":"statement.leverage","label":"Leverage","computed":true}
+    ],
+    "Balance Sheet": [
+      {"key":"cash","label":"Cash","config":"analysis_lines.cash"},
+      {"key":"ar","label":"Accounts receivable","config":"analysis_lines.accounts_receivable"},
+      {"key":"inventory","label":"Inventory","config":"analysis_lines.inventory"},
+      {"key":"other_current_assets","label":"Other current assets"},
+      {"key":"total_current_assets","label":"Total current assets","config":"analysis_lines.total_current_assets"},
+      {"key":"ppe","label":"Property and equipment"},
+      {"key":"intangibles","label":"Goodwill and intangibles"},
+      {"key":"other_noncurrent_assets","label":"Other non-current assets"},
+      {"key":"total_noncurrent_assets","label":"Total non-current assets"},
+      {"key":"total_assets","label":"Total assets","config":"analysis_lines.total_assets"},
+      {"key":"ap","label":"Accounts payable","config":"analysis_lines.accounts_payable"},
+      {"key":"accrued","label":"Accrued expenses"},
+      {"key":"deferred_revenue","label":"Deferred revenue"},
+      {"key":"other_current_liabilities","label":"Other current liabilities"},
+      {"key":"total_current_liabilities","label":"Total current liabilities","config":"analysis_lines.total_current_liabilities"},
+      {"key":"long_term_debt","label":"Long-term debt"},
+      {"key":"other_noncurrent_liabilities","label":"Other non-current liabilities"},
+      {"key":"total_noncurrent_liabilities","label":"Total non-current liabilities"},
+      {"key":"total_liabilities","label":"Total liabilities"},
+      {"key":"total_equity","label":"Total equity","config":"analysis_lines.total_equity"},
+      {"key":"total_liabilities_and_equity","label":"Total liabilities and equity"},
+      {"key":"statement.dso_days","label":"Days sales outstanding","computed":true},
+      {"key":"statement.dpo_days","label":"Days payables outstanding","computed":true},
+      {"key":"statement.dio_days","label":"Days inventory outstanding","computed":true}
+    ],
+    "Cash Flow Statement": [
+      {"key":"operating_cash_flow","label":"Operating cash flow","config":"analysis_lines.operating_cf"},
+      {"key":"investing_cf","label":"Investing","config":"analysis_lines.investing_cf"},
+      {"key":"financing_cf","label":"Financing","config":"analysis_lines.financing_cf"},
+      {"key":"net_change_cash","label":"Net change in cash","config":"analysis_lines.net_change_cash"}
+    ]
   }
 }

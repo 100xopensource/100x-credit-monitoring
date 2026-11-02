@@ -4,11 +4,12 @@
 
 Credit Monitoring is a **local-file workflow**, not a local-only processing system.
 
-- The plugin reads only folders the user connects through Claude Cowork.
+- In Cowork, the plugin reads only folders the user approves. Cloud Cowork may stage approved files temporarily in its managed runtime and write results back to the selected results folder.
 - Borrower source folders are treated as read only.
 - Results and monitoring state are written beneath the results folder the user selects.
 - Content sent to or processed by Claude is governed by the user's Anthropic plan, terms, privacy controls, and retention settings.
-- The plugin includes no separate account, API key, telemetry service, database, or cloud connector.
+- Cowork needs no separate plugin account, API key, telemetry service or database. Its dashboard remains a self-contained snapshot.
+- The plugin also contains instructions for Claude Tag channels whose administrators provide SharePoint access. That is a separate, administrator-configured setup, not a connector installed by this Cowork workflow, and Cowork does not switch to it automatically.
 
 Review Anthropic's applicable terms and organizational settings before processing confidential borrower information.
 
@@ -16,7 +17,7 @@ Review Anthropic's applicable terms and organizational settings before processin
 
 A hosted Claude dashboard is separate from local file processing. The plugin validates a local candidate, identifies the borrowers included, and asks permission before private creation. It does not share the dashboard automatically. Sharing is controlled through Claude's own controls.
 
-Same-link updates are unavailable in v1. The plugin does not silently mutate a completed hosted artifact or replace its saved identity.
+Same-link updates are unavailable in Cowork. The plugin does not silently mutate a completed hosted artifact or replace its saved identity.
 
 ## Data-handling safeguards
 

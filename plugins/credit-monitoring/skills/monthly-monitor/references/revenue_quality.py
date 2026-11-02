@@ -94,8 +94,8 @@ import monitor_lib as ml  # noqa: E402
 import rows_emit  # noqa: E402
 import covenant_compliance as cc  # noqa: E402
 
-import openpyxl  # noqa: E402
-from openpyxl.utils import get_column_letter  # noqa: E402
+openpyxl = ml.prerequisites.openpyxl
+get_column_letter = ml.prerequisites.get_column_letter
 
 # ===========================================================================
 # Constants / config-driven defaults
@@ -1534,7 +1534,8 @@ def compute(cfg, period, unit, out_override=None, config_path=None,
         except (OSError, ValueError, KeyError) as e:
             exceptions.append({
                 "section": "arr_bridge/retention", "type": "parse_error",
-                "path": retention_path, "error": str(e),
+                "input": "retention_file", "error": type(e).__name__,
+                "detail": "Could not read the configured retention input; check access and layout.",
             })
 
     # ================================================================
@@ -1683,7 +1684,8 @@ def compute(cfg, period, unit, out_override=None, config_path=None,
         except (OSError, ValueError, KeyError) as e:
             exceptions.append({
                 "section": "deferred_revenue", "type": "parse_error",
-                "path": dr_path, "error": str(e),
+                "input": "deferred_revenue_file", "error": type(e).__name__,
+                "detail": "Could not read the configured deferred-revenue input; check access and layout.",
             })
 
     # ================================================================
@@ -2003,6 +2005,7 @@ def main():
                     help="the run this output belongs to, minted once by the "
                          "orchestrator for the whole run (or set CREDIT_MONITOR_RUN_ID)")
     args = ap.parse_args()
+    ml.prerequisites.require_workbook()
     if args.run_id:
         os.environ["CREDIT_MONITOR_RUN_ID"] = args.run_id   # run_stamp() reads it
 

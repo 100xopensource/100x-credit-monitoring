@@ -531,8 +531,7 @@ def value_at(series, is_flow, window, idx, months=None, deemed=None):
 #
 # It can be declared once for the whole spec and overridden per covenant. Absent,
 # the default is what every spec written so far MEANS: a money threshold is
-# already on the model's unit (Example Borrower's floors read 1500 and 3000 against a model in
-# thousands), and a ratio is unitless. So nothing silently changes for a deal
+# already on the model's unit, and a ratio is unitless. So nothing silently changes for a deal
 # already set up, and a spec that would rather quote the agreement's own figure
 # can say so and be read correctly.
 #
@@ -1876,8 +1875,7 @@ def compute(model, spec, unit, borrower_name=None, certified=None,
         # The cure terms named ONCE per covenant that actually flagged, not
         # copied onto every breach date. They are the credit
         # agreement's words and live in covenant-spec.json; a breach points at
-        # them by covenant id. Example Borrower's June output carried one covenant's cure
-        # paragraph twelve times, once per test date.
+        # them by covenant id rather than repeating them for each test date.
         # Only covenants that grant one: a covenant whose terms say "none" is
         # not a cure, and listing it here reads as though there were time to fix.
         cure_rights={c["id"]: c["cure_rights"]
@@ -1923,6 +1921,7 @@ def main():
                     help="the run this output belongs to, minted once by the "
                          "orchestrator for the whole run (or set CREDIT_MONITOR_RUN_ID)")
     args = ap.parse_args()
+    ml.prerequisites.require_workbook()
     if args.run_id:
         os.environ["CREDIT_MONITOR_RUN_ID"] = args.run_id   # run_stamp() reads it
 

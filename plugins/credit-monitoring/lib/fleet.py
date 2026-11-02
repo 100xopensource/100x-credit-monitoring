@@ -234,22 +234,29 @@ def _selection(entry, fleet_path):
     return {"period": period, "run_id": run_id}, None
 
 
-def _fact(found):
-    return {key: found[key] for key in (
-        "period", "run_id", "folder", "workbook_path", "memo_path", "roles"
-    ) if key in found}
+def _fact(found, borrower, shown):
+    """A run's facts. Its workbook and memo paths, the files to open, are the
+    copies at the top of the borrower's folder, and only while that folder holds
+    this run. An attachment opens the file itself, and an edit to a copy under
+    `.record/` makes the next run stop."""
+    fact = {key: found[key] for key in ("period", "run_id", "folder", "roles") if key in found}
+    if shown and (shown.get("period"), shown.get("run_id")) == (fact["period"], fact["run_id"]):
+        fact["workbook_path"] = str(borrower / found["roles"]["financial_workbook"])
+        fact["memo_path"] = str(borrower / found["roles"]["memo"])
+    return fact
 
 
 def _lifecycle(entry, fleet_path):
     monitor_output = _monitor_output_folder(entry)
     borrower = Path(entry["config_path"]).resolve().parents[3]
+    current = run_lib.read_manifest(run_lib.record_dir(borrower))
     selected_id, selection_warning = _selection(entry, fleet_path)
     warnings = [selection_warning] if selection_warning else []
     selected = None
     if selected_id:
         try:
             selected = _fact(run_lib.published_run(
-                monitor_output, selected_id["period"], selected_id["run_id"]))
+                monitor_output, selected_id["period"], selected_id["run_id"]), borrower, current)
         except (OSError, ValueError) as exc:
             selected = dict(selected_id, folder=str(
                 borrower / _RECORD_DIR / _RUNS_DIR
@@ -271,6 +278,8 @@ def _lifecycle(entry, fleet_path):
                 ledger = run_lib.read_ledger(run)
                 manifest_exists = (run / run_lib.MANIFEST_NAME).exists()
                 manifest = run_lib.read_manifest(run)
+                if manifest is None and ledger and ledger.get('status') == 'abandoned':
+                    continue
                 if manifest is None:
                     if manifest_exists:
                         warnings.append(f"unreadable manifest for {period_dir.name} {run.name}")
@@ -292,7 +301,7 @@ def _lifecycle(entry, fleet_path):
                     continue
                 try:
                     found = _fact(run_lib.verified_run(
-                        monitor_output, period_dir.name, run.name))
+                        monitor_output, period_dir.name, run.name), borrower, current)
                 except ValueError as exc:
                     found = {"period": period_dir.name, "run_id": run.name,
                              "folder": str(run)}
@@ -310,7 +319,6 @@ def _lifecycle(entry, fleet_path):
         discarded = set()
     completed = [item for item in completed
                  if (item["period"], item["run_id"]) not in discarded]
-    current = run_lib.read_manifest(run_lib.record_dir(borrower))
     if current and current.get("status") == "no_accepted_result":
         # Only a newly frozen run based on this state can need delivery now.
         try:

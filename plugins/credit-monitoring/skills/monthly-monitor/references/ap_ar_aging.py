@@ -109,7 +109,7 @@ if _LIB_DIR not in sys.path:
 import monitor_lib as ml
 import rows_emit
 
-import openpyxl
+openpyxl = ml.prerequisites.openpyxl
 
 # Normalized aging buckets, in order.
 BUCKETS = ["current", "1-30", "31-60", "61-90", ">90"]
@@ -337,8 +337,226 @@ def _mark_rollups(cands, grand_total):
     return rolled
 
 
+# Detail-level exports: one row per claim / invoice, a Bucket column and a Balance
+# column, and no Total column, no counterparty subtotals, no grand-total row.
+_DETAIL_BALANCE_HEADERS = ("balance", "open balance", "open amount",
+                           "outstanding", "outstanding balance", "amount open",
+                           "amount", "amount due", "balance due")
+# Sheet-name words that say which side a worksheet holds, when one workbook
+# carries A/R and A/P on separate sheets.
+_SIDE_SHEET_WORDS = {
+    "AR": ("ar ", "ar_", "a/r", "receivable", "customer", "claims"),
+    "AP": ("ap ", "ap_", "a/p", "payable", "vendor"),
+}
+
+
+def _grid_for_side(path, file_format, side):
+    """The worksheet for the requested side when the workbook names one, else the
+    reader's default sheet. A single export file often holds 'AR Detail' and
+    'AP Detail' side by side; reading the first sheet for both sides reports the
+    receivables twice and the payables never."""
+    if side not in _SIDE_SHEET_WORDS:
+        return _read_grid(path, file_format)
+    grids = _read_all_grids(path, file_format)
+    if len(grids) < 2:
+        return _read_grid(path, file_format)
+    matches = []
+    for name, rows in grids:
+        n = re.sub(r'[-_]+', ' ', str(name).lower())
+        if any(re.search(r'\b' + re.escape(w.strip('_ ')), n) for w in _SIDE_SHEET_WORDS[side]):
+            matches.append((name, rows))
+    if len(matches) != 1:
+        raise ValueError(f'ambiguous {side} worksheet selection in {path}; provide a single-side export')
+    return matches[0]
+_DETAIL_LABELS = {
+    "AR": ("payer class", "payer", "payor", "customer", "debtor", "account"),
+    "AP": ("vendor", "supplier", "payee"),
+}
+
+
+def _read_all_grids(path, file_format="auto"):
+    """Every worksheet of an aging export as [(sheet_name, rows), ...]."""
+    fmt = (file_format or "auto").lower()
+    if fmt == "auto":
+        fmt = _sniff_format(path)
+    if fmt == "xlsx":
+        wb = openpyxl.load_workbook(path, data_only=True, read_only=True)
+        try:
+            return [(n, [[c.value for c in row] for row in wb[n].iter_rows()])
+                    for n in wb.sheetnames]
+        finally:
+            wb.close()
+    return list(ml.read_spreadsheetml(path).items())
+
+
+def _row_span(rows):
+    """'5-9' for a contiguous run of 1-based rows, '5-9,14' otherwise; a single
+    row stays a number."""
+    rows = sorted(rows)
+    if len(rows) == 1:
+        return rows[0]
+    runs, start, prev = [], rows[0], rows[0]
+    for r in rows[1:]:
+        if r != prev + 1:
+            runs.append((start, prev))
+            start = r
+        prev = r
+    runs.append((start, prev))
+    return ",".join(str(a) if a == b else f"{a}-{b}" for a, b in runs)
+
+
+def _bucket_and_balance_cols(norm):
+    """(bucket_col, balance_col) of a normalized header row; either may be None."""
+    bucket_col = next((k for k, h in enumerate(norm)
+                       if h in ("bucket", "aging bucket")), None)
+    balance_col = next((norm.index(h) for h in _DETAIL_BALANCE_HEADERS
+                        if h != 'amount' and h in norm), None)
+    if balance_col is None and 'amount' in norm:
+        balance_col = norm.index('amount')
+    return bucket_col, balance_col
+
+
+def _find_detail_header(rows, side):
+    """(header_idx, label_col, balance_col, bucket_col) of a detail-level aging
+    grid, or None. Needs a Bucket column, a Balance-style column and a label
+    column for the requested side (any side when `side` is None)."""
+    wanted = (_DETAIL_LABELS.get(side) if side in _DETAIL_LABELS
+              else _DETAIL_LABELS["AR"] + _DETAIL_LABELS["AP"])
+    for i, r in enumerate(rows):
+        if not r:
+            continue
+        norm = [ml.norm_label(c) if c is not None else "" for c in r]
+        bucket_col, balance_col = _bucket_and_balance_cols(norm)
+        label_col = next((norm.index(w) for w in wanted if w in norm), None)
+        if None not in (bucket_col, balance_col, label_col):
+            return i, label_col, balance_col, bucket_col
+    return None
+
+
+def _parse_detail(path, file_format, given_path, amount_scale, side):
+    """Aggregate a claim-/invoice-level export into counterparty rows: group by
+    the label column, bucket by the Bucket column, total by the Balance column.
+    There is no export TOTAL row, so the grand total is the sum of the rows."""
+    sheet, rows = _grid_for_side(path, file_format, side)
+    found = _find_detail_header(rows, side)
+    if found is None:
+        return None
+    header_idx, label_col, balance_col, bucket_col = found
+    header = rows[header_idx]
+    groups = {}          # label -> {"total", "buckets", "rows"}
+    n_detail = 0
+    for rn, r in enumerate(rows[header_idx + 1:], start=header_idx + 2):
+        if not r:
+            continue
+        if label_col >= len(r) or r[label_col] is None or not str(r[label_col]).strip():
+            if balance_col < len(r) and ml.safe_float(r[balance_col]) not in (None, 0):
+                raise ValueError(f'missing counterparty for monetary row {rn} in {sheet}')
+            continue
+        name = re.sub(r"\s+", " ", str(r[label_col])).replace("\xa0", " ").strip()
+        if _is_non_party(name):
+            continue
+        bal = ml.safe_float(r[balance_col]) if balance_col < len(r) else None
+        if bal is None:
+            continue
+        raw_bucket = r[bucket_col] if bucket_col < len(r) else None
+        b = _classify_bucket(raw_bucket)
+        if b is None:
+            raise ValueError(f"unrecognised aging bucket {raw_bucket!r} at row {rn} "
+                             f"of sheet {sheet!r} in {path}")
+        g = groups.setdefault(name, {"total": 0.0, "rows": [],
+                                     "buckets": {k: 0.0 for k in BUCKETS}})
+        g["total"] += bal
+        g["buckets"][b] += bal
+        g["rows"].append(rn)
+        n_detail += 1
+    if not groups:
+        raise ValueError(f"no detail rows parsed from sheet {sheet!r} in {path}")
+
+    scale = float(amount_scale or 0) or DEFAULT_AMOUNT_SCALE
+    parties = [{"name": n, "row": _row_span(g["rows"]), "rows": g["rows"],
+                "total": g["total"] / scale,
+                "buckets": {b: g["buckets"][b] / scale for b in BUCKETS}}
+               for n, g in groups.items()]
+    buckets_total = {b: round(sum(p["buckets"][b] for p in parties), 2)
+                     for b in BUCKETS}
+    parties_total = round(sum(p["total"] for p in parties), 2)
+    as_of = None
+    for r in rows[:header_idx]:
+        for c in (r or []):
+            if isinstance(c, str) and c.strip().lower().startswith("as of"):
+                as_of = c.strip()
+    return {
+        "as_of": as_of, "total": parties_total, "buckets": buckets_total,
+        "parties": parties, "parties_total": parties_total, "rolled_up_rows": [],
+        "total_col": balance_col, "sheet": sheet, "header_row": header_idx + 1,
+        "total_row": None,
+        "given_path": str(given_path) if given_path else str(path),
+        "amount_scale": scale,
+        "detail": {"label_header": str(header[label_col]).strip(),
+                   "balance_header": str(header[balance_col]).strip(),
+                   "bucket_header": str(header[bucket_col]).strip(),
+                   "n_detail_rows": n_detail, "n_groups": len(parties)},
+    }
+
+
+def _parse_bucket_totals(sheet, rows, given_path, amount_scale, as_of):
+    """A bucket-totals export: a Bucket column and an Amount column, one row per
+    aging bucket, then a Total row, and no customer or vendor rows. Buckets and
+    the grand total read straight off the file; there are no counterparties, so
+    concentration has nothing to rank. The bucket rows are what reconcile to the
+    Total row. Returns None when the sheet has no such header."""
+    for header_idx, r in enumerate(rows):
+        norm = [ml.norm_label(c) if c is not None else "" for c in (r or [])]
+        bucket_col, amount_col = _bucket_and_balance_cols(norm)
+        if None not in (bucket_col, amount_col):
+            break
+    else:
+        return None
+    header = rows[header_idx]
+    buckets = {b: 0.0 for b in BUCKETS}
+    bucket_rows = []
+    total = total_row = None
+    for rn, r in enumerate(rows[header_idx + 1:], start=header_idx + 2):
+        r = r or []
+        label = r[bucket_col] if bucket_col < len(r) else None
+        amt = ml.safe_float(r[amount_col]) if amount_col < len(r) else None
+        if label is None or not str(label).strip():
+            if amt not in (None, 0):
+                raise ValueError(f"amount with no aging bucket at row {rn} of sheet "
+                                 f"{sheet!r} in {given_path}")
+            continue
+        if ml.norm_label(label) in ("total", "grand total"):
+            if amt is not None:
+                total, total_row = amt, rn
+            break
+        b = _classify_bucket(label)
+        if b is None:
+            raise ValueError(f"unrecognised aging bucket {label!r} at row {rn} "
+                             f"of sheet {sheet!r} in {given_path}")
+        buckets[b] += amt or 0.0
+        bucket_rows.append(rn)
+    if not bucket_rows:
+        return None
+
+    scale = float(amount_scale or 0) or DEFAULT_AMOUNT_SCALE
+    rows_total = sum(buckets.values())
+    return {
+        "as_of": as_of,
+        "total": (total if total is not None else rows_total) / scale,
+        "buckets": {b: round(buckets[b] / scale, 2) for b in BUCKETS},
+        "parties": [], "parties_total": 0.0, "rolled_up_rows": [],
+        "total_col": amount_col, "sheet": sheet, "header_row": header_idx + 1,
+        "total_row": total_row,
+        "given_path": str(given_path),
+        "amount_scale": scale,
+        "bucket_totals": {"bucket_header": str(header[bucket_col]).strip(),
+                          "amount_header": str(header[amount_col]).strip(),
+                          "rows": bucket_rows},
+    }
+
+
 def parse_aging(path, file_format="auto", given_path=None,
-                amount_scale=DEFAULT_AMOUNT_SCALE):
+                amount_scale=DEFAULT_AMOUNT_SCALE, side=None):
     """Parse an A/R or A/P aging-summary export into a structured dict.
 
     Returns:
@@ -371,7 +589,7 @@ def parse_aging(path, file_format="auto", given_path=None,
     it lists. The parsed counterparty rows are summed separately so compute() can
     reconcile the two and flag a gap instead of publishing shares against a
     denominator the parts never added up to."""
-    sheet, rows = _read_grid(path, file_format)
+    sheet, rows = _grid_for_side(path, file_format, side)
     if not rows:
         raise ValueError(f"no rows parsed from {path}")
 
@@ -412,6 +630,17 @@ def parse_aging(path, file_format="auto", given_path=None,
             header_idx = i
             break
     if header_idx is None:
+        # Not a counterparty-per-row summary: try a claim-/invoice-level detail
+        # export (Bucket + Balance columns), aggregated by counterparty. `side`
+        # ("AR"/"AP") picks the worksheet when one workbook holds both.
+        detail = _parse_detail(path, file_format, given_path, amount_scale, side)
+        if detail is not None:
+            return detail
+        # Last: one row per aging bucket and no counterparties at all.
+        totals = _parse_bucket_totals(sheet, rows, given_path or path,
+                                      amount_scale, as_of)
+        if totals is not None:
+            return totals
         raise ValueError(f"could not locate aging header row in {path}")
 
     header = rows[header_idx]
@@ -561,9 +790,12 @@ def rows_vs_total(parsed, tol=DEFAULT_TIE_TOL):
     share divides by the TOTAL row's grand total while its numerator is summed
     from the rows; when the two disagree, the file holds rows the parse read
     differently than the export did (a group parent, an intercompany line, a
-    column the header naming missed), and every share is off by the gap."""
+    column the header naming missed), and every share is off by the gap.
+    A bucket-totals export has no counterparty rows; its bucket rows are the
+    parts that must add up to its TOTAL row."""
     grand = parsed["total"] or 0.0
-    parts = parsed["parties_total"]
+    parts = (round(sum(parsed["buckets"].values()), 2) if parsed.get("bucket_totals")
+             else parsed["parties_total"])
     diff = round(parts - grand, 2)
     return {
         "grand_total": round(grand, 2),
@@ -628,11 +860,16 @@ def tie_out(aging_total, bs_value, label, tie_tol=DEFAULT_TIE_TOL):
 # Per-figure provenance + calculation records
 # ===========================================================================
 def _party_rows_span(parsed):
-    """'8-50' — the 1-based row span the counterparty rows were read from
-    (a single row stays a single number). None when no parties parsed."""
-    rows = [p["row"] for p in parsed["parties"]]
+    """'8-50' — the 1-based row span the counterparty rows (a bucket-totals
+    export's bucket rows) were read from; a single row stays a single number.
+    None when no rows parsed."""
+    bt = parsed.get("bucket_totals")
+    rows = (bt["rows"] if bt else
+            [r for p in parsed["parties"] for r in p.get("rows", [p["row"]])])
     if not rows:
         return None
+    if parsed.get("detail"):
+        return str(_row_span(rows))      # detail rows may not be contiguous
     lo, hi = min(rows), max(rows)
     return str(lo) if lo == hi else f"{lo}-{hi}"
 
@@ -662,10 +899,20 @@ def _total_src(parsed):
     scaled = ("" if scale == 1 else
               f", divided by the configured aging amount_scale of {scale:,.0f} "
               "so the aging reads in the model's units")
+    bt = parsed.get("bucket_totals")
     if parsed.get("total_row"):
+        col = bt["amount_header"] if bt else "Total"
         return (f"the aging export's TOTAL row (row {parsed['total_row']}, "
-                f"Total column){scaled}")
+                f"{col} column){scaled}")
     span = _party_rows_span(parsed)
+    if bt and span:
+        return (f"the sum of the '{bt['amount_header']}' column across bucket rows "
+                f"{span}; the export has no TOTAL row{scaled}")
+    det = parsed.get("detail")
+    if det and span:
+        return (f"the sum of the '{det['balance_header']}' column across the "
+                f"{det['n_detail_rows']} claim/invoice rows (rows {span}); the export "
+                f"has no TOTAL row{scaled}")
     if span:
         return (f"the sum of the Total column across counterparty rows {span} "
                 f"(no TOTAL row found){scaled}")
@@ -692,7 +939,12 @@ def _snapshot_block(side, parsed, month, flow_value, days_value,
     flow_name = ("monthly revenue" if days_metric_name == "dso_days"
                  else "the monthly DPO basis")
     days = ml.days_in_month(month)
+    bt = parsed.get("bucket_totals")
     bits = [f"total {t:,.2f} = {_total_src(parsed)}",
+            (f"bucket amounts = the export's own bucket rows (rows {span}); it lists "
+             f"no {'customer' if side == 'AR' else 'vendor'} rows, so top-{top_n} "
+             f"concentration is empty")
+            if bt else
             f"bucket amounts = per-bucket columns summed across {n_parties} "
             f"counterparty rows" + (f" (rows {span})" if span else "")]
     if recon["reconciles"]:
@@ -727,7 +979,12 @@ def _snapshot_block(side, parsed, month, flow_value, days_value,
         prow = entry.pop("row")
         entry["source_ref"] = [idx.ref(parsed["given_path"],
                                        sheet=parsed["sheet"], row=prow)]
-        entry["calc"] = (f"amount = Total column of this counterparty's row {prow} "
+        det = parsed.get("detail")
+        entry["calc"] = (f"amount = '{det['balance_header']}' column summed over this "
+                         f"counterparty's detail rows ({prow}) in the {month} {side} "
+                         f"aging export; pct_of_total = amount / {side} aging grand "
+                         f"total {t:,.2f}") if det else (
+                         f"amount = Total column of this counterparty's row {prow} "
                          f"in the {month} {side} aging export; pct_of_total = "
                          f"amount / {side} aging grand total {t:,.2f}")
 
@@ -908,27 +1165,81 @@ def compute(ar_latest, ap_latest, ar_prior, ap_prior, model, lines,
                                 ("A/P", ap_prior, prior_month)):
         if parsed is None:
             continue
+        det = parsed.get("detail")
+        if det:
+            exceptions.append({
+                "type": "aging_aggregated_from_detail",
+                "what": f"{month} {side} aging: rows aggregated from claim/invoice detail",
+                "detail": (f"The {month} {side} export lists "
+                           f"{det['n_detail_rows']} claim/invoice rows with no "
+                           f"counterparty subtotals and no grand-total row. Rows were "
+                           f"aggregated by '{det['label_header']}' ({det['n_groups']} "
+                           f"groups), bucketed by '{det['bucket_header']}' and totalled "
+                           f"by '{det['balance_header']}'. The grand total is the sum of "
+                           f"those rows, so the export's own total is not an independent "
+                           f"check; the balance-sheet tie-out is."),
+            })
+        # A bucket-totals export names no counterparty, so concentration is empty
+        # for that reason and not a parse gap. Said once per side, for the month
+        # the memo reports; the prior month's concentration is never shown.
+        bt = parsed.get("bucket_totals")
+        if bt and (parsed is ar_latest or parsed is ap_latest):
+            party = "customer" if side == "A/R" else "vendor"
+            exceptions.append({
+                "type": "aging_bucket_totals_only",
+                "what": f"{month} {side} aging: bucket totals only, no {party} rows",
+                "detail": (f"The {month} {side} export lists one row per aging bucket "
+                           f"(rows {_party_rows_span(parsed)}) and a total, with no "
+                           f"{party} rows. Buckets, % over 90, "
+                           f"{'DSO' if side == 'A/R' else 'DPO'} and the balance-sheet "
+                           f"tie-out are computed; top-{top_n} concentration is empty "
+                           f"because the file names no {party}. A {party}-level aging "
+                           f"from the borrower would fill it."),
+            })
         recon = rows_vs_total(parsed, tie_tol)
         if recon["reconciles"]:
             continue
+        if bt:
+            rows_read = f"{len(bt['rows'])} bucket rows"
+            cause = "the export's own bucket rows do not add up to the total it prints"
+        else:
+            rows_read = f"{recon['n_counterparties']} counterparty rows"
+            cause = ("the file holds rows this parse counted differently than the "
+                     "export did (a group or intercompany parent, or a column the "
+                     "bucket headers did not name)")
         exceptions.append({
             "type": "aging_rows_do_not_sum_to_total",
-            "what": f"{month} {side} aging: counterparty rows vs the export's TOTAL row",
+            "what": (f"{month} {side} aging: {'bucket' if bt else 'counterparty'} rows "
+                     f"vs the export's TOTAL row"),
             "counterparty_rows_total": recon["counterparty_rows_total"],
             "grand_total": recon["grand_total"],
             "difference": recon["difference"],
             "n_counterparties": recon["n_counterparties"],
-            "detail": (f"The {recon['n_counterparties']} counterparty rows read from "
+            "detail": (f"The {rows_read} read from "
                        f"the {month} {side} aging export sum to "
                        f"{recon['counterparty_rows_total']:,.2f}, but the export's own "
                        f"TOTAL row says {recon['grand_total']:,.2f} — "
                        f"{recon['difference']:,.2f} apart. Every bucket share and "
-                       f"concentration share for this side is off by that gap; the file "
-                       f"holds rows this parse counted differently than the export did "
-                       f"(a group or intercompany parent, or a column the bucket "
-                       f"headers did not name). Read the shares as indicative until "
+                       f"concentration share for this side is off by that gap; "
+                       f"{cause}. Read the shares as indicative until "
                        f"the file is reconciled."),
         })
+
+    for parsed, month, flow in ((ap_latest, latest_month, dpo_latest),
+                                (ap_prior, prior_month, dpo_prior)):
+        if parsed is not None and flow is not None and flow <= 0:
+            alt = (parsed["total"] / abs(flow) * ml.days_in_month(month)) if flow else None
+            exceptions.append({
+                "type": "dpo_basis_not_positive",
+                "what": f"{month} DPO unavailable: model line '{lines['dpo_basis']}' is {flow:,.2f}",
+                "detail": (f"The DPO denominator reads {flow:,.2f} for {month}; the engine "
+                           f"only computes DPO on a positive basis (a negative cost line "
+                           f"is how a one-time credit shows up). The model stores this "
+                           f"cost line as a negative; verify whether this reflects a credit or sign "
+                           f"convention. Read as an absolute value DPO would be "
+                           f"{alt:,.2f} days; not published.") if alt is not None else
+                          "The DPO denominator is zero. DPO is undefined and is not published.",
+            })
 
     note = ("DSO/DPO are single-month and volatile. DPO uses configured basis "
             f"'{lines['dpo_basis_key']}' (model line '{lines['dpo_basis']}').")
@@ -993,6 +1304,7 @@ def main():
                     help="the run this output belongs to, minted once by the "
                          "orchestrator for the whole run (or set CREDIT_MONITOR_RUN_ID)")
     args = ap.parse_args()
+    ml.prerequisites.require_workbook()
     if args.run_id:
         os.environ["CREDIT_MONITOR_RUN_ID"] = args.run_id   # run_stamp() reads it
 
@@ -1039,14 +1351,14 @@ def main():
         fmt = acfg["file_format"]
         scale = acfg["amount_scale"]
         ar_latest = parse_aging(ml.resolve_path(ar_latest_path), fmt,
-                                given_path=ar_latest_path, amount_scale=scale)
+                                given_path=ar_latest_path, amount_scale=scale, side="AR")
         ap_latest = parse_aging(ml.resolve_path(ap_latest_path), fmt,
-                                given_path=ap_latest_path, amount_scale=scale)
+                                given_path=ap_latest_path, amount_scale=scale, side="AP")
         ar_prior = (parse_aging(ml.resolve_path(ar_prior_path), fmt,
-                                given_path=ar_prior_path, amount_scale=scale)
+                                given_path=ar_prior_path, amount_scale=scale, side="AR")
                     if ar_prior_path else None)
         ap_prior = (parse_aging(ml.resolve_path(ap_prior_path), fmt,
-                                given_path=ap_prior_path, amount_scale=scale)
+                                given_path=ap_prior_path, amount_scale=scale, side="AP")
                     if ap_prior_path else None)
         model = ml.open_model(model_path)
     except (ValueError, OSError) as e:
