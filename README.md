@@ -28,7 +28,7 @@ Explore six fictional borrowers' June 2026 workbooks, memos, and portfolio dashb
 
 **[View live sample](https://100xpartners.ai/credit-monitoring/)** · **[Download sample results](sample-output/README.md#1-view-sample-results)** · **[Continue from the sample — compatibility notes](sample-output/README.md#2-continue-from-the-sample)** · **[Run the sample yourself](sample-output/README.md#3-run-the-sample-yourself)**
 
-The [sample guide](sample-output/README.md) includes the complete ZIP and dashboard download. Saved-store continuation is blocked by the current candidate's folder validator; the reports remain independently viewable. Running a fresh review takes the normal time.
+The [sample guide](sample-output/README.md) includes the complete ZIP and dashboard download. Setup can recognize the sample's saved results, but continuing the sample end to end has not been verified. The reports remain independently viewable; use a fresh results folder for a new review.
 
 ## What it looks like
 
@@ -46,7 +46,7 @@ Screenshots of the [live sample](https://100xpartners.ai/credit-monitoring/) —
 
 ![Covenant test table as at 30 June 2026: minimum fixed charge coverage ratio on an LTM basis, 1.20x required against 0.93x actual, headroom of -22.2%, result breach, linked to the income statement cells in the model, with reading notes on the compliance certificate below](docs/assets/screenshot-covenant-tests.png)
 
-**Any figure traces back to where it came from.** Hover a number and the memo says which model row, which period, and which document it was read from — so a reviewer can check a figure without rebuilding it.
+**Inspect the evidence behind reported figures.** Available figure tooltips identify the model row, period and supporting evidence. Missing or unresolved evidence still requires analyst review.
 
 ![Pledged collateral table with a tooltip open on accounts receivable reading "How this figure was arrived at": the reported accounts receivable at June 2026, taken from the model row of the same name, a period-end level read from the model balance sheet](docs/assets/screenshot-figure-trace.png)
 
@@ -61,7 +61,11 @@ The borrowers, figures, and documents shown are synthetic. Nothing above is a re
 
 Each review produces exactly these two. The optional portfolio dashboard is a separate combined view of reviews you have already finished, not a third output.
 
-You can create a dashboard privately, open it again later, and ask whether it is still up to date. Updating one at the same link is not supported in v1 — create a new one instead. See [the portfolio dashboard](#advanced-the-portfolio-dashboard) for how. Full detail in [Limitations](docs/LIMITATIONS.md).
+You can create a dashboard privately, open it again later, and ask whether it is still up to date. Updating one at the same link is not supported in Cowork. Open the existing hosted copy, or use the refreshed local pages; an Update request does not create a replacement. See [the portfolio dashboard](#advanced-the-portfolio-dashboard) for how. Full detail in [Limitations](docs/LIMITATIONS.md).
+
+## Reading the new reports
+
+The workbook's Source Register records available borrower-source locations and unresolved evidence. Expandable financial statement lines expose supported components without inventing missing history. Budget YTD compares matching plan and actual months; missing plan lines remain unavailable rather than becoming zero. Workbook edits are refreshed only on request, with saved originals preserved. Keep a separate copy of a workbook before editing it; see [Limitations](docs/LIMITATIONS.md#workbook-edits-and-saved-reviews).
 
 ## Before you start
 
@@ -72,7 +76,7 @@ You can create a dashboard privately, open it again later, and ask whether it is
 3. **Have Excel and a browser ready.**
    You'll use them to open the generated workbook and memo.
 
-Nothing else to install.
+The plugin checks its runtime prerequisites before workbook work. If support is unavailable, it stops and asks for approved provisioning; it never installs software automatically. See [runtime prerequisites](plugins/credit-monitoring/references/runtime-prerequisites.md).
 
 ## Install
 
@@ -102,12 +106,12 @@ You need at least one saved review before this will work.
 |---|---|
 | **"Create my portfolio dashboard"** | Claude lists which borrowers will appear, then asks permission before creating a private dashboard. Nothing is shared automatically. |
 | **"Open my portfolio dashboard"** | Reopens the existing one. Opening it is not proof that it matches your local results. |
-| **"Is my portfolio dashboard current?"** | Checks whether the local candidate still matches the dashboard you created. |
+| **"Is my portfolio dashboard current?"** | Checks whether your saved local results match the dashboard you created. |
 | **"Show me how to share the dashboard"** | Points you at Claude's own Share control. The plugin never changes permissions itself. |
 
 Two skills sit behind this: `refresh-dashboard` rebuilds the local portfolio pages from verified saved runs, and `portfolio-artifact` creates, reopens, and checks the hosted copy.
 
-**Updating one at the same link is not supported in v1.** Create a new dashboard instead. A local refresh rebuilds your local pages but does not touch an existing hosted dashboard.
+**Updating one at the same link is not supported in Cowork.** Open the existing dashboard or use the refreshed local pages. A local refresh does not touch an existing hosted dashboard or create a replacement.
 
 Full walkthrough in [Getting started](docs/GETTING_STARTED.md#optional-portfolio-dashboard).
 
@@ -152,7 +156,7 @@ flowchart TB
 
 This is a **local-file workflow**, not a claim of local-only processing. The plugin reads user-selected files and stores results in a user-selected local or synced folder. Document content processed by Claude is handled under the user's Anthropic terms and settings. Creating a hosted Claude dashboard is a separate, explicit action; nothing is shared automatically.
 
-Completed reviews are application-preserved and manifest integrity-checked before reuse, not filesystem-immutable. They remain ordinary writable files: users, sync clients, or other software can alter or delete them, after which verification will fail.
+Completed reviews are application-preserved and manifest integrity-checked before reuse, not filesystem-immutable. They remain ordinary writable files: users, sync clients, or other software can alter or delete them, which manifest checks are intended to detect. See [Limitations](docs/LIMITATIONS.md#workbook-edits-and-saved-reviews).
 
 The plugin does not replace professional judgment. Verify source evidence, formulas, covenant definitions, exceptions, and conclusions before relying on an output. See [Security and privacy](docs/SECURITY_AND_PRIVACY.md) and [Limitations](docs/LIMITATIONS.md).
 

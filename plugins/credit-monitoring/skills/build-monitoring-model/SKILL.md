@@ -11,6 +11,8 @@ metadata:
 
 # Build Monitoring Model (data layer)
 
+Read `../../CLAUDE.md` before anything else; it holds the rules shared by every skill.
+
 Produce the canonical, validated monthly IS/BS/CF workbook in the borrower’s stable `_model/`
 workspace. If the configured model still points into `.record/current`, do not build there: after
 write approval, follow **monitor-setup** to verify-copy-verify the workbook and sidecars into `_model/`,
@@ -18,14 +20,28 @@ reload the config, then continue. The build follows `references/assembling-rules
 in the delegated worker below. During a monthly run, analysis reads the run-local snapshot created
 after this build, never the mutable canonical workbook directly.
 
+## Check readiness before dispatch
+
+Before dispatching **model-builder** or assembling any workbook, run
+`python "${CLAUDE_PLUGIN_ROOT}/lib/requirements.py"` using the same interpreter as the
+worker/engines. On required failure, **do not dispatch**, write a partial model or replace
+outputs; give the provision/retry/stop guidance in
+`${CLAUDE_PLUGIN_ROOT}/references/runtime-prerequisites.md`. Do not install or download
+packages/tools, invoke pip/uv setup or assume network access. If Python cannot start,
+request an already provisioned approved runtime before proceeding. Pass the checked
+interpreter and this rule in the worker brief; the worker rechecks if its runtime differs.
+Optional import readiness or pending recalculation integration is not proof of successful
+recalculation/current-values fallback. Preserve the existing build/validation contract.
+
 ## Delegate the assembly, keep the talking here
 Keep the connected source/store roots bound on every subprocess and include both in the worker brief;
 logical `source:` and `store:` paths cannot resolve from a previous subprocess's environment.
 Once the paths are in hand, hand the build to the plugin's **model-builder** agent (Task tool, subagent
 type `credit-monitoring:model-builder`; where the runtime doesn't offer plugin agents, use a
-general-purpose subagent, prepend the text of `${CLAUDE_PLUGIN_ROOT}/agents/model-builder.md`, and set
+general-purpose subagent, prepend the text of `../../agents/model-builder.md`, and set
 that dispatch to sonnet at xhigh as the agent file declares — prepended text carries no frontmatter). Its
-brief carries the borrower-config path, the reporting folder and model output path in all three forms
+brief carries the plugin folder (two levels above this skill's base directory, as an absolute path),
+the borrower-config path, the reporting folder and model output path in all three forms
 (the connected-folder path to read, the `/sessions/…/mnt/…` sandbox path bash needs for the recalc and
 the gate, and the borrower-config string for engine arguments), the covenant-spec path and the
 debt-service schedule path when they exist,
@@ -36,14 +52,14 @@ touch this context.
 The agent's job is the **Contract**, **Method** and **Definition of Done** below — that is the part its
 brief points at. This section and the closing menu are yours: anything that speaks to the analyst stays
 here, including an unavailable folder or file. Say in one plain line what is running while the build
-works (`${CLAUDE_PLUGIN_ROOT}/references/asking.md`).
+works (`../../references/asking.md`).
 
 **Answer the diagnosis it hands back, then send the build again.** The worker returns what it saw when
 a file was not locally readable, a whole folder read back empty, a package was encrypted, or a path
 was too long for Excel. For a locally unreadable file, do not infer a provider or explain sync settings.
 Attach the folder guide and offer **[Try again]** / **[Skip this file]** / **[Stop for now]**. For a
 genuinely empty folder, say that no files were found and offer the matching choices from
-`${CLAUDE_PLUGIN_ROOT}/references/connecting-folders.md`. Once the analyst acts, dispatch the build
+`../../references/runtime/cowork/files.md`. Once the analyst acts, dispatch the build
 again with what changed and say in one plain line that you are picking it back up. A run whose reporting
 folder never came back readable ends on that menu, not on an empty workbook.
 
@@ -65,7 +81,7 @@ folder never came back readable ends on that menu, not on an empty workbook.
    listing right there — file names present but unreadable versus no file names anywhere — and report
    which one you saw rather than silently rereading it. The analyst's session handles unreadable files
    with the folder guide and handles a genuinely empty folder with
-   `${CLAUDE_PLUGIN_ROOT}/references/connecting-folders.md`.
+   `../../references/runtime/cowork/files.md`.
 2. Merge-by-period with the restatement scan; latest/consolidated wins; log old→new in Sources & Notes
    AND `restatements.json`. Record the per-column winner in `source-map.json` (assembling-rules →
    "Source map").
@@ -79,8 +95,10 @@ folder never came back readable ends on that menu, not on an empty workbook.
    support rows"): the schedule's contractual cash interest and scheduled principal per month, never
    the ledger's interest line — plus disclosed non-facility amortization. Without a schedule, build at
    lower precision and say so in the conclusion.
-6. **Recalc as the LAST write** (assembling-rules → "Recalc") — make every openpyxl cell edit BEFORE
-   it, or that cell ships with no cached value and downstream modules read blank subtotals.
+6. **Finalize the Source Register and recalculate as the LAST write** (assembling-rules →
+   "Internal Source Register" / "Recalc"). Use the deterministic finalizer on a separate scratch
+   candidate and retain its paired source map. Make every openpyxl edit before final recalculation.
+   Disclose values-only fallback when used; missing evidence is a limitation, not a completeness gate.
 7. Run the **validation gate** on the recalced, saved file: `references/validate_model.py <model>` must
    exit 0, plus the checks in assembling-rules → "Validation gate". On pass, save canonical + dated
    snapshot and write/update the profile — **save safely** per assembling-rules → "Versioning & output
@@ -96,6 +114,6 @@ folder never came back readable ends on that menu, not on an empty workbook.
   monthly-monitor can snapshot them into its run before any module starts.
 
 ## When you're done — suggest the next step
-On a standalone run, close with a menu (`${CLAUDE_PLUGIN_ROOT}/references/asking.md`): **[Run
+On a standalone run, close with a menu (`../../references/asking.md`): **[Run
 ‹borrower›'s monthly review now]** (follow **monthly-monitor**) / **[Done for now]**. When
 Another setup wrapper invoked you, it owns the sequence.

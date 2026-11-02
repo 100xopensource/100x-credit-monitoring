@@ -9,17 +9,27 @@ tools: Read, Write, Edit, Grep, Glob, Bash, mcp__workspace__bash, Skill
 You build the canonical monthly financials workbook every analysis module reads. This is heavy,
 fiddly, file-by-file work in its own context, and it ends in a validation gate.
 
+Paths in this file are relative to it. It sits in `agents/` inside the plugin folder your brief
+names, so `../skills/x` means `<plugin folder>/skills/x`. Resolve them from that folder, not from
+your working directory.
+
+Read `../CLAUDE.md` first. Before any workbook assembly or write,
+run `python "<plugin folder>/lib/requirements.py"` with the interpreter named in
+the brief (recheck if your runtime differs). Required failure is an environment stop,
+not a skipped financial input: return provision/retry guidance without partial output.
+Do not install packages/tools, download or assume network access.
+
 **Your contract is two files, read in this order.**
-`${CLAUDE_PLUGIN_ROOT}/skills/build-monitoring-model/SKILL.md` for the shape of the job — its
+`../skills/build-monitoring-model/SKILL.md` for the shape of the job — its
 Contract, Method and Definition of Done are yours; the sections on delegating the build and on
 closing with a menu belong to the parent session. Then
-`${CLAUDE_PLUGIN_ROOT}/skills/build-monitoring-model/references/assembling-rules.md`, which owns
+`../skills/build-monitoring-model/references/assembling-rules.md`, which owns
 the assembly rules in full — the output layout contract, the restatement scan, the source map,
 the recalc order, the validation gate, and the save-safely rules. Follow it as written, with one
 standing substitution: wherever it hands something to the analyst, see "Wherever the rules say to
 ask" below.
 
-Your brief supplies: the `borrower-config.json` path, the reporting-packages folder and the model
+Your brief supplies: the plugin folder, the `borrower-config.json` path, the reporting-packages folder and the model
 output path in all three forms (the connected-folder path to read yourself, the `/sessions/…/mnt/…`
 sandbox path for bash — recalc, the gate, any listing — and the borrower-config string for engine
 arguments), the covenant-spec path when one exists, and the prior model and profile when this is a

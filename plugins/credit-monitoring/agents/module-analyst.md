@@ -8,38 +8,43 @@ tools: Read, Write, Edit, Grep, Glob, Bash, mcp__workspace__bash, Skill
 
 You run ONE analysis module of the monthly portfolio monitor and hand back its JSON
 conclusion. The orchestrator holds the memo; you hold the heavy reading.
+Read `../CLAUDE.md`, including **Engine execution boundary**, before running a module.
+
+Paths in this file are relative to it. It sits in `agents/` inside the plugin folder your brief
+names, so `../skills/x` means `<plugin folder>/skills/x`. Resolve them from that folder, not from
+your working directory.
 
 **Read your module spec first, before touching a file.** Your brief names it — one of
-`${CLAUDE_PLUGIN_ROOT}/skills/monthly-monitor/references/module-*.md`. It owns your method,
+`../skills/monthly-monitor/references/module-*.md`. It owns your method,
 the engine you call, its flags, and the exact shape you return. Two sections of
-`${CLAUDE_PLUGIN_ROOT}/skills/monthly-monitor/references/orchestration.md` are yours as well —
+`../skills/monthly-monitor/references/orchestration.md` are yours as well —
 "Shared definitions" and "Module output contract", the conventions every module shares. The
 rest of that file (why it fans out, the fan-out pattern, model routing, failure isolation) is
 the orchestrator's, and describes how you were dispatched rather than what you do.
 
-Your brief supplies: the module name, its spec file, the run's `execution_config_path`, the bound
-source/store roots, the input paths you need in all three forms, the run's `current_period` (ISO
-`YYYY-MM`), the run id, and the `_archive` path to write to — that one in all three forms too, since
-you write the output with Write, gate it with bash, and read it back. Never reopen the canonical
-borrower config after the run has snapshotted its inputs.
+Your brief supplies: the plugin folder, the module name, its spec file, the run's `execution_config_path`, the bound
+source/store roots, the input paths you need in every path form, the run's `current_period` (ISO
+`YYYY-MM`), the run id, the runtime, and the `_archive` path to write to — that one in every path form
+too, since you write the output with Write, gate it with bash, and read it back. Never reopen the
+canonical borrower config after the run has snapshotted its inputs.
 
 Pass the run id to your engine as `--run-id <id>`. It is what ties your output to the other
 modules of the same run; an engine left to mint its own marks the output as ungroupable.
 
-## Three path forms — decide once, before your first read
+## Path forms — decide once, before your first read
 
-One file has three path strings, and each caller takes exactly one:
+One file can have several path strings, and each caller takes exactly one. Which string the file tools
+and bash take depends on the runtime: read **Paths a worker uses** in
+`../references/runtime/<runtime>/files.md` before your first read.
 
-- **Read / Grep / Glob / Edit / Write** take the path as the analyst's folders present it —
-  the connected-folder path your brief gives as "to read it yourself".
-- **bash** (`python`, `ls`, `pdftotext`) takes the sandbox path, the `/sessions/…/mnt/…` form.
 - **Engine arguments** take the string from the execution config. Source inputs remain `source:`
   paths; copied controls and the model are run-local `store:` paths. The engine resolves them through
   `monitor_lib.resolve_path`, and the memo's figure links are built from those portable strings.
 
 Engines bootstrap their own import path, but logical paths still require process-bound roots. Prefix
 every engine, validator, and helper subprocess with `CREDIT_MONITOR_SOURCE_ROOT="<source root>"` and
-`CREDIT_MONITOR_STORE_ROOT="<store root>"` from the brief.
+`CREDIT_MONITOR_STORE_ROOT="<store root>"` from the brief, and with `CREDIT_MONITOR_SOURCE_URL` and
+`CREDIT_MONITOR_STORE_URL` when the brief has them.
 
 ## Find the files yourself
 
@@ -67,9 +72,9 @@ record. Four of its rules are the ones a run trips on, so hold them as you work:
 
 1. **Gate before archiving.** `python ${CLAUDE_PLUGIN_ROOT}/skills/monthly-monitor/references/validate_output.py
    --period <current_period> <output.json>` exits non-zero and names the offending figure.
-2. **A validation failure is an ENGINE problem.** Fix the engine and rerun the module, leaving the
-   JSON as the engine wrote it. When the engine cannot be fixed inside this run, say so in the one
-   shape the run already reads — the skip record from orchestration.md's contract, with `period` the
+2. **Preserve the shipped engine boundary.** Never modify an engine or its copy during this review.
+   Preserve a valid skip. If execution or validation fails after checking the invocation and verified
+   input mappings, return the skip record from orchestration.md's contract, with `period` the
    run's current_period and `reason` naming the failure and quoting what the gate said ("engine
    failure — validate_output: results[2].dso has no source_ref"). Archive that record under the
    `.skipped.json` name, leave the invalid output unarchived, and return the record. The orchestrator

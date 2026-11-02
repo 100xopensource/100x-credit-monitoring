@@ -14,6 +14,13 @@ metadata:
 
 # Render memo
 
+Read `../../CLAUDE.md` before anything else; it holds the rules shared by every skill.
+Before workbook-backed payload/performance gathering, run
+`python "${CLAUDE_PLUGIN_ROOT}/lib/requirements.py"` in the same engine interpreter.
+Required failure stops before writes; use `${CLAUDE_PLUGIN_ROOT}/references/runtime-prerequisites.md`
+for explicit provision/retry guidance. Do not install or download. Rendering already prepared
+JSON/HTML remains independent of workbook support.
+
 Every figure on the page comes from an engine, and every opinion comes from you. Gather the
 payload, write the boxes, run three more commands, read the result. Four commands and your own
 prose — the format itself belongs to the template.
@@ -34,9 +41,20 @@ covers all three. Called standalone, `<input_run>` is application-preserved and 
 output folder.
 
 The engines run in fresh shell processes. Bind the same `CREDIT_MONITOR_SOURCE_ROOT` and
-`CREDIT_MONITOR_STORE_ROOT` supplied by run-monitor on every command and delegated brief, then confirm
-the shell reaches `$PM` and the saved run. When either root is unavailable, ask for every needed folder
-in one message (`${CLAUDE_PLUGIN_ROOT}/references/connecting-folders.md`).
+`CREDIT_MONITOR_STORE_ROOT` supplied by run-monitor on every command and delegated brief (and
+`CREDIT_MONITOR_SOURCE_URL` and `CREDIT_MONITOR_STORE_URL` when supplied), then confirm
+the shell reaches `$PM` and the saved run. When either root is unavailable, reach it as
+`../../references/runtime/<runtime>/files.md` says.
+
+## Reading source traces
+
+Keep model cells distinct from borrower evidence. Source/Results folder locations are relative to
+connected roots; no web address does not mean missing evidence. Mapping coverage names unmapped
+months and missing derived-statement dependencies, not verification or file accessibility. Preserve
+supplied evidence periods, cells/pages, statuses and unresolved reasons without promoting confidence.
+Borrower-certified values remain borrower-reported even when a certificate cannot be located.
+A shared memo includes relative names, not source documents or access permissions. Do not invent
+links or add setup/remediation steps merely because a trace has no supported web address.
 
 ## Step 1 — Gather the figures
 
@@ -148,7 +166,7 @@ Exactly ONE self-contained `.html` file named `<borrower> Monitoring Memo.html`.
 `monthly-monitor`, write `<run_folder>/<borrower> Monitoring Memo.html`; the application-preserved run folder is
 the period record. Write to a temp file in the SAME folder and replace, then re-read the final file
 before reporting done. If the output folder is not connected,
-ask for it with a menu (`${CLAUDE_PLUGIN_ROOT}/references/connecting-folders.md`). Asked to put
+reach it as `../../references/runtime/<runtime>/files.md` says. Asked to put
 the memo somewhere OTHER than the borrower's own monitoring folder, write the memo, its payload
 and its prose there together — the three travel as one record — and read the borrower's config,
 model and archives where they already are, writing nothing into the borrower's folder. When

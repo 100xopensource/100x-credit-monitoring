@@ -4,6 +4,16 @@ Rules for building and maintaining a borrower's monthly Income Statement, Balanc
 in Excel from the company's own reporting packages. Goal: one canonical, validated, version-stable file
 per borrower that grows month over month.
 
+## Prerequisites before assembly
+Read `${CLAUDE_PLUGIN_ROOT}/CLAUDE.md` and
+`${CLAUDE_PLUGIN_ROOT}/references/runtime-prerequisites.md`. Check required workbook
+support with `python "${CLAUDE_PLUGIN_ROOT}/lib/requirements.py"` in the actual engine
+interpreter before assembly or writes. Stop on required failure; no partial model,
+financial skip record, output replacement or package/tool installation. Format-specific
+readers below are conditional and must already be provided; request a readable authorized
+alternative when unavailable. Recalculation runs through the source register when LibreOffice is available;
+readiness alone cannot establish current values or fallback success.
+
 ## Objective
 - Reconstruct the monthly **Income Statement**, **Balance Sheet**, and **Cash Flow** at **full
   line-item detail**. Do not summarize, collapse, rename, or drop lines.
@@ -25,7 +35,7 @@ standalone divisions/subsidiaries), confirm scope before building; keep the base
 ## Source files — locating, formats, access
 - Identify the reporting package(s) in the borrower's **connected** deal folder; ignore models,
   appraisals, certificates, and prior-deal files. When the folder isn't connected, follow the access
-  ladder (`${CLAUDE_PLUGIN_ROOT}/references/connecting-folders.md`): an unconnected folder is unknown,
+  ladder (`../../../references/runtime/cowork/files.md`): an unconnected folder is unknown,
   not empty, so never conclude "no packages" or "nothing filed" from an unconnected folder.
 - **Formats:** `.xlsx`/`.xlsm` → openpyxl (zip-based). Old binary `.xls` → xlrd/pandas. **NetSuite/
   QuickBooks `.xls` exports are frequently SpreadsheetML XML** (the file starts with `<?xml`); parse
@@ -204,6 +214,34 @@ contract above.
   plug is itself a flag. Use this builder rather than a bespoke per-borrower CF. Keep CF-vs-IS /
   CF-vs-BS memo rows.
 
+## Internal Source Register — finalize the assembled candidate
+
+Capture row locations in each source-map month entry's `rows`, keyed by exact model cell
+when labels repeat, otherwise by label. A spreadsheet row hit can be
+`{"cells":"B4","method":"captured","multiplier":1,"source_unit":"USD","model_unit":"USD"}`.
+Row `file`/`sheet` overrides apply only to that row. Put unresolved reasons in `not_found`.
+Never invent a captured coordinate from a coincidentally equal number.
+
+After assembly, finalize to a separate ephemeral candidate using the authorized reporting folder:
+
+```bash
+python -B "${CLAUDE_PLUGIN_ROOT}/lib/source_register.py" assembled.xlsx source-map.json \
+  --source-root "$AUTHORIZED_REPORTING_FOLDER" --output candidate.xlsx
+```
+
+The finalizer establishes current calculated values before openpyxl changes, writes internal
+input references and a long-form Source Register, then recalculates again. If final recalculation
+fails, it uses the same build's current values and visibly discloses values-only delivery. If current
+required calculations cannot be established, preserve the last good model; do not substitute old
+caches or invent zero. Missing evidence remains visible without blocking usable financial output.
+
+Read the returned mode/note in the delivery conclusion. The candidate's sibling
+`candidate.source-map.json` contains the exact register mapping and workbook digest. Verify that
+pair and run the existing financial validation gate before promoting the workbook and renaming
+its mapping to `source-map.json` through the normal safe-save workflow. Do not promote a partial
+or mismatched pair. Do not write the workbook after successful recalculation. Manual edits require
+explicit requested edit propagation, not an ordinary rebuild of the edited file.
+
 ## Recalc — populate cached values, as the LAST write
 openpyxl writes formula strings with **no computed value**, so downstream readers (the analysis modules)
 see blanks for every subtotal until a human opens the file in Excel. After writing, force a recalc so
@@ -256,7 +294,7 @@ month. Then ask for a look.
   they never become `DELETE_ME` or superseded-attempt files in `_model`. The source folder is read-only,
   and scratch is not a place to
   "save anyway" — if the output folder isn't connected, hand back the folder steps
-  (`${CLAUDE_PLUGIN_ROOT}/references/connecting-folders.md`).
+  (`../../../references/runtime/cowork/files.md`).
 - **Save safely (synced folders).** Write the gated workbook to a hidden atomic-replace temp file in the SAME output folder, then
   replace the canonical file — an interrupted save must never leave a truncated model in place. Before
   overwriting, check the new file isn't drastically smaller than the last good one (a size collapse means

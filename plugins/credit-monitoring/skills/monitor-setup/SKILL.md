@@ -13,22 +13,24 @@ metadata:
 
 # Monitor Setup
 
+Read `../../CLAUDE.md` before anything else; it holds the rules shared by every skill.
+
 Produce the two per-borrower control files every other stage reads: `borrower-config.json` (mechanical)
 and `deal-context.json` (interpretive). Both are DATA and live in the analyst-CONNECTED output folder —
 never inside the plugin, never inside the read-only reporting/deal folder. Templates are in `config/`.
 
 When this skill is directly invoked by the analyst and `run-monitor` has not handed it resolved entry
-context, first follow `${CLAUDE_PLUGIN_ROOT}/references/entry-routing.md` through its welcome and
+context, first follow `../../references/entry-routing.md` through its welcome and
 permission menu. Preserve explicit setup intent. When `run-monitor` already supplied that context,
 continue here without repeating the welcome or permission menu.
 
 Before the first question, find what this session can reach through
-`${CLAUDE_PLUGIN_ROOT}/references/connecting-folders.md`. If either source or store root is unavailable,
+`../../references/runtime/cowork/files.md`. If either source or store root is unavailable,
 follow **store-setup** to obtain both folders.
 Keep both connected roots in context and bind them on every plugin subprocess and worker brief; one
 subprocess cannot export them to the next. Every later choice runs the same loop — look first, propose
 what you found as options with the one you recommend leading, then act on the option the analyst picks
-through `AskUserQuestion` (`${CLAUDE_PLUGIN_ROOT}/references/asking.md`). Anything mechanical you can
+through `AskUserQuestion` (`../../references/asking.md`). Anything mechanical you can
 see, just do.
 
 **Run this skill in the session that talks to the analyst.** Every ASK here — the output folder, each
@@ -64,7 +66,7 @@ alters a computed figure.
 ## Part A — borrower-config.json (mechanical)
 
 **Updating an existing borrower — check and fix, don't re-interview.** Read the existing
-`borrower-config.json` and fill only what's missing or stale. If `model_output_path` still points into
+`borrower-config.json` and fill only what's missing or stale; step 8's check names the stale paths. If `model_output_path` still points into
 `.record/current`, ask before changing it; verify the existing workbook and sidecars, copy them into
 `<borrower root>/_model/`, verify the copies, then update the path. Leave historical runs and every
 analyst setting unchanged.
@@ -84,7 +86,7 @@ recommend a company: folder order is not credit evidence.
   list and current position across responses. On the final page, remove **[More companies]** and show
   the remaining one or two names plus **[None of these]** and **[Not now]**. Never wrap to the first
   page or repeat a page. This makes all candidates reachable without an infinite menu loop.
-- **None of these** asks the single normal free text question allowed by `asking.md`. The Other box may
+- **None of these** asks the single normal free text question allowed by `../../references/asking.md`. The Other box may
   also supply a company name at any page. **Not now** pauses without selecting a company.
 
 A group or subsidiary name does not automatically define a separate borrower, so confirm the intended
@@ -131,7 +133,9 @@ setup hunting through the wrong folders.
 2. `credit_agreement_path` AND `ic_uw_memo_path`: ask the analyst to select each file. The credit
    agreement is OUTSIDE the reporting folder, elsewhere in the borrower's deal folder. Look through
    that folder yourself and offer the files that look right as a menu, ALWAYS plus **[Point me at
-   it]** / **[Skip — I don't have it now]**. The file's own subfolder varies by deal. On skip,
+   it]** / **[Skip — I don't have it now]**. The file's own subfolder varies by deal. Cite the file
+   by its path in the source folder even when its name says nothing, such as `1.pdf`; never copy it
+   into the store under a better name. On skip,
    leave blank and warn plainly: no credit agreement → covenant-setup is blocked; no final/executed IC
    or UW memo → business_profile, credit_thesis and key_risks_at_uw come through as flagged drafts.
 3. `budget_path`: ask the analyst to select the budget workbook (same menu) and confirm which tab/version
@@ -158,13 +162,20 @@ setup hunting through the wrong folders.
    workbook (`budget_path` + the tab from `budget_version_note`) and fill in
    `config/budget-map.template.json`: `sheet`, `period_columns` (EVERY month the budget covers that the
    monitor may report on — a missing month makes budget-vs-actual fail that month), `metric_rows`
-   (revenue, gross_profit, net_income, interest_expense, taxes, depreciation_amortization; plus
-   financing_cost / interest_income only if the budget has them), `opex_groups` (the {add, subtract}
-   shape reconciles a budget whose chart of accounts differs from the actuals'), and — when the pinned
+   (revenue; gross_profit if the plan has one; for EBITDA exactly ONE of `'ebitda'`, the plan's own
+   EBITDA row, when the plan stops at EBITDA, or the rows that build it: net_income,
+   interest_expense, taxes, depreciation_amortization, plus financing_cost / interest_income only if
+   the plan has them. A map naming both is refused), `opex_groups` (the {add, subtract}
+   shape reconciles a budget whose chart of accounts differs from the actuals'; leave the block out
+   when the plan has no opex line), and — when the pinned
    budget carries a balance-sheet section — `balance_sheet_rows` for the collateral components it plans,
    so the memo's Collateral box can show 'vs Budget'. Two key joins: `opex_groups` keys match
    borrower-config `opex_groups` EXACTLY, and `balance_sheet_rows` keys match collateral-map
    `pledged_components` labels EXACTLY.
+   Map only lines the plan has: leave out a line it does not have, and never fill a line from another
+   row or a blank row. The engine reads a missing line as no plan and says so; a borrowed or blank row
+   reads as a plan figure, so EBITDA standing in for gross profit becomes a false beat, and a blank row
+   becomes a $0 plan.
    VERIFY before accepting: extract one known month through the map and eyeball revenue, gross profit,
    EBITDA, each opex group and any balance_sheet_rows against the budget tab; fix the map until they
    match.
@@ -211,10 +222,12 @@ setup hunting through the wrong folders.
    units, never what we call it.
 7. Write borrower-config.json INTO the connected output folder. Verify every WRITABLE path resolves
    INSIDE that output folder and that NO writable path resolves inside the reporting/deal folder.
-8. **CHECK the finished config before you finish.** Read it back and confirm every `*_path` and
-   `*_folder` value starts with `source:` or `store:`. A value that starts with a drive letter,
-   `/sessions/`, `/home/` or `/Users/` names one computer and works only where it was written. Rewrite
-   each one through step A1.0.
+8. **CHECK the finished config before you finish.** Run
+   `python ${CLAUDE_PLUGIN_ROOT}/skills/monitor-setup/references/config_paths.py check "<this borrower-config.json>"`.
+   It exits 1 and lists each path that cannot stay, with its reason. A value that starts with a drive
+   letter, `/sessions/`, `/home/` or `/Users/` names one computer and works only where it was written:
+   rewrite it through step A1.0. An input from A1 that starts with `store:` belongs in the source
+   folder: point it at the original file there through A1. Run the check again until it passes.
 9. **Register the borrower in the registry.** `python ${CLAUDE_PLUGIN_ROOT}/lib/fleet.py register --config "<this
    borrower-config.json>"` adds/updates this borrower in `credit-monitoring-registry.json` at the monitoring
    root — so `run-monitor` resolves it in ONE lookup next time.
@@ -227,7 +240,7 @@ setup hunting through the wrong folders.
      **The FEE LETTER is MANDATORY reading when present** — fee letters routinely carry ADDITIVE
      economics on top of the agreement (extra PIK to the agent, extra success/exit fees) that are not
      conflicts but layers; sourcing fee economics from an IC/UW memo instead of the executed fee letter
-     is a known failure mode (Example Borrower 2026-07: 1.00% agent PIK + 0.50% success fee both missed).
+     can omit additive agent PIK or success fees. Check the executed fee letter rather than inferring terms.
      **DISCREPANCY RULE — exhaust executed docs before flagging.** When any two sources state different
      terms or economics (memo vs agreement, cert vs model, any pair), text-sweep EVERY executed
      document in the deal folder for the conflicting term (pdftotext + grep takes minutes) BEFORE
@@ -251,16 +264,15 @@ setup hunting through the wrong folders.
      that tests it. No UW/IC memo found → leave the fields as flagged drafts for the analyst, never an
      invented thesis.
 1b. PROPOSE the deal ARCHETYPE (`static.archetype`) — infer it from the IC/UW memo's business
-   description (controlled vocabulary + framing blocks: monthly-monitor `references/archetypes.md`) and
+   description (controlled vocabulary + framing blocks: `../monthly-monitor/references/archetypes.md`) and
    put it to the analyst as a confirm-or-override alongside the judgment fields below. Analyst skips →
    write the inferred value with `archetype_provenance` "inferred — unconfirmed"; nothing fits →
    "unclassified" (generic framing; never blocks onboarding). The archetype selects the memo's liquidity
    framing, KPI emphasis and collateral read; it never changes a computed figure.
 1c. PROPOSE the DEAL TEAM (`static.deal_team`), then have the analyst CONFIRM it — these are the
-   names the memo header shows, in display order. The deal team is the borrower's own people,
-   and every person named in a deal folder is the borrower's: one setup read a borrower's CFO into
-   the header, on the first line a partner reads. So score each candidate against the book, which
-   already holds the answer — the other borrowers' deal records name who staffs credit deals:
+   names the memo header shows, in display order. The deal team belongs to the lender,
+   not the borrower. Documents may name either party. Use other authorized deal records
+   as supporting evidence, but have the analyst confirm membership:
 
        python ${CLAUDE_PLUGIN_ROOT}/references/deal_team.py propose \
            --exclude "<this borrower's folder>" --name "<candidate>" --name "<candidate>"
@@ -283,7 +295,7 @@ setup hunting through the wrong folders.
    cannot be written before they are graded. Surface the latest objective evidence (current covenant
    status, key variances, aging) to make the call fast — then leave the choice unrecommended. This is
    the credit judgment, the one place the monitor lays out the evidence and does not lead with an
-   option (`${CLAUDE_PLUGIN_ROOT}/references/asking.md`).
+   option (`../../references/asking.md`).
    Ask these HERE, in the session with the analyst; every one of them is theirs to give, and a
    blank `our_view` is what makes a first memo read like it has no house view. In a synthetic test,
    pinned test-persona judgments supplied by the test instructions stand in for analyst answers; they
@@ -337,7 +349,8 @@ setup hunting through the wrong folders.
   means use reporting); budget-map.json written and verified against one known month;
   collateral-map.json written; `modules[]` set; **`model.scale` + `model.currency` read off the workbook
   and checked against one figure with the analyst**; line-read floor decided and stated to the analyst;
-  every path written as `source:` or `store:`; the canonical model path is under the stable `_model/`
+  every path written as `source:` or `store:` and every A1 input as `source:`, with step 8's check
+  passing; the canonical model path is under the stable `_model/`
   workspace rather than `.record/current`; borrower registered.
 - deal-context.json valid JSON: **`ebitda_addbacks` built with the analyst, every candidate given a treatment and a reason (blank is not a default)**; `facility` with per-figure sources; `business_profile` with per-field
   sources and source_tier stamps (silent fields flagged drafts); `credit_thesis` + `key_risks_at_uw`

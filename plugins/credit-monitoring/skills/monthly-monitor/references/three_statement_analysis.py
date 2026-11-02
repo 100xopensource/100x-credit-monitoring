@@ -128,6 +128,11 @@ def _pct(a, b):
     return round(r, 6) if r is not None else None
 
 
+def _working_capital_days(balance, flow, month):
+    ratio = _safe_div(balance, flow)
+    return _round(ratio * ml.days_in_month(month), 1) if ratio is not None else None
+
+
 def _num(x):
     return ml.safe_float(x)
 
@@ -164,7 +169,9 @@ def _skip_line(nl, extra_norm=None):
         return True
     if extra_norm and (nl == extra_norm if isinstance(extra_norm, str) else nl in extra_norm):
         return True
-    if nl.startswith(("total", "net ", "memo", "provisional", "subtotal", "ordinary income",
+    # No "net " here: it names leaves as well as subtotals. compute() passes the rows the model
+    # works out from other rows, whatever their labels; _SUBTOTALS names Net Income.
+    if nl.startswith(("total", "memo", "provisional", "subtotal", "ordinary income",
                        "ebitda", "note ", "note1", "note 1")):
         return True
     if nl in {"other income", "other expense", "income", "expense", "operating expenses",
@@ -232,10 +239,11 @@ _ADDBACK_TAGS = ("miscellaneous", "misc expense", "one-time", "one time", "non-r
                  "management fee", "sponsor fee", "monitoring fee", "litigation", "settlement",
                  "severance")
 def ebitda_addback_register(model, S, months, li, seg):
-    """Quality-of-EBITDA: identify below-the-line / discretionary lines a borrower may add back to
-    EBITDA that are NOT in the configured bridge (interest / tax / D&A). Quantifies each candidate
-    (latest + TTM) and whether adding them back materially changes -- or flips the sign of -- EBITDA.
-    Surfaces the kind of large opaque 'Miscellaneous Expenses' add-back covenant EBITDA can lean on."""
+    """Candidate expense rows, not a proved EBITDA bridge or legal add-back.
+
+    A label and signed amount cannot establish whether a cost is already outside
+    configured EBITDA or permitted by its governing definition.
+    """
     rows = (getattr(model, "sheets", {}) or {}).get("Income Statement") or {}
     idx = seg[-12:] if len(seg) >= 12 else seg
     def _ttm(vals):
@@ -265,28 +273,16 @@ def ebitda_addback_register(model, S, months, li, seg):
         if len(w) == len(idx):
             ca_ttm = sum(v for v in w if v is not None)
     cand_total = sum(c["ttm"] or 0.0 for c in cands)
-    adjusted = (ca_ttm + cand_total) if ca_ttm is not None else None
-    flips = (ca_ttm is not None and adjusted is not None and ca_ttm < 0 <= adjusted)
-    reliant = flips or (ca_ttm is not None and adjusted not in (None, 0)
-                        and abs(cand_total) >= 0.25 * abs(adjusted))
+    # Do not apply candidate costs without a proved inclusion/definition bridge.
     reg = {"ca_ebitda_ttm": _round(ca_ttm) if ca_ttm is not None else None,
            "addback_candidates": sorted(cands, key=lambda c: abs(c["ttm"] or 0), reverse=True),
            "candidate_total_ttm": _round(cand_total),
-           "ebitda_with_addbacks_ttm": _round(adjusted) if adjusted is not None else None,
-           "flips_sign": bool(flips), "addback_reliant": bool(reliant),
-           "note": ("Reconstructed EBITDA is negative but turns positive once these below-the-line "
-                    "items are added back -- covenant EBITDA leans on discretionary add-backs; verify each is permitted."
-                    if flips else
-                    "material discretionary add-backs relative to EBITDA -- verify each is permitted under the EBITDA definition."
-                    if reliant else
-                    "candidate below-the-line add-backs identified; not material to EBITDA this period.")}
-    exc = None
-    if reliant:
-        exc = {"flag": "ebitda_quality_addback_reliant", "severity": "elevated" if flips else "watch",
-               "detail": (f"EBITDA quality: reconstructed TTM EBITDA {reg['ca_ebitda_ttm']:,} vs "
-                          f"{reg['ebitda_with_addbacks_ttm']:,} with {reg['candidate_total_ttm']:,} of "
-                          f"discretionary add-backs ({', '.join(c['line'] for c in reg['addback_candidates'][:3])})")}
-    return reg, exc
+           "ebitda_with_addbacks_ttm": None,
+           "flips_sign": None, "addback_reliant": None,
+           "note": "Candidate expense rows only; signed amounts are preserved. Inclusion in "
+                   "configured EBITDA and permission under its definition are not established, "
+                   "so adjusted EBITDA, sign flips and add-back reliance are not assessed."}
+    return reg, None
 
 
 _DEBT_TAGS = ("notes payable", "note payable", "promissory", "loan", "convertible",
@@ -1028,23 +1024,18 @@ def build_revenue_mix(model, cfg, months, li, seg_info, orig, revenue_total_norm
             if hit:
                 leaves.append((hit[0], [_num(v) for v in hit[1]]))
     else:
-        # auto-detect: IS rows between the "Revenue" section header and the revenue total row,
-        # excluding the total itself and any blank/header rows.
+        # Infer only a blank Revenue header followed by a distinct, later total.
         is_rows = list(model.sheets.get("Income Statement", {}).items())
-        # Need source order; monitor_lib stores dict insertion order == sheet row order (Python 3.7+).
-        in_section = False
-        for nl, series in is_rows:
-            if nl == "revenue":
-                in_section = True
-                continue
-            if not in_section:
-                continue
-            if nl == revenue_total_norm:
-                break
+        labels = [label for label, _ in is_rows]
+        if "revenue" not in labels or revenue_total_norm not in labels:
+            return []
+        start, stop = labels.index("revenue"), labels.index(revenue_total_norm)
+        if start >= stop or any(_num(v) is not None for v in is_rows[start][1]):
+            return []
+        for nl, series in is_rows[start + 1:stop]:
             vals = [_num(v) for v in series]
-            if all(v is None for v in vals):
-                continue
-            leaves.append((nl, vals))
+            if any(v is not None for v in vals):
+                leaves.append((nl, vals))
 
     if len(leaves) < 2:
         return []
@@ -1124,6 +1115,7 @@ def build_opex_trends(opex_found_series, months, li, ytd, pytd, seg_info,
             "group": disp, "latest": _round(latest), "mom_pct": mom_pct,
             "ytd_same_basis": _round(ytd_v), "prior_ytd_same_basis": _round(pytd_same_basis),
             "direction": direction,
+            "direction_note": "Direction describes signed recorded values, not whether cost burden improved or worsened.",
         }
         if src is not None and model is not None and labels and disp in labels:
             p = model.provenance(labels[disp], sheet="Income Statement")  # full row: YTD + prior YTD
@@ -1371,6 +1363,12 @@ def build_headlines(tr_rev, tr_eb, gm_ytd, gm_ytd_ex, flagged_is, flagged_bs, dr
             return f"{r['line']} went to zero this month (prior {fmt_usd(r['prior'], unit)})."
         return f"{r['line']} moved to {fmt_usd(r['latest'], unit)} from {fmt_usd(r['prior'], unit)} this month."
 
+    def drift_txt(row):
+        return (f"{row['line']}: signed recorded value has been {row['direction']} for "
+                f"{row['segment_months']} months, from {fmt_usd(row.get('start_value'), unit)} "
+                f"to {fmt_usd(row.get('latest_value'), unit)} ({fmt_pct(row['total_pct'])} cumulative). "
+                "Numeric direction alone does not say whether expense burden improved or worsened.")
+
     top_is = flagged_is[0] if flagged_is else None
     top_drift = drift[0] if drift else None
     if top_is and top_drift:
@@ -1379,11 +1377,11 @@ def build_headlines(tr_rev, tr_eb, gm_ytd, gm_ytd_ex, flagged_is, flagged_bs, dr
         if is_mag >= dr_mag:
             H.append(flag_txt(top_is))
         else:
-            H.append(f"{top_drift['line']} has been {top_drift['direction']} for {top_drift['segment_months']} months ({fmt_pct(top_drift['total_pct'])} cumulative) — a sustained drift, not a one-month spike.")
+            H.append(drift_txt(top_drift))
     elif top_is:
         H.append(flag_txt(top_is))
     elif top_drift:
-        H.append(f"{top_drift['line']} has been {top_drift['direction']} for {top_drift['segment_months']} months ({fmt_pct(top_drift['total_pct'])} cumulative) — a sustained drift, not a one-month spike.")
+        H.append(drift_txt(top_drift))
 
     if flagged_bs:
         H.append(flag_txt(flagged_bs[0]))
@@ -2099,8 +2097,8 @@ def compute(model, cfg, unit, borrower_name=None, config_file=None):
 
     ar_l, ap_l = _at(S["accounts_receivable"], li), _at(S["accounts_payable"], li)
     cogs_l = _at(S["operating_cogs"], li)
-    dso = _safe_div(ar_l, rev_l); dso = _round(dso * days_latest, 1) if dso is not None else None
-    dpo = _safe_div(ap_l, cogs_l); dpo = _round(dpo * days_latest, 1) if dpo is not None else None
+    dso = _working_capital_days(ar_l, rev_l, latest)
+    dpo = _working_capital_days(ap_l, cogs_l, latest)
     add("working_capital", "dso_days", dso, kind="days",
         source_ref=refs(key_ref("accounts_receivable", latest, "spot"),
                         key_ref("revenue", latest, "spot")),
@@ -2112,7 +2110,7 @@ def compute(model, cfg, unit, borrower_name=None, config_file=None):
     dio = ccc = None
     if S.get("inventory") is not None:
         inv_l = _at(S["inventory"], li)
-        dio = _safe_div(inv_l, cogs_l); dio = _round(dio * days_latest, 1) if dio is not None else None
+        dio = _working_capital_days(inv_l, cogs_l, latest)
         ccc = _round(sum(x for x in [dso, dio, (-dpo if dpo is not None else None)] if x is not None), 1) \
             if None not in (dso, dio, dpo) else None
         add("working_capital", "dio_days", dio, kind="days",
@@ -2222,6 +2220,12 @@ def compute(model, cfg, unit, borrower_name=None, config_file=None):
     # reconciliation detail, not leaf P&L accounts -- exclude every row in such a section (by
     # sheet-row-order membership, not just the header row itself) from standouts/drift/line_movers.
     ebitda_skip |= _mark_memo_section_rows(list(model.sheets.get("Income Statement", {}).items()))
+    # A row the model works out from other rows is a subtotal ("Operating Income", "Net Revenue"),
+    # a check row or a copy of a row already read, never a leaf, whatever its label. Labels can't
+    # tell: "Net Property and Equipment" is a typed balance. The name rules in _skip_line still
+    # cover a model with no formulas.
+    computed = model.computed_rows()
+    ebitda_skip |= computed.get("Income Statement", set())
     revenue_total_label = (cfg.get("model_lines") or {}).get("revenue", "")
     revenue_total_norm = ml.norm_label(revenue_total_label) if revenue_total_label else None
 
@@ -2229,6 +2233,7 @@ def compute(model, cfg, unit, borrower_name=None, config_file=None):
                          skip_norms=ebitda_skip, ytd_idxs=ytd, denom_series=S["revenue"],
                          src=src, denom_label=S_label.get("revenue"))
     bs_read = read_lines(model, "Balance Sheet", months, li, seg_info, orig, line_read_cfg,
+                         skip_norms=computed.get("Balance Sheet"),
                          denom_series=S["total_assets"], flag_share_shift=True,
                          src=src, denom_label=S_label.get("total_assets"))
     drift, drift_meta = detect_drift(
@@ -2382,6 +2387,19 @@ def compute(model, cfg, unit, borrower_name=None, config_file=None):
         except Exception as _e:  # pragma: no cover
             _ts = {"error": repr(_e)}
 
+    day_series = {}
+    for metric, balance, flow in [('dso_days', 'accounts_receivable', 'revenue'),
+                                  ('dpo_days', 'accounts_payable', 'operating_cogs'),
+                                  ('dio_days', 'inventory', 'operating_cogs')]:
+        if S.get(balance) is None or S.get(flow) is None:
+            day_series[metric] = None
+            continue
+        day_series[metric] = [
+            {'m': month, 'v': _working_capital_days(_at(S[balance], i), _at(S[flow], i), month),
+             'source_ref': refs(key_ref(balance, month, 'spot'), key_ref(flow, month, 'spot')),
+             'calc': f'{metric} = {balance} / {flow} x {ml.days_in_month(month)} calendar days at {month}'}
+            for i, month in enumerate(months)]
+
     return ml.conclusion(
         module="three-statement-analysis", period=latest, results=results, exceptions=exceptions,
         source_index=src, unit=unit,
@@ -2396,7 +2414,8 @@ def compute(model, cfg, unit, borrower_name=None, config_file=None):
         opex_composition=opex_found, headlines=headlines, trend=trend, mom_bridge=bridge,
         series={"revenue": pairs("revenue"),
                 "gross_margin": ([{"m": months[i], "v": gm_series[i]} for i in range(len(months))] if gm_series else None),
-                "ebitda": pairs("ebitda_bridge"), "cash": pairs("cash"), "total_equity": pairs("total_equity")},
+                "ebitda": pairs("ebitda_bridge"), "cash": pairs("cash"), "total_equity": pairs("total_equity"),
+                **day_series},
         seasonality_low_months=sorted(low_months) if low_months else None,
         segments={"breaks": seg_info["breaks"],
                   "current_basis_start": months[cur_seg_idxs[0]] if cur_seg_idxs else None,
@@ -2437,6 +2456,7 @@ def main():
                     help="the run this output belongs to, minted once by the "
                          "orchestrator for the whole run (or set CREDIT_MONITOR_RUN_ID)")
     args = ap.parse_args()
+    ml.prerequisites.require_workbook()
     if args.run_id:
         os.environ["CREDIT_MONITOR_RUN_ID"] = args.run_id   # run_stamp() reads it
 
@@ -2469,10 +2489,10 @@ def main():
         out = ml.conclusion(
             module="three-statement-analysis", period=None, results=[],
             exceptions=[{"flag": "model_open_failed", "severity": "error",
-                        "detail": f"Could not open/parse model workbook at '{model_path}': {exc}"}],
+                        "detail": f"Could not open/parse the configured model workbook ({type(exc).__name__}). Check workbook access and layout."}],
             engine=_ENGINE_VERSION, borrower=borrower or cfg.get("borrower_name"),
             skipped=True,
-            reason=f"model workbook could not be opened/parsed: {exc}")
+            reason=f"model workbook could not be opened/parsed ({type(exc).__name__})")
         out_path = ml.write_output(out, args.out)
         print(f"Wrote {out_path}: model_open_failed -- {exc}")
         return

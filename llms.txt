@@ -22,4 +22,4 @@ A borrower run produces two person-facing deliverables: a financial workbook and
 
 ## Support
 
-Claude Cowork is supported in v1. Other agent harnesses are not supported or promised. Same-link hosted dashboard updates and migration of pre-v1 monitoring runs are unsupported.
+Public onboarding supports Claude Cowork. Bundled administrator-configured channel instructions do not establish public channel support. Same-link hosted dashboard updates are unsupported in Cowork. Migration of pre-v1 monitoring runs is unsupported. Native Excel edit refresh and end-to-end Sample Output continuation remain unverified. See docs/LIMITATIONS.md.

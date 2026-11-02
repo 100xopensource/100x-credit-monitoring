@@ -13,8 +13,11 @@ Nothing here is hardcoded to a particular borrower. Everything borrower-specific
 is supplied by config (borrower-config.json + budget-map.json):
 
   * model_lines          canonical metric key -> the borrower's model row label
-                         (revenue, gross_profit, ebitda_bridge; optional
+                         (revenue, ebitda_bridge; optional gross_profit,
                          financing_cost). Read from the model via monitor_lib.
+                         A model with no gross-profit row still compares
+                         revenue / EBITDA / opex, and its gross-profit rows
+                         read n/a on the actual side.
   * opex_groups          display name -> model row label, for the opex breakdown.
                          Keys align 1:1 with the budget-map opex_groups.
   * comparability_items  OPTIONAL list of one-time items to also show ex-item
@@ -39,20 +42,31 @@ DESIGN
   standardized layout), but every number is parsed with ml.safe_float.
 * COMPARABILITY of EBITDA: ACTUAL EBITDA is read from the model's single EBITDA
   bridge row (model_lines.ebitda_bridge -- the SAME row covenant-compliance
-  reads, one system-wide definition, not recomputed here). BUDGET EBITDA is
-  computed with the IDENTICAL bridge formula -- Net Income + Interest Expense
-  (+ Financing Cost if enabled and present) + Income Taxes + D&A - Interest
-  Income -- so actual and budget EBITDA are like-for-like.
+  reads, one system-wide definition, not recomputed here). BUDGET EBITDA comes
+  one of two ways, per the budget-map:
+    - built (metric_rows: net_income, interest_expense, taxes,
+      depreciation_amortization, optional financing_cost / interest_income)
+      with the IDENTICAL bridge formula -- Net Income + Interest Expense
+      (+ Financing Cost if enabled and present) + Income Taxes + D&A -
+      Interest Income -- so actual and budget EBITDA are like-for-like;
+    - stated (metric_rows.ebitda): the plan's own EBITDA row, read as the plan
+      states it, for a plan that stops at EBITDA. A map naming both is refused
+      (two answers for one figure), and the notes say which way it came.
+* A LINE THE PLAN DOES NOT HAVE IS NO PLAN, never $0: gross profit and opex
+  are optional on either side, and a side with no line reads None, so its
+  variance and favorable flag are None too. Rows drop only when neither side
+  has the line, and the notes say so.
 
 Usage (config-driven -- preferred):
     python budget_vs_actual.py --borrower-config <borrower-config.json> --out <output .json>
   model <- paths.model_output_path; budget-map <- paths.budget_map_path; the
   model_lines / opex_groups / comparability_items / ebitda blocks come from the
   borrower-config. The latest month defaults to the model's last populated month
-  and YTD start to January of that year; both can be overridden with the flags.
-  A default January start is trimmed to the months the model actually carries,
-  and the output says so; an explicit --ytd-start the model cannot cover is a
-  SKIP instead, since narrowing an analyst's own window is not the engine's call.
+  and YTD start to the later of January of that year and the plan's first month;
+  both can be overridden with the flags. The default start is also trimmed to the
+  months the model actually carries, and the output says why the YTD is short; an
+  explicit --ytd-start the model cannot cover is a SKIP instead, since narrowing
+  an analyst's own window is not the engine's call.
 
 Usage (explicit paths -- still requires --borrower-config for model_lines):
     python budget_vs_actual.py \
@@ -78,8 +92,8 @@ if _LIB_DIR not in sys.path:
 import monitor_lib as ml
 import rows_emit
 
-import openpyxl
-from openpyxl.utils import get_column_letter
+openpyxl = ml.prerequisites.openpyxl
+get_column_letter = ml.prerequisites.get_column_letter
 
 # Default materiality: flag when |var%| >= 10% AND |var$| >= $50,000. The dollar
 # side is a DOLLAR figure and the variances it is compared against are in the
@@ -89,6 +103,11 @@ from openpyxl.utils import get_column_letter
 # the rule as "|var$| >= 50,000".
 DEFAULT_MATERIAL_PCT = 0.10
 DEFAULT_MATERIAL_ABS = 50000.0
+
+# The plan rows that build EBITDA up from net income. A map that names the plan's
+# own EBITDA row as well as any of these is refused (BudgetReader).
+EBITDA_BUILD = ("net_income", "interest_expense", "taxes", "depreciation_amortization",
+                "financing_cost", "interest_income")
 
 
 ConfigError = ml.ConfigError
@@ -107,7 +126,9 @@ def load_analysis_config(cfg):
     model_lines = cfg.get("model_lines") or {}
     lines = {
         "revenue": ml.require_line(model_lines, "revenue", "budget-vs-actual"),
-        "gross_profit": ml.require_line(model_lines, "gross_profit", "budget-vs-actual"),
+        # optional -- a model with no gross-profit row still compares revenue,
+        # EBITDA and opex; its gross-profit rows read n/a on the actual side.
+        "gross_profit": model_lines.get("gross_profit") or None,
         "ebitda_bridge": ml.require_line(model_lines, "ebitda_bridge", "budget-vs-actual"),
         # optional -- only used for a comparability note
         "financing_cost": model_lines.get("financing_cost"),
@@ -186,8 +207,9 @@ def actual_metrics(model, lines, opex_groups, items, latest_month, ytd_months):
     """Build the actuals block (latest month + YTD) entirely via monitor_lib."""
     rev_m = model.get_line(lines["revenue"], month=latest_month)
     rev_y = _sum_line(model, lines["revenue"], ytd_months)
-    gp_m = model.get_line(lines["gross_profit"], month=latest_month)
-    gp_y = _sum_line(model, lines["gross_profit"], ytd_months)
+    gp_label = lines.get("gross_profit")
+    gp_m = model.get_line(gp_label, month=latest_month) if gp_label else None
+    gp_y = _sum_line(model, gp_label, ytd_months) if gp_label else None
 
     # EBITDA: read straight from the model's single EBITDA bridge row -- the SAME
     # row covenant_compliance.py uses -- so the two modules report identical
@@ -198,13 +220,13 @@ def actual_metrics(model, lines, opex_groups, items, latest_month, ytd_months):
     # Comparability adjustments (empty list -> zero adjustment, no ex-item lines).
     adj, per_item = _comparability_adjustments(model, items, latest_month, ytd_months)
 
-    # opex groups
+    # opex groups -- a total built from no group is no figure, not $0
     opex_m, opex_y = {}, {}
     for name, label in ml.iter_label_map(opex_groups):
         opex_m[name] = model.get_line(label, month=latest_month) or 0.0
         opex_y[name] = _sum_line(model, label, ytd_months) or 0.0
-    total_opex_m = sum(opex_m.values())
-    total_opex_y = sum(opex_y.values())
+    total_opex_m = sum(opex_m.values()) if opex_m else None
+    total_opex_y = sum(opex_y.values()) if opex_y else None
 
     fin_m = fin_y = None
     if lines.get("financing_cost"):
@@ -264,6 +286,20 @@ class BudgetReader:
                 f"workbook (sheets: {', '.join(wb.sheetnames)})") from None
         self.period_columns = budget_map["period_columns"]
         self.metric_rows = budget_map["metric_rows"]
+        # A plan that stops at EBITDA maps its own EBITDA row as
+        # metric_rows.ebitda, read INSTEAD of the build. A map naming the stated
+        # row and the build rows too has two answers for one figure; neither is
+        # picked for the analyst, so the comparison skips and says which.
+        self.stated_ebitda = self._has_metric("ebitda")
+        if self.stated_ebitda:
+            below = [k for k in EBITDA_BUILD if self._has_metric(k)]
+            if below:
+                raise ConfigError(
+                    "the budget map names both the plan's own EBITDA row "
+                    f"('ebitda') and rows that build EBITDA up from net income "
+                    f"({', '.join(below)}), which gives two answers for one "
+                    "figure; keep 'ebitda' when the plan states EBITDA itself, "
+                    "or keep the build rows when it does not")
 
     def _cell(self, row, col):
         return ml.safe_float(self.ws.cell(row=row, column=col).value) or 0.0
@@ -325,10 +361,18 @@ class BudgetReader:
     def _has_metric(self, name):
         return name in self.metric_rows
 
+    def has_opex(self):
+        """Whether the plan names any opex group. With none, its opex total is
+        no figure: summing nothing reads as a $0 plan."""
+        return bool(ml.iter_label_map(self.map.get("opex_groups")))
+
     def ebitda_components(self):
-        """The (metric, sign) terms of the budget EBITDA bridge, exactly as
-        ebitda() sums them -- ONE list drives both the value and its per-figure
-        source refs, so the two can never drift apart."""
+        """The (metric, sign) terms budget EBITDA sums, exactly as ebitda()
+        sums them -- ONE list drives both the value and its per-figure source
+        refs, so the two can never drift apart. A stated EBITDA row is the one
+        term; otherwise the bridge."""
+        if self.stated_ebitda:
+            return [("ebitda", 1)]
         comps = [("net_income", 1), ("interest_expense", 1), ("taxes", 1),
                  ("depreciation_amortization", 1)]
         if self.addback_financing_cost and self._has_metric("financing_cost"):
@@ -338,8 +382,10 @@ class BudgetReader:
         return comps
 
     def ebitda(self, period_iso_list):
-        """Budget EBITDA computed with the IDENTICAL formula the model's EBITDA
-        bridge uses, so budget is like-for-like with the bridge-sourced actual:
+        """Budget EBITDA. A stated row (metric_rows.ebitda) is read as the plan
+        states it. Otherwise it is computed with the IDENTICAL formula the
+        model's EBITDA bridge uses, so budget is like-for-like with the
+        bridge-sourced actual:
             Net Income + Interest Expense + Financing Cost (if enabled AND present
             in the budget) + Income Taxes + D&A - Interest Income.
         Driven by the budget-map metric_rows (see ebitda_components). The
@@ -386,8 +432,11 @@ class BudgetReader:
 def budget_metrics(reader, latest_iso, ytd_iso_list):
     rev_m = reader.metric("revenue", latest_iso)
     rev_y = reader.metric_sum("revenue", ytd_iso_list)
-    gp_m = reader.metric("gross_profit", latest_iso)
-    gp_y = reader.metric_sum("gross_profit", ytd_iso_list)
+    # A plan with no gross-profit line has no gross-profit plan: None, never
+    # another row's figure.
+    has_gp = reader._has_metric("gross_profit")
+    gp_m = reader.metric("gross_profit", latest_iso) if has_gp else None
+    gp_y = reader.metric_sum("gross_profit", ytd_iso_list) if has_gp else None
     eb_m = reader.ebitda([latest_iso])
     eb_y = reader.ebitda(ytd_iso_list)
 
@@ -395,8 +444,8 @@ def budget_metrics(reader, latest_iso, ytd_iso_list):
     for name, spec in ml.iter_label_map(reader.map.get("opex_groups")):
         opex_m[name] = reader.opex_group(spec, latest_iso)
         opex_y[name] = reader.opex_group_sum(spec, ytd_iso_list)
-    total_opex_m = sum(opex_m.values())
-    total_opex_y = sum(opex_y.values())
+    total_opex_m = sum(opex_m.values()) if opex_m else None
+    total_opex_y = sum(opex_y.values()) if opex_y else None
 
     return {
         "revenue": {"latest": rev_m, "ytd": rev_y},
@@ -529,15 +578,20 @@ def _budget_side(idx, reader, budget_map_file, rows_spec, periods, section, how)
 
 
 def _budget_ebitda_side(idx, reader, budget_map_file, periods, how):
-    """(refs, desc) for budget EBITDA: one cell ref per bridge component read
-    (labeled with the component name), plus the budget-map metric_rows block
-    that mapped them. Mirrors BudgetReader.ebitda_components exactly."""
+    """(refs, desc) for budget EBITDA: one cell ref per term read (labeled with
+    the term's name), plus the budget-map metric_rows block that mapped them.
+    Mirrors BudgetReader.ebitda_components exactly -- a stated EBITDA row's ref
+    is that row's own cells."""
     refs, terms = [], []
     for name, sign in reader.ebitda_components():
         for p in reader.rows_provenance(reader.metric_rows[name], periods):
             refs.append(idx.ref(reader.given_path, label=name, **p))
         terms.append(f"{'-' if sign < 0 else '+'} {name}")
     refs.append(idx.ref(budget_map_file, section="metric_rows"))
+    if reader.stated_ebitda:
+        return refs, (f"budget EBITDA read from the plan's stated EBITDA row "
+                      f"(budget-map metric_rows.ebitda), sheet "
+                      f"'{reader.sheet_name}', {how}")
     formula = " ".join(terms)[2:]  # drop the leading "+ "
     return refs, (f"budget EBITDA = {formula} per budget-map metric_rows, "
                   f"sheet '{reader.sheet_name}', {how}")
@@ -615,8 +669,15 @@ def compute(model, reader, acfg, latest_month, ytd_months, unit, borrower=None,
 
     rev_a_m, rev_b_m = AP(lines["revenue"], "latest"), BP("revenue", "latest")
     rev_a_y, rev_b_y = AP(lines["revenue"], "YTD"), BP("revenue", "YTD")
-    gp_a_m, gp_b_m = AP(lines["gross_profit"], "latest"), BP("gross_profit", "latest")
-    gp_a_y, gp_b_y = AP(lines["gross_profit"], "YTD"), BP("gross_profit", "YTD")
+    # Gross profit is optional on both sides: a side with no line reads n/a,
+    # and with neither side the rows drop and a note says so.
+    gp_label = lines["gross_profit"]
+    gp_in_budget = reader._has_metric("gross_profit")
+    if gp_label:
+        gp_a_m, gp_a_y = AP(gp_label, "latest"), AP(gp_label, "YTD")
+    else:
+        gp_a_m = gp_a_y = ([], "no gross-profit model line (model_lines.gross_profit unset)")
+    gp_b_m, gp_b_y = BP("gross_profit", "latest"), BP("gross_profit", "YTD")
     eb_a_m, eb_a_y = AP(bridge, "latest"), AP(bridge, "YTD")
     eb_b_m = _budget_ebitda_side(idx, reader, budget_map_file, [latest_iso], how_m)
     eb_b_y = _budget_ebitda_side(idx, reader, budget_map_file, ytd_iso, how_y)
@@ -656,19 +717,22 @@ def compute(model, reader, acfg, latest_month, ytd_months, unit, borrower=None,
     add(cmp_line("Revenue", "YTD", A["revenue"]["ytd"],
                  B["revenue"]["ytd"], rev_a_y, rev_b_y))
 
-    # Gross Profit (as-reported)
+    # Gross Profit (as-reported) -- while either side has a gross-profit line
+    show_gp = bool(gp_label or gp_in_budget)
     gp_note = None
-    if gp_items:
+    if gp_items and gp_label:
         gp_note = (f"As-reported; includes comparability item(s) [{item_names}] "
                    "that distort the underlying figure. See ex-item line.")
-    add(cmp_line("Gross Profit (as-reported)", "latest", A["gross_profit"]["latest"],
-                 B["gross_profit"]["latest"], gp_a_m, gp_b_m))
-    add(cmp_line("Gross Profit (as-reported)", "YTD", A["gross_profit"]["ytd"],
-                 B["gross_profit"]["ytd"], gp_a_y, gp_b_y, note=gp_note))
+    if show_gp:
+        add(cmp_line("Gross Profit (as-reported)", "latest", A["gross_profit"]["latest"],
+                     B["gross_profit"]["latest"], gp_a_m, gp_b_m))
+        add(cmp_line("Gross Profit (as-reported)", "YTD", A["gross_profit"]["ytd"],
+                     B["gross_profit"]["ytd"], gp_a_y, gp_b_y, note=gp_note))
 
-    # Gross Profit (YTD ex-item) -- only when comparability items apply to GP.
+    # Gross Profit (YTD ex-item) -- only when comparability items apply to GP
+    # and the model has a gross-profit line to adjust.
     gp_item_refs = []
-    if gp_items:
+    if gp_items and gp_label:
         gp_item_refs = [r for it in gp_items for r in AP(it["model_line"], "YTD")[0]]
         gp_adj = A["adjustments"]["gross_profit"]["ytd"]
         gp_ex = A["gross_profit_adj"]["ytd"]
@@ -688,7 +752,7 @@ def compute(model, reader, acfg, latest_month, ytd_months, unit, borrower=None,
 
     # Gross Margin % (as-reported; plus ex-item YTD when applicable)
     def gm(gp, rev):
-        return (gp / rev) if rev else None
+        return (gp / rev) if (gp is not None and rev) else None
     a_gm_m = gm(A["gross_profit"]["latest"], A["revenue"]["latest"])
     b_gm_m = gm(B["gross_profit"]["latest"], B["revenue"]["latest"])
     a_gm_y = gm(A["gross_profit"]["ytd"], A["revenue"]["ytd"])
@@ -717,21 +781,22 @@ def compute(model, reader, acfg, latest_month, ytd_months, unit, borrower=None,
                 f"{_fmt_pct(b)} = {_fmt(b_gp)} / {_fmt(b_rev)} (budget "
                 f"'{reader.sheet_name}'); var_abs = margin points (actual - budget)")
 
-    results.append(_margin_row(
-        "Gross Margin %", "latest", a_gm_m, b_gm_m,
-        "margin points (actual - budget)",
-        source_ref=gp_a_m[0] + rev_a_m[0] + gp_b_m[0] + rev_b_m[0],
-        calc=_margin_calc(a_gm_m, b_gm_m, A["gross_profit"]["latest"],
-                          A["revenue"]["latest"], B["gross_profit"]["latest"],
-                          B["revenue"]["latest"], how_m)))
-    results.append(_margin_row(
-        "Gross Margin % (as-reported)", "YTD", a_gm_y, b_gm_y,
-        "margin points; as-reported",
-        source_ref=gp_a_y[0] + rev_a_y[0] + gp_b_y[0] + rev_b_y[0],
-        calc=_margin_calc(a_gm_y, b_gm_y, A["gross_profit"]["ytd"],
-                          A["revenue"]["ytd"], B["gross_profit"]["ytd"],
-                          B["revenue"]["ytd"], how_y)))
-    if gp_items:
+    if show_gp:
+        results.append(_margin_row(
+            "Gross Margin %", "latest", a_gm_m, b_gm_m,
+            "margin points (actual - budget)",
+            source_ref=gp_a_m[0] + rev_a_m[0] + gp_b_m[0] + rev_b_m[0],
+            calc=_margin_calc(a_gm_m, b_gm_m, A["gross_profit"]["latest"],
+                              A["revenue"]["latest"], B["gross_profit"]["latest"],
+                              B["revenue"]["latest"], how_m)))
+        results.append(_margin_row(
+            "Gross Margin % (as-reported)", "YTD", a_gm_y, b_gm_y,
+            "margin points; as-reported",
+            source_ref=gp_a_y[0] + rev_a_y[0] + gp_b_y[0] + rev_b_y[0],
+            calc=_margin_calc(a_gm_y, b_gm_y, A["gross_profit"]["ytd"],
+                              A["revenue"]["ytd"], B["gross_profit"]["ytd"],
+                              B["revenue"]["ytd"], how_y)))
+    if gp_items and gp_label:
         a_gm_y_ex = gm(A["gross_profit_adj"]["ytd"], A["revenue"]["ytd"])
         results.append(_margin_row(
             f"Gross Margin % (ex-{item_names})", "YTD",
@@ -746,14 +811,18 @@ def compute(model, reader, acfg, latest_month, ytd_months, unit, borrower=None,
 
     # EBITDA -- actual sourced from the model's single EBITDA bridge row (the same
     # row covenant-compliance reads); budget mirrors the bridge formula.
+    # A stated plan EBITDA is on the plan's own definition, which the record
+    # itself says, beside the figure it qualifies.
+    eb_plan_note = (" Plan EBITDA is the plan's own stated figure, not rebuilt "
+                    "from its lines." if reader.stated_ebitda else "")
     add(cmp_line("EBITDA (as-reported)", "latest", A["ebitda"]["latest"],
                  B["ebitda"]["latest"], eb_a_m, eb_b_m,
                  note=(f"Actual EBITDA is read from the model's EBITDA bridge row "
                        f"'{bridge}' (single, system-wide definition), not recomputed "
-                       "-- so it equals what covenant-compliance reads.")))
+                       "-- so it equals what covenant-compliance reads." + eb_plan_note)))
     eb_note_ytd = (f"Actual EBITDA read from the model's EBITDA bridge row "
                    "(single definition shared with covenant-compliance), not "
-                   "recomputed.")
+                   "recomputed." + eb_plan_note)
     if eb_items:
         eb_note_ytd += " As-reported YTD EBITDA is distorted by comparability item(s). See ex-item line."
     add(cmp_line("EBITDA (as-reported)", "YTD", A["ebitda"]["ytd"],
@@ -785,6 +854,8 @@ def compute(model, reader, acfg, latest_month, ytd_months, unit, borrower=None,
     n_groups = sum(1 for _ in ml.iter_label_map(opex_groups))
 
     def _tot_a_prov(prov_map, how):
+        if not n_groups:
+            return [], "no opex group is named in the borrower's settings"
         return ([r for p in prov_map.values() for r in p[0]],
                 f"sum of the {n_groups} configured opex-group model "
                 f"rows [{group_names}], {how}")
@@ -793,15 +864,19 @@ def compute(model, reader, acfg, latest_month, ytd_months, unit, borrower=None,
         refs = [r for p in prov_map.values() for r in p[0]]
         if not refs:  # no groups mapped: the (empty) map block is the source
             refs.append(idx.ref(budget_map_file, section="opex_groups"))
+            return refs, "the plan has no opex line (budget-map opex_groups names none)"
         return (refs, f"sum of the budget-map opex_groups rows, budget "
                       f"'{reader.sheet_name}', {how}")
 
-    add(cmp_line("Total Opex (normalized)", "latest", A["total_opex"]["latest"],
-                 B["total_opex"]["latest"], _tot_a_prov(a_opex_m, how_m),
-                 _tot_b_prov(b_opex_m, how_m), lower_is_better=True))
-    add(cmp_line("Total Opex (normalized)", "YTD", A["total_opex"]["ytd"],
-                 B["total_opex"]["ytd"], _tot_a_prov(a_opex_y, how_y),
-                 _tot_b_prov(b_opex_y, how_y), lower_is_better=True))
+    # Total Opex -- while either side names an opex group; a side with none
+    # reads n/a, so its variance and favorable flag are n/a too.
+    if n_groups or reader.has_opex():
+        add(cmp_line("Total Opex (normalized)", "latest", A["total_opex"]["latest"],
+                     B["total_opex"]["latest"], _tot_a_prov(a_opex_m, how_m),
+                     _tot_b_prov(b_opex_m, how_m), lower_is_better=True))
+        add(cmp_line("Total Opex (normalized)", "YTD", A["total_opex"]["ytd"],
+                     B["total_opex"]["ytd"], _tot_a_prov(a_opex_y, how_y),
+                     _tot_b_prov(b_opex_y, how_y), lower_is_better=True))
 
     # Key opex groups
     for name, _lab in ml.iter_label_map(opex_groups):
@@ -828,15 +903,53 @@ def compute(model, reader, acfg, latest_month, ytd_months, unit, borrower=None,
             f"Financing cost (model line '{lines['financing_cost']}'): "
             f"{A['financing_cost']['ytd']:,.0f} YTD. Confirm whether it sits above "
             "or below the EBITDA bridge per the credit agreement's definition.")
-    notes.append(
-        f"Actual EBITDA is sourced from the model's single EBITDA bridge row "
-        f"'{bridge}' -- the SAME row covenant-compliance reads -- so the two "
-        "modules report identical actual EBITDA (one system-wide definition). "
-        "Budget EBITDA is computed with the identical bridge formula (Net Income "
-        "+ Interest Expense + Financing Cost if enabled and present + Income Taxes "
-        "+ D&A - Interest Income) so it is like-for-like. The financing-cost "
-        f"add-back is {'ENABLED' if acfg['addback_financing_cost'] else 'DISABLED'} "
-        "via ebitda.addback_financing_cost in borrower-config.")
+    if not show_gp:
+        notes.append(
+            "Gross profit and gross margin are not compared: neither the model "
+            "nor the plan has a gross profit line.")
+    elif not gp_label:
+        notes.append(
+            "Gross profit has no actual figure: the borrower's settings name no "
+            "gross profit line in the model, so the gross profit and gross margin "
+            "rows carry the plan figure only.")
+    elif not gp_in_budget:
+        notes.append(
+            "Gross profit and gross margin have no plan figure: the plan has no "
+            "gross profit line, so they are not compared against plan, and no "
+            "other line stands in for it.")
+    if not (n_groups or reader.has_opex()):
+        notes.append(
+            "Operating expense is not compared: the borrower's settings name no "
+            "operating expense group and the plan has no operating expense line.")
+    elif not reader.has_opex():
+        notes.append(
+            "Operating expense has no plan figure: the plan has no operating "
+            "expense line, so total operating expense is not compared against "
+            "plan and carries no favorable or unfavorable flag.")
+    elif not n_groups:
+        notes.append(
+            "Operating expense has no actual figure: the borrower's settings name "
+            "no operating expense group, so total operating expense carries the "
+            "plan figure only.")
+    if reader.stated_ebitda:
+        notes.append(
+            f"Actual EBITDA is sourced from the model's single EBITDA bridge row "
+            f"'{bridge}' -- the SAME row covenant-compliance reads -- so the two "
+            "modules report identical actual EBITDA (one system-wide definition). "
+            "Plan EBITDA is the plan's own EBITDA row (budget-map "
+            "metric_rows.ebitda), read as the plan states it rather than rebuilt "
+            "from its lines, so a difference between the plan's definition of "
+            "EBITDA and the model's shows up as variance.")
+    else:
+        notes.append(
+            f"Actual EBITDA is sourced from the model's single EBITDA bridge row "
+            f"'{bridge}' -- the SAME row covenant-compliance reads -- so the two "
+            "modules report identical actual EBITDA (one system-wide definition). "
+            "Budget EBITDA is computed with the identical bridge formula (Net Income "
+            "+ Interest Expense + Financing Cost if enabled and present + Income Taxes "
+            "+ D&A - Interest Income) so it is like-for-like. The financing-cost "
+            f"add-back is {'ENABLED' if acfg['addback_financing_cost'] else 'DISABLED'} "
+            "via ebitda.addback_financing_cost in borrower-config.")
     notes.extend(acfg.get("analysis_notes") or [])
 
     return ml.conclusion(
@@ -865,8 +978,11 @@ def compute(model, reader, acfg, latest_month, ytd_months, unit, borrower=None,
                      "model (read via monitor_lib). Budget is management-prepared/"
                      "unaudited, extracted via budget-map.json. ACTUAL EBITDA is read "
                      "from the model's single EBITDA bridge row (the same definition "
-                     "covenant-compliance uses); budget EBITDA mirrors that bridge "
-                     "formula for like-for-like comparison."),
+                     "covenant-compliance uses); "
+                     + ("budget EBITDA is the plan's own stated EBITDA row "
+                        "(budget-map metric_rows.ebitda)." if reader.stated_ebitda else
+                        "budget EBITDA mirrors that bridge formula for like-for-like "
+                        "comparison.")),
     )
 
 
@@ -910,7 +1026,8 @@ def _ytd_within_model(model, revenue_label, ytd_months):
     return list(reversed(kept))
 
 
-def resolve_ytd_window(model, revenue_label, latest_month, ytd_start=None):
+def resolve_ytd_window(model, revenue_label, latest_month, ytd_start=None,
+                       plan_months=None):
     """The YTD window to compare on, and the note the output owes a reader.
 
     Returns (ytd_months, note). Raises ConfigError -- which main turns into a skip
@@ -918,8 +1035,12 @@ def resolve_ytd_window(model, revenue_label, latest_month, ytd_start=None):
 
     An EXPLICIT ytd_start is the analyst's, so a window the model cannot cover is
     refused rather than narrowed. The default January start is the engine's own
-    convenience, so the engine trims it to what the model carries and says so in
-    the note: both sides then sum the same months, which is the whole point.
+    convenience, so the engine starts it at the plan's first month when the plan
+    starts later in the year (`plan_months`, the months the budget-map names),
+    trims it to what the model carries, and says which in the note: both sides
+    then sum the same months, which is the whole point. A plan that starts after
+    the latest month is left to the budget read, which skips and says what the
+    plan covers.
     """
     if ytd_start:
         asked = _derive_ytd_months(latest_month, ytd_start)
@@ -934,20 +1055,26 @@ def resolve_ytd_window(model, revenue_label, latest_month, ytd_start=None):
         return asked, None
 
     end_y, _ = ml._parse_label(latest_month)
-    asked = _derive_ytd_months(latest_month, f"Jan {end_y}")
+    year = _derive_ytd_months(latest_month, f"Jan {end_y}")
+    planned = set(plan_months or [])
+    plan_first = next((mo for mo in year if mo in planned), None)
+    asked = year[year.index(plan_first):] if plan_first else year
     kept = _ytd_within_model(model, revenue_label, asked)
     if not kept:
         raise ConfigError(
             f"the financials model carries no figures for {latest_month}, so there "
             "is no year-to-date period to compare the budget against")
-    if len(kept) == len(asked):
+    if len(kept) == len(year):
         return kept, None
+    why = ("the financials model does not carry the earlier months of the year"
+           if len(kept) < len(asked) else
+           f"the plan starts in {plan_first}, so it has no figure for the earlier "
+           f"months of the year")
     note = (f"Year-to-date covers {kept[0]} to {kept[-1]} "
             f"({len(kept)} month{'s' if len(kept) > 1 else ''}), not from "
-            f"{asked[0]}: the financials model does not carry the earlier months of "
-            f"the year. Both the actual and the budget side are summed over this "
-            f"same shorter window, so the YTD comparison is like-for-like — but it "
-            f"is not a full year to date.")
+            f"{year[0]}: {why}. Both the actual and the budget side are summed over "
+            f"this same shorter window, so the YTD comparison is like-for-like — but "
+            f"it is not a full year to date.")
     return kept, note
 
 
@@ -980,6 +1107,7 @@ def main():
                     help="the run this output belongs to, minted once by the "
                          "orchestrator for the whole run (or set CREDIT_MONITOR_RUN_ID)")
     args = ap.parse_args()
+    ml.prerequisites.require_workbook()
     if args.run_id:
         os.environ["CREDIT_MONITOR_RUN_ID"] = args.run_id   # run_stamp() reads it
 
@@ -1022,7 +1150,9 @@ def main():
         # The YTD window has to be a span BOTH sides cover, or every YTD variance
         # reports the gap between the windows instead of performance.
         ytd_months, ytd_note = resolve_ytd_window(
-            model, acfg["lines"]["revenue"], latest_month, args.ytd_start)
+            model, acfg["lines"]["revenue"], latest_month, args.ytd_start,
+            plan_months=[ml.month_label(k) for k in reader.period_columns
+                         if ml.month_label(k)])
     except (ConfigError, ValueError, FileNotFoundError) as e:
         # A known bad-input condition (missing config surface, unmapped budget
         # month, unreadable model, ...) is a SKIP RECORD, not a traceback: the

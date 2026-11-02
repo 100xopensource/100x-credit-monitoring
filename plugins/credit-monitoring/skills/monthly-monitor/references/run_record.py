@@ -15,10 +15,9 @@ Seven commands, in the order a run uses them:
          itself unblock accept, discard, or finish. A file not named stays
          blocking, and a further edit after intake goes stale and is
          reported as changed again, never silently carried through.
-  base   which frozen run this borrower's last state is read from -- the
-         latest selected month, verified, or `seed` when no month has been
-         selected yet. The run resolves it ONCE, here, and hands the answer
-         to `open`.
+  base   which verified selected run supplies continuity (`--through-period`)
+         or strictly earlier financial comparison (`--before-period`), or seed.
+         The run resolves its continuity base once and hands it to `open`.
   open   resume this month's unfinished run, or start a new one: mint the run
          id, make the run folder and write `run-ledger.json` with the base it
          was given and every step pending. `--consume-edit` pins a NEW run to
@@ -52,11 +51,57 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                 "..", "..", "..", "lib"))
 
 import run_lib as ml  # noqa: E402
+import requirements as prerequisites  # noqa: E402
+
+
+def _one_line(text, width=80):
+    """A cell's text on one indented line: a line break in a note would
+    otherwise print as a line of its own."""
+    text = " ".join(str(text).split())
+    return text if len(text) <= width else text[:width - 3] + "..."
+
+
+def _cell_value(v):
+    return "(blank)" if v is None or (isinstance(v, str) and not v.strip()) else _one_line(v)
+
+
+def _move_lines(comparison, shown=50):
+    """What moved inside one changed workbook, one indented line each: the
+    first `shown` cells or rows, then the look that changed or why nothing
+    inside could be read."""
+    moved = comparison.get("moved") or []
+    lines = []
+    for m in moved[:shown]:
+        if m.get("cell"):
+            what = "" if m["what"] == m["cell"] else f" ({_one_line(m['what'])})"
+            lines.append(f"  {m['sheet']} {m['cell']}{what}: "
+                         f"{_cell_value(m['was'])} -> {_cell_value(m['now'])}")
+        elif m.get("row"):
+            words = m["now"] if m["now"] is not None else m["was"]
+            lines.append(f"  {m['sheet']} row {m['row']}: {m['what'].lower()}, {_one_line(words)}")
+        else:
+            lines.append(f"  {m['what']}: {m['now']}")
+    total = comparison.get("moved_count", len(moved))
+    if total > min(shown, len(moved)):
+        more = total - min(shown, len(moved))
+        lines.append(f"  and {more} more change{'s' if more > 1 else ''}")
+    if comparison.get("look") and moved:
+        lines.append(f"  also changed: {comparison['look']['what']}")
+    elif comparison.get("look"):
+        lines.append(f"  no cell changed; the change is in {comparison['look']['what']}")
+    if comparison.get("unread") and moved:
+        lines.append(f"  notes and formats were not checked: {comparison['unread']}")
+    elif comparison.get("unread"):
+        lines.append(f"  could not say what changed inside: {comparison['unread']}")
+    if comparison.get("reads_the_same"):
+        lines.append("  no cell or look change was found inside")
+    return lines
 
 
 def _check_lines(found):
     """The warning, in the words its fix is in. One line per file, because the
-    analyst decides per file whether it is work or an accident."""
+    analyst decides per file whether it is work or an accident; what moved
+    inside a changed workbook follows beneath its line."""
     if not found["checked"]:
         return ["this borrower has no frozen record yet, so there is nothing "
                 "in the deal folder that a run would write over."]
@@ -73,8 +118,15 @@ def _check_lines(found):
         else:
             lines.append(
                 f"changed since the last run wrote it (digest {c.get('digest')}): {rel}")
+        if any(k in c for k in ("moved", "look", "unread", "reads_the_same")):
+            lines.extend(_move_lines(c))
     for rel in found.get("repackaged", []):
-        lines.append(f"repackaged (same cells, new container bytes): {rel}")
+        why = found.get("look_unchecked", {}).get(rel)
+        if why:
+            lines.append(f"repackaged (the cells are the same; notes and formats were "
+                         f"not checked: {why}): {rel}")
+        else:
+            lines.append(f"repackaged (nothing a person sees changed, only the file's bytes): {rel}")
     for rel in found["missing"]:
         lines.append(f"the last run wrote it and it is not there now: {rel}")
     for rel in found["unreadable"]:
@@ -164,7 +216,7 @@ def _open_locked(args, deal):
         elif args.base_run:
             base, base_folder = _base_of(folder, args.base_run, args.base_period)
         else:
-            latest = ml.latest_published(folder)
+            latest = ml.latest_published(folder, through_period=period)
             base, base_folder = _base_of(folder, (latest or {}).get("run_id"),
                                          (latest or {}).get("period"))
         run_id = ml.mint_run_id()
@@ -229,9 +281,9 @@ def main(argv=None):
     bse.add_argument("--folder", required=True,
                      help="paths.monitor_output_folder from borrower-config")
     bse.add_argument("--before-period",
-                     help="YYYY-MM; take the latest selected month BEFORE this "
-                          "one, which is what a revision of a selected month "
-                          "reads its continuity inputs from")
+                     help="YYYY-MM; latest selected month strictly BEFORE this one for financial comparison")
+    bse.add_argument("--through-period",
+                     help="YYYY-MM; latest selected month at or before this one for continuity")
     bse.add_argument("--json", action="store_true")
 
     opn = sub.add_parser("open", help="resume or start this month's run")
@@ -266,6 +318,11 @@ def main(argv=None):
     stp.add_argument("--module", help="the module, when the step is modules")
     stp.add_argument("--state", default="done", choices=list(ml.LEDGER_STATES))
 
+    abn = sub.add_parser("abandon", help="set an unfinished, stale run aside so the next open starts fresh")
+    abn.add_argument("--run", required=True, help="the unfinished run folder")
+    abn.add_argument("--reason", required=True, help="why it cannot deliver, for the ledger")
+    abn.add_argument("--json", action="store_true")
+
     sel = sub.add_parser("select", help="use this frozen run as the current result")
     sel.add_argument("--run", required=True, help="the frozen run folder")
     sel.add_argument("--deal", required=True, help="the borrower's deal root")
@@ -296,7 +353,7 @@ def main(argv=None):
 
     try:
         if args.command == "check":
-            found = ml.unapproved_deal_work(args.folder)
+            found = ml.unapproved_deal_work(args.folder, moves=True)
             if args.json:
                 print(json.dumps(found, indent=2))
             else:
@@ -305,7 +362,8 @@ def main(argv=None):
             return 0
         if args.command == "base":
             found = None if _old_layout(args.folder) else ml.latest_published(
-                args.folder, before_period=args.before_period)
+                args.folder, before_period=args.before_period,
+                through_period=args.through_period)
             if args.json:
                 print(json.dumps(found or {"from": "seed"}, indent=2))
             elif found:
@@ -321,6 +379,14 @@ def main(argv=None):
         if args.command == "snapshot":
             print(json.dumps(ml.snapshot_run_inputs(
                 args.run, args.config, args.model), indent=2))
+            return 0
+        if args.command == "abandon":
+            ledger = ml.abandon_run(args.run, args.reason)
+            out = {"run_id": ledger.get("run_id"), "period": ledger.get("period"),
+                   "status": ledger.get("status"), "abandoned_at": ledger.get("abandoned_at"),
+                   "reason": ledger.get("abandoned_reason")}
+            print(json.dumps(out, indent=2) if args.json else
+                  f"{out['run_id']} set aside ({out['status']}); the next open for {out['period']} starts a fresh run.")
             return 0
         if args.command == "select":
             result = ml.select_current_result(
@@ -353,6 +419,9 @@ def main(argv=None):
               + ("still to do: " + ", ".join(waiting) if waiting
                  else "every step is done — the run can be frozen."))
         return 0
+    except prerequisites.WorkbookPrerequisiteError as exc:
+        print(str(exc), file=sys.stderr)
+        return 1
     except (ValueError, OSError, ml.StoreLockError) as exc:
         print(str(exc), file=sys.stderr)
         return 1

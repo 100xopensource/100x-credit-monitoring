@@ -5,7 +5,7 @@
 **[View the live sample dashboard](https://100xpartners.ai/credit-monitoring/)** on the 100x Partners website, or download the files using the sample guide below.
 
 - **[View sample results](../sample-output/README.md#1-view-sample-results):** open the completed June 2026 dashboard, workbooks, and memos for six fictional borrowers. No Claude account or plugin is needed. Download HTML before opening it; GitHub shows its source.
-- **[Continue from the sample](../sample-output/README.md#2-continue-from-the-sample):** read the compatibility notes first. The prepared plugin currently rejects this saved store during folder setup; standalone reports remain available. This is not a seamless-resume package.
+- **[Continue from the sample](../sample-output/README.md#2-continue-from-the-sample):** read the compatibility notes first. Setup can recognize these saved results, but end-to-end continuation has not been verified. Standalone reports remain available; use a fresh results folder for a new review.
 - **[Run the sample yourself](../sample-output/README.md#3-run-the-sample-yourself):** use the source dataset, one borrower, and a separate empty results folder. First setup can take an hour or more.
 
 For the download links, folder map, and limitations, use the [sample guide](../sample-output/README.md). To run your own review, continue below.
@@ -56,17 +56,17 @@ Success means:
 
 The completed workbook and memo are a **draft**, not an accepted result. Ask Claude to accept or discard that exact draft after reviewing it. Discard keeps the saved history and restores the accepted working files; the first review cannot be discarded because there is no accepted result to restore. Newer manual edits block replacement.
 
-To incorporate workbook edits, ask Claude to review them and produce a new draft. It checks the exact reviewed file and recomputes the analysis and memo. Memo edit intake is not supported; preserve those edits and resolve them before continuing. Never edit internal records to bypass a warning.
+To incorporate workbook edits, ask Claude to review them and produce a new draft. It checks the exact reviewed file before recomputing the analysis and memo. Unsupported edits or unavailable recalculation can stop the refresh. Keep a separate copy of the workbook before editing; see [Limitations](LIMITATIONS.md#workbook-edits-and-saved-reviews). Memo edit intake is not supported; preserve those edits and resolve them before continuing. Never edit internal records to bypass a warning.
 
-This release creates new-format stores only. Older stores are left unchanged, not converted. If recovery reports a damaged saved run, keep the files and ask for help rather than deleting its records.
+The plugin supports the current results-folder layout only. Older stores are left unchanged, not converted. If recovery reports a damaged saved run, keep the files and ask for help rather than deleting its records.
 
 ## Optional portfolio dashboard
 
 ![Synthetic portfolio dashboard example: three current reviews, two watch/review statuses, with Nemeris on watch, Selvara stable, and Veyrona under review](assets/output-dashboard.svg)
 
-After one or more completed reviews are selected as current, ask **“Create my portfolio dashboard.”** Claude explains which borrowers will appear before requesting permission to create a private hosted dashboard. You can later open it or ask whether the local candidate is current.
+After one or more completed reviews are selected as current, ask **“Create my portfolio dashboard.”** Claude explains which borrowers will appear before requesting permission to create a private hosted dashboard. You can later open it or ask whether the hosted dashboard matches your saved local results.
 
-The dashboard distinguishes accepted results from the visible draft and prior accepted periods. Creating a hosted dashboard includes those views; refreshing local pages does not update an existing hosted dashboard. Same-link updates are not supported in v1; the existing hosted copy stays unchanged. Opening it is not proof that it matches local results.
+The dashboard distinguishes accepted results from the visible draft and prior accepted periods. Creating a hosted dashboard includes those views; refreshing local pages does not update an existing hosted dashboard. Same-link updates are not supported in Cowork; the existing hosted copy stays unchanged. Opening it is not proof that it matches local results.
 
 ## Finance guidance
 

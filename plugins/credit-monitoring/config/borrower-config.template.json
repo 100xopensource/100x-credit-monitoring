@@ -1,5 +1,5 @@
 {
-  "_comment": "Per-borrower config. Copy to borrower-config.json (one per borrower) and fill in. Paths are the contract between stages — every skill reads from here. EVERY path is written \"<shared folder>:<path inside it>\", e.g. \"store:Example Borrower/.record/current/_model/covenant-spec.json\" or \"source:Example Borrower/6_Loan Monitoring/1_Reporting\". Only the process-bound roots `source` and `store` are supported. A full path starting with a drive letter, a home directory or /sessions names one computer and is not portable. monitor-setup writes this form and refuses a config that does not use it (skills/monitor-setup/references/config_paths.py). INPUTS (reporting_packages_folder, optional compliance_certificate_folder, credit_agreement_path, ic_uw_memo_path, budget_path) are READ-ONLY and live in the deal folder; the monitor never writes there. All OUTPUTS + control files (this borrower-config.json, model_output_path, monitor_output_folder, covenant_spec_path, deal_context_path, budget_map_path) live under a SEPARATE, analyst-CONNECTED output folder — NEVER the deal/reporting folder. monitor-setup must ASK the analyst to select and connect that output folder; it is never defaulted or guessed.",
+  "_comment": "Per-borrower config. Copy to borrower-config.json (one per borrower) and fill in. Paths are the contract between stages — every skill reads from here. EVERY path is written \"<shared folder>:<path inside it>\", e.g. \"store:Example Borrower/.record/current/_model/covenant-spec.json\" or \"source:Example Borrower/6_Loan Monitoring/1_Reporting\". Only the process-bound roots `source` and `store` are supported. A full path starting with a drive letter, a home directory or /sessions names one computer and is not portable. monitor-setup writes this form and refuses a config that does not use it (skills/monitor-setup/references/config_paths.py). INPUTS (reporting_packages_folder, optional compliance_certificate_folder, credit_agreement_path, ic_uw_memo_path, budget_path) are READ-ONLY and live in the deal folder; the monitor never writes there. Cite each where it sits there as source:, even a file named only 1.pdf; monitor-setup refuses an input written as store:. All OUTPUTS + control files (this borrower-config.json, model_output_path, monitor_output_folder, covenant_spec_path, deal_context_path, budget_map_path) live under a SEPARATE, analyst-CONNECTED output folder — NEVER the deal/reporting folder. monitor-setup must ASK the analyst to select and connect that output folder; it is never defaulted or guessed.",
   "borrower_name": "Example Borrower, Inc.",
   "fund": "",
   "timezone": "America/New_York",
@@ -49,18 +49,18 @@
     "as_of": "auto: latest month present in reporting_packages_folder"
   },
   "model_lines": {
-    "_comment": "Maps canonical metric keys to THIS borrower's row labels in the monitoring model (build-monitoring-model output; column A of the statement sheets, matched case-insensitively). budget-vs-actual, ap-ar-aging AND three-statement-analysis read these — no chart-of-accounts label is hardcoded in the modules. Fill with the borrower's actual model row labels. The example values below are Example Borrower's QuickBooks labels.",
+    "_comment": "Maps canonical metric keys to THIS borrower's row labels in the monitoring model (build-monitoring-model output; column A of the statement sheets, matched case-insensitively). budget-vs-actual, ap-ar-aging AND three-statement-analysis read these — no chart-of-accounts label is hardcoded in the modules. Fill with the borrower's actual model row labels. The values below illustrate row-label mapping; replace every value with this borrower's verified model labels.",
     "revenue": "Total - Income",
     "gross_profit": "Gross Profit",
-    "operating_cogs": "Total - 5000 - Cost of Goods Sold",
+    "operating_cogs": "Cost of Goods Sold",
     "ebitda_bridge": "Provisional EBITDA (=sum above)",
     "net_income": "Net Income",
-    "interest_expense": "7101 - Interest Expense",
-    "taxes": "Total - 7150 - Taxes",
-    "depreciation_amortization": "Total - 6900 - Depreciation and Amortization Expense",
-    "financing_cost": "7102 - Financing Cost",
-    "accounts_receivable": "1101 - Accounts Receivable",
-    "accounts_payable": "2001 - Accounts Payable",
+    "interest_expense": "Interest Expense",
+    "taxes": "Taxes",
+    "depreciation_amortization": "Depreciation and Amortization",
+    "financing_cost": "Financing Cost",
+    "accounts_receivable": "Accounts Receivable",
+    "accounts_payable": "Accounts Payable",
     "pre_financing_subtotal": "",
     "_pre_financing_subtotal_comment": "OPTIONAL, v3 (three-statement-analysis MoM Net Income bridge). The model's OWN P&L subtotal between operating expenses and any below-the-line items (interest/tax/D&A/non-operating) — e.g. an 'EBITDA (as-reported)' row, or a QuickBooks-style 'Net Ordinary Income' row. NO label is hardcoded by the engine. If left blank, the engine DERIVES it as gross_profit − sum(opex_groups) — always available once those resolve, but pin the actual model row here when one exists so the bridge reads off the model's own reported subtotal rather than re-deriving it. The bridge's tie invariant (components must sum to the NI delta within $1) is enforced in code; if it doesn't tie, mom_bridge.status is 'unresolved' and the bridge is withheld as fact rather than emitted wrong.",
     "revenue_components": [],
@@ -70,32 +70,21 @@
   },
   "_model_lines_required_comment": "budget-vs-actual needs: revenue, gross_profit, ebitda_bridge (financing_cost optional). ap-ar-aging needs: accounts_receivable, accounts_payable, revenue, operating_cogs. three-statement-analysis needs: revenue, gross_profit, ebitda_bridge, net_income for core metrics; interest_expense for coverage; pre_financing_subtotal/revenue_components/total_debt are v3 OPTIONAL (see per-key comments above — total_debt in particular is never guessed). A module errors clearly if a key it needs is missing; three-statement-analysis specifically discloses every unresolved/unconfigured key in lines_not_found and every consequently-suppressed ratio in ratios_suppressed.",
   "opex_groups": {
-    "_comment": "Display name -> model IS row label, for the budget-vs-actual opex breakdown. Keys MUST match the budget-map opex_groups keys (the two are compared like-for-like). Example values are Example Borrower's.",
-    "Employee Compensation": "Total - 6100 - Employee Compensation",
-    "Professional Services": "Total - 6500 - Professional Services",
-    "Sales & Marketing": "Total - 6400 - Sales & Marketing Expenses",
-    "Research & Development": "Total - 6600 - Research & Development",
-    "Facility Costs": "Total - 6200 - Facility Costs",
-    "Fulfillment": "Total - 6300 - Fulfillment Costs",
-    "General & Administrative (ex-fulfillment)": "Total - 6800 - General & Administrative Expenses",
-    "Travel & Entertainment": "Total - 6700 - Travel & Entertainment Expenses",
-    "Depreciation & Amortization": "Total - 6900 - Depreciation and Amortization Expense"
+    "_comment": "Display name -> model IS row label, for the budget-vs-actual opex breakdown. Keys MUST match the budget-map opex_groups keys (the two are compared like-for-like). Replace example values with verified row labels.",
+    "Employee Compensation": "Employee Compensation",
+    "Professional Services": "Professional Services",
+    "Sales & Marketing": "Sales and Marketing",
+    "Research & Development": "Research and Development",
+    "Facility Costs": "Facility Costs",
+    "Fulfillment": "Fulfillment",
+    "General & Administrative (ex-fulfillment)": "General and Administrative",
+    "Travel & Entertainment": "Travel and Entertainment",
+    "Depreciation & Amortization": "Depreciation and Amortization"
   },
-  "comparability_items": [
-    {
-      "_comment": "OPTIONAL. One-time items that distort as-reported gross profit / EBITDA and should ALSO be shown ex-item. Leave the list EMPTY ([]) for the general case. Each item's model_line value is added to (operation 'add', default) or subtracted from ('subtract') the reported metric to strip its effect — 'add' handles a contra amount (e.g. a refund sitting as a negative in COGS). The Example Borrower example below strips a one-time customs-duty refund.",
-      "name": "Custom Duty Refund",
-      "model_line": "5006 - Custom Duty Refund",
-      "applies_to": [
-        "gross_profit",
-        "ebitda"
-      ],
-      "operation": "add",
-      "note": "One-time customs-duty refund credited to COGS; inflates as-reported gross profit and EBITDA."
-    }
-  ],
+  "_comparability_items_comment": "OPTIONAL. Leave empty unless a verified one-time item requires an ex-item comparison. Each item records name, model_line, applies_to (gross_profit and/or ebitda), operation (add or subtract), and note. Add reverses a contra amount; subtract removes a positive contribution. Confirm the treatment with the analyst.",
+  "comparability_items": [],
   "ebitda": {
-    "_comment": "budget EBITDA mirrors the model's EBITDA bridge formula. addback_financing_cost adds the budget's financing_cost line back into budget EBITDA when present (set true only if the credit agreement's EBITDA definition adds financing cost back, as Example Borrower's does). Actual EBITDA always comes from model_lines.ebitda_bridge and is never recomputed here.",
+    "_comment": "budget EBITDA mirrors the model's EBITDA bridge formula. addback_financing_cost adds the budget's financing_cost line back into budget EBITDA when present (set true only if the credit agreement's EBITDA definition adds financing cost back). Actual EBITDA always comes from model_lines.ebitda_bridge and is never recomputed here.",
     "addback_financing_cost": true
   },
   "aging": {
@@ -108,7 +97,7 @@
     "top_n": 5
   },
   "analysis_notes": [
-    "OPTIONAL free-text notes appended verbatim to the budget-vs-actual comparability notes — e.g. a chart-of-accounts reconciliation. Example Borrower example: the actuals model uses the borrower's QuickBooks (QBO) chart of accounts while the 2026 budget P&L follows a NetSuite (NS) chart; the budget-map reconciles the two COA structures (folding fulfillment-type costs out of budget G&A to match the actuals' separate Fulfillment group, and adding budget D&A into Total Opex)."
+    "Replace with verified comparability notes, or leave analysis_notes empty. Explain any differences between the actual and budget account groupings."
   ],
   "analysis": {
     "_comment": "OPTIONAL (three-statement-analysis, v4). All keys optional; defaults shown are used if omitted. Objective tuning ONLY — interpretive deal narrative stays in deal-context, never here.",
@@ -164,10 +153,10 @@
     "_thresholds_comment": "liquidity_months_to_floor (v3): below this many months-to-floor at 1m burn, the engine emits a liquidity headline and a liquidity_thin exception (severity elevated)."
   },
   "analysis_lines": {
-    "_comment": "OPTIONAL (three-statement-analysis). Override the balance-sheet / cash-flow row labels the module reads; if omitted it resolves from default candidate labels/regexes and flags any it cannot find in lines_not_found. Example values are Example Borrower's. v3 note: if this borrower's model has no inventory line (e.g. a SaaS business) or no current/non-current split on the Balance Sheet, simply OMIT those keys here rather than mapping them to an unrelated row as a plumbing workaround — the v3 engine suppresses the dependent ratios (DIO/CCC, current_ratio/working_capital) with a disclosed reason in ratios_suppressed[] instead. total_debt may also be set here (equivalent to model_lines.total_debt) — see model_lines._total_debt_comment for why it is never auto-defaulted.",
-    "cash": "Total - 1000 - Cash",
+    "_comment": "OPTIONAL (three-statement-analysis). Override the balance-sheet / cash-flow row labels the module reads; if omitted it resolves from default candidate labels/regexes and flags any it cannot find in lines_not_found. Replace example values with verified row labels. v3 note: if this borrower's model has no inventory line (e.g. a SaaS business) or no current/non-current split on the Balance Sheet, simply OMIT those keys here rather than mapping them to an unrelated row as a plumbing workaround — the v3 engine suppresses the dependent ratios (DIO/CCC, current_ratio/working_capital) with a disclosed reason in ratios_suppressed[] instead. total_debt may also be set here (equivalent to model_lines.total_debt) — see model_lines._total_debt_comment for why it is never auto-defaulted.",
+    "cash": "Cash",
     "accounts_receivable": "Total Accounts Receivable",
-    "inventory": "Total - 1300 - Inventory",
+    "inventory": "Inventory",
     "total_current_assets": "Total Current Assets",
     "total_assets": "Total ASSETS",
     "accounts_payable": "Total Accounts Payable",
@@ -181,6 +170,7 @@
   },
   "shared_definitions": {
     "_comment": "Compute ONCE; every module reads the same. Source the definition from the credit agreement via covenant-setup.",
-    "ebitda_definition_ref": "covenant-spec.json#/definitions/EBITDA"
+    "ebitda_definition_ref": "covenant-spec.json#/definitions/EBITDA",
+    "_statement_cash_after_debt_service_ref_note": "Optional statement_cash_after_debt_service_ref points to an existing covenant-spec.json#/definitions/<name> flow definition with compute.model_line binding the declared guarded cash-after-debt-service formula. Omit without that definition; the statement displays unavailable, never guesses cash payments. This display measure does not replace engine free_cash_flow."
   }
 }

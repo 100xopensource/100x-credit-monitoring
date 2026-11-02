@@ -189,8 +189,9 @@ record (`{"skipped": true, "reason": …}`), never a bare traceback.
 
 The ENGINE computes everything in this spec. The driving agent runs it, reports failures, and
 may add NOTHING to the output JSON — no custom keys, no hand-recomputed values. If the engine
-cannot produce a section, the agent reports the gap. Engine bugs found mid-run are fixed IN THE
-ENGINE, tested, and synced back — never patched in output.
+cannot produce a section, the agent reports the gap using the documented skip/failure contract.
+Follow **Engine execution boundary** in the plugin rules: code repairs belong to a separate
+engineering change, never this review.
 
 **The engine file is long and exceeds a single file-read window. Copy it BYTE-FOR-BYTE to the
 working directory (filesystem copy, or chunked reads with offset continuation until EOF), verify the

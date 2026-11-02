@@ -16,7 +16,7 @@
   },
 
   "metric_rows": {
-    "_comment": "Canonical metric -> budget row(s). A value is an int (single row), a list of ints (summed), or {\"add\":[...],\"subtract\":[...]}. REQUIRED for EBITDA: net_income, interest_expense, taxes, depreciation_amortization. OPTIONAL: financing_cost, interest_income — INCLUDE these keys ONLY if the budget actually has them (a present key is assumed to have a valid row). Replace the example row numbers with the real ones.",
+    "_comment": "Canonical metric -> budget row(s). A value is an int (single row), a list of ints (summed), or {\"add\":[...],\"subtract\":[...]}. revenue is required. For EBITDA map exactly ONE of: 'ebitda', the plan's own EBITDA row, when the plan stops at EBITDA; OR the rows that build it, net_income, interest_expense, taxes, depreciation_amortization (plus financing_cost / interest_income only if the plan has them). A map naming both is refused. gross_profit is optional: leave out any line the plan does not have, and never fill a line from another row or a blank row, because the engine reads a missing line as no plan and a borrowed or blank row as a plan figure. Replace the example row numbers with the real ones.",
     "revenue": 10,
     "gross_profit": 25,
     "net_income": 80,
@@ -38,8 +38,8 @@
     "Sales & Marketing": 33,
     "Research & Development": 35,
     "Facility Costs": 31,
-    "Fulfillment": {"add": [40, 41, 42], "subtract": []},
-    "General & Administrative (ex-fulfillment)": {"add": [36], "subtract": [40, 41, 42]},
+    "Fulfillment": 32,
+    "General & Administrative (ex-fulfillment)": 36,
     "Travel & Entertainment": 37,
     "Depreciation & Amortization": 60
   }

@@ -38,9 +38,8 @@ python revenue_quality.py --config <borrower-config.json> --period 2026-05 --out
 Pass each path **as the borrower-config writes it** (`source:...`) — the same string as in borrower-config, not a `/sessions/…`
 path. That string is what the memo's figure links are built from. Format is read off the file's
 own bytes (.xlsx / SpreadsheetML / text), so an export that mislabels its extension reads fine.
-To open a file yourself first, use the connected-folder path with Read (the file tools refuse a
-`/sessions/…/mnt/…` string) and the sandbox path with bash — your agent contract's "Three path forms"
-(`${CLAUDE_PLUGIN_ROOT}/agents/module-analyst.md`).
+To open a file yourself first, use the path forms in **Paths a worker uses**
+(`../../../references/runtime/<runtime>/files.md`).
 The engine reads every tab, so a workbook whose detail sits behind a cover tab is fine as-is.
 
 The certificate is read as TEXT. When the period's certificate is a PDF, use an already-existing

@@ -6,7 +6,7 @@ via the Task tool, so the orchestrator holds only the short JSON conclusions and
 synthesize.
 
 ## The worker is a shipped agent
-The plugin ships the module worker as `${CLAUDE_PLUGIN_ROOT}/agents/module-analyst.md`, so its
+The plugin ships the module worker as `../../../agents/module-analyst.md`, so its
 contract — path forms, engine discipline, the validator gate, the read-back, the return shape — is a
 versioned file rather than prose retyped into every dispatch. Dispatch it by subagent type
 `credit-monitoring:module-analyst`. Where the runtime does not offer plugin agents, dispatch a
@@ -30,19 +30,21 @@ not the frontmatter, so a fallback dispatch left unset runs the worker on the or
   orchestrator does in a few tool calls.
 - Each brief carries: (a) the module name and its module spec file, (b) the returned
   `execution_config_path`, (c) the bound source/store roots, (d) the input paths it needs, (e) the
-  run's `current_period`, (f) the run folder's `_archive` path to write to — in all three forms like
+  run's `current_period`, (f) the run folder's `_archive` path to write to — in every path form, like
   every other path, since the worker writes the output with Write, gates it through bash, and reads it
-  back — and (g) the run id (below). Never brief the canonical config after snapshot.
+  back — (g) the run id (below), (h) the runtime, and (i) the plugin folder as an absolute path, two
+  levels above this skill's base directory: the worker's file gives its paths relative to the plugin,
+  and a dispatched worker has no other way to find it. Never brief the canonical config after snapshot.
 - **Open the run once before the fan-out and put its returned run id in every brief.** Use
   `run_record.py open`; it mints `run-<YYYYMMDD>-<HHMMSS>` or resumes an unfinished period. Tell each worker to pass it
   to its engine as `--run-id <id>`. This is what ties one run's five module outputs together: an engine
   left to mint its own stamps `run_id_from: "engine"`, and a month's modules then read as separate runs
   that nothing can order or group.
 - Pass paths, never raw statement data — the subagent reads the file itself.
-- **Give every path in all three forms** — the connected-folder path, the `/sessions/.../mnt/...`
-  sandbox path, and the execution-config string (`source:...` or run-local `store:...`) for engine
-  arguments. Which tool takes which is the agent contract's "Three path forms". The worker prefixes
-  every engine subprocess with the two bound roots; one subprocess cannot inherit them from another.
+- **Give every path in every form** the runtime's path rules list (**Paths a worker uses** in
+  `../../../references/runtime/<runtime>/files.md`); one form is always the execution-config string
+  (`source:...` or run-local `store:...`) for engine arguments. The worker prefixes every engine
+  subprocess with the two bound roots; one subprocess cannot inherit them from another.
 
 ## Shared definitions
 EBITDA / Total Debt / Liquidity come from `covenant-spec.json`. The build already computed the EBITDA
@@ -71,13 +73,13 @@ worker instead of per dispatch:
 
 | Agent | Model | Effort | Why |
 |---|---|---|---|
-| `module-analyst` | sonnet | xhigh | The engine is deterministic; getting to it is not — finding the period's files in a folder shaped differently every deal, reading a title row to tell A/R from A/P, fixing an engine mid-run. |
+| `module-analyst` | sonnet | xhigh | The engine is deterministic; getting to it is not — finding the period's files in a folder shaped differently every deal, reading a title row to tell A/R from A/P, recognizing unavailable inputs without changing the engine. |
 | `model-builder` | sonnet | xhigh | Long, fiddly, and correctness-critical: merge-by-period, the restatement scan, recalc order, then a gate that either passes or costs a rebuild. |
 | `covenant-extractor` | sonnet | xhigh | Hundreds of pages of definitions, a `basis` call that silently false-passes a covenant when wrong, and a discrepancy rule that means sweeping the whole executed set. |
 
 Every worker runs at `xhigh`: each of these is a hard problem wearing a contract, and lower effort buys
 fewer tool calls exactly where the work is finding the right file and noticing the thing that doesn't
-reconcile. Sonnet is the model floor — live-file parsing and mid-run engine fixes need it. The memo's
+reconcile. Sonnet is the model floor — live-file interpretation and failure diagnosis need it. The memo's
 synthesis is what stays on the orchestrator's strong model.
 
 **Synthesis stays on the orchestrator's own model.** Choosing "the issue," rating the RAG grid
@@ -141,8 +143,9 @@ orchestrator's context. Run monthly-monitor in a session on the strongest model 
   conclusion.
 - **Validate on write:** run `references/validate_output.py --period <current_period> <output.json>` on
   EVERY module output BEFORE archiving; it fails loudly and names the offending figure. A validation
-  failure is an ENGINE problem — fix the engine and rerun the module; never hand-edit the output JSON to
-  pass. If the engine cannot be fixed within the run, the module writes the skip record above with
+  failure must not trigger a code change during the review. Follow **Engine execution boundary** in
+  the plugin rules; include it in every worker brief and reject modified-engine results. Never
+  hand-edit output JSON to pass. The module writes the skip record above with
   `reason` naming the failure and quoting what the gate said ("engine failure — validate_output: …"),
   archives it under the `.skipped.json` name, and returns that record as its conclusion — the invalid
   output stays unarchived. Failure isolation then applies: the memo states the module unavailable with
@@ -154,9 +157,15 @@ orchestrator's context. Run monthly-monitor in a session on the strongest model 
   gate prints them, and a note is not where a request to the credit team is delivered. Its
   `exceptions` are what the engine warned about and the reading a worker took where its input was
   ambiguous: read them before synthesizing, and land each one — stated in the memo, put to the
-  analyst as a menu (`${CLAUDE_PLUGIN_ROOT}/references/asking.md`) when the call is theirs, or left
+  analyst as a menu (`../../../references/asking.md`) when the call is theirs, or left
   out because the memo already carries it. A memo sentence stands only where the `exceptions` behind
   it agree with it.
+- **Unreconciled covenant tests have no settled verdict.** When `reconciliation_required` is true
+  and `reconciliation_override` is false, name each blocked covenant and test date as unresolved.
+  Preserve both model and certified figures and their explanation; neither reading governs until
+  the basis is settled. Other tests and the rest of the memo can still be reported. Do not choose
+  a financial definition, change calculations, or run `--allow-unreconciled` without the analyst's
+  explicit decision. An instruction to continue or keep a draft is not that decision.
 - **Record what the month covered, after the last module lands.** Run
   `references/coverage_record.py --archive <_archive> --period <current_period> --borrower-config
   <execution_config_path> --run-id <run id> --out <run_folder>/coverage.json`. It reads the archive and states,
@@ -179,4 +188,4 @@ Name the section of their memo that is affected, say why, and say what would fil
 "I could not check the promises in the loan agreement this month, because the compliance certificate
 for June is not in the folder yet. Everything else in this memo is complete. Once that certificate
 arrives I can add this section in." The wording rules are in
-`${CLAUDE_PLUGIN_ROOT}/references/asking.md`.
+`../../../references/asking.md`.

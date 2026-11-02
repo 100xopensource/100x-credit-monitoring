@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Write the flat pages read by the Credit Monitoring portfolio artifact.
+"""Write the pages read by the Credit Monitoring portfolio artifact.
 
 Every page is derived from a verified, manifest-checked run selected in `published.json`.
 The builder never chooses a run by directory order and never reads an unpublished
@@ -20,13 +20,16 @@ import hashlib
 import json
 import os
 import re
-import shutil
 import sys
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _LIB_DIR = os.path.abspath(os.path.join(_HERE, "..", "..", "..", "lib"))
 if _LIB_DIR not in sys.path:
     sys.path.insert(0, _LIB_DIR)
+
+import requirements as prerequisites
+from covenant_status import presented_results
+from judgment import settled_fields, settled_thesis
 
 try:
     import monitor_lib as ml
@@ -92,12 +95,25 @@ DASHBOARD_FOLDER_NAME = "Artifact"
 # The catalog id of the dashboard folder. A first build asks the catalog where
 # that folder is, so a folder the catalog does not name cannot receive one.
 
-# What the dashboard folder holds. A refresh writes the first three; `fonts.html`
+# What the dashboard folder holds. A refresh writes `index.json` and, for each run,
+# the pages named by `_PAGE_SUFFIXES` into `views/<borrower>/<run id>/`; `fonts.html`
 # and `.dashboard` are put there once and left alone (Rule 2 of the skill).
 # `desktop.ini` and `Thumbs.db` are Windows' own, and a fresh OneDrive folder can
 # hold one before anything is published into it.
+VIEWS_DIR = "views"
 _PAGE_SUFFIXES = ("--deal.json", "--memo.html", "--workbook.json")
-_KEPT_NAMES = ("index.json", "fonts.html", ".dashboard", "desktop.ini", "thumbs.db")
+_KEPT_NAMES = ("index.json", "fonts.html", ".dashboard", VIEWS_DIR, "desktop.ini", "thumbs.db")
+
+
+def make_view_folder(out_dir, deal):
+    """Make the folder this run's pages go in and return its path from `out_dir`.
+
+    Each run has its own folder, so a later run never replaces these pages and a
+    reader changes runs only when the borrower's index row names another folder.
+    """
+    folder = "/".join((VIEWS_DIR, slugify(deal.folder), deal.run["run_id"]))
+    os.makedirs(os.path.join(out_dir, *folder.split("/")), exist_ok=True)
+    return folder
 
 
 def foreign_names(out_dir):
@@ -389,7 +405,7 @@ def covenant_rows(payload):
     page. The module reports one row per covenant per month-end it could test, so
     the grid takes the latest per covenant and the deal page keeps the history."""
     rows = []
-    for raw in (payload.get("results") or []):
+    for raw in presented_results(payload):
         rows.append({
             "id": raw.get("id"),
             "name": raw.get("name"),
@@ -402,6 +418,7 @@ def covenant_rows(payload):
             "headroom_abs": num(raw.get("headroom_abs")),
             "headroom_pct": num(raw.get("headroom_pct")),
             "status": raw.get("status"),
+            "reconciliation_reason": raw.get("reconciliation_reason"),
             "source": raw.get("source"),
             "calc": raw.get("calc"),
             "notes": raw.get("notes"),
@@ -496,7 +513,7 @@ def answers_only(rows):
 def covenant_summary(payload):
     """Summarize covenant counts and the tested covenant with the least room."""
     rows = answers_only(latest_per_covenant(covenant_rows(payload)))
-    counts = {"total": len(rows), "pass": 0, "breach": 0, "at_risk": 0, "not_evaluable": 0}
+    counts = {"total": len(rows), "pass": 0, "breach": 0, "at_risk": 0, "not_evaluable": 0, "unresolved": 0}
     for row in rows:
         key = row.get("status")
         if key in counts:
@@ -587,6 +604,8 @@ def three_statement_summary(payload):
             "burn_3m_avg": num(liquidity.get("burn_3m_avg")),
             "cash_floor": num(liquidity.get("cash_floor")),
             "floor_source": liquidity.get("floor_source"),
+            "burn_1m": num(liquidity.get("burn_1m")),
+            "burn_3m_avg": num(liquidity.get("burn_3m_avg")),
             "months_to_floor_1m": num(liquidity.get("months_to_floor_1m")),
             "months_to_floor_3m": num(liquidity.get("months_to_floor_3m")),
         },
@@ -620,13 +639,11 @@ def workbook_pages(path, max_rows=400, max_cols=60):
 
     A cell keeps its computed value and number format, never its formula. The
     local workbook remains the record; this page is a readable copy."""
-    try:
-        from openpyxl import load_workbook
-    except ImportError:
-        return None, "openpyxl is not installed, so the workbook sheets were not built."
+    if prerequisites.workbook_problem:
+        return None, "openpyxl workbook support is unavailable, so the workbook sheets were not built."
 
     try:
-        book = load_workbook(path, read_only=True, data_only=True)
+        book = prerequisites.openpyxl.load_workbook(path, read_only=True, data_only=True)
     except Exception as exc:                                  # a locked or partial file
         return None, "The workbook could not be opened (%s)." % type(exc).__name__
 
@@ -698,29 +715,41 @@ OUR_VIEW_FIELDS = ("watchlist", "trajectory", "thesis_status", "what_would_chang
 
 
 def dashboard_our_view(view):
-    """The deal record's `our_view`, narrowed to the fields the dashboard shows.
+    """Only contracted, non-disclaimed judgments may reach dashboard consumers."""
+    return settled_fields(view, OUR_VIEW_FIELDS)[0]
 
-    This is a field allowlist, not a sign-off check -- it does not evaluate
-    whether a field has been signed off (that is `memo_payload.settled_view`'s
-    job for the memo). It only keeps the dashboard from ever seeing a field or
-    annotation it was not contracted to show.
-    """
-    view = view or {}
-    return {k: view.get(k) for k in OUR_VIEW_FIELDS}
 
+
+_ENTITY_SUFFIX = re.compile(
+    r"[\s,]*\b(l\.?l\.?c\.?|l\.?p\.?|l\.?l\.?p\.?|inc\.?|incorporated|corp\.?|corporation|"
+    r"co\.?|company|ltd\.?|limited|plc|gmbh|s\.?a\.?|b\.?v\.?|n\.?v\.?|pty\.?)\b\.?\s*$",
+    re.I)
+
+
+def pretty_short_name(name, folder):
+    """The borrower's name as a card reads it: the legal name without its entity
+    suffix ("Asteron Care Partners, LLC" -> "Asteron Care Partners"), or the
+    store folder's slug written as words when no legal name is on file
+    ("asteron-care-partners" -> "Asteron Care Partners"). A card headed by the
+    folder slug reads as a file path, not a company."""
+    text = str(name or "").strip()
+    if text and text != str(folder or "").strip():
+        return text
+    words = re.sub(r"[-_]+", " ", str(folder or "")).strip()
+    words = re.sub(r"\s+monitoring\s*$", "", words, flags=re.I).strip()
+    return " ".join(w if w.isupper() else w.capitalize() for w in words.split()) or str(folder or "")
 
 def index_row(deal, files):
     """One borrower's line in the portfolio grid."""
     config = deal.config or {}
     context = deal.deal_context or {}
-    view = context.get("our_view") or {}
+    view = dashboard_our_view(context.get("our_view"))
     static = context.get("static") or {}
 
     name = (context.get("borrower_name") or config.get("borrower_name")
             or config.get("borrower") or deal.folder)
     short = (config.get("borrower_short_name") or config.get("short_name")
-             or re.sub(r"\s+(monitoring|-\s*\d+)\s*$", "", deal.folder,
-                       flags=re.I).strip())
+             or pretty_short_name(name, deal.folder))
 
     cov = deal.modules.get("covenant-compliance") or {}
     tsa = deal.modules.get("three-statement-analysis") or {}
@@ -734,7 +763,7 @@ def index_row(deal, files):
             break
 
     return {
-        "slug": slugify(short or deal.folder),
+        "slug": slugify(deal.folder),
         "name": name,
         "short": short or deal.folder,
         "folder": deal.folder,
@@ -760,7 +789,10 @@ def index_row(deal, files):
 
 def deal_page(deal, row):
     """One borrower's own page: every covenant test with its history, the module
-    conclusions, and the open items carried into next month."""
+    conclusions, and the open items carried into next month.
+
+    It and the workbook page hold what the run says and nothing about the build,
+    so a run's pages come out the same whenever they are built."""
     cov = deal.modules.get("covenant-compliance") or {}
     tsa = deal.modules.get("three-statement-analysis") or {}
     context = deal.deal_context or {}
@@ -772,14 +804,15 @@ def deal_page(deal, row):
     return {
         "schema": DEAL_SCHEMA,
         "contract_version": CONTRACT_VERSION,
-        "generated_at": now_iso(),
         "slug": row["slug"],
         "name": row["name"],
         "short": row["short"],
         "period": deal.period,
         "unit": row["unit"],
         "our_view": dashboard_our_view(context.get("our_view")),
-        "business": (context.get("static") or {}),
+        "business": dict(context.get("static") or {},
+                         credit_thesis=settled_thesis(
+                             (context.get("static") or {}).get("credit_thesis") or [])),
         "carry_forward": (context.get("carry_forward") or {}),
         "covenants": {
             "latest": pairs_together(latest_per_covenant(covenants)),
@@ -803,7 +836,6 @@ def deal_page(deal, row):
             "methodology": tsa_data.get("methodology"),
         },
         "modules": module_states(deal),
-        "files": row["files"],
     }
 
 
@@ -811,7 +843,6 @@ def workbook_page(deal, row, sheets, note):
     return {
         "schema": WORKBOOK_SCHEMA,
         "contract_version": CONTRACT_VERSION,
-        "generated_at": now_iso(),
         "slug": row["slug"],
         "name": row["name"],
         "period": deal.period,
@@ -869,19 +900,30 @@ def narrative_page(path, period, borrowers):
 # writing
 # ---------------------------------------------------------------------------
 
-def write_json(path, payload):
+def write_bytes(path, data):
+    """Replace `path` with `data`, or leave it alone when it already holds them:
+    an earlier run's pages stay as they are, and a synced folder uploads nothing."""
+    try:
+        with open(path, "rb") as fh:
+            if fh.read() == data:
+                return len(data)
+    except OSError:
+        pass
     tmp = path + ".tmp"
-    with open(tmp, "w", encoding="utf-8") as fh:
-        json.dump(payload, fh, ensure_ascii=False, separators=(",", ":"))
+    with open(tmp, "wb") as fh:
+        fh.write(data)
     os.replace(tmp, path)
-    return os.path.getsize(path)
+    return len(data)
+
+
+def write_json(path, payload):
+    return write_bytes(path, json.dumps(payload, ensure_ascii=False,
+                                        separators=(",", ":")).encode("utf-8"))
 
 
 def copy_file(source, target):
-    tmp = target + ".tmp"
-    shutil.copyfile(source, tmp)
-    os.replace(tmp, target)
-    return os.path.getsize(target)
+    with open(source, "rb") as fh:
+        return write_bytes(target, fh.read())
 
 
 def _period_files(out_dir, deal, row, stem, keep_workbooks, written):
@@ -889,20 +931,20 @@ def _period_files(out_dir, deal, row, stem, keep_workbooks, written):
     from any other period or draft for the same borrower, and return the
     files map. Shared by the draft preview and each prior accepted period."""
     files = {}
+    folder = make_view_folder(out_dir, deal)
     if deal.memo_path:
-        target = os.path.join(out_dir, stem + "--memo.html")
-        size = copy_file(resolve(deal.memo_path), target)
-        files["memo"] = os.path.basename(target)
+        files["memo"] = "%s/%s--memo.html" % (folder, stem)
+        size = copy_file(resolve(deal.memo_path), os.path.join(out_dir, files["memo"]))
         written.append((files["memo"], size))
 
-    deal_name = stem + "--deal.json"
+    deal_name = "%s/%s--deal.json" % (folder, stem)
     size = write_json(os.path.join(out_dir, deal_name), deal_page(deal, row))
     files["deal"] = deal_name
     written.append((deal_name, size))
 
     if keep_workbooks and deal.workbook_path:
         sheets, note = workbook_pages(resolve(deal.workbook_path))
-        wb_name = stem + "--workbook.json"
+        wb_name = "%s/%s--workbook.json" % (folder, stem)
         size = write_json(os.path.join(out_dir, wb_name), workbook_page(deal, row, sheets, note))
         files["workbook"] = wb_name
         files["excel_name"] = os.path.basename(deal.workbook_path)
@@ -980,25 +1022,24 @@ def build(store, out_dir, narrative_path=None, keep_workbooks=True,
         else:
             stem = "%s--%s" % (slugify(deal.folder), deal.period)
             files = {}
+            folder = make_view_folder(out_dir, deal)
 
             if deal.memo_path:
-                target = os.path.join(out_dir, stem + "--memo.html")
-                size = copy_file(resolve(deal.memo_path), target)
-                files["memo"] = os.path.basename(target)
+                files["memo"] = "%s/%s--memo.html" % (folder, stem)
+                size = copy_file(resolve(deal.memo_path), os.path.join(out_dir, files["memo"]))
                 files["memo_url"] = cloud_url(deal.memo_path)
                 written.append((files["memo"], size))
 
             row = index_row(deal, files)
-            row["slug"] = slugify(deal.folder)          # the file stem and the row agree
 
-            deal_name = stem + "--deal.json"
+            deal_name = "%s/%s--deal.json" % (folder, stem)
             size = write_json(os.path.join(out_dir, deal_name), deal_page(deal, row))
             files["deal"] = deal_name
             written.append((deal_name, size))
 
             if keep_workbooks and deal.workbook_path:
                 sheets, note = workbook_pages(resolve(deal.workbook_path))
-                wb_name = stem + "--workbook.json"
+                wb_name = "%s/%s--workbook.json" % (folder, stem)
                 size = write_json(os.path.join(out_dir, wb_name),
                                   workbook_page(deal, row, sheets, note))
                 files["workbook"] = wb_name

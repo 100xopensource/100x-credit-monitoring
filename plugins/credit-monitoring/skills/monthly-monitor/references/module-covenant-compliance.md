@@ -170,7 +170,7 @@ all. Two things to carry into the memo:
   parties agreed to make the metrics work.
 - A `deemed_model_disagreement` warning means the workbook's own row for a deemed month is not the deemed
   amount. The covenant is tested on the agreement's figure; the model's row still feeds every other read of
-  that month, so this is a build to fix (`assembling-rules.md`), not a covenant finding.
+  that month, so this is a build to fix (`../../build-monitoring-model/references/assembling-rules.md`), not a covenant finding.
 
 **An empty cell is not a balance of zero, and the engine keeps them apart.** A blank stays absent all
 the way through: a spot read of a blank month, or a flow window blank end to end, is `input_blank`.
@@ -193,8 +193,8 @@ with `validate_output.py <out.json>` before archiving.**
 The ENGINE computes everything in this spec. The driving agent transcribes the certificate,
 runs the engine, reports failures, and may add NOTHING to the output JSON — no custom keys, no
 hand-recomputed values, no covenant math of its own. If the engine cannot produce a section,
-report the gap. Engine bugs found mid-run are fixed IN THE ENGINE, tested, and synced back via the
-plugin repo — never patched in output.
+report the gap using the documented skip/failure contract. Follow **Engine execution boundary**
+in the plugin rules: code repairs belong to a separate engineering change, never this review.
 
 **Copy the engine file BYTE-FOR-BYTE to the working directory (filesystem copy, or chunked reads with
 offset continuation until EOF), verify the copy (byte count or checksum against the source), and run

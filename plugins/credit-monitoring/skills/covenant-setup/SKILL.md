@@ -15,6 +15,8 @@ metadata:
 
 # Covenant Setup (one-time)
 
+Read `../../CLAUDE.md` before anything else; it holds the rules shared by every skill.
+
 Turn the credit agreement into a durable, machine-readable covenant spec in the standardized contract
 that `covenant-compliance` consumes. Do this once per borrower; re-run only on an amendment.
 
@@ -56,9 +58,9 @@ Step 0 (reaching the agreement) and step 7 (sign-off) happen HERE, in the sessio
 Steps 1–6 — the sweep of hundreds of pages, the mapping, the validator — go to the plugin's
 **covenant-extractor** agent (Task tool, subagent type `credit-monitoring:covenant-extractor`;
 where the runtime doesn't offer plugin agents, use a general-purpose subagent, prepend the text of
-`${CLAUDE_PLUGIN_ROOT}/agents/covenant-extractor.md`, and set that dispatch to sonnet at xhigh as the
-agent file declares — prepended text carries no frontmatter). Its brief carries the borrower, the
-credit-agreement path, the deal folder, the compliance certificate(s) and the `covenant_spec_path`
+`../../agents/covenant-extractor.md`, and set that dispatch to sonnet at xhigh as the
+agent file declares — prepended text carries no frontmatter). Its brief carries the plugin folder (two levels above this skill's base
+directory, as an absolute path), the borrower, the credit-agreement path, the deal folder, the compliance certificate(s) and the `covenant_spec_path`
 — each in both forms, the connected-folder path and the `/sessions/…/mnt/…` sandbox path, since the
 spec is written with one and gated with the other. It returns the spec path, the validator result, one line per covenant, the
 ambiguities for step 7, and the security provisions the collateral map needs — so no second pass over
@@ -67,9 +69,9 @@ the agreement is required.
 ## Method
 0. **Reach the agreement.** It lives outside the reporting folder, inside the borrower's own folder in
    the deal documents folder. If that folder is not attached, ask for it with a menu
-   (`${CLAUDE_PLUGIN_ROOT}/references/connecting-folders.md`), then read the agreement from inside it.
+   (`../../references/runtime/cowork/files.md`), then read the agreement from inside it.
    Never conclude "no agreement" from a folder that isn't connected.
-   If it is genuinely unavailable, offer a menu (`${CLAUDE_PLUGIN_ROOT}/references/asking.md`):
+   If it is genuinely unavailable, offer a menu (`../../references/asking.md`):
    **[Connect the credit agreement] / [Skip covenants for now — I'll flag it]**; on skip, skip-and-flag
    (covenant-compliance is omitted downstream) rather than erroring.
 1. **Extract** the agreement text (pdf skill / `pdftotext` / `pdfplumber`). Locate the Definitions section
@@ -211,7 +213,7 @@ the agreement is required.
    observation to the spec and re-run this one command — the contractual blocks change only on an
    amendment.
 7. **Human-review checkpoint:** covenants are high-stakes — put every ambiguity the extractor listed to
-   the analyst before the spec is accepted. Each one is a menu (`${CLAUDE_PLUGIN_ROOT}/references/asking.md`)
+   the analyst before the spec is accepted. Each one is a menu (`../../references/asking.md`)
    naming what the agreement says and the two readings — **[Accept as parsed: <the reading recorded>] /
    [Use <the alternative>] / [Let me correct it] / [Leave this one open for now]** — with the reading
    the agreement best supports first and the § cited. Never an open-ended "does this look right?". The
@@ -235,7 +237,7 @@ pinned and `covenant_support_rows` matching the covenant-spec's bound labels, an
 at `debt_service_schedule_path`**; ambiguities flagged for review.
 
 ## When you're done — suggest the next step
-Running standalone, close with a menu (`${CLAUDE_PLUGIN_ROOT}/references/asking.md`):
+Running standalone, close with a menu (`../../references/asking.md`):
 **[Build/refresh the monitoring model]** (now that the EBITDA definition and security provisions are
 pinned — follow **build-monitoring-model**, then the collateral map) / **[Run the monthly review]** /
 **[Done for now]**. When another setup wrapper invoked you, skip this — it owns the sequence.

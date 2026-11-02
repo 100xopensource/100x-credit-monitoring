@@ -77,8 +77,11 @@ DATE_CELL = re.compile(
     + "|".join(MONTHS + [month[:3] for month in MONTHS])
     + r")\s+\d{4})\b", re.I)
 AGING_RANGE_CELL = re.compile(r"^\d+\s*[-–—]\s*\d+(?:\s+days?)?$", re.I)
+# A document cell whose name happens to start with a digit -- "1_Borrower
+# Information.pdf", "13-Week Liquidity Forecast.xlsx" -- is a file name, not a
+# figure, and the registry links it rather than tracing it.
 NUMBERED_FILENAME_CELL = re.compile(
-    r"^\d+_[^/\\\n]+\.[A-Za-z][A-Za-z0-9]{0,7}(?:\s+[—-]\s+.*)?$")
+    r"^\d[^/\\\n]*\.[A-Za-z][A-Za-z0-9]{0,7}(?:\s+[—-]\s+.*)?$")
 # The five panes, their ids and their order -- fixed so a `#tab=` link is stable
 # across borrowers (report-structure "Layout").
 TABS = ["tab-overview", "tab-deal", "tab-covenants", "tab-financials", "tab-files"]
@@ -144,6 +147,8 @@ class Memo(HTMLParser):
         self._row_traced = False
         self._table = None
         self._row = None
+        self._row_attrs = None
+        self.statement_controls = []
         self._in_head_row = False
         self._in_title = False
         self._seen_flags_heading = False
@@ -170,6 +175,8 @@ class Memo(HTMLParser):
             self.panes.append((a.get("id"), "active" in cls))
         if tag == "button" and a.get("data-tab"):
             self.tab_buttons.append(a["data-tab"])
+        if tag == 'button' and a.get('data-statement-group'):
+            self.statement_controls.append(a)
         if a.get("data-box"):
             self.boxes.append(a["data-box"])
         # A trace box is page the reader opens with a click, and the format puts
@@ -190,8 +197,11 @@ class Memo(HTMLParser):
             else:
                 self._in_script = True
         if tag == "table":
-            self._table = {"corner": None, "rows": [],
-                           "money": a.get("data-money")}
+            self._table = {"corner": None, "rows": [], "row_attrs": [],
+                           "money": a.get("data-money"),
+                           'statement_section': a.get('data-statement-section'),
+                           'layout': a.get('data-statement-layout'),
+                           'columns': a.get('data-statement-columns')}
         if tag == "thead":
             self._in_head_row = True
         if tag == "tr":
@@ -202,6 +212,7 @@ class Memo(HTMLParser):
             # when clicked, so it counts as traced.
             self._row_traced = bool(a.get("data-method") or a.get("data-steps"))
             self._row = []
+            self._row_attrs = a
         if tag in ("td", "th"):
             self._cell, self._cell_traced, self._cell_span = [], self._row_traced, False
         rec = None
@@ -238,10 +249,12 @@ class Memo(HTMLParser):
             if self._table is not None and self._row:
                 if self._in_head_row and self._table["corner"] is None:
                     self._table["corner"] = self._row[0]["text"]
-                    self._table["statement_section"] = _statement_section(
+                    self._table["statement_section"] = self._table.get('statement_section') or _statement_section(
                         self._table["corner"])
+                    self._table['head'] = list(self._row)
                 elif not self._in_head_row:
                     self._table["rows"].append(self._row)
+                    self._table['row_attrs'].append(self._row_attrs or {})
             self._row = None
         if tag == "thead":
             self._in_head_row = False
@@ -336,7 +349,7 @@ def parse_money(s):
     t = t.replace("$", "").strip()
     mult = 1.0
     if t.rstrip(")").rstrip().endswith("MM"):
-        # A move printed in millions -- "+$3.79MM" -- reads back as its dollars.
+        # A move printed in millions reads back as its dollar value.
         i = t.rindex("MM")
         t = (t[:i] + t[i + 2:]).strip()
         mult = 1e6
@@ -576,64 +589,85 @@ def check_printed(memo, payload, errs, warns):
 
 
 def check_statement_tables(memo, payload, errs):
-    """Each statement cell against its own row and column. Returns how many tables
-    were matched, so a memo that lost them all is a failure rather than a pass."""
-    matched = 0
+    """Check screen AND print rows/columns/units, not just the first numeric panel."""
+    matched, layouts = 0, {}
+    visible = re.sub(r'\s+', ' ', ' '.join(memo.text_parts))
     for tbl in memo.tables:
-        section = tbl.get("statement_section")
+        section = tbl.get('statement_section')
         if not section:
             continue
         matched += 1
-        t = ((payload.get("sections") or {}).get(section) or {}).get("table") or {}
-        rows = t.get("rows") or []
-        months = t.get("months") or []
-        scale = float((t.get("display") or {}).get("scale") or 1)
-        name = str(tbl["corner"]).split(" (")[0]
-        if len(tbl["rows"]) != len(rows):
-            errs.append(f"the {name.lower()} shows {len(tbl['rows'])} lines where the "
-                        f"run produced {len(rows)} — a line was added or dropped "
-                        f"after the figures were gathered")
+        table = ((payload.get('sections') or {}).get(section) or {}).get('table') or {}
+        rows, months = table.get('rows') or [], table.get('months') or []
+        totals = table.get('totals')
+        if totals is None:
+            year = (table.get('ytd_months') or months or ['? ?'])[-1].split()[-1]
+            totals = [{'id':'ytd', 'label':'YTD '+year}] if table.get('flow') and table.get('ytd_months') else []
+        expected = months + [col['id'] for col in totals]
+        labels = {**{mo:mo for mo in months}, **{col['id']:col['label'] for col in totals}}
+        name = str(tbl['corner']).split(' (')[0]
+        columns = expected
+        if tbl.get('columns') is not None:
+            try:
+                columns = json.loads(tbl['columns'])
+            except (TypeError, ValueError):
+                errs.append(name+': unreadable statement column identities')
+                continue
+            if not isinstance(columns, list) or not columns or any(key not in expected for key in columns) or len(columns) != len(set(columns)):
+                errs.append(name+': invalid or duplicate statement columns')
+                continue
+            if columns != [key for key in expected if key in columns]:
+                errs.append(name+': statement periods are out of order')
+            heads = [cell['text'].strip() for cell in (tbl.get('head') or [])[1:]]
+            if heads != [labels[key] for key in columns]:
+                errs.append(name+': statement headings disagree with their periods')
+            if tbl.get('layout') == 'screen' and columns != expected:
+                errs.append(name+': screen statement lost a requested column')
+            layouts.setdefault(section, []).append((tbl.get('layout'), columns))
+        scale = float((table.get('display') or {}).get('scale') or 1)
+        if len(tbl['rows']) != len(rows):
+            errs.append(f'{name}: row count {len(tbl["rows"])} differs from payload {len(rows)}')
             continue
-        for shown, row in zip(tbl["rows"], rows):
-            if not shown:
+        for index, (shown, row) in enumerate(zip(tbl['rows'], rows)):
+            if len(shown) != len(columns)+1:
+                errs.append(name+': missing or extra cells in '+str(row.get('label')))
                 continue
-            label = shown[0]["text"].strip()
-            want_label = str(row.get("label") or "").strip()
-            if label != want_label:
-                errs.append(f"the {name.lower()} shows '{label[:40]}' where the run "
-                            f"produced '{want_label[:40]}'")
+            if shown[0]['text'].strip() != str(row.get('label') or '').strip():
+                errs.append(name+': statement row identity/label differs from payload')
                 continue
-            is_share = str(row.get("unit") or "usd").lower() in PCT_UNITS
-            for i, month in enumerate(months):
-                if i + 1 >= len(shown):
-                    errs.append(f"{name}, {want_label}: the {month} column is missing")
-                    break
-                _check_cell(name, want_label, month, shown[i + 1]["text"],
-                            (row.get("cells") or [None] * len(months))[i]
-                            if i < len(row.get("cells") or []) else None,
-                            is_share, errs, scale)
-            ytd_shown = shown[len(months) + 1] if len(shown) > len(months) + 1 else None
-            if ytd_shown is None:
-                continue
-            if is_share:
-                # A share's year to date is that year's own ratio, never a sum: the
-                # cell prints the ratio the run worked out, or says why there is
-                # none. A figure where the run produced none is a hand edit.
-                v, _p = leading_figure(ytd_shown["text"])
-                if row.get("ytd") is not None:
-                    _check_cell(name, want_label, "the year to date",
-                                ytd_shown["text"], row["ytd"], True, errs, scale)
-                elif v is not None:
-                    errs.append(f"{name}, {want_label}: the year-to-date cell prints "
-                                f"{ytd_shown['text'][:24]}, but a share is not added "
-                                f"down a year")
-                continue
-            _check_cell(name, want_label, "the year to date", ytd_shown["text"],
-                        row.get("ytd"), False, errs, scale)
+            if tbl.get('columns') is not None:
+                attrs = tbl['row_attrs'][index]
+                if attrs.get('data-role') != (row.get('role') or 'other') or attrs.get('data-group') != (row.get('group') or ''):
+                    errs.append(name+': statement grouping differs from payload')
+            for i, key in enumerate(columns):
+                value = (row.get('cells') or [])[months.index(key)] if key in months else row.get(key)
+                unit = str(row.get('unit') or 'usd').lower()
+                _check_cell(name, str(row['label']), labels[key], shown[i+1]['text'], value,
+                            unit in PCT_UNITS, errs, scale, unit)
+                covered, requested = row.get(key+'_months_covered'), row.get(key+'_months_requested')
+                if covered is not None and covered < (requested or 0) and f'{covered} of {requested}' not in shown[i+1]['text']:
+                    errs.append(name+': partial statement coverage note missing for '+str(row['label']))
+            if tbl.get('layout') == 'screen':
+                for reason in set((row.get('unavailable') or {}).values()):
+                    if re.sub(r'\s+', ' ', reason) not in visible:
+                        errs.append(name+': unavailable-input reason lost from visible statement notes')
+                if row.get('fold_coverage') and re.sub(r'\s+', ' ', row['method']) not in visible:
+                    errs.append(name+': supported/partial folding scope is not visible')
+        if tbl.get('layout') == 'screen':
+            for group in {r.get('group') for r in rows if r.get('role') == 'child'}:
+                controls = [a for a in memo.statement_controls if a.get('data-statement-group') == group]
+                ids = {attrs.get('id') for attrs in tbl['row_attrs'] if attrs.get('data-role') == 'child' and attrs.get('data-group') == group}
+                if len(controls) != 1 or controls[0].get('type') != 'button' or controls[0].get('aria-expanded') not in ('true','false') or set(controls[0].get('aria-controls','').split()) != ids:
+                    errs.append(name+': fold control identity/ARIA does not match its children')
+    for section, tables in layouts.items():
+        screen = [cols for layout,cols in tables if layout == 'screen']
+        printed = [col for layout,cols in tables if layout == 'print' for col in cols]
+        if len(screen) != 1 or printed != screen[0]:
+            errs.append(section+': complete screen/print column coverage is missing or duplicated')
     return matched
 
 
-def _check_cell(table, label, column, shown, value, is_share, errs, scale=1.0):
+def _check_cell(table, label, column, shown, value, is_share, errs, scale=1.0, unit=None):
     """One statement cell against the one payload number it claims."""
     v, printed = leading_figure(shown)
     if value is None:
@@ -650,15 +684,19 @@ def _check_cell(table, label, column, shown, value, is_share, errs, scale=1.0):
     # table's own display scale, or a share to one decimal -- so any slack here is
     # room for an edit to hide in.
     if is_share:
-        # The cells of a share row are fractions and print as percentages, so they
-        # are compared as percentages -- 0.2998 on the page is 30.0%.
-        if abs(v - float(value) * 100.0) >= 0.05:
-            errs.append(f"{table}, {label}, {column}: the memo prints {printed} where "
-                        f"the run produced {float(value) * 100:.1f}%")
-        return
-    if round(v) != round(float(value) / scale):
-        errs.append(f"{table}, {label}, {column}: the memo prints {printed} where the "
-                    f"run produced {round(float(value) / scale):,}")
+        expected = float(f'{float(value)*100:.1f}')
+    elif unit in RATIO_UNITS:
+        expected = float(f'{float(value):.2f}')
+        if not re.search(r'[xX×]', printed):
+            errs.append(f'{table}, {label}, {column}: multiple unit missing')
+    elif unit == 'days':
+        expected = float(f'{float(value):.1f}')
+        if 'days' not in shown:
+            errs.append(f'{table}, {label}, {column}: days unit missing')
+    else:
+        expected = round(float(value)/scale)
+    if abs(v-expected) > 1e-9:
+        errs.append(f'{table}, {label}, {column}: prints {printed}, expected {expected}')
 
 
 def check_drawn(memo, payload, errs, warns):
@@ -1167,8 +1205,7 @@ def check_flags(payload, memo, errs, warns):
         if any(form.lower() in prose.lower() for form in forms):
             continue
         # An item is also covered when the prose cites its dollar amount — the
-        # analyst writes the exact figure ($34,960,655) where the item's record
-        # carries a rounded one ($34,960,000), and either names the item.
+        # prose and the item's record may use different rounding precision.
         amount = item.get("amount_usd")
         if amount:
             target = abs(float(amount))

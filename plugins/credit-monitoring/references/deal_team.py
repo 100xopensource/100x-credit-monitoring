@@ -4,11 +4,9 @@ deal_team.py -- who the memo header may name as the deal team.
 
 The problem
 ===========
-The header names the deal team on the first line a partner reads, and the deal
-team is the borrower's own people. Every person named in a deal folder is
-the BORROWER's -- the credit agreement's signature pages, the reporting
-package's certificate, the underwriting memo's management section. One setup
-read a borrower's CFO out of those documents and printed it under "Deal team".
+The header names the lender's deal team, not the borrower's officers.
+Borrower documents may name either party; confirm team membership with the
+analyst rather than inferring it from a signature or management section.
 
 The strategy
 ============

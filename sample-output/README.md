@@ -6,7 +6,7 @@
 
 - **[View the live portfolio dashboard](https://100xpartners.ai/credit-monitoring/)** — explore the completed sample directly on the 100x Partners website. No download or review run required.
 - **[Download the portfolio dashboard](https://raw.githubusercontent.com/100xopensource/100x-credit-monitoring/main/sample-output/portfolio-monitor.html)** — save it as `portfolio-monitor.html`, then double-click it to open in a browser. If the browser displays HTML text, use **Save Page As** and keep the `.html` extension.
-- **[Download the complete sample ZIP](https://github.com/100xopensource/100x-credit-monitoring/releases/download/v1.1.0/credit-monitoring-sample-output-2026-06-v1.zip)** — extract it, then open `sample-output/portfolio-monitor.html`. The ZIP includes the Excel workbooks, HTML memos, and saved working files. This link resolves once `v1.1.0` is published; the `v1.0.0` release shipped only the plugin bundle and `SHA256SUMS.txt`, not this sample.
+- **[Download the complete sample ZIP](https://github.com/100xopensource/100x-credit-monitoring/releases/download/v1.1.0/credit-monitoring-sample-output-2026-06-v1.zip)** — extract it, then open `sample-output/portfolio-monitor.html`. The ZIP includes the Excel workbooks, HTML memos, and saved working files. The `v1.0.0` release shipped only the plugin bundle and `SHA256SUMS.txt`, not this sample.
 - Alternatively, use the repository's **Code → Download ZIP**, extract it, and open its `sample-output` folder.
 
 GitHub displays HTML source rather than running the dashboard. Download and open it locally; no server or build step is required. In a downloaded copy, the dashboard is also [here](portfolio-monitor.html).
@@ -30,13 +30,13 @@ The dashboard's financial-model view is not an Excel download. Use the workbook 
 
 ## 2. Continue from the sample
 
-This is a convenient copy of a completed run, **not a guarantee of seamless continuation across plugin versions**. **The currently prepared release plugin rejects this sample during results-folder setup.** Viewing the delivered files and running a fresh review are available; in-plugin continuation of the saved store is not verified or supported by this candidate. Do not remove records or bypass that check.
+This is a convenient copy of a completed run, **not a guarantee of seamless continuation across plugin versions**. **Version 1.3.3 accepts this sample at folder setup, but end-to-end continuation has not been verified.** Viewing the delivered files and running a fresh review are available. Use a fresh results folder for new reviews; do not remove or rewrite the sample's saved records.
 
 You can still open the downloaded workbook, memo, or dashboard directly and use those files as reference. If you want the plugin to generate results now, use [Run the sample yourself](#3-run-the-sample-yourself) below.
 
 ### Folder map for a compatible plugin
 
-The following is the saved sample's folder map, not a working continuation walkthrough for the current candidate:
+The following is the saved sample's folder map, not a working continuation walkthrough for the current plugin:
 
 1. Keep an untouched copy of the extracted sample, and work in a second copy. Keep the hidden `.record` folders: they contain saved review state.
 2. Use the **full six-borrower [source dataset](https://github.com/100xopensource/100x-credit-monitoring-synthetic-dataset)**. This sample was produced from dataset metadata version `v1.0.0`, with 755 source documents. The document contents also match the prepared dataset candidate labelled `v1.1.0`; exact fingerprints are in [sample-manifest.json](sample-manifest.json). A minified sample is not a substitute for these saved file references.
@@ -59,7 +59,7 @@ My sample workspace/
         └── credit-monitoring-output/
 ```
 
-**Why the limitation?** The sample includes a supplementary borrower directory, `borrowers/orinth-vale-infrastructure/_docs/`, which the prepared plugin's folder validator does not accept. At borrower level, the validator permits regular files and the `.record/` and `_model/` directories, but not `_docs/`. The `store-schema.json` and per-borrower `.record/published.json` files are accepted; they are not the cause of this rejection. A direct read-only diagnostic lookup can locate all six archived reviews as **unpublished results**, but that does not bypass the failing folder-setup step or prove that the Cowork workflow can continue. The package preserves the supplied records rather than converting them.
+**Why the limitation?** Folder setup and archived-review recognition are only part of a complete review. Version 1.3.3 recognizes the six saved current reviews and permits supplementary borrower folders such as `_docs/`; that does not prove continuation in Cowork. Orinth Vale's historical configuration also points to a credit agreement inside the results folder, which current source-location checks refuse if borrower setup is rerun. The supplied records are preserved, not converted. Verification results in `sample-manifest.json` describe the earlier checks, not current compatibility.
 
 After viewing, ask for the specific next action you want. There is no unfinished June review to resume and no supplied July run. New analysis still takes time; this package does not make the monitoring engine faster. A hosted Claude artifact is not inherited from the author, and the included HTML dashboard does not automatically update.
 

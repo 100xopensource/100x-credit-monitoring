@@ -12,16 +12,22 @@ metadata:
 
 # Monthly Monitor
 
+Read `../../CLAUDE.md` before anything else; it holds the rules shared by every skill.
+Before workbook-backed work or dispatch, run `python "${CLAUDE_PLUGIN_ROOT}/lib/requirements.py"`
+in the same engine interpreter. Required failure stops that work before writes, not as a financial
+skip; use `${CLAUDE_PLUGIN_ROOT}/references/runtime-prerequisites.md` for provision/retry guidance.
+Do not install or download. Independent folder/store checks remain usable.
+
 Orchestrate the monthly review. State lives in files: read durable files, coordinate, write durable
 files back. See `references/orchestration.md` and `references/continuity.py`.
 
 When directly invoked without a resolved config from `run-monitor`, return through **run-monitor** and
-`${CLAUDE_PLUGIN_ROOT}/references/entry-routing.md` first. When `run-monitor` handed in the resolved
+`../../references/entry-routing.md` first. When `run-monitor` handed in the resolved
 config and completed the welcome and permission menu, continue here without repeating either one.
 
 Every interaction follows the same loop: research first, propose options with a recommendation, act
-on the option the analyst picks through `AskUserQuestion`
-(`${CLAUDE_PLUGIN_ROOT}/references/asking.md`). Which borrower, the deal context, what to watch,
+on the option the analyst picks from a menu (`../../references/asking.md`; how a menu is sent is in
+`../../references/runtime/<runtime>/asking.md`). Which borrower, the deal context, what to watch,
 what's next: all menus grounded in what you already read, never a typed answer or a form.
 
 ## Step 0 — Load the resolved control files
@@ -30,13 +36,17 @@ Proceed only when `run-monitor` handed you the resolved `borrower-config.json` p
 entry routing and write permission. A borrower name by itself is not resolved context: return through
 **run-monitor** rather than calling the legacy registry resolver here.
 
+Carry any instruction to keep the earlier current review through every worker brief and the final
+choice. Permission to compute or save a draft is not permission to replace the current review.
 Read `borrower-config.json` and resolve `paths.deal_context_path` → load `deal-context.json`.
 Missing deal-context → offer to fill it in now or continue without a deal context.
 
 Keep the source and store roots handed off by run-monitor for the entire run. Prefix every plugin
 subprocess below with `CREDIT_MONITOR_SOURCE_ROOT="<source root>"` and
-`CREDIT_MONITOR_STORE_ROOT="<store root>"`, and include both bindings in every worker brief. The code
-blocks omit that repeated prefix for readability; it is mandatory for each fresh process.
+`CREDIT_MONITOR_STORE_ROOT="<store root>"`, and include both bindings in every worker brief. When the
+runtime also bound `CREDIT_MONITOR_SOURCE_URL` and `CREDIT_MONITOR_STORE_URL`, carry them the same way:
+the memo's figure links are built from them. The code blocks omit that repeated prefix for
+readability; it is mandatory for each fresh process.
 
 ## Step 1 — Protect current work and establish accepted history
 
@@ -46,6 +56,9 @@ Before creating or changing a run, execute:
 python ${CLAUDE_PLUGIN_ROOT}/skills/monthly-monitor/references/run_record.py check \
   --folder "<paths.monitor_output_folder>" --json
 ```
+
+`../../references/runtime/<runtime>/asking.md` says how this step's questions reach the analyst, or
+what answers them without a question.
 
 If it reports changed, missing, unreadable, repackaged, or unpublished work, state each item plainly and ask whether
 to continue. Stop on no. Repackaged means the workbook container was re-wrapped (Excel/SharePoint) with the same cells — it does not block delivery. This concrete safety decision is required even when run-monitor already
@@ -75,9 +88,16 @@ an edit nobody actually reviewed. `still_blocking` always still lists every real
 To make a new run consume an accepted edit, pin it at `open` (below) with `--consume-edit "<same path>"`;
 `open` fails if that path is not still accepted and still live. That run's `snapshot` step must then be given
 `--model` pointing at the accepted file itself (the `open` response's `consume_edit.source_path`), not the
-canonical model — `snapshot` verifies the given file's digest against the pin and refuses a mismatch. No
-new recomputation code exists for this: the run reruns against that file exactly like any other model
-input, and only THAT run's finish is exempted from the block, bound to its own pinned digest — a different
+canonical model — `snapshot` verifies the given file's digest against the pin and refuses a mismatch.
+For known Source Register inputs, only an explicit human request to check and propagate edits starts
+this flow; saving alone triggers nothing. Numeric input/register edits are refreshed in a separate
+run-local workbook. The exact edited original is retained under `edited-original/`, while analysis
+uses the returned refreshed model path and paired source map. Source evidence remains context, not
+validation of analyst-edited amounts. If refresh fails or values-only input has no formula-bearing
+build, report **Propagation incomplete: dependent results could not be refreshed**; keep the edit,
+do not finish a stale or unrelated run, and retry only after the next explicit request.
+For other eligible workbooks, the existing snapshot behavior remains unchanged.
+Only THAT run's finish is exempted from the block, bound to its own pinned digest — a different
 or unrelated run, and accept/discard, still refuse over the same unconsumed edit. The finished draft's
 manifest records which file was consumed and why.
 
@@ -89,10 +109,15 @@ before any run write:
 
 ```bash
 python ${CLAUDE_PLUGIN_ROOT}/skills/monthly-monitor/references/run_record.py base \
-  --folder "<paths.monitor_output_folder>" --before-period "<YYYY-MM>" --json
+  --folder "<paths.monitor_output_folder>" --through-period "<YYYY-MM>" --json
 ```
 
-A same-period revision therefore reads continuity from the prior selected month. Treat the returned
+This is the continuity base: a same-period revision retains that month's accepted open items,
+context and focus; a new month uses the latest earlier accepted month, never a future month.
+For financial comparison separately call `base --before-period "<YYYY-MM>" --json` with the same
+folder. Keep that strictly earlier result separate: a same-month continuity base is not an earlier-period
+financial comparator. If that lookup returns seed, disclose no prior-period comparison rather than
+compare this review with itself. Treat the returned
 folder, manifest roles, workbook path, and memo path as authoritative; `seed` means no selected base.
 Read the returned base folder's manifest and call
 `continuity.py load_prior_state(base_folder, manifest,
@@ -108,13 +133,14 @@ question. Remind the analyst of prior focus, headline, open requests, and unreso
 strongest candidates first plus **[Nothing specific — use the deal context]**; confirm forward-stress
 scenarios in the same menu. For a resume, preserve the ledger's existing analyst focus.
 
-After the analyst answers, say **Before the long quiet** from `asking.md`. Only then begin the quiet
-work; never tell the analyst they can walk away while a question is waiting.
+After the analyst answers, say **Before the long quiet** from `../../references/asking.md`. Only then
+begin the quiet work; never tell the analyst they can walk away while a question is waiting.
 
 ## Step 3 — Open the exact run and snapshot its inputs
 
 For a new run, pass the base result and each focus item into `open`. If the historical lookup returned
-`seed`, pass `--seed-base` explicitly. With no base flags, `open` uses the latest accepted run. For an
+`seed`, pass `--seed-base` explicitly. With no base flags, `open` uses the latest accepted run at or
+before this review's period. For an
 explicit draft continuation, use `--draft-base` with its exact `--base-run` and `--base-period`:
 
 ```bash
@@ -131,7 +157,10 @@ what `snapshot` below must be given as `--model` instead of the canonical model.
 
 For `run_incomplete`, continue from the already verified `open` result from Step 1; never silently open a
 replacement run. If delivery later reports that this run is stale, preserve it and explain that a fresh
-run is needed against the changed state. Do not repin its ledger or overwrite the newer result.
+run is needed against the changed state. Ask for approval to set the unfinished run aside.
+After approval, run `run_record.py abandon --run "<run_folder>" --reason "<approved reason>"`,
+then repeat `open` to start fresh. Never abandon a frozen run. The abandoned folder remains evidence
+and cannot be resumed, changed or delivered. Do not repin its ledger or overwrite the newer result.
 
 If `model_migration_required` is true and the run has no completed model snapshot, stop here and follow
 **monitor-setup**'s approved verify-copy-verify migration, then reload the config. If pending steps
@@ -189,34 +218,44 @@ python ${CLAUDE_PLUGIN_ROOT}/lib/manifest.py finish \
 ```
 
 The validated manifest roles control refresh and future opening; never substitute names derived from
-the borrower folder key. Finish produces a draft, not an accepted result. Offer links to its actual
-workbook and memo before the choice below, so the user can inspect the materialized changes. If this run
+the borrower folder key. Finish produces a draft, not an accepted result. Offer its actual workbook
+and memo, the copies finish wrote at the top of the borrower's folder, before the choice below, so the
+user can inspect the materialized changes. If this run
 was opened with `--consume-edit`, its manifest now carries which file and why as `edit_intake`; mention it
 in the same preview so the analyst sees their edit was actually recomputed into this draft, not just noted.
 Writes are ordered, not a multi-file transaction; no recovery journal is created. If a filesystem
 or permission error interrupts finish, resolve that error and retry this same command for the same
-saved run. For an actual file-deletion restriction, use Cowork's supported deletion-permission tool
-for the named output file, explain the scope it grants, then retry the plugin command. Do not truncate
+saved run. For an actual file-deletion restriction, follow
+`../../references/runtime/<runtime>/files.md`, then retry the plugin command. Do not truncate
 files, reconstruct state, or replace the plugin retry with manual deletion. A stale/edited-file or
 corrupt-saved-run refusal needs the specific conflicting evidence resolved, not broader permission.
-See `${CLAUDE_PLUGIN_ROOT}/references/store-contract.md`.
+See `../../references/store-contract.md`.
 
 ## Step 6 — Current-result choice, then close
 
-Present exactly:
+`../../references/runtime/<runtime>/delivery.md` says how the finished files and this choice reach
+the analyst, or what takes this step's place.
 
-1. **Use this run as the current result — default**
+Ask for an explicit choice; silence or permission to run never accepts a draft.
+When the analyst asked to keep the earlier current review, present **Keep the earlier review current;
+keep this run as a draft — recommended** first, **Replace the earlier current review with this run**
+second, then **Discard this run**. State which earlier run remains current. Do not suggest replacement
+as the default. Only a clear intentional replacement answer overrides that instruction.
+Otherwise present:
+
+1. **Use this run as the current result**
 2. **Keep it as an unpublished run**
 3. **Discard this run**
 
-For choice 1, run:
+The command mapping below follows the action, not its position in the reordered menu.
+For accepting the new run (choice 1 in the ordinary menu), run:
 
 ```bash
 python ${CLAUDE_PLUGIN_ROOT}/skills/monthly-monitor/references/run_record.py select \
   --run "<run_folder>" --deal "<borrower root>" --period "<YYYY-MM>"
 ```
 
-For choice 1, require the `select` result to carry `required_next_step: refresh-dashboard`, then follow
+After accepting the new run, require the `select` result to carry `required_next_step: refresh-dashboard`, then follow
 `refresh-dashboard` only after `current-result-selected` is written. Pass the borrower key so the
 artifact refresh reads the same verified, manifest-checked run the analyst selected. **Do not emit a free-form completion, answer “what next,” or stop after selection:** a selected run is not closed until local refresh, portfolio status, and the closing menu below have all completed. Artifact pages are derived views; the run still has exactly two person-facing monitoring outputs.
 
@@ -226,11 +265,11 @@ and status steps. Do not make a platform call yet. Remember the dashboard action
 `current` or `stale`, and no dashboard action for `recover`. Follow the full `portfolio-artifact` flow
 only when the analyst chooses that dashboard action.
 
-For choice 2, run the same command with `--keep-unpublished`. State which run remains selected.
+To keep the earlier review current and retain this draft, run the same command with `--keep-unpublished`. State which run remains selected.
 Selection is metadata, not a third person-facing output, and an unpublished run must not refresh the
 artifact.
 
-For choice 3, name the exact run being discarded -- read its run id from the draft's own manifest, never
+To discard, name the exact run being discarded -- read its run id from the draft's own manifest, never
 a phrase like "the latest run":
 
 ```bash
@@ -249,9 +288,9 @@ restoration, and does not repeat an already recorded decision.
 
 
 
-For choice 1, close with **[Open the memo]**, the remembered dashboard action when one exists, then
-**[Run another borrower]** / **[Done for now]**. For choice 2, close with **[Open the memo] /
-[Run another borrower] / [Done for now]**. For choice 3, close with **[Open the memo]** only when
+After accepting, close with **[Open the memo]**, the remembered dashboard action when one exists, then
+**[Run another borrower]** / **[Done for now]**. After keeping the draft, close with **[Open the memo] /
+[Run another borrower] / [Done for now]**. After discarding, close with **[Open the memo]** only when
 discard reported `status: accepted` (the memo it links to is the restored prior result, not the
 discarded draft), otherwise **[Run another borrower] / [Done for now]**. The first review cannot be discarded.
 
@@ -261,7 +300,10 @@ discarded draft), otherwise **[Run another borrower] / [Done for now]**. The fir
 - A hand edit to the workbook was either reviewed through `edit-intake` and consumed by a run pinned to it
   with `--consume-edit`, or left blocking; none was silently overwritten, discarded, or exempted by any
   other run, accept, or discard. A memo edit was reverted or left blocking, never carried through.
-- New runs recorded the verified before-period base; resumed runs retained their ledger-recorded base.
+- New runs recorded the verified at-or-before continuity base, with a separate strictly earlier
+  financial comparison; resumed runs retained their ledger-recorded base.
+- A keep-current instruction survived handoffs and the closing choice; only explicit intentional
+  acceptance replaced the earlier review.
 - Complete config and model inputs were snapshotted, and every downstream stage used the run-local model.
 - Every module output passed validation and is archived in the application-preserved run folder.
 - Exact workbook and memo roles verify against the integrity-checked manifest; no ledger step remains pending.

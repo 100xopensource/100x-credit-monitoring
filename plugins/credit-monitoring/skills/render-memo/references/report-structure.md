@@ -15,13 +15,16 @@ Two invariants hold throughout:
   PLAIN NAMES — no letter prefixes ("A ·", "F ·") in headings, prose references, or trace-box text.
 - Surface & flag; NEVER a credit recommendation. The Evidence discipline below bounds every claim.
 
-## Time windows — there are TWO; do not conflate them
+## Time windows — keep analysis and statement history separate
 
 - **Analysis window = calendar year-to-date** — January of the current year through the current period.
   You READ and reason across this whole path (direction, inflection, volatility, cumulative), not
   two-point MoM/YoY snapshots. It GROWS through the year (Oct → Jan–Oct).
-- **Display window = trailing 5 months** ending at the current period (June → Feb–Jun). The statement
-  tables SHOW these five monthly columns only.
+- **Legacy display window = trailing 5 months** ending at the current period, retained for existing consumers.
+- **Statement history** uses `statement_windows(current_period, fiscal_year_start_month)`: prior fiscal-year
+  flow months plus current fiscal-year months; balance sheets show prior fiscal quarter ends plus current
+  fiscal months. Complete FY/TTM/YTD summaries are typed: sum flows, use exact position endpoints,
+  compute ratios from their operands. Do not duplicate TTM when it equals YTD or invent missing history.
 
 Compute both with `references/period_windows.py` — `windows(current_period)` returns the display months,
 the YTD analysis months, the `t3m_pair`, the complete quarters, the fiscal years and the trailing
@@ -42,9 +45,9 @@ rules govern, and both are resolved by `period_windows.py` — never hand-rolled
 
 **A percentage is suppressed, not printed, when it would mislead.** Two cases, both handled in
 `performance_views.py` and both rendered as words rather than a ratio:
-- the comparison crosses zero (EBITDA +$5K to -$2,577K) → show "sign change" and the two levels;
-- the base is below 1% of that window's own revenue (EBITDA $66K on $31,489K of revenue) → show the
-  dollar move and "off a near-zero base", never "+1,755%".
+- the comparison crosses zero → show "sign change" and the two levels;
+- the base is below 1% of that window's own revenue → show the
+  dollar move and "off a near-zero base", never a misleading percentage.
 
 A column is tagged not-like-for-like when its window SPANS a `basis_breaks` entry, or when the two
 windows it compares sit on opposite sides of one. A window lying wholly on the old basis is a faithful
@@ -62,7 +65,7 @@ header banner. Tabs, order and ids are fixed so `#tab=` hashes are stable across
 | Deal summary | `tab-deal` | company · key terms · transaction summary · security summary · capital structure |
 | Covenants | `tab-covenants` | covenant strip (repeated) · covenant detail & stress |
 | Financial performance | `tab-financials` | income statement, cash flow and balance sheet reviews |
-| Files & audit | `tab-files` | source-document registry · data quality & basis notes · flags & follow-ups |
+| Files & audit | `tab-files` | source-document registry · data quality · flags & follow-ups |
 
 Overview is the default. The template JS owns switching: a click on ANY in-page anchor first activates
 the tab that CONTAINS its target, then the browser jumps — deep links keep working across tabs, so the
@@ -71,9 +74,25 @@ bar.
 
 The page uses the full width of a desktop screen (`.wrap` caps at 1760px). Sections pair side by side
 in `.hrow` grid rows exactly where the example pairs them — Company beside Key terms, Transaction
-summary beside Security summary, the two metric boxes, the statement reviews — and every pairing
+summary beside Security summary, the statement reviews — and every pairing
 collapses to one column below 1280px. A wide table scrolls inside its own `.tblwrap`; the page itself
 never scrolls horizontally.
+
+## Basis notes and keyboard traces
+
+Collateral metrics, Covenant detail & stress, Covenant history and Forward stress have
+an (i) when there is basis text. Hover or click opens it; Enter or Space opens it from
+the keyboard, and Escape closes it. Focus alone does not open it. Agreement entries
+show date and name, and each opens its full setup text. Either/or rules, the funded-debt
+denominator and Covenant history's legend stay visible. Data quality keeps missing
+certificate signer/date findings; the covenant section does not repeat them.
+
+Tab reaches each figure table once; arrows choose a figure, Home/End reach row edges,
+and Enter/Space opens the same trace box as a mouse click. Focus stays on the figure;
+arrows update an open trace, Tab reaches its file links and Escape returns to the figure.
+Prose figures and summary chips are separate Tab stops. Performance view changes retain
+keyboard access. Printing opens every memo box and basis note, hides controls and trace
+boxes, then restores the reader's collapsed boxes afterwards.
 
 ## Section order (fixed)
 
@@ -126,8 +145,9 @@ The strip sits OUTSIDE any collapsible so covenant status never hides. Order wit
 - A chip states the covenant, not its formula: the payload shortens each name for the chip (the
   "either/or leg" tag and a trailing parenthetical come off), and keeps the full name for the grid.
 
-#### 1.2 Performance & collateral metrics — the two boxes side by side, OPEN
-The two boxes sit in one `.hrow` (Performance left, Collateral right) and render OPEN by default —
+#### 1.2 Performance & collateral metrics: two full-width boxes, Performance first, OPEN
+Performance sits first at the full page width, because its Monthly view has six level columns, and
+Collateral sits beneath it, also full width. Both render OPEN by default —
 the persistent header bar with its ONE teaser figure stays, a reader may still collapse a box, and
 print force-expands (see Style). ALL content is kept — the box pattern hides nothing. Teasers:
 Performance → YTD revenue vs prior year %; Collateral → the senior hard-asset coverage ratio.
@@ -142,15 +162,36 @@ Performance → YTD revenue vs prior year %; Collateral → the senior hard-asse
   unusual is flattered or punished by YoY alone. So the box offers all four and lets the reader choose.
   A segmented control switches views; `monthly` is the default.
 
-  | View | Columns | Shows |
+  | View | Columns | The change beneath a level |
   |---|---|---|
-  | Monthly | MoM · YoY · T3M vs prior-year T3M · vs Budget | change |
-  | Quarterly | the last 8 complete quarters, oldest first | levels, each with its prior-year comparison |
-  | Annual | the last complete fiscal years · current YTD · YTD annualised | levels, each with its prior-year comparison |
-  | Annualised | LTM · L6M annualised · L3M annualised · YTD annualised | levels at a twelve-month rate |
+  | Monthly | the month · the month before · the same month a year earlier · Budget for the month · T3M · the same T3M a year earlier | the month, or the T3M, against that column |
+  | Quarterly | the last 8 complete quarters, oldest first | against the same quarter a year earlier |
+  | Annual | the last complete fiscal years · current YTD · Budget YTD · YTD annualised | against the year, or the same months, a year earlier; the plan column: the actual over the plan's months against the plan |
+  | Annualised | LTM · L6M annualised · L3M annualised · YTD annualised | none |
 
-  Rows are the same in every view: net revenue, gross profit, EBITDA and operating expense, each margin
-  following its parent as a sub-row (basis points in the change view, per cent in the level views).
+  Every view prints LEVELS. A comparison column (the month before, the same month a year earlier,
+  the plan, the same three months a year earlier) prints its own level and, beneath it in small type,
+  the reported window's change against it; the reported window's own columns print the level alone.
+  The four Monthly changes are the MoM, YoY, T3M-against-prior-year-T3M and against-plan changes the
+  view always carried.
+
+  **Budget YTD** ("Budget 2026 YTD", named for the memo's year) follows the year-to-date column. It
+  prints the year-to-date plan budget-vs-actual read (`memo_payload.plan_figures(archive, "YTD")`)
+  over that result's own `ytd_months`, with the actual over the same months against it. A plan
+  covering fewer months than the year to date keeps the column's name, compares its own months only,
+  and is flagged like a reporting-basis change: amber header, asterisk, and a line under the table
+  naming the months and the matching actual ("the plan starts in April, so this compares April to
+  June only, $38.7M actual against a $46.6M plan"). The note under the table holds one line per
+  flagged column. With no plan month inside the year to date, or no plan on file, the column drops and
+  the data quality list says why; December has no year-to-date column, so no Budget YTD either. A
+  Budget YTD cell traces to the plan's own months and budget workbook cells and borrows no other
+  month. Never clip the months of an already aggregated plan total. If its full window does
+  not fit within calendar YTD (for example an explicit prior-year start), omit Budget YTD and
+  name both windows and the unsplittable total in the absence/data-quality reason. The budget
+  engine's explicit-start comparison remains unchanged; no partial total is invented.
+  Rows are the same in every view: net revenue, gross profit, EBITDA and
+  operating expense, each margin following its parent as a sub-row (the share as the level, the
+  change in basis points).
 
   **Pre-compute every view in Python; the toggle only swaps what is displayed.** Run
   `references/performance_views.py --borrower-config <cfg> --out <perf.json>` and embed the payload.
@@ -163,8 +204,23 @@ Performance → YTD revenue vs prior year %; Collateral → the senior hard-asse
   the payload unchanged; scaling it again is the thousand-fold error in the other direction.
 
   No shading on any column, in any view: shading implied a "primary" basis, which is the judgment this
-  toggle hands back to the reader. Colour green/red = favourable/unfavourable; opex GROWTH is neutral
-  (it grows with revenue). Budget cells are "—" and the column is omitted when no budget is on file.
+  toggle hands back to the reader. Colour green/red = favourable/unfavourable, on the change line
+  beneath a level only, never on the level itself: a red May figure would read as May being bad when
+  it is June against May that fell. The engine writes each change's colour (`tone`). Opex against an
+  earlier period is neutral (it grows with revenue); opex and its share of revenue against the plan
+  are red above plan and green below, judged on the size of the spend, since some workbooks store
+  costs as negative numbers. Budget cells are "—" and the column is omitted when no budget is on file.
+  A line the plan does not have (gross profit, operating expense) leaves the cells it feeds empty,
+  never $0 and never another line's figure; each empty cell's trace says why, and the box states
+  each reason once under the table. Operating expense with no group named in the borrower's settings
+  is no figure in any column, with its reason stated the same way.
+  Revenue and EBITDA mappings remain required. Missing or unavailable actual gross profit does
+  not remove the box: gross profit and gross margin show "—" with a clear unavailable reason in
+  every affected view/window, while supported revenue, EBITDA and configured expense figures stay.
+  Never substitute zero, infer cost of goods sold, or guess a gross profit mapping. A real stated
+  zero remains zero. A plan-only gross profit cannot imply an actual comparison: its dependent
+  cells are unavailable too. Unavailable cells carry their reason, not partial or unrelated source
+  hops; supported cells retain their own exact month windows and sources.
   Links to the Income statement review.
 
 - **Collateral metrics** — per-deal, driven by `collateral-map.json`. Track the pledged
@@ -359,19 +415,29 @@ template-identical in both places), then:
 The income statement and cash flow reviews stack in the left column; the balance sheet review takes
 the right. Each review keeps its full content:
 
-- **Income statement review** (folds Revenue quality) — the trailing-5-month table (plus a YTD column;
-  flows only) then **Key observations (year-to-date)** — a handful of substantive bullets read across the
+- **Income statement review** (folds Revenue quality) — the fiscal statement-history table with typed
+  summaries, then **Key observations (year-to-date)** — a handful of substantive bullets read across the
   whole YTD path, NOT a line-by-line table. For recurring-revenue deals include the ARR bridge, retention
   (organic vs combined across any basis break) and the deferred-revenue read.
 
-- **Cash flow review** — the trailing-5-month table (plus a YTD column) then Key observations (YTD). State
-  it is a derived indirect statement; ending cash ties to the balance sheet by construction; flag any
-  period the derived net change does not reconcile to the balance-sheet cash move.
+- **Cash flow review** — fiscal statement history with typed summaries, then Key observations (YTD).
+  Describe the supplied model's basis, not an assumed derivation. Opening and closing cash are endpoint
+  positions, never summed; flag any reported net change that does not reconcile to the cash move.
 
-- **Balance sheet review** (folds Liquidity & runway + collateral detail) — the trailing-5-month table
-  (NO YTD column — balances do not sum) then Key observations (YTD), then liquidity/runway (burn on the
+- **Balance sheet review** (folds Liquidity & runway + collateral detail) — fiscal statement history
+  (NO summary columns — balances do not sum) then Key observations (YTD), then liquidity/runway (burn on the
   YTD operating figure, months-to-floor, deferred-revenue cushion, one-time distortions flagged) and the
   collateral coverage detail.
+
+Statement controls fold only supported breakdowns; uncertain rows remain visible and unplaced.
+Every line reveals all detail; print always includes every row in six-column panels regardless of
+screen state. Preserve stored signs and exact cell traces. Missing operands/definitions stay unavailable
+with reasons. Cash after debt service (defined) is a separate display measure, never engine free cash
+flow. Its optional `shared_definitions.statement_cash_after_debt_service_ref` must name an existing
+flow definition bound to the declared guarded model formula; do not invent a payment basis.
+Leverage quotes only a unique configured covenant identity at its exact date/window/primitive; no
+model fallback for a missing declared test. Working-capital days quote archived points, not a new
+render-time calculation. Ratios and days never inherit money scaling.
 
 ### Tab 5 — Files & audit
 
@@ -382,7 +448,7 @@ the right. Each review keeps its full content:
   a credit reader, and what it is dated or covers. A document the report relies on but cannot link is
   still listed, with its location described in words. The registry lists sources; it repeats no
   figures.
-- **Data quality & basis notes** — restatements, extraction/format limits, definition gaps (certificate
+- **Data quality** — restatements, extraction/format limits, definition gaps (certificate
   vs model), basis breaks, budget absence, derived-CF reconciliation, capitalization policy. Honest but
   quarantined — the Overview only inherits a caveat if it changes a conclusion.
   Each note is written for the credit reader: name the figures it affects and what to trust, in plain
@@ -607,12 +673,12 @@ ROW and once per COLUMN so the payload stays small; the template JS composes eac
 
 ### Degradation — never a broken or guessed link
 
-- An output whose envelope carries no `stores` → no link resolves; Data quality & basis notes carries
+- An output whose envelope carries no `stores` → no link resolves; Data quality carries
   ONE note, written for the reader: "Figures name their source file but do not open it — this
   borrower's files are in a folder the monitor does not know." Instead of flagging every figure.
 - A figure whose ref names no store (the envelope has others) → `srcmiss`: the container still answers (the box names the
-  file, no link) + a Data quality & basis notes flag.
-- A ref with no `upstream` → the trace stops at the model cell + ONE Data quality & basis notes note:
+  file, no link) + a Data quality flag.
+- A ref with no `upstream` → the trace stops at the model cell + ONE Data quality note:
   "Figures trace to the model but not through to the borrower's own monthly file for this month." The
   module records the gap; the renderer reports it rather than trying to close it.
 - A trace hop whose file cannot be resolved renders as a PLAIN-TEXT hop line naming the file (`h: null` —

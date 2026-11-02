@@ -17,6 +17,7 @@ import json
 import os
 import re
 import shutil
+import tempfile
 from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path
@@ -25,10 +26,12 @@ try:
     from plugin.lib.persistence import *  # noqa: F401,F403 - shared primitives
     from plugin.lib import store_transaction as transaction
     from plugin.lib import workbook_integrity as integrity
+    from plugin.lib import source_register
 except ModuleNotFoundError:
     from persistence import *  # noqa: F401,F403 - extracted plugin script
     import store_transaction as transaction
     import workbook_integrity as integrity  # noqa: E402 - extracted plugin script
+    import source_register
 
 StoreRecoveryError = transaction.StoreRecoveryError
 
@@ -135,14 +138,21 @@ def _guard_write_retry(deal_root, before, writes):
 
 def _apply_writes(deal_root, writes):
     """Apply planned working-copy writes, in the given (dict) order, each as
-    one durable single-file replace or delete. Not a multi-file transaction:
-    an interruption here leaves whatever prefix of `writes` already landed,
-    and the caller's own operation is retried from scratch -- its guard
-    checks and its `writes` are recomputed from current disk state, so a
-    retry against the same saved run finishes what is left rather than
-    redoing what already landed."""
+    one durable single-file replace, then the planned removals. Not a
+    multi-file transaction: an interruption here leaves whatever prefix of
+    `writes` already landed, and the caller's own operation is retried from
+    scratch -- its guard checks and its `writes` are recomputed from current
+    disk state, so a retry against the same saved run finishes what is left
+    rather than redoing what already landed.
+
+    Removals come after every write, the working manifest included, so a
+    folder that refuses deletes (a connected computer until the analyst
+    allows them, a SharePoint library) still holds the whole delivery. A file
+    it would not remove stays where it was, as the store allows, and is
+    returned."""
     before = transaction.snapshot(deal_root)
-    for rel, value in writes.items():
+    not_removed = []
+    for rel, value in sorted(writes.items(), key=lambda item: item[1] is None):
         target = transaction.path_in(deal_root, rel)
         actual = transaction.digest(target)
         if actual == _write_digest(deal_root, value):
@@ -150,9 +160,11 @@ def _apply_writes(deal_root, writes):
         if actual != before.get(rel):
             raise ValueError(f"working file changed during delivery: {rel}")
         if value is None:
-            if target.exists():
+            try:
                 target.unlink()
                 transaction.sync_directory(target.parent)
+            except OSError:
+                not_removed.append(rel)
         elif "text" in value:
             transaction.atomic_file(target, text=value["text"])
         else:
@@ -160,6 +172,7 @@ def _apply_writes(deal_root, writes):
             if not source.exists():
                 raise ValueError(f"preserved source is missing: {value['source']}")
             transaction.atomic_file(target, source=source)
+    return not_removed
 
 
 def _json_write(value):
@@ -559,7 +572,7 @@ def published_run(monitor_output_folder, period, run_id, catalog=None):
     return _selected_run_guard(monitor_output_folder, period, run_id, catalog)
 
 
-def latest_published(monitor_output_folder, before_period=None, catalog=None):
+def latest_published(monitor_output_folder, before_period=None, catalog=None, through_period=None):
     deal = deal_root_of(resolve_output_path(monitor_output_folder))
     if deal is None:
         raise ValueError(
@@ -568,7 +581,9 @@ def latest_published(monitor_output_folder, before_period=None, catalog=None):
     months = data.get("months") or {}
     if not isinstance(months, dict):
         raise ValueError(f"{published_path(deal)} does not hold one run id per month.")
-    periods = sorted(p for p in months if before_period is None or str(p) < str(before_period))
+    periods = sorted(p for p in months
+                     if (before_period is None or str(p) < str(before_period))
+                     and (through_period is None or str(p) <= str(through_period)))
     if not periods:
         return None
     run_id = _published_entry(data, periods[-1])
@@ -619,6 +634,7 @@ def mark_step(run_folder, step, state="done", module=None):
     with store_lock(deal):
         if Path(run_folder, MANIFEST_NAME).exists():
             raise ValueError("the run is frozen; its ledger cannot be changed")
+        _require_active_run(run_folder)
         return _mark_step(run_folder, step, state, module)
 
 
@@ -707,8 +723,8 @@ def _execution_config(config_path, config_target, model_target):
         except ValueError:
             continue
         copied = os.path.join(config_target, *rel.parts)
-        if os.path.isfile(resolve_path(value)):
-            paths[key] = _snapshot_store_path(copied)
+        # Missing declared controls must stay missing, not read a later live file.
+        paths[key] = _snapshot_store_path(copied)
     paths["model_output_path"] = _snapshot_store_path(model_target)
     return execution
 
@@ -722,6 +738,7 @@ def snapshot_run_inputs(run_folder, config_path, model_path):
     with store_lock(deal):
         if Path(run_folder, MANIFEST_NAME).exists():
             raise ValueError("the run is frozen; its inputs cannot be changed")
+        _require_active_run(run_folder)
         return _snapshot_run_inputs(run_folder, config_path, model_path)
 
 
@@ -732,6 +749,17 @@ def _consume_edit_sidecar_source(run_folder, ledger):
     workspace when it holds both sidecars. The borrower root itself never
     holds sidecars -- only the delivered workbook the analyst edited."""
     base = ledger.get("base") or {}
+    if ledger.get('consume_edit'):
+        deal = deal_root_of(run_folder)
+        intake = read_edit_intake(deal)
+        if intake.get('run_id') and intake.get('period'):
+            reviewed = _immutable_run_folder(deal, str(intake['period']), str(intake['run_id']))
+            checked = verify_manifest(reviewed)
+            if checked['status'] != 'ok':
+                raise ValueError('The delivery reviewed for edit intake no longer verifies')
+            map_path = Path(reviewed, 'source-map.json')
+            if map_path.is_file() and json.loads(map_path.read_text(encoding='utf-8')).get('register'):
+                return reviewed
     if base.get("from") != "run" or not base.get("run_id") or not base.get("period"):
         deal = deal_root_of(run_folder)
         canonical = Path(deal) / "_model"
@@ -768,7 +796,7 @@ def _snapshot_run_inputs(run_folder, config_path, model_path):
         # model actually being staged is that exact reviewed content, not
         # something else the caller passed by mistake, BEFORE trusting
         # anything else about this snapshot.
-        if not os.path.isfile(model_path) or file_sha256(model_path) != pin.get("digest"):
+        if not os.path.isfile(model_path) or file_id(model_path) != pin.get("digest"):
             raise ValueError(
                 f"this run is pinned to consume the accepted edit at {pin.get('path')!r} "
                 f"(digest {pin.get('digest')}); the given model does not match it.")
@@ -788,10 +816,24 @@ def _snapshot_run_inputs(run_folder, config_path, model_path):
     if os.path.exists(config_target) or any(os.path.exists(path) for path in targets):
         raise ValueError("the run already contains an incomplete input snapshot; refusing to overwrite it.")
     execution = _execution_config(config_path, config_target, targets[0])
-    shutil.copytree(config_source, config_target)
-    for source, target in zip(sources, targets):
-        _copy_into_place(source, target)
-    write_output(execution, os.path.join(config_target, EXECUTION_CONFIG_NAME))
+    mapping = json.loads(Path(sidecar_dir, 'source-map.json').read_text(encoding='utf-8')) if pin else {}
+    edited_original = None
+    with tempfile.TemporaryDirectory(prefix='run-model-refresh-') as scratch:
+        if pin and mapping.get('register'):
+            original = os.path.join(sidecar_dir, os.path.basename(model_path))
+            refreshed = os.path.join(scratch, os.path.basename(model_path))
+            result = source_register.refresh_edit(original, model_path, mapping, refreshed)
+            edited_original = 'edited-original/' + os.path.basename(model_path)
+            # Preserve the pin before staging its derived output. A failed refresh above writes nothing to the run.
+            _copy_into_place(model_path, os.path.join(run_folder, edited_original))
+            sources[0] = refreshed
+            map_path = os.path.join(scratch, 'source-map.json')
+            Path(map_path).write_text(json.dumps(result['source_map']), encoding='utf-8')
+            sources[sources.index(os.path.join(sidecar_dir, 'source-map.json'))] = map_path
+        shutil.copytree(config_source, config_target)
+        for source, target in zip(sources, targets):
+            _copy_into_place(source, target)
+        write_output(execution, os.path.join(config_target, EXECUTION_CONFIG_NAME))
 
     ledger["inputs"] = {
         "config": CONFIG_DIR,
@@ -799,6 +841,11 @@ def _snapshot_run_inputs(run_folder, config_path, model_path):
         "sidecars": [os.path.basename(path) for path in sources[1:]],
         "execution_config": EXECUTION_CONFIG_NAME,
     }
+    if edited_original:
+        ledger['inputs']['edited_original'] = edited_original
+        ledger['inputs']['edited_original_digest'] = file_sha256(os.path.join(run_folder, edited_original))
+        ledger['inputs']['refreshed_digest'] = file_sha256(targets[0])
+        ledger['inputs']['refreshed_map_digest'] = file_sha256(os.path.join(run_folder, 'source-map.json'))
     ledger.setdefault("steps", {})["config"] = "done"
     ledger["steps"]["model"] = "done"
     write_output(ledger, ledger_path(run_folder))
@@ -823,8 +870,55 @@ def resumable_run(monitor_output_folder, period):
             if (str(ledger.get("period")) != str(period)
                     or str(ledger.get("run_id")) != name):
                 raise ValueError("the run ledger identity does not match its folder.")
+            if ledger.get("status") == "abandoned":
+                # Set aside on purpose (see abandon_run): preserved, never resumed.
+                continue
             return {"run_id": name, "folder": here, "ledger": ledger}
     return None
+
+
+def _require_active_run(run_folder):
+    ledger = read_ledger(run_folder)
+    if ledger and ledger.get('status') == 'abandoned':
+        raise ValueError('the run was abandoned; start a fresh run instead')
+
+
+def abandon_run(run_folder, reason):
+    """Set an unfinished run aside so the next `open` starts fresh.
+
+    A run whose pinned working state no longer matches the deal folder can never
+    deliver (`_guard_stale_run`), and `resumable_run` would hand it back to every
+    later `open` for the same month -- the month was stuck. This records the
+    decision on the run's own ledger: status `abandoned`, when, and why. Nothing is
+    deleted or moved; the folder stays as evidence and is simply skipped when the
+    next run opens. A frozen run (one with a manifest) is not unfinished and cannot
+    be abandoned; discard it instead.
+    """
+    run_folder = resolve_output_path(run_folder)
+    deal = deal_root_of(run_folder)
+    if deal is None:
+        raise ValueError("run is not inside a borrower record")
+    reason = " ".join(str(reason or "").split())
+    if not reason:
+        raise ValueError("say why the run is being set aside; the ledger records it")
+    with store_lock(deal):
+        if Path(run_folder, MANIFEST_NAME).exists():
+            raise ValueError("the run is frozen; discard it rather than abandon it")
+        ledger = read_ledger(run_folder)
+        folder = Path(run_folder)
+        if (not ledger or folder.parent.parent != Path(record_dir(deal)) / RUNS_DIR
+                or ledger.get('schema') != LEDGER_SCHEMA
+                or ledger.get('run_id') != folder.name
+                or ledger.get('period') != folder.parent.name
+                or ledger.get('status') not in ('in-flight', 'abandoned')):
+            raise ValueError('invalid run path or ledger identity for abandonment')
+        if ledger.get("status") == "abandoned":
+            return ledger
+        ledger["status"] = "abandoned"
+        ledger["abandoned_at"] = _now().isoformat(timespec="seconds")
+        ledger["abandoned_reason"] = reason
+        write_output(ledger, ledger_path(run_folder))
+        return read_ledger(run_folder)
 
 
 def adopt_into_run(run_folder, source_path):
@@ -868,9 +962,11 @@ def repoint_refs(run_folder, deal_root, period=None, catalog=None, roles=None):
             continue
         old = text
         if _zone_of(rel, deal_names) == "deal":
-            text = text.replace(deal_rel, run_rel)
+            # Immutable references already name their run, including historical runs.
+            prefix = re.escape(deal_rel) + rf"(?!/{re.escape(RECORD_DIR)}/{RUNS_DIR}/)"
         else:
-            text = text.replace(f"{deal_rel}/{RECORD_DIR}/{CURRENT_DIR}", run_rel)
+            prefix = re.escape(f"{deal_rel}/{RECORD_DIR}/{CURRENT_DIR}")
+        text = re.sub(prefix + r"(?=/|[\"'<>\s?#]|$)", lambda _match: run_rel, text)
         if text != old:
             _write_text(full, text)
             changed[rel] = 1
@@ -908,7 +1004,7 @@ def _delivery_writes(run_folder, deal_root, status="draft"):
             writes[target] = None
     if os.path.exists(_edit_intake_path(deal_root)):
         writes[".record/" + EDIT_INTAKE_NAME] = None
-    # The working manifest moves last: it identifies a complete delivery.
+    # The working manifest is the last write: it identifies a complete delivery.
     writes[".record/manifest.json"] = _json_write(
         dict(manifest, status=status, published=status == "accepted"))
     return writes
@@ -1081,6 +1177,7 @@ def finish_run(run_folder, deal_root, run_id=None, period=None, by=None,
         raise ValueError("the run is not complete: " + ", ".join(waiting))
 
     with store_lock(deal_root):
+        _require_active_run(run_folder)
         ledger = read_ledger(run_folder)
         if (ledger is None or ledger.get("run_id") != run_id or ledger.get("period") != period):
             raise ValueError("the run ledger identity does not match its folder")
@@ -1099,8 +1196,8 @@ def finish_run(run_folder, deal_root, run_id=None, period=None, by=None,
                 writes = _delivery_writes(run_folder, deal_root)
                 before = ledger.get("delivery_base")
                 _guard_write_retry(deal_root, before, writes)
-                _apply_writes(deal_root, writes)
-                refreshed = {"written": list(writes)}
+                refreshed = {"written": list(writes),
+                             "not_removed": _apply_writes(deal_root, writes)}
             else:
                 _guard_visible_edits(deal_root)
             # Already delivered: never change an accepted run back to draft.
@@ -1143,8 +1240,8 @@ def finish_run(run_folder, deal_root, run_id=None, period=None, by=None,
             if rel not in old_roles.values() and transaction.path_in(deal_root, rel).exists():
                 raise ValueError(f"delivery would overwrite an unrecorded file: {rel}")
         _guard_stale_run(deal_root, run_id, period, ledger)
-        _apply_writes(deal_root, writes)
-        refreshed = {"written": list(writes)}
+        refreshed = {"written": list(writes),
+                     "not_removed": _apply_writes(deal_root, writes)}
     return {
         "run_id": run_id,
         "period": period,
@@ -1214,17 +1311,49 @@ def read_edit_intake(deal_root):
     return data
 
 
+def _spent_acceptances(deal_root):
+    """Every acceptance a frozen run already consumed, as (path, digest, at).
+    A frozen run keeps its manifest even after its draft is discarded."""
+    spent = set()
+    runs = os.path.join(record_dir(deal_root), RUNS_DIR)
+    for period in (os.listdir(runs) if os.path.isdir(runs) else ()):
+        folder = os.path.join(runs, period)
+        if not os.path.isdir(folder):
+            continue
+        for run in os.listdir(folder):
+            manifest = read_manifest(os.path.join(folder, run)) or {}
+            for entry in manifest.get("edit_intake") or ():
+                if isinstance(entry, dict):
+                    spent.add((entry.get("path"), entry.get("digest"), entry.get("at")))
+    return spent
+
+
+def _unspent(deal_root, accepted):
+    spent = _spent_acceptances(deal_root)
+    return {path: entry for path, entry in accepted.items()
+            if isinstance(entry, dict)
+            and (path, entry.get("digest"), entry.get("at")) not in spent}
+
+
 def _live_accepted(deal_root, manifest):
     """Accepted entries still bound to the run this borrower currently shows,
-    i.e. taken before this exact manifest was superseded by a later delivery."""
+    i.e. taken before this exact manifest was superseded by a later delivery,
+    and not yet consumed by a frozen run. Finish deletes the record, but a
+    store whose host cannot delete keeps it, and discarding the consuming
+    run's draft puts the run it was bound to back on show."""
     data = read_edit_intake(deal_root)
     if (not data or data.get("run_id") != manifest.get("run_id")
             or data.get("period") != manifest.get("period")):
         return {}
-    return data.get("accepted") or {}
+    return _unspent(deal_root, data.get("accepted") or {})
 
 
-def unapproved_deal_work(monitor_output_folder, catalog=None):
+# The most moves one comparison lists: an inserted column can move every
+# cell in a sheet, and `check --json` must stay small enough to read.
+MOVES_LISTED = 200
+
+
+def unapproved_deal_work(monitor_output_folder, catalog=None, moves=False):
     """What the deal folder holds that a delivery would write over.
 
     `changed` always lists every real content change, whether or not it was
@@ -1235,10 +1364,18 @@ def unapproved_deal_work(monitor_output_folder, catalog=None):
     -- when one exists -- the still-live intake acceptance for that exact
     digest) so a caller can require/recheck those exact digests rather than
     accept whatever now happens to be on disk.
+
+    With `moves`, each changed workbook's comparison also names what moved
+    (`integrity.file_moves`: its `moved` cells and rows, else the `look`
+    that changed), so a reviewer reads the change, not a digest. Past
+    `MOVES_LISTED`, `moved` holds the first ones and `moved_count` all of
+    them, and `look_unchecked` says why a repackaged workbook's look was not
+    compared. Off by default: only `check` shows it, and it reads both
+    workbooks again.
     """
     empty = {"checked": False, "changed": [], "missing": [], "unreadable": [],
-             "repackaged": [], "comparisons": [], "run_id": None, "period": None,
-             "unpublished": False}
+             "repackaged": [], "look_unchecked": {}, "comparisons": [], "run_id": None,
+             "period": None, "unpublished": False}
     deal = deal_root_of(resolve_output_path(monitor_output_folder))
     if deal is None:
         return empty
@@ -1253,6 +1390,7 @@ def unapproved_deal_work(monitor_output_folder, catalog=None):
     names = {workbook_name, roles["memo"]}
     live = _live_accepted(deal, manifest)
     changed, missing, unreadable, repackaged, comparisons = [], [], [], [], []
+    look_unchecked = {}
     for rel, expected in sorted((manifest.get("files") or {}).items()):
         if _zone_of(rel, names) == "deal":
             locations = [(os.path.join(deal, rel), rel)]
@@ -1267,24 +1405,35 @@ def unapproved_deal_work(monitor_output_folder, catalog=None):
                 missing.append(shown)
                 continue
             try:
-                digest = file_sha256(here)
-                if digest == expected:
+                if same_id(here, expected):
                     continue
+                digest = file_id(here)
                 # Bytes moved but cells may not have: Excel/SharePoint
                 # re-wraps the container. Only a real content change
                 # blocks delivery; repackaging is reported, not refused.
                 frozen = os.path.join(immutable, *rel.split("/"))
                 if integrity.same_content(frozen, here):
                     repackaged.append(shown)
+                    if moves and rel.lower().endswith((".xlsx", ".xlsm")):
+                        why = integrity.look_unchecked(frozen, here)
+                        if why:
+                            look_unchecked[shown] = why
                     continue
                 changed.append(shown)
                 taken = live.get(shown)
-                comparisons.append({
+                comparison = {
                     "path": shown, "expected": expected, "digest": digest,
                     "intake": ({"digest": taken["digest"], "at": taken.get("at"),
                                "reason": taken.get("reason")}
                               if taken and taken.get("digest") == digest else None),
-                })
+                }
+                if moves and rel.lower().endswith((".xlsx", ".xlsm")):
+                    listed = integrity.file_moves(frozen, here)
+                    if len(listed["moved"]) > MOVES_LISTED:
+                        listed.update(moved=listed["moved"][:MOVES_LISTED],
+                                      moved_count=len(listed["moved"]))
+                    comparison.update(listed)
+                comparisons.append(comparison)
             except (OSError, StoreAccessError):
                 unreadable.append(shown)
 
@@ -1296,6 +1445,7 @@ def unapproved_deal_work(monitor_output_folder, catalog=None):
         "missing": missing,
         "unreadable": unreadable,
         "repackaged": repackaged,
+        "look_unchecked": look_unchecked,
         "comparisons": comparisons,
         "run_id": run_id,
         "period": period,
@@ -1343,7 +1493,7 @@ def record_edit_intake(deal_root, edits, reason=None):
         comparisons = {c["path"]: c for c in found["comparisons"]}
         at = _now().isoformat(timespec="seconds")
         data = read_edit_intake(deal_root)
-        accepted = dict(data.get("accepted") or {}) if (
+        accepted = _unspent(deal_root, data.get("accepted") or {}) if (
             data.get("run_id") == found["run_id"]
             and data.get("period") == found["period"]) else {}
         for path, digest in pairs:
@@ -1363,9 +1513,18 @@ def record_edit_intake(deal_root, edits, reason=None):
                     f"{path!r} no longer matches the digest just reviewed "
                     f"({digest}); check now reports {comparison['digest']}. Run "
                     "check again and accept its current comparison, not a stale one.")
-            held = integrity._held_workbook_reason(
-                os.path.join(immutable, roles["financial_workbook"]),
-                os.path.join(deal_root, *path.split("/")))
+            original = os.path.join(immutable, roles['financial_workbook'])
+            edited = os.path.join(deal_root, *path.split('/'))
+            source_map_path = os.path.join(immutable, 'source-map.json')
+            source_map = json.loads(Path(source_map_path).read_text(encoding='utf-8')) if os.path.isfile(source_map_path) else {}
+            if source_map.get('register'):
+                try:
+                    source_register.register_edits(original, edited, source_map)
+                    held = None
+                except ValueError as exc:
+                    held = str(exc)
+            else:
+                held = integrity._held_workbook_reason(original, edited)
             if held is not None:
                 raise ValueError(
                     f"{path!r} cannot be taken as a reported figure: {held}. "
@@ -1447,9 +1606,33 @@ def _finish_guard(deal_root, run_folder, ledger):
         comparisons = {c["path"]: c for c in found["comparisons"]}
         comparison = comparisons.get(pin["path"]) or {}
         intake = comparison.get("intake") or {}
-        staged = os.path.join(run_folder, os.path.basename(pin["path"]))
+        inputs = ledger.get('inputs') or {}
+        original_rel = inputs.get('edited_original')
         try:
-            staged_digest = file_sha256(staged) if os.path.isfile(staged) else None
+            base_dir = _consume_edit_sidecar_source(run_folder, ledger)
+            base_map = json.loads(Path(base_dir, 'source-map.json').read_text(encoding='utf-8'))
+        except (ValueError, OSError) as exc:
+            raise ValueError('The visible files were edited since the last delivery; verified refresh inputs are unavailable') from exc
+        if base_map.get('register') and not original_rel:
+            raise ValueError('Registered edit requires successful refresh evidence before finish')
+        expected_original = 'edited-original/' + os.path.basename(pin['path'])
+        if original_rel and original_rel != expected_original:
+            raise ValueError('Invalid consumed-edit original snapshot path')
+        staged = os.path.join(run_folder, original_rel or os.path.basename(pin['path']))
+        if original_rel:
+            original_digest = inputs.get('edited_original_digest')
+            if original_digest and file_sha256(staged) != original_digest:
+                raise ValueError('Consumed-edit original snapshot changed after snapshot')
+            refreshed = transaction.path_in(run_folder, inputs.get('model'))
+            if file_sha256(refreshed) != inputs.get('refreshed_digest'):
+                raise ValueError('Refreshed consumed-edit output changed after snapshot')
+            map_path = Path(run_folder, 'source-map.json')
+            if file_sha256(map_path) != inputs.get('refreshed_map_digest'):
+                raise ValueError('Refreshed consumed-edit sidecar changed after snapshot')
+            if not same_id(refreshed, json.loads(map_path.read_text(encoding='utf-8')).get('register', {}).get('workbook_digest')):
+                raise ValueError('Refreshed sidecar does not match workbook')
+        try:
+            staged_digest = file_id(staged) if os.path.isfile(staged) else None
         except (OSError, StoreAccessError):
             staged_digest = None
         if (comparison.get("digest") == pin.get("digest")
@@ -1476,30 +1659,14 @@ def _latest_accepted_entry(deal_root):
     return {"period": period, "run": str(run_id)} if run_id else None
 
 
-def _first_discard_writes(deal_root, manifest):
-    writes = {}
-    for role in ("financial_workbook", "memo"):
-        rel = manifest["roles"][role]
-        writes[rel] = None
-        if role == "financial_workbook":
-            writes[".record/current/" + rel] = None
-    writes[".record/manifest.json"] = _json_write({
-        "schema": MANIFEST_SCHEMA, "schema_version": STORE_SCHEMA_VERSION,
-        "status": "no_accepted_result", "published": False,
-        "period": manifest.get("period"), "files": {}, "roles": {},
-    })
-    return writes
-
-
 def discard_draft(deal_root, run_id, period=None, reason=None):
     """Discard the currently visible DRAFT named `run_id` for `period`.
 
     Discarding never deletes the frozen run under `runs/<period>/<run-id>/` --
-    only the working copy changes. When this borrower has an accepted run
-    (for any period), the visible files are restored from it. Otherwise this
-    is the borrower's first discard: the draft's deliverables are removed,
-    `.record/manifest.json` is left naming no accepted result, and
-    `.record/current/config` and `_model/` are untouched.
+    only the working copy changes: the visible files are restored from the
+    borrower's latest accepted run (for any period). With no accepted run
+    there is nothing to restore, so a borrower's first review cannot be
+    discarded.
     """
     deal_root = resolve_output_path(deal_root)
     _reject_deal_alias(deal_root)
@@ -1526,7 +1693,8 @@ def discard_draft(deal_root, run_id, period=None, reason=None):
         if manifest.get("status") == "accepted":
             raise ValueError(
                 f"{run_id!r} for {period!r} is already accepted; there is no draft to discard.")
-        if _latest_accepted_entry(deal_root) is None:
+        accepted = _latest_accepted_entry(deal_root)
+        if accepted is None:
             raise ValueError(
                 "the first review cannot be discarded: there is no prior accepted result to restore. "
                 "Accept this draft or leave it unpublished.")
@@ -1541,13 +1709,8 @@ def discard_draft(deal_root, run_id, period=None, reason=None):
                     "resolve those edits before discarding: " + ", ".join(changed))
 
         verified_run(current_dir(deal_root), period, run_id)
-        accepted = _latest_accepted_entry(deal_root)
-        restore_folder = (
-            _immutable_run_folder(deal_root, accepted["period"], accepted["run"])
-            if accepted else None)
-
-        if accepted:
-            published_run(current_dir(deal_root), accepted["period"], accepted["run"])
+        restore_folder = _immutable_run_folder(deal_root, accepted["period"], accepted["run"])
+        published_run(current_dir(deal_root), accepted["period"], accepted["run"])
         # The decision line is recorded before the working files/manifest
         # change, and skipped here if a retry finds it already landed: a
         # partial discard interrupted after this line but before the rest
@@ -1559,8 +1722,7 @@ def discard_draft(deal_root, run_id, period=None, reason=None):
                 "at": _now().isoformat(timespec="seconds"), "event": "discarded",
                 "borrower": borrower, "period": period, "run_id": run_id, "reason": reason,
             })
-        writes.update(_delivery_writes(restore_folder, deal_root, "accepted") if restore_folder
-                      else _first_discard_writes(deal_root, manifest))
+        writes.update(_delivery_writes(restore_folder, deal_root, "accepted"))
         if decided:
             # The recorded discard plus its saved draft identifies the pre-copy
             # files. Only those bytes or the verified restoration are allowed.
@@ -1578,6 +1740,6 @@ def discard_draft(deal_root, run_id, period=None, reason=None):
         "discarded": True,
         "run_id": run_id,
         "period": period,
-        "restored": accepted["run"] if accepted else None,
-        "status": "accepted" if accepted else "no_accepted_result",
+        "restored": accepted["run"],
+        "status": "accepted",
     }

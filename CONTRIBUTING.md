@@ -14,7 +14,7 @@ Before opening a change:
 
 ## Build and validate
 
-Requirements: Python 3.10+, dependencies from `requirements.txt`, and LibreOffice for workbook formula recalculation. Install the Python dependency with:
+Technical verification targets provisioned POSIX Python 3.12, dependencies from `requirements.txt`, and LibreOffice where workbook formula recalculation is required. Native Windows Python is not a supported engine route because store locking requires POSIX. Cowork acceptance requires a real session. See the [runtime prerequisites](plugins/credit-monitoring/references/runtime-prerequisites.md). For an explicitly approved developer environment, install the Python dependencies with:
 
 ```sh
 python3 -m pip install -r requirements.txt

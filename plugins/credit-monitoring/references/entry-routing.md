@@ -6,9 +6,38 @@ sentence: no reasoning, plan, status line, tool narration, skill name, internal 
 word. The classification is internal control data; never print or paraphrase the classification.
 
 When a selected route specifies both a welcome and an initial menu, treat them as one atomic first
-interaction: emit the complete welcome as assistant text, then immediately call `AskUserQuestion`
-with the matching menu in the same assistant turn. The tool call does not replace the welcome. Never
-send the menu alone or render its bracketed choices as assistant text.
+interaction: the complete welcome, then the menu, in the same turn, never the menu alone.
+`runtime/<runtime>/asking.md` says how the runtime sends the two.
+
+## 0. Know the runtime
+
+Work out which runtime this session is in before anything else. Like the classification, the
+runtime is internal control data: never print it.
+
+| Runtime | How you know | `<runtime>` |
+|---|---|---|
+| A Claude Tag channel | The session is told "This is the Slack entrypoint", and replies reach the thread only through `mcp__slackbot__*` tools. No folder can be attached or requested here. | `claude-tag` |
+| Cowork | Any other session. Folders the analyst approves appear under `/sessions/*/mnt/`, or, in a session that runs in the cloud, stay on the analyst's computer behind the `mcp__remote-devices__*` tools. | `cowork` |
+
+Then read the runtime's four files, beside this file. Each covers one concern, and the skills point
+to them wherever the runtimes differ:
+
+| File | Covers |
+|---|---|
+| `runtime/<runtime>/files.md` | How this session reaches the borrower's documents and the monitoring store, what to say about them, and the path forms a worker uses |
+| `runtime/<runtime>/asking.md` | How a menu or question reaches the analyst, or what settles it instead, and how progress is reported |
+| `runtime/<runtime>/delivery.md` | How finished files reach the analyst, and the finished message |
+| `runtime/<runtime>/dashboard.md` | How the portfolio dashboard is created, opened and kept current |
+
+A path written `runtime/<runtime>/…` in a skill, agent or reference means this runtime's file. Name
+the runtime in every worker brief, so the worker reads the same files.
+
+If one of the runtime's files says it is not written yet, tell the analyst in plain words that
+credit monitoring cannot run here yet, change nothing, and stop.
+
+**store-setup**, **monitor-setup**, **covenant-setup**, **build-monitoring-model** and
+**open-folder-guide** run only in Cowork. In any other runtime, a step that needs one of them tells
+the analyst that it has to be done in Cowork for now, changes nothing, and stops.
 
 ## 1. Understand the request
 
@@ -43,7 +72,7 @@ one journey state:
 
 | State | Meaning |
 |---|---|
-| `unknown` | The monitoring store is not reachable in this Cowork conversation. Nothing is known yet. |
+| `unknown` | The monitoring store is not reachable in this session. Nothing is known yet. |
 | `new` | The store is reachable and the borrower is not registered. |
 | `setup_incomplete` | The borrower is registered but setup is unfinished. |
 | `first_review_pending` | Setup is complete but no monthly review has been published. |
@@ -51,7 +80,7 @@ one journey state:
 | `ready` | At least one review is complete and no monthly run is unfinished. |
 
 **Unknown is not clean.** Never call a borrower new, incomplete, or ready until the selected store is
-reachable. Folder approval can be session scoped, so reconnecting folders does not repeat setup.
+reachable.
 
 For a named borrower, also read `interrupted_run`, `unpublished_run`, `selected_run`,
 `finalization_warnings`, and `lifecycle_warnings` as independent facts. They may coexist. An
@@ -68,7 +97,7 @@ for an unpublished or selected result. Always include **[Stop without making cha
   **[Approve finalization]** before retrying the saved run's finalization. If that retry fails, offer
   **[Retry finalization]**. Both actions write and require that explicit approval. A stale-run,
   changed-file or recovery-journal refusal is not permission to force delivery. Preserve the files,
-  explain the conflict and follow `references/store-contract.md`; do not remove the journal.
+  explain the conflict and follow `store-contract.md`; do not remove the journal.
 - For `interrupted_run`, offer **[Resume the interrupted review]**. Resuming writes and requires
   approval. When present, also offer **[Open the unpublished result]** and **[Open the selected
   result]**; these open only the exact returned role paths and are read only.
@@ -101,7 +130,7 @@ Fill in the borrower name where known. These are complete welcomes; do not add a
 >
 > A review is complete when both files are attached here and I tell you where they were saved."
 
-For an unqualified start request, immediately call `AskUserQuestion` with:
+For an unqualified start request, immediately ask this menu:
 
 > "How would you like to begin?"
 >
@@ -128,10 +157,10 @@ For an unqualified start request, immediately call `AskUserQuestion` with:
   **store-setup** without repeating the welcome or generic continue menu. Use normal company
   selection for one borrower; downloading files alone does not authorize a review.
 - **Use my own documents** → preserve this as route intent and follow **store-setup** without asking
-  for a company name first. It is not permission to open a native picker immediately: store-setup
-  must explain both folders, attach the guide, ask its readiness question, and wait for the answer.
-  After access, use the normal company selection. Do not ask the generic continue menu.
-- **Not now** → stop without opening a picker or changing anything.
+  for a company name first. It is route intent, not permission to request a folder immediately:
+  `runtime/<runtime>/files.md` says what has to happen first. After access, use the normal company
+  selection. Do not ask the generic continue menu.
+- **Not now** → stop without requesting a folder or changing anything.
 
 For explicit review intent with no company name, preserve that intent and use the generic
 continue-or-stop menu in Section 4; never show the generic onboarding choices. After access, use the
@@ -248,19 +277,14 @@ silently treated as the user's choice.
 
 ## 4. Ask before any write
 
-Call `AskUserQuestion` for every menu in this reference. Never render bracketed choices as plain
-assistant text; the user must receive clickable options.
+Ask every menu in this reference as `runtime/<runtime>/asking.md` says.
 
 The no-name, no-records onboarding menu above is the only exception for an unqualified start request.
 Choosing **[Explore the completed sample (recommended)]** or **[Use my own documents]** selects the route and
 replaces this generic menu. It does not satisfy either folder-readiness gate in store-setup.
 
-For every other route where the state is literally `unknown` or `new`, use this menu:
-
-> "Before I open any folders, would you like me to continue and save this review in a folder you
-> choose, or stop without changing anything?"
->
-> **[Continue and choose folders]** / **[Stop without making changes]**
+For every other route where the state is literally `unknown` or `new`, use the menu under **Before
+opening any folders** in `runtime/<runtime>/files.md`.
 
 When Section 2 or 3 provides a fact-specific action menu, use that menu and do not follow it with the
 generic continue menu. Otherwise, only for `setup_incomplete`, `first_review_pending`,
@@ -276,7 +300,7 @@ the write permission; do not ask the returning-borrower permission menu again. O
 results is read only and needs no write permission.
 
 Only after a continue or start-and-save choice may the workflow request or reapprove folders, prepare
-a store, open or resume a run, or write a file. A stop choice opens no picker and changes nothing.
+a store, open or resume a run, or write a file. A stop choice requests no folder and changes nothing.
 
 ## 5. Preserve direct commands
 

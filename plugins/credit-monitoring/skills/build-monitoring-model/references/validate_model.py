@@ -27,8 +27,9 @@ for path in (_HERE, _LIB_DIR):
     if path not in sys.path:
         sys.path.insert(0, path)
 
-import openpyxl  # noqa: E402
 import monitor_lib as ml  # noqa: E402
+
+openpyxl = ml.prerequisites.openpyxl
 import cashflow  # noqa: E402
 
 _STATEMENT_SHEETS = ("Income Statement", "Balance Sheet", "Cash Flow Statement")
@@ -37,6 +38,7 @@ _STATEMENT_SHEETS = ("Income Statement", "Balance Sheet", "Cash Flow Statement")
 def validate(path):
     """Returns (errors, warnings). Errors block the build (recalc-drop corruption);
     warnings are surfaced but do not block."""
+    ml.prerequisites.check_workbook()
     try:
         model = ml.open_model(path)
     except Exception as e:
@@ -96,6 +98,7 @@ def main():
     if len(sys.argv) != 2:
         print("usage: python validate_model.py <model.xlsx>")
         sys.exit(2)
+    ml.prerequisites.require_workbook()
     errors, warnings = validate(sys.argv[1])
     for w in warnings:
         print("  ! (warning)", w)

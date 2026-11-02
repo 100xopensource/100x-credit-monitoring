@@ -8,7 +8,17 @@ This installed package turns borrower reporting and loan documents into a struct
 
 [View the live dashboard](https://100xpartners.ai/credit-monitoring/) or [download the completed sample](https://github.com/100xopensource/100x-credit-monitoring/tree/main/sample-output). The sample includes six fictional borrowers' June 2026 workbooks, memos, dashboard, and supporting saved records. Viewing does not start a review.
 
-Continuation is not verified: the current candidate rejects this saved store during results-folder setup. Use the standalone reports or the sample guide's fresh-run instructions with a separate empty results folder.
+Continuation is not verified. Use the standalone reports or the sample guide's fresh-run instructions with a separate empty results folder.
+
+## Runtime readiness
+
+Read [CLAUDE.md](CLAUDE.md) and [runtime prerequisites/recovery](references/runtime-prerequisites.md).
+Before workbook assembly, model-builder dispatch or workbook-backed analysis, run
+`python "${CLAUDE_PLUGIN_ROOT}/lib/requirements.py"` in the same interpreter as the engines.
+Required workbook support is `openpyxl==3.1.5`; failure stops that work without replacing
+results. The probe is check-only: no installation, download or assumed network. Independent
+folder/store/JSON/HTML work remains usable. PDF import readiness and pending recalculation
+integration do not prove extraction/fallback or Cowork host compatibility.
 
 ## Run it
 
@@ -25,7 +35,7 @@ Each review produces exactly:
 1. one financial workbook with monthly history, supporting schedules, and monitoring calculations; and
 2. one monitoring memo covering performance, liquidity, covenants, risks, evidence, and missing information.
 
-The optional portfolio dashboard is a separate combined view of reviews you have already finished, not a third output. Private dashboard creation and opening are supported in v1; updating a hosted dashboard at the same link is not.
+The optional portfolio dashboard is a separate combined view of reviews you have already finished, not a third output. Private dashboard creation and opening are supported in Cowork; updating a hosted dashboard at the same link is not.
 
 ## Drafts, edits and saved results
 

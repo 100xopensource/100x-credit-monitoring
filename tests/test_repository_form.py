@@ -171,7 +171,8 @@ class RepositoryFormTest(unittest.TestCase):
         plugin = ROOT / "plugins" / "credit-monitoring"
         entry = (plugin / "references" / "entry-routing.md").read_text()
         asking = (plugin / "references" / "asking.md").read_text()
-        folders = (plugin / "references" / "connecting-folders.md").read_text()
+        folders = (plugin / "references" / "runtime" / "cowork" / "files.md").read_text()
+        asking += "\n" + folders
         store = (plugin / "skills" / "store-setup" / "SKILL.md").read_text()
         run = (plugin / "skills" / "run-monitor" / "SKILL.md").read_text()
         setup = (plugin / "skills" / "monitor-setup" / "SKILL.md").read_text()
@@ -265,7 +266,7 @@ class RepositoryFormTest(unittest.TestCase):
         self.assertIn("**Results:**", access)
         self.assertIn("anthropic terms", normalized_access)
 
-        store_normalized = " ".join(store.lower().replace(">", "").split())
+        store_normalized = " ".join((store + "\n" + folders).lower().replace(">", "").split())
         for phrase in (
             "choose documents folder",
             "read folder guide",
@@ -296,7 +297,7 @@ class RepositoryFormTest(unittest.TestCase):
         self.assertLess(store_normalized.index("run `store.py`"),
                         store_normalized.index("post-access acknowledgement"))
         self.assertIn("both valid folders are already reachable", store_normalized)
-        run_normalized = " ".join(run.lower().split())
+        run_normalized = " ".join((run + "\n" + folders).lower().split())
         self.assertIn("route intent, not permission", run_normalized)
         self.assertIn("post-access acknowledgement", run_normalized)
         self.assertIn("readiness", folders.lower())

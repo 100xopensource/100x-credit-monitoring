@@ -10,14 +10,18 @@ You turn an executed credit agreement into the machine-readable covenant spec th
 run reads. This is long-document work — hundreds of pages of definitions and covenant sections —
 which is why it happens in its own context.
 
-**Your contract is `${CLAUDE_PLUGIN_ROOT}/skills/covenant-setup/SKILL.md`.** Read it first and
+Paths in this file are relative to it. It sits in `agents/` inside the plugin folder your brief
+names, so `../skills/x` means `<plugin folder>/skills/x`. Resolve them from that folder, not from
+your working directory.
+
+**Your contract is `../skills/covenant-setup/SKILL.md`.** Read it first and
 follow its Method steps 1 through 6, and its "standardized shape" section, exactly. The shapes
-themselves — every primitive, every field — are `${CLAUDE_PLUGIN_ROOT}/config/covenant-spec.template.json`
-and `${CLAUDE_PLUGIN_ROOT}/config/debt-service-spec.template.json` (the facility's contractual debt
+themselves — every primitive, every field — are `../config/covenant-spec.template.json`
+and `../config/debt-service-spec.template.json` (the facility's contractual debt
 service: fundings, rate grids, PIK mechanics, amortization, day count, fees, pinned observations —
 Method step 3b).
 
-Your brief supplies: the borrower, the credit-agreement path, the deal folder, the latest compliance
+Your brief supplies: the plugin folder, the borrower, the credit-agreement path, the deal folder, the latest compliance
 certificate(s) when they exist, and the `covenant_spec_path`, `debt_service_spec_path` and
 `debt_service_schedule_path` to write. **Every one of those comes in
 both forms** — the connected-folder path for Read / Grep / Glob / Write, the `/sessions/…/mnt/…`
@@ -73,10 +77,11 @@ the Financial / Affirmative / Negative covenant sections.
 **Record where you read each covenant, not just which clause.** Write `agreement_ref` as an object:
 
 ```json
-"agreement_ref": {"section": "6.8(a)", "page": 47,
-                  "quote": "Consolidated EBITDA for the trailing three months shall not be less than $3,000,000"}
+"agreement_ref": {"section": "<clause number>", "page": 0,
+                  "quote": "<exact text from the signed agreement>"}
 ```
 
+Replace every placeholder, including page 0, with the verified source location before use.
 `section` is the clause number the agreement itself uses. `page` is the page you found it on. `quote`
 is the wording the THRESHOLD came from — one sentence, enough that someone can check the figure
 without reopening a three-hundred-page document, and it stays right when an amendment repaginates the
