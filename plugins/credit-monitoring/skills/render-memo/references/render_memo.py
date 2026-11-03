@@ -1097,24 +1097,260 @@ def render_collateral(payload):
     return head + chipbox + table + notes
 
 
+# The series the chart draws: net revenue and EBITDA as bars, EBITDA margin
+# as a line, each point with its %. Gross profit and operating expense stay in the
+# payload for the PM Template's Trend sheet; the chart draws neither.
+TREND_DRAWN = ("net_revenue", "ebitda", "ebitda_margin")
+
+
+def _values(figs):
+    """The values of a list of payload figures, None kept."""
+    return [None if f is None else f.get("value") for f in figs or []]
+
+
+# A step in a schedule: "5.50x (through Jun 2024)", "3.00x (from 3 Jan 2025)".
+_STEP = re.compile(r"(\d+(?:\.\d+)?(?:x|%))\s*\(\s*(?:(through)\s+|(from)\s+)?([^()]+?)\s*\)")
+
+
+def month_stamp(label):
+    """A month label, "Aug 2021", as "2021-08"; None for any other label."""
+    m = re.fullmatch(r"([A-Z][a-z]{2})[a-z]* (\d{4})", str(label or "").strip())
+    return f"{m.group(2)}-{MONTH_ABBR.index(m.group(1)) + 1:02d}" if m and m.group(1) in MONTH_ABBR else None
+
+
+def box_cell(text):
+    """A terms cell as the chart's box prints it: a month's year as 'YY
+    ("Jun '24"), a day whole ("Jun 30 2025"), and a schedule of steps as
+    one line between arrows, each step keeping its dates. The pop-out keeps the payload's
+    words."""
+    if not text:
+        return text
+    steps = [p.strip() for p in str(text).split(" / ")]
+    found = [_STEP.fullmatch(p) for p in steps]
+    if len(steps) > 1 and all(found):
+        text = " → ".join(f"{m.group(1)} {'to ' if m.group(2) else 'from ' if m.group(3) else ''}{m.group(4)}"
+                          for m in found)
+    return re.sub(rf"(?<=(?:{'|'.join(MONTH_ABBR)}) )(?:19|20)(\d\d)\b", r"'\1", str(text))
+
+
+def box_term_name(name):
+    """A terms row's name as the box prints it: a name that opens with "Legacy" prints
+    the rest, less "single", "ratio" and "reference only", then "(legacy)"."""
+    m = re.match(r"(?i)legacy\s+(.+)", str(name or ""))
+    if not m:
+        return name
+    rest = re.sub(r"(?i)\b(?:single|ratio|reference only)\b", " ", m.group(1))
+    rest = re.sub(r"\s+", " ", rest).strip()
+    return rest[:1].upper() + rest[1:] + " (legacy)"
+
+
+def _name_undated(name):
+    """An amendment's name without the date `memo_payload.trend_amendments` puts after it,
+    "Jun 30 2025" (or "30 Jun 2025"): the event's head prints the day."""
+    return re.sub(r",\s*(?:\d{1,2} \w{3}|\w{3} \d{1,2}) \d{4}$", "", str(name or "")).strip()
+
+
+def box_event_name(name):
+    """An amendment's or a waiver's name as the box heads it: "First Amendment to Credit
+    Agreement, Apr 14 2023" reads "First Amendment"; "... and Waiver" keeps "and Waiver"."""
+    said = _name_undated(name)
+    return re.sub(r"\s+to (?:the )?Credit Agreement\b", "", said).strip() or None
+
+
+def _box_terms(terms):
+    """The event's terms table with the box's shorter cells and row names."""
+    if not terms:
+        return terms
+    return dict(terms, rows=[dict(r, name=box_term_name(r.get("name")), before=box_cell(r.get("before")),
+                                  after=box_cell(r.get("after"))) for r in terms.get("rows") or []])
+
+
 def render_trend_data(payload):
     tc = payload["sections"]["trend_chart"]
     months = tc.get("months") or []
+    series = tc.get("series") or {}
+    adj = _values(tc.get("adj_ebitda"))
     trend = {"months": [_short(m) for m in months],
-             "series": tc.get("series") or {},
-             "notes": tc.get("notes") or {},
+             # The window's months before the model's first, drawn empty.
+             "lead_months": [_short(m) for m in tc.get("lead_months") or []],
+             # Each month on the axis, lead months first, as YYYY-MM: From and To read them
+             "stamps": [month_stamp(m) for m in (tc.get("lead_months") or []) + months],
+             "series": {k: series[k] for k in TREND_DRAWN if k in series},
+             # Each hover line on a year earlier: that month's figure, the change, and a
+             # money line's percent; the margin's change is in points.
+             "yoy": {k: {"prior": _values([m and m.get("prior") for m in ms]),
+                         "change": _values([m and m["change"] for m in ms]),
+                         "pct": _values([m and m["pct"] for m in ms])}
+                     for k, ms in (tc.get("yoy") or {}).items()},
+             # Each month's Adjusted EBITDA and its hover, on a deal that records Adjusted
+             # EBITDA; empty on one that does not
+             "adj_ebitda": adj if tc.get("adj_formula") else [],
+             "adj_formula": tc.get("adj_formula") or [],
+             # the name of every box's EBITDA line, "Adjusted EBITDA" where the package
+             # reports its only EBITDA so, with the hover that says so
+             "event_ebitda": tc.get("event_ebitda") or "EBITDA",
+             "ebitda_formula": tc.get("ebitda_formula"),
+             "notes": {"chart": (tc.get("notes") or {}).get("chart") or ""},
              "basis_break_index": tc.get("basis_break_index"),
-             # The quarter boxes the chart draws over each quarter-end column. The
-             # totals are the payload's own, computed and gated before they reach
-             # the page; the chart positions them and nothing more.
-             "quarters": tc.get("quarters") or []}
+             # Each amendment's column on the whole axis, lead months first, and what it
+             # changed; the chart flags the column.
+             "amendments": [{"k": k, "index": a["index"], "name": a.get("name"),
+                             "label": a.get("label") or "A", "page": a.get("page"),
+                             "changes": a.get("changes"),
+                             "administrative_only": bool(a.get("administrative_only"))}
+                            for k, a in enumerate(tc.get("amendments") or [])
+                            if a.get("index") is not None],
+             # Each event's box: its lines' values as the payload worked them out, and
+             # its terms table. A click opens `#trend-evt-<k>`.
+             "events": [{"k": e["k"], "index": e["index"], "kind": e.get("kind"),
+                         "label": e.get("label"), "date": e.get("date_words"),
+                         "name": e.get("name"), "amendment": e.get("amendment"),
+                         "short_name": box_event_name(e.get("name")),
+                         # an advance whose funding date no document gives
+                         "date_note": e.get("date_note"),
+                         "lines": [{"key": ln["key"], "label": ln["label"], "fmt": ln["fmt"],
+                                    "value": (ln.get("figure") or {}).get("value"),
+                                    "short": ln.get("short"),
+                                    # an Adjusted EBITDA line's hover: its formula, or why
+                                    **({"formula": ln["formula"]} if ln.get("formula") else {}),
+                                    # the day the advance funded, in an amendment's box
+                                    **({"date": ln["date"]} if ln.get("date") else {}),
+                                    # the figure a document stated at the time, beside it
+                                    **({"stated": {k: ln["stated"].get(k) for k in ("value", "kind", "page")}}
+                                       if ln.get("stated") else {})}
+                                   for ln in e.get("lines") or []],
+                         "terms": _box_terms(e.get("terms"))}
+                        for e in tc.get("events") or [] if e.get("index") is not None]}
     return json.dumps(trend, sort_keys=True)
 
 
+def render_trend_lead(payload):
+    """The one line under the chart that stays open: where the model starts against the
+    first advance, when the chart draws months before the model."""
+    tc = payload["sections"]["trend_chart"]
+    lead, months = tc.get("lead_months") or [], tc.get("months") or []
+    first = tc.get("first_advance") or {}
+    if not lead or not months:
+        return ""
+    return (f"The model starts {esc(months[0])}; the first advance was "
+            f"{esc(first.get('date_words'))}, so the months before "
+            f"{esc(months[0])} are drawn empty.")
+
+
+def _event_line(ln):
+    """One line of an event's pop-out: its figure, traced, or why it is missing."""
+    f = ln.get("figure")
+    body = (trc(f, sign=True) if f else
+            f'<span class="muted">{esc(ln.get("missing") or "not on file")}</span>')
+    row = f'<tr><th>{esc(ln.get("label"))}</th><td>{body}</td></tr>'
+    st = ln.get("stated")
+    if st:
+        row += (f'<tr class="tev-stated"><th>{esc(st.get("label", "").split(" — ")[0])}'
+                + (f', page {st["page"]}' if st.get("page") else "")
+                + f'</th><td>{trc(st, sign=True)}</td></tr>')
+    return row
+
+
+def _section_page(d):
+    """Where a document says a thing, "§2.01, p. 6"; "" when neither is on file."""
+    return ", ".join(x for x in (f'§{str(d["section"]).lstrip("§ ")}' if d.get("section") else "",
+                                 f'p. {d["page"]}' if d.get("page") else "") if x)
+
+
+def _term_source(src):
+    """Where a terms row's value was read, or what was searched for one not on file."""
+    if not src:
+        return ""
+    if src.get("searched"):
+        return f"Not on file: {src['searched']}"
+    where = _section_page(src)
+    return " ".join(x for x in (src.get("as") or "", src.get("document") or "", where) if x)
+
+
+def _terms_table(terms, full=None):
+    """An amendment's terms as its pop-out prints them: every row's value Before and
+    After the document, what changed, and where each value was read."""
+    rows = []
+    for r in (terms or {}).get("rows") or []:
+        after = esc(r.get("after") or "not on file")
+        src = _term_source(r.get("source"))
+        rows.append(f'<tr><th>{esc(r.get("name"))}'
+                    + (f'<br><span class="muted" style="font-weight:400">{esc(src)}</span>' if src else "")
+                    + f'</th><td>{esc(r.get("before") or "not on file")}</td>'
+                    + (f'<td><b>{after}</b></td>' if r.get("changed") else f'<td>{after}</td>')
+                    + ('<td>' if r.get("changed") else '<td class="muted">')
+                    + f'{esc(r.get("change") or "")}</td></tr>')
+    return ('<table class="tev-terms"><thead><tr><th>Term</th><th>Before</th><th>After</th>'
+            '<th>Change</th></tr></thead><tbody>' + "".join(rows) + '</tbody></table>') if rows else ""
+
+
+def render_trend_events(payload):
+    """One hidden block per event the chart boxes: its LTM figures and advances, each
+    traced, its terms table and every change the covenant record holds with its section
+    and page, and the document's link. A click on the box or the flag shows it."""
+    tc = payload["sections"]["trend_chart"]
+    stores = payload.get("stores") or {}
+    amds = tc.get("amendments") or []
+    out = []
+    for e in tc.get("events") or []:
+        if e.get("index") is None:
+            continue
+        a = amds[e["amendment"]] if isinstance(e.get("amendment"), int) and e["amendment"] < len(amds) else None
+        kind = {"waiver": "Waiver", "amendment": "Amendment"}.get(e.get("kind"), "")
+        if e.get("date_note") and e.get("kind") == "advance":
+            head = (f'<div class="tev-h"><b>{esc(e.get("label"))}</b> &middot; funding date not on file</div>'
+                    f'<p class="tev-doc">{esc(e["date_note"])}</p>')
+        else:
+            head = (f'<div class="tev-h"><b>{esc(e.get("date_words"))}</b> &middot; {esc(e.get("label"))}'
+                    + (f' &middot; {kind}' if kind else "") + '</div>')
+        doc = ""
+        if a is not None:
+            page = f", page {a['page']}" if a.get("page") else ""
+            doc = ('<p class="tev-doc">' + srclink(a.get("source_ref") or {},
+                                                   esc(f'{_name_undated(a.get("name")) or "Amendment"}{page}'), stores)
+                   + '</p>')
+        lines = "".join(_event_line(ln) for ln in e.get("lines") or [])
+        adv = "".join(
+            f'<tr><th>{esc(v["date_words"])}, {esc(v["name"])}'
+            + (f'<br><span class="muted" style="font-weight:400">{esc(v["note"])}</span>' if v.get("note") else "")
+            + f'</th><td>{trc(v["figure"], sign=True)}</td></tr>'
+            for v in e.get("advances") or [])
+        changes = ""
+        if a is not None:
+            items = []
+            for c in a.get("changes") or []:
+                src = _section_page(c)
+                was = f'{esc(c["from"])} &rarr; ' if c.get("from") else ""
+                items.append(f'<li><b>{esc(c.get("what"))}</b>: {was}{esc(c.get("to") or "")}'
+                             + (f' <span class="muted">&middot; {esc(src)}</span>' if src else "") + '</li>')
+            if a.get("changes") is None:
+                items.append('<li class="muted">Not yet read into the covenant record.</li>')
+            elif not items:
+                items.append('<li class="muted">'
+                             + ("Read; changed nothing we test." if a.get("administrative_only")
+                                else "No change recorded.") + '</li>')
+            changes = '<h4>What it changed</h4><ul class="tev-changes">' + "".join(items) + '</ul>'
+        out.append(f'<div class="tev" id="trend-evt-{e["k"]}" hidden>{head}{doc}'
+                   f'<table class="tev-lines"><tbody>{lines}</tbody></table>'
+                   + (f'<h4>Advances</h4><table class="tev-lines tev-adv"><tbody>{adv}</tbody></table>'
+                      if adv else "")
+                   + (f'<h4>Terms</h4>{_terms_table(e.get("terms"))}' if e.get("terms") else "")
+                   + changes + '</div>')
+    return "\n".join(out)
+
+
+def render_trend_title(payload):
+    tc = payload["sections"]["trend_chart"]
+    n = len(tc.get("lead_months") or []) + len(tc.get("months") or [])
+    return f'{n}-month trend' if n else 'Trend'
+
+
 def render_trend_range(payload):
-    months = payload["sections"]["trend_chart"].get("months") or []
+    tc = payload["sections"]["trend_chart"]
+    months = tc.get("months") or []
     if not months:
         return ""
+    months = (tc.get("lead_months") or []) + months
     return f'({esc(months[0])} &ndash; {esc(months[-1])})'
 
 
@@ -1150,15 +1386,59 @@ def render_trend_caption(payload):
     span = f"{months[0]} &ndash; {months[-1]}" if months else ""
     cited = srclink(ref, esc(ref["name"]), payload.get("stores") or {},
                     detail=f"{len(months)} monthly columns")
-    quarters = tc.get("quarters") or []
-    quarter_line = ""
-    if quarters:
-        quarter_line = (f' The {len(quarters)} boxes across the top hold complete '
-                        f'calendar quarters, added up from the same columns; a '
-                        f'quarter the window does not hold in full gets no box.')
+    word = tc.get("event_ebitda") or "EBITDA"
+    boxes = (" Each flag on the chart is an amendment, a waiver or an advance, on its month; "
+             "a click on it opens its box, whose LTM figures add up the twelve months to the "
+             "month end before it, off the same columns"
+             + (", with Adjusted EBITDA under its EBITDA, as the deal's files and record carry it"
+                if tc.get("adj_formula") else
+                ", and its EBITDA is the package's own Adjusted EBITDA" if word != "EBITDA" else "")
+             + ". An advance's pro forma total debt is the debt on the model's balance sheet at "
+             "the month end before it, net of OID, plus the amount advanced."
+             if tc.get("events") else "")
     return (f'Chart reads the {len(months)} monthly columns of the monitoring model '
-            f'({span}): {cited}. The margins view divides each line by revenue in the '
-            f'same month.{quarter_line}')
+            f'({span}): {cited}. EBITDA margin is EBITDA over net '
+            f'revenue in the same month.{boxes}'
+            + _trend_amendment_line(tc, payload.get("stores") or {}) + _trend_advance_line(tc))
+
+
+def _trend_advance_line(tc):
+    """The advances the window leaves out, by date, so a box nobody sees is still named."""
+    off = [e for e in tc.get("events") or [] if e.get("kind") == "advance" and e.get("index") is None]
+    if not off:
+        return ""
+    return (" Advances outside the chart's months: "
+            + "; ".join(esc(f'{e.get("date_words")}, {dollars(e["advances"][0]["amount"])}')
+                        for e in off if e.get("advances")) + ".")
+
+
+def _trend_amendment_line(tc, stores):
+    """The amendments under the chart, oldest first, each a link to its file. A
+    marked one carries the id the chart's marker opens it by."""
+    amds = tc.get("amendments") or []
+    if not amds:
+        return ""
+    on, off, undated = [], [], []
+    for k, a in enumerate(amds):
+        page = f", page {a['page']}" if a.get("page") else ""
+        label = f'{a["label"]}: ' if a.get("label") else ""
+        link = srclink(a.get("source_ref") or {},
+                       esc(f'{label}{a.get("name") or "Amendment"}{page}'), stores)
+        if not a.get("dated"):
+            undated.append(link)
+        elif a.get("index") is None:
+            off.append(link)
+        else:
+            on.append(f'<span id="trend-amd-{k}">{link}</span>')
+    line = ""
+    if on:
+        line += (" The purple flags are amendments and waivers, on the month each was signed; "
+                 "click one, or its box, for its terms: " + "; ".join(on) + ".")
+    if off:
+        line += " Outside the chart's months: " + "; ".join(off) + "."
+    if undated:
+        line += " No date on file, so not marked: " + "; ".join(undated) + "."
+    return line
 
 
 # =============================================================== deal producers
@@ -2442,9 +2722,12 @@ def render(payload, prose, template, run_date, version=None):
         "SNAP_COLLATERAL": render_collateral(payload),
         "COLLATERAL_BASIS": basis_note("collateral", esc(reader_prose(
             ((payload["sections"]["snapshot_collateral"].get("collateral") or {}).get("security_summary"))))),
+        "TREND_TITLE": render_trend_title(payload),
         "TREND_RANGE": render_trend_range(payload),
         "TREND_DATA": render_trend_data(payload),
         "TREND_CAPTION": render_trend_caption(payload),
+        "TREND_LEAD": render_trend_lead(payload),
+        "TREND_EVENTS": render_trend_events(payload),
         "DEAL_COMPANY_FACTS": render_company_facts(payload),
         "DEAL_TERMS": render_deal_terms(payload, stores),
         "DEAL_TRANSACTION_GAPS": render_transaction_gaps(payload),

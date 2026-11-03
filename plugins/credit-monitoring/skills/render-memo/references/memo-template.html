@@ -37,8 +37,10 @@
      SUMMARY_COVENANTS             prose    one sentence when all pass with room; the certified-vs-model gap and the nearest tight test when not
      SUMMARY_OUTLOOK               prose    forward indicators on file, the governing question for the credit, the open asks
      TREND_RANGE                   payload  the heading suffix, e.g. (Dec 2024 – Jun 2026)
-     TREND_DATA                    payload  the #trend-data island: months, series, notes, basis_break_index, quarters
-     TREND_CAPTION                 payload  the caption's source line, srclink to the model
+     TREND_DATA                    payload  the #trend-data island: months, lead months, series, yoy, adj_ebitda, adj_formula, event_ebitda, ebitda_formula, notes, basis_break_index, amendments, events
+     TREND_CAPTION                 payload  the caption's source line, srclink to the model, behind the Show sources toggle
+     TREND_LEAD                    payload  where the model starts against the first advance, when the chart draws months before it; "" otherwise
+     TREND_EVENTS                  payload  one hidden .tev block per event box: its figures traced, its terms and changes, its document
      -- Deal summary tab --------------------------------------------------------------
      DEAL_COMPANY_PROFILE          prose    one paragraph on what the company does and what drives its numbers, citing the underwriting memo once
      DEAL_COMPANY_FACTS            payload  the two table.facttable bodies; absent value → "not on file in the deal file" (muted)
@@ -301,24 +303,120 @@
   .flow a{color:var(--accent-ink);text-decoration:none;border-bottom:1px dotted var(--accent)}
 
   /* ---------- CHART ---------- */
-  .chart-toggle{display:inline-flex;border:1px solid var(--line-2);border-radius:5px;overflow:hidden;margin-bottom:8px}
-  .chart-toggle button{border:0;background:#fff;color:var(--muted);font-size:12px;font-weight:700;
-    letter-spacing:.03em;padding:8px 16px;cursor:pointer;font-family:inherit;transition:background .1s,color .1s}
-  .chart-toggle button:not(.active):hover{background:var(--wash);color:var(--ink)}
-  .chart-toggle button.active{background:var(--navy);color:#fff}
   .chartwrap{position:relative}
-  .chart-legend{display:flex;flex-wrap:wrap;gap:16px;margin:10px 0 2px;font-size:12px;color:var(--muted)}
+  .trend-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 24px;margin:0 0 6px}
+  .trend-top .trend-range{margin:0}
+  .chart-legend{display:flex;flex-direction:column;align-items:flex-end;gap:5px;margin:0 0 0 auto;font-size:12.5px;color:var(--ink-2)}
+  .chart-legend .lg-row{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px 16px}
+  .chart-legend .lg-hint{font-size:11.5px;color:var(--faint)}
   .chart-legend span{display:inline-flex;align-items:center;gap:7px}
   .chart-legend i{width:12px;height:12px;border-radius:2px;display:inline-block}
-  .chart-legend i.ln{height:3px;width:18px;border-radius:2px}
+  .chart-legend i.adv{width:14px;height:14px;color:#fff;font-weight:700;font-size:10px;line-height:14px;font-style:normal;text-align:center}
+  .chart-legend i.ln{height:2px;width:20px;border-radius:2px;position:relative}
+  .chart-legend i.ln::after{content:"";position:absolute;left:7px;top:-2px;width:6px;height:6px;border-radius:50%;background:inherit}
   .chart-legend i.dash{height:0;width:18px;border-top:3px dashed currentColor;background:none}
   .axis-note{font-size:11.5px;color:var(--faint);margin-top:6px}
-  #tt{position:absolute;pointer-events:none;background:var(--navy);color:#fff;border-radius:6px;padding:9px 11px;
-      font-size:11.5px;line-height:1.5;box-shadow:0 8px 24px rgba(32,20,95,.34);opacity:0;transition:opacity .08s;z-index:5;min-width:158px}
-  #tt .ttm{font-weight:700;margin-bottom:5px;border-bottom:1px solid rgba(255,255,255,.2);padding-bottom:4px;letter-spacing:.02em}
-  #tt .ttr{display:flex;justify-content:space-between;gap:16px}
-  #tt .ttr .sw{display:inline-flex;align-items:center;gap:6px}
-  #tt .ttr .sw i{width:9px;height:9px;border-radius:2px;display:inline-block}
+  #tt,#tt-pin{position:absolute;pointer-events:none;background:var(--navy);color:#fff;border-radius:6px;padding:9px 11px;
+      font-size:11.5px;line-height:1.5;box-shadow:0 8px 24px rgba(32,20,95,.34);opacity:0;transition:opacity .08s;z-index:5;min-width:158px;max-width:440px}
+  .tbox .ttm{font-weight:700;margin-bottom:5px;border-bottom:1px solid rgba(255,255,255,.2);padding-bottom:4px;letter-spacing:.02em}
+  .tbox .ttr{display:flex;justify-content:space-between;gap:16px}
+  .tbox .ttr .sw,.tbox .ttg .sw{display:inline-flex;align-items:center;gap:6px}
+  .tbox .ttr .sw i,.tbox .ttg .sw i{width:9px;height:9px;border-radius:2px;display:inline-block;box-shadow:0 0 0 1px rgba(255,255,255,.6)}
+  .tbox table.tt-terms{border-collapse:collapse;margin:5px 0 3px;width:100%;table-layout:fixed;background:none}
+  .tbox table.tt-terms th,.tbox table.tt-terms td{padding:0 6px 1px 0;text-align:left;vertical-align:top;font-weight:400;
+    font-size:11px;line-height:1.3;text-transform:none;letter-spacing:0;border:0;background:none;color:#fff;white-space:normal;width:auto}
+  .tbox table.tt-terms th:first-child{width:24%;color:#DAD2F9}
+  /* A terms cell keeps its conditions and test holidays, so a box with a terms table is wider. */
+  #tt-pin:has(table.tt-terms){max-width:620px}
+  .tbox table.tt-terms tr:first-child th{color:#B9AFCE;font-size:10.5px}
+  .tbox table.tt-terms tr.tt-un>*{color:#A49BBE}
+  .tbox .ttr.tt-other{display:block;font-size:11px;line-height:1.35;margin-top:3px}
+  /* A line's sum, on hover, focus or a tap: pro forma total debt's and
+     Adjusted EBITDA's formula, with a Sources link under it. The tip sits
+     inside its line, so it stays open while the pointer is on it, and waits a moment as the
+     pointer crosses to it. */
+  .tbox .tt-sum{position:relative;pointer-events:auto;cursor:help;outline:0}
+  .tbox .ttr.tt-sum>span:not(.tt-tip),.tbox span.tt-sum{text-decoration:underline dotted rgba(255,255,255,.6);text-underline-offset:3px}
+  .tbox .tt-tip{display:block;visibility:hidden;transition:visibility 0s .4s;position:absolute;right:0;bottom:100%;background:#fff;color:var(--ink);border-radius:4px;
+    padding:4px 8px;font-size:11px;font-weight:400;line-height:1.4;text-align:left;white-space:normal;width:max-content;
+    max-width:420px;box-shadow:0 4px 14px rgba(32,20,95,.35);z-index:3;cursor:auto}
+  .tbox .tt-sum:hover>.tt-tip,.tbox .tt-sum:focus-within>.tt-tip{visibility:visible;transition-delay:0s}
+  .tbox .tt-tip .tt-src{display:block;width:max-content;margin-top:8px;color:var(--accent-ink);text-decoration:underline;cursor:pointer;outline:0}
+  .tbox .tt-tip .tt-srcs:not([hidden]){display:block;margin-top:3px;color:var(--muted)}
+  .tbox .tt-tip .tt-srcs span{display:block}
+  /* The month's hover follows the pointer and takes no mouse, faded out too: a click pins the
+     month, and the pinned box shows the sums. */
+  #tt .tt-sum{pointer-events:none}
+  /* A month's lines in two columns: the line, then its figure. */
+  .tbox .ttg{display:grid;grid-template-columns:auto auto;gap:0 16px;align-items:center;font-variant-numeric:tabular-nums}
+  .tbox .ttg>span:nth-child(2n){text-align:right}
+  .tbox .ttg .yoy{color:#DAD2F9}
+  .tbox .ttg span.yoy:nth-child(2n+1){padding-left:15px}
+  .tbox .muted{color:#B9AFCE}
+  /* A click pins the month's box: it takes clicks, and its × closes it. It
+     moves by any of its heads, as an event box does, and the hover draws over it. */
+  #tt{z-index:6}
+  #tt-pin{pointer-events:auto;padding-right:26px}
+  .tbox .tt-x{position:absolute;top:4px;right:6px;border:0;background:none;color:#fff;font-size:17px;line-height:1;
+    cursor:pointer;padding:2px 4px;opacity:.85}
+  .tbox .tt-x:hover{opacity:1}
+  .tbox a.tt-more{color:#EDE9FB;font-weight:700;text-decoration:underline;cursor:pointer}
+  /* THE EVENT BOXES: any number open at once, each floating over the
+     chart's top edge with a line down to its flag. Each moves by its head and keeps its place.
+     Only the head, the × and the link take the mouse, so the bars under a box still show their
+     month. The boxes are one layer: over the chart, under the month's hover and the pop-out. */
+  .trend-boxes{position:relative;z-index:4;height:0}
+  .tev-leaders{position:absolute;left:0;top:0;width:1px;height:1px;overflow:visible;pointer-events:none;z-index:0}
+  .tev-box{position:absolute;width:430px;max-width:calc(100vw - 32px);box-sizing:border-box;background:var(--navy);
+    color:#fff;border-radius:6px;border-top:3px solid var(--tev-col);padding:8px 28px 9px 11px;font-size:11.5px;
+    line-height:1.5;box-shadow:0 8px 24px rgba(32,20,95,.34);z-index:1;pointer-events:none}
+  .tev-box.adv{width:400px}
+  .tev-box .ttm,#tt-pin .ttm{cursor:grab;touch-action:none;user-select:none}
+  .tev-box .ttm,.tev-box .tt-x,.tev-box a.tt-more{pointer-events:auto}
+  .tev-box.dragging,#tt-pin.dragging{box-shadow:0 14px 34px rgba(32,20,95,.45)}
+  .tev-box.dragging .ttm,#tt-pin.dragging .ttm{cursor:grabbing}
+  #chart g.tev-flag.on rect{stroke:var(--ink);stroke-width:2}
+  .trend-lead{margin:8px 0 4px}
+  .trend-slider{display:flex;align-items:center;gap:12px;margin:6px 0 2px}
+  .trend-slider input{flex:1;accent-color:var(--accent-ink);cursor:pointer}
+  .trend-slider[hidden]{display:none}
+  .trend-range{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;margin:0 0 6px;font-size:12px;color:var(--muted)}
+  .trend-range[hidden]{display:none}
+  .trend-range label{display:inline-flex;align-items:center;gap:6px;font-weight:700}
+  .trend-range input{width:7.5em;font:inherit;font-weight:400;color:var(--ink);border:1px solid var(--line-2);border-radius:5px;
+    padding:3px 6px;background:var(--paper)}
+  .trend-hint{flex-basis:100%;font-size:11.5px;color:var(--faint)}
+  .trend-print{display:none}
+  .trend-print h4{margin:10px 0 4px;font-size:12px}
+  .trend-print-t{border-collapse:collapse;width:100%;font-size:10.5px}
+  .trend-print-t th,.trend-print-t td{border-bottom:1px solid var(--line);padding:3px 6px;text-align:left;vertical-align:top}
+  #sec-trend.trend-live .trend-h-all{display:none}
+  @media print{.trend-slider,.trend-boxes,.trend-range{display:none}.trend-print{display:block}#tt,#tt-pin,.trend-pop{display:none}
+    #sec-trend.trend-live .trend-h-all{display:inline}#sec-trend .trend-h-view{display:none}}
+  .trend-srcbtn{border:1px solid var(--line-2);background:#fff;color:var(--muted);font:inherit;font-size:12px;
+    font-weight:700;padding:5px 12px;border-radius:5px;cursor:pointer}
+  .trend-srcbtn:hover{background:var(--wash);color:var(--ink)}
+  #trend-src{margin-top:8px}
+  .trend-pop{position:absolute;top:8px;right:8px;width:min(560px,96%);max-height:calc(100% - 16px);overflow:auto;
+    background:#fff;border:1px solid var(--line-2);border-radius:8px;box-shadow:0 10px 30px rgba(32,20,95,.25);
+    padding:14px 16px 12px;z-index:6;font-size:13px}
+  .trend-pop[hidden]{display:none}
+  .trend-pop-x{position:absolute;top:6px;right:8px;border:0;background:none;font-size:20px;line-height:1;
+    color:var(--muted);cursor:pointer}
+  .trend-pop .tev-h{font-size:14px;color:var(--ink);margin:0 24px 4px 0}
+  .trend-pop .tev-doc{margin:0 0 8px;font-size:12.5px}
+  .trend-pop h4{margin:10px 0 4px;font-size:12px;letter-spacing:.03em;text-transform:uppercase;color:var(--muted)}
+  .trend-pop table{border-collapse:collapse;width:100%;font-size:12.5px;table-layout:fixed}
+  .trend-pop th,.trend-pop td{padding:3px 8px 3px 0;border-bottom:1px solid var(--hair);text-align:left;vertical-align:top;
+    text-transform:none;letter-spacing:0;font-size:12.5px;white-space:normal;line-height:1.4}
+  .trend-pop th{font-weight:600;color:var(--ink-2);width:40%}
+  .trend-pop .tev-lines td{text-align:right}
+  .trend-pop .tev-adv th{width:72%}
+  .trend-pop .tev-terms th{width:34%}
+  .trend-pop .tev-terms thead th{color:var(--muted);font-weight:700;font-size:11.5px;width:auto}
+  .trend-pop .tev-terms thead th:first-child{width:34%}
+  .trend-pop ul{margin:0;padding-left:18px}
+  .trend-pop li{margin:3px 0;line-height:1.45}
 
   footer{margin-top:32px;font-size:11.5px;color:var(--muted);border-top:1px solid var(--line-2);
     padding-top:16px;line-height:1.6}
@@ -535,30 +633,51 @@
 </div>
 
 <div id="trendwrap">
-<!-- 18-MONTH TREND -->
-<h2 id="sec-trend">18-month trend <span class="small muted" style="font-weight:400">{{TREND_RANGE}}</span></h2>
+<!-- TREND: 18 months, or the deal's own window -->
+<!-- On screen the chart's code names the months on view; on paper the heading stays as written here. -->
+<h2 id="sec-trend"><span class="trend-h-all">{{TREND_TITLE}} <span class="small muted" style="font-weight:400">{{TREND_RANGE}}</span></span><span class="trend-h-view" hidden>Trend <span class="small muted" style="font-weight:400" id="trend-h-range"></span></span></h2>
 <div class="card">
-  <div class="chart-toggle" id="toggle">
-    <!-- The kept drawing code binds `#toggle .tgl` and reads `data-m`, so these two
-         attributes are what make the toggle live. Renaming either leaves the buttons on the
-         page with nothing listening and the chart stuck on the absolute view. -->
-    <button class="tgl active" data-m="abs">Absolute ($)</button>
-    <button class="tgl" data-m="pct">Margins (%)</button>
-  </div>
-  <div class="chartwrap">
-    <svg id="chart" width="100%" viewBox="0 0 940 320" role="img" aria-label="18-month performance trend"></svg>
-    <div id="tt"></div>
+  <!-- The top row: From and To, the months on view (the latest 18 by
+       default), on the left; the legend on the right. -->
+  <div class="trend-top">
+  <div class="trend-range" id="trend-range" hidden>
+    <label>From <input id="trend-from" inputmode="numeric" size="7" placeholder="MM/YYYY" aria-label="First month on view, MM/YYYY"></label>
+    <label>To <input id="trend-to" inputmode="numeric" size="7" placeholder="MM/YYYY" aria-label="Last month on view, MM/YYYY"></label>
+    <span class="trend-hint" id="trend-hint" hidden></span>
   </div>
   <div class="chart-legend" id="legend"></div>
-  <!-- The drawing code writes the axis caption here on every repaint. Without this element
-       that write throws and takes the rest of the repaint with it. -->
-  <div class="axis-note" id="axisnote"></div>
-  <p class="small muted" style="margin:8px 0 0">{{TREND_CAPTION}}</p>
+  </div>
+  <div class="chartwrap">
+    <svg id="chart" width="100%" viewBox="0 0 1100 320" role="img" aria-label="Performance trend"></svg>
+    <div id="tt" class="tbox"></div>
+    <div id="tt-pin" class="tbox" hidden></div>
+    <!-- Each event's full terms, written by render_memo.py: a box's "Full terms"
+         shows one, and its figures open their trace like any other on the page. -->
+    <div id="trend-pop" class="trend-pop" hidden>
+      <button type="button" class="trend-pop-x" aria-label="Close">&times;</button>
+      {{TREND_EVENTS}}
+    </div>
+  </div>
+  <!-- The slider moves the months on view back to the first advance. -->
+  <div class="trend-slider" id="trend-slider-wrap">
+    <input type="range" id="trend-slider" aria-label="Move the chart's months back in time">
+  </div>
+  <!-- The open event boxes, written by the chart's code: one per flag clicked, over the chart. -->
+  <div class="trend-boxes" id="trend-boxes"></div>
+  <!-- On paper: every event in a table, written by the chart's code. -->
+  <div class="trend-print" id="trend-print"></div>
+  <p class="small muted trend-lead">{{TREND_LEAD}}</p>
+  <button type="button" class="trend-srcbtn" id="trend-srcbtn" aria-expanded="false" aria-controls="trend-src">Show sources</button>
+  <div id="trend-src" hidden>
+    <!-- The drawing code writes the unit note here once. -->
+    <div class="axis-note" id="axisnote"></div>
+    <p class="small muted" style="margin:8px 0 0">{{TREND_CAPTION}}</p>
+  </div>
 </div>
-<!-- The chart's DATA, written by render_memo.py from the payload: months, the four dollar
-     series, the three margin series, the axis captions, the basis-break index and the
-     complete quarters with their totals. The drawing code below reads it from here and
-     declares no series and computes no total of its own. -->
+<!-- The chart's DATA, written by render_memo.py from the payload: the months, the lead
+     months before the model's first, the net revenue, EBITDA and EBITDA margin series,
+     each month's revenue change on a year earlier, the amendments and the events with
+     their figures. The drawing code below reads it from here and works out no figure. -->
 <script type="application/json" id="trend-data">{{TREND_DATA}}</script>
 </div>
 </div>
@@ -842,58 +961,77 @@ const TREND=(function(){
   catch(e){ return {months:[],series:{}}; }
 })();
 const S=TREND.series||{};
-const M=TREND.months||[];
-const pick=k=>{const v=((S[k]||{}).values)||[]; return M.map((_,i)=>v[i]==null?null:v[i]);};
-const REV =pick("net_revenue");
-const GP  =pick("gross_profit");
-const OPEX=pick("opex");
-const EB  =pick("ebitda");
-/* The margins are payload series too. Computing them here would put arithmetic in the
-   browser, where nothing gates it and nothing traces it to a model cell. */
-const GPM =pick("gross_margin");
-const EBM =pick("ebitda_margin");
-const OPXM=pick("opex_pct_of_revenue");
+/* The window can open before the model's first month (a term window from the first
+   advance): those lead months are drawn empty, and every index below counts them. */
+const LEAD=TREND.lead_months||[], L=LEAD.length;
+const M=LEAD.concat(TREND.months||[]);
+const n=M.length;
+const onAxis=a=>M.map((_,i)=>i<L||!a||a[i-L]==null?null:a[i-L]);
+const pick=k=>onAxis((S[k]||{}).values);
+const REV=pick("net_revenue"), EB=pick("ebitda");
+/* The margin, each line's change on a year earlier and Adjusted EBITDA are payload
+   figures too. Working them out here would put arithmetic in the browser, where nothing
+   gates it and nothing traces it to a model cell. */
+const EBM=pick("ebitda_margin"), ADJ=onAxis(TREND.adj_ebitda), ADJF=onAxis(TREND.adj_formula);
+const YOY={}; Object.entries(TREND.yoy||{}).forEach(([k,v])=>{YOY[k]={prior:onAxis(v.prior),change:onAxis(v.change),pct:onAxis(v.pct)};});
+/* Adjusted EBITDA prints only on a deal whose files or record carry it. The
+   EBITDA line takes the name the files give it, "Adjusted EBITDA" where the package reports
+   its only EBITDA so. */
+const HAS_ADJ=(TREND.adj_formula||[]).length>0, EBW=TREND.event_ebitda||'EBITDA';
+/* EBITDA is one darker blue, a loss included: the bar below the zero line says it.
+   The tooltip outlines each swatch, so the blue reads on its navy ground. */
+const C={rev:'#E0DEE9', eb:'#1f7a4d', adj:'#155C39', ebm:'#8a5d09',
+         amd:'#5027F1', adv:'#170B41'};
+/* THE AMENDMENT FLAGS. One per amendment or waiver signed inside the window,
+   on its month, labelled A-5 for the Fifth Amendment, W-1 for the first waiver. */
+const AMD=(TREND.amendments||[]).filter(a=>a&&typeof a.index==='number'&&a.index>=0&&a.index<n);
+/* THE EVENTS. One per amendment, waiver and advance in the window, on its date: the LTM
+   figures to the month end before it and, for an advance, the existing debt, the amount,
+   the pro forma total debt and leverage, and our loan after it. Each is a flag on its
+   month; a click on the flag opens its box. The payload works out
+   every figure; this code formats and places them. */
+const EVT=(TREND.events||[]).filter(e=>e&&typeof e.index==='number'&&e.index>=0&&e.index<n);
+const BB=(TREND.basis_break_index==null?-1:TREND.basis_break_index+L);
 
-/* `key` names the payload series each item draws. The quarter boxes read their
-   figures out of the island by that key, so an item and its quarter total can
-   never come from two different series. */
-const VIEWS={
-  abs:{unit:'$',
-    bars:{name:'Net revenue', key:'net_revenue', color:'#E0DEE9', data:REV},
-    lines:[{name:'Gross profit', key:'gross_profit', color:'#222222', data:GP},
-           {name:'EBITDA', key:'ebitda', color:'#1f7a4d', data:EB},
-           {name:'Operating expense', key:'opex', color:'#8a5d09', data:OPEX}],
-    note:(TREND.notes&&TREND.notes.abs)||''},
-  pct:{unit:'%',
-    ctxBars:{name:'Net revenue (context)', key:'net_revenue', color:'#E0DEE9', data:REV},
-    lines:[{name:'Gross profit margin', key:'gross_margin', color:'#1f7a4d', data:GPM, dash:true},
-           {name:'EBITDA margin', key:'ebitda_margin', color:'#155C39', data:EBM, dash:true},
-           {name:'Opex % of revenue', key:'opex_pct_of_revenue', color:'#6E6E72', data:OPXM, dash:true}],
-    note:(TREND.notes&&TREND.notes.pct)||''}
-};
+/* A loss reads -$0.68M, never $-0.68M: the sign in front of the amount. */
+const fmtM=v=>(v<0?'-':'')+'$'+Math.abs(v/1e6).toFixed(2)+'M';
+const fmtP=v=>(v*100).toFixed(1)+'%';
+const fmtS=v=>(v>=0?'+':'-')+Math.abs(v*100).toFixed(1)+'%';
+const fmtX=v=>v.toFixed(2)+'x';
+const fmtPt=v=>(v>=0?'+':'-')+Math.abs(v).toFixed(1)+' pts';
+const escH=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function lineText(ln){
+  if(ln.value==null) return ln.short||'not on file';
+  return ln.fmt==='pct'?fmtS(ln.value):ln.fmt==='x'?fmtX(ln.value):fmtM(ln.value);
+}
+/* A line with the figure a document stated at the time beside it:
+   "$12.00M · certificate then $11.50M (p. 6)"; an amendment's Advanced line with the day
+   the advance funded: "$5.00M · Sep 15 2023". */
+function lineWithStated(ln){
+  const said=lineText(ln)+(ln.date?' · '+ln.date:'');
+  const st=ln.stated; if(!st||st.value==null) return said;
+  const kind=st.kind==='compliance certificate'?'certificate':st.kind||'document';
+  return said+' · '+kind+' then '+fmtM(st.value)+(st.page?' (p. '+st.page+')':'');
+}
+/* An advance no funding document dates heads "Advance · funding date not on file". */
+const undated=e=>e.kind==='advance'&&!!e.date_note;
+const kindWord=e=>e.kind==='waiver'?'Waiver':e.kind==='amendment'?'Amendment':'';
+
+/* THE VIEW. The chart opens on the latest 18 months, ending at the
+   run's month; the slider under it moves the view back to the first advance. Printed,
+   it shows the latest 18 months. */
+const DEF=Math.min(n,18);
+let VIEW=DEF, V0=n-DEF;
+const inView=i=>i>=V0&&i<V0+VIEW;
 
 const NS="http://www.w3.org/2000/svg";
-const W=940,padL=58,padR=22,padB=42;
-const n=M.length, iw=W-padL-padR;
-/* THE QUARTER BAND. Each complete calendar quarter gets one box, over the month
-   that closes it, holding the quarter's own totals. The totals are computed in
-   memo_payload.py and gated before they reach the page; this code positions them
-   and formats them, and adds nothing up.
-   The band is reserved ABOVE the plot rather than drawn inside it: a box over the
-   lines hides the months it is summarising. The chart therefore grows taller by
-   the band instead of the plot shrinking, so the drawn area is the same height
-   with the boxes as without them. */
-const Q=(TREND.quarters||[]).filter(q=>q&&q.values&&typeof q.end_index==='number');
-const QP=(iw/Math.max(n,1))*3;                  /* space between one box and the next */
-const QCOLS=QP>=124?2:1;                        /* two value columns when they fit */
-const QBW=Math.min(150,Math.max(64,QP-8)), QBH=QCOLS===2?44:71, QY=6;
-const QH=Q.length?QBH+12:0;
-const padT=16+QH, H=320+QH, ih=H-padT-padB;
-const svg=document.getElementById("chart"), tt=document.getElementById("tt");
-svg.setAttribute("viewBox","0 0 "+W+" "+H);
-const BB=(TREND.basis_break_index==null?-1:TREND.basis_break_index); let mode='abs';
+const W=1100,padL=58,padR=52,padB=40,ih=5*50, iw=W-padL-padR; /* the plot height, written as a product so the page holds no stray figure */
+let cw=iw/Math.max(VIEW,1);   /* a column narrows as the range grows */
+const x=i=>padL+(i-V0+0.5)*cw;
 function el(t,a){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e;}
-const x=i=>padL+(i+0.5)*(iw/n);
+function txt(x0,y0,s,a){const t=el("text",Object.assign({x:x0,y:y0},a||{})); t.textContent=s; return t;}
+const svg=document.getElementById("chart"), tt=document.getElementById("tt"), tp=document.getElementById("tt-pin");
+
 function niceDom(min,max){
   min=Math.min(0,min); max=Math.max(0,max);
   if(min===0&&max===0) max=1;
@@ -901,130 +1039,461 @@ function niceDom(min,max){
   const step=Math.pow(10,Math.floor(Math.log10(span)))/2||1;
   return [Math.floor(min/step)*step, Math.ceil(max/step)*step];
 }
-
-function render(){
-  const v=VIEWS[mode];
-  while(svg.firstChild) svg.removeChild(svg.firstChild);
-  const has=q=>q!==null&&q!==undefined&&!Number.isNaN(q); /* a month with no figure is a gap, not a zero */ let vals=[]; v.lines.forEach(l=>vals.push(...l.data.filter(has)));
-  if(mode==='abs') vals.push(...v.bars.data.filter(has));
-  const [mn,mx]=niceDom(Math.min(...vals),Math.max(...vals));
-  const y=val=>padT+ih-((val-mn)/(mx-mn))*ih;
-
-  for(let gth=0;gth<=4;gth++){
-    const f=gth/4, yy=padT+ih-f*ih, lv=mn+f*(mx-mn);
-    svg.appendChild(el("line",{x1:padL,y1:yy,x2:W-padR,y2:yy,stroke:"#F2F1F6"}));
-    const t=el("text",{x:padL-7,y:yy+4,"text-anchor":"end","font-size":10,fill:"#6E6E72"});
-    t.textContent = mode==='abs' ? (lv/1e6).toFixed(1)+'M' : (lv*100).toFixed(0)+'%';
-    svg.appendChild(t);
-  }
-  if(mn<0){const yz=y(0); svg.appendChild(el("line",{x1:padL,y1:yz,x2:W-padR,y2:yz,stroke:"#DBD9E5","stroke-width":1}));}
-
-  /* One rule per quarter-end column, tying each box to the month it summarises.
-     It is drawn in TWO parts, because the two stretches do different work: the
-     stub crossing the empty gap between the box and the plot is solid and carries
-     the link, while the part crossing the data is dashed and lighter so it reads
-     behind the bars and lines rather than among them. Both sit under the series
-     for the same reason. */
-  Q.forEach(q=>{ if(q.end_index<0||q.end_index>=n) return;
-    const qx=x(q.end_index);
-    svg.appendChild(el("line",{x1:qx,y1:QY+QBH,x2:qx,y2:padT,
-      stroke:"#A19CBC","stroke-width":1.2,opacity:.95}));
-    svg.appendChild(el("line",{x1:qx,y1:padT,x2:qx,y2:padT+ih,
-      stroke:"#A19CBC","stroke-dasharray":"4 3","stroke-width":1,opacity:.7}));});
-
-  const bw=(iw/n)*0.62;
-  if(mode==='abs'){
-    const z=y(0);
-    for(let i=0;i<n;i++){if(!has(v.bars.data[i]))continue; const yv=y(v.bars.data[i]);
-      svg.appendChild(el("rect",{x:x(i)-bw/2,y:Math.min(yv,z),width:bw,height:Math.abs(z-yv),fill:v.bars.color,rx:1,opacity:.85}));}
-  } else {
-    const rmax=Math.max(...v.ctxBars.data);
-    for(let i=0;i<n;i++){if(!has(v.ctxBars.data[i]))continue; const h=(v.ctxBars.data[i]/rmax)*ih*0.8;
-      svg.appendChild(el("rect",{x:x(i)-bw/2,y:padT+ih-h,width:bw,height:h,fill:v.ctxBars.color,rx:1,opacity:.13}));}
-  }
-
-  if(BB>=0&&BB<n){
-    const bb=x(BB)-(iw/n)/2;
-    svg.appendChild(el("line",{x1:bb,y1:padT,x2:bb,y2:padT+ih,stroke:"#b23a2c","stroke-dasharray":"5 4","stroke-width":1.2,opacity:.55}));
-  }
-
-  for(let i=0;i<n;i++){ if(i%2===0||i>=n-3){
-    const t=el("text",{x:x(i),y:H-padB+16,"text-anchor":"middle","font-size":9,fill:"#6E6E72"});
-    t.textContent=M[i]; svg.appendChild(t);}}
-
-  v.lines.forEach(s=>{
-    let d="",pen=false; for(let i=0;i<n;i++){if(!has(s.data[i])){pen=false;continue;} d+=(pen?"L":"M")+x(i)+" "+y(s.data[i]); pen=true;}
-    const a={d,fill:"none",stroke:s.color,"stroke-width":2.2,"stroke-linejoin":"round","stroke-linecap":"round"};
-    if(s.dash)a["stroke-dasharray"]="5 3";
-    svg.appendChild(el("path",a));
-    for(let i=0;i<n;i++)if(has(s.data[i]))svg.appendChild(el("circle",{cx:x(i),cy:y(s.data[i]),r:2.2,fill:s.color}));
+const has=q=>q!==null&&q!==undefined&&!Number.isNaN(q); /* a month with no figure is a gap, not a zero */
+let mn=0,mx=1,rmn=0,rmx=1,padT=36,H=padT+ih+padB,FLAGS=[],AMD_LV=0,ADV_LV=0,HAS_MONEY=false;
+const y=v=>padT+ih-((v-mn)/(mx-mn))*ih, yr=v=>padT+ih-((v-rmn)/(rmx-rmn))*ih;
+/* The scales and the flags of the months in view. */
+function layout(){
+  cw=iw/Math.max(VIEW,1);
+  const vis=M.map((_,i)=>i).filter(inView), val=a=>vis.map(i=>a[i]).filter(has);
+  const money=[].concat(val(REV),val(EB),val(ADJ));
+  HAS_MONEY=money.length>0;   /* a view of empty months prints no scale */
+  [mn,mx]=niceDom(Math.min(...money,0),Math.max(...money,0));
+  [rmn,rmx]=niceDom(Math.min(...val(EBM),0),Math.max(...val(EBM),0));
+  /* The two axes share their zero, so a bar below the line and the margin below it agree. */
+  const f0=-mn/(mx-mn), r0=-rmn/(rmx-rmn);
+  if(f0>0&&f0<1){ if(r0<f0) rmn=-f0*rmx/(1-f0); else if(r0>f0) rmx=-rmn*(1-f0)/f0; }
+  else if(f0===0&&r0>0){ mn=-r0*mx/(1-r0); }
+  /* Two rows of flags: the advances on top, the amendments and waivers under them. In its row, a flag that would touch the one before it sits a step higher. */
+  const ends={adv:[],amd:[]};
+  FLAGS=EVT.filter(e=>inView(e.index)).sort((a,b)=>a.index-b.index).map(e=>{
+    const adv=e.kind==='advance', lbl=adv?'$':e.label||'A', fw=8+lbl.length*6, ax=x(e.index),
+          row=ends[adv?'adv':'amd'];
+    let lvl=0; while(row[lvl]!=null&&row[lvl]>ax-fw/2-2) lvl++;
+    row[lvl]=ax+fw/2;
+    return {e,adv,lbl,fw,ax,lvl,col:adv?C.adv:C.amd};
   });
-
-  /* THE QUARTER BOXES. One per complete quarter, over the month that closes it,
-     carrying the same four series the view draws, in the same order as the legend
-     and the tooltip. A quarter the payload could not total for a series shows a
-     dash for that series rather than a figure standing in for it. */
-  if(Q.length){
-    const items=[mode==='abs'?v.bars:v.ctxBars].concat(v.lines);
-    const colw=(QBW-14)/QCOLS;
-    Q.forEach(q=>{
-      const i=q.end_index; if(i<0||i>=n) return;
-      const bx=Math.max(padL-8,Math.min(W-padR-QBW+8,x(i)-QBW/2));
-      svg.appendChild(el("rect",{x:bx,y:QY,width:QBW,height:QBH,rx:3,
-        fill:"#F4F3F8",stroke:"#D7D5E2"}));
-      const lab=el("text",{x:bx+7,y:QY+13,"font-size":9,"font-weight":700,fill:"#222222"});
-      /* The dagger says the three months are not on one reporting basis; the
-         axis caption below the chart says what it means. */
-      lab.textContent=(q.short||q.label||"")+(q.spans_basis_break?" †":"");
-      svg.appendChild(lab);
-      items.forEach((it,k)=>{
-        const val=(q.values||{})[it.key];
-        const cx=bx+7+(k%QCOLS)*colw, cy=QY+27+Math.floor(k/QCOLS)*13;
-        svg.appendChild(el("rect",{x:cx,y:cy-6,width:6,height:6,rx:1,fill:it.color}));
-        const t=el("text",{x:cx+9,y:cy,"font-size":8.5,fill:"#5C5C5C"});
-        /* A loss reads -$0.68M, never $-0.68M: the sign belongs in front of the
-           amount, and a quarter of negative EBITDA is exactly what a reader scans
-           this band for. */
-        t.textContent = !has(val) ? "—"
-          : (it.key==='net_revenue'||mode==='abs')
-            ? (val<0?'-':'')+'$'+Math.abs(val/1e6).toFixed(2)+'M'
-          : (val*100).toFixed(1)+'%';
-        svg.appendChild(t);
-      });
-    });
-  }
-
-  const guide=el("line",{x1:0,y1:padT,x2:0,y2:padT+ih,stroke:"#222222","stroke-width":1,opacity:0});
-  svg.appendChild(guide);
-  const cap=el("rect",{x:padL,y:padT,width:iw,height:ih,fill:"transparent"}); svg.appendChild(cap);
-  cap.addEventListener("mousemove",e=>{
-    const r=svg.getBoundingClientRect(), sx=(e.clientX-r.left)*(W/r.width);
-    let i=Math.round((sx-padL)/(iw/n)-0.5); i=Math.max(0,Math.min(n-1,i));
-    const gx=x(i); guide.setAttribute("x1",gx); guide.setAttribute("x2",gx); guide.setAttribute("opacity",.25);
-    let rows="";
-    const revItem = mode==='abs'? v.bars : v.ctxBars;
-    rows+=`<div class="ttr"><span class="sw"><i style="background:${revItem.color}"></i>Net revenue</span><span>${has(REV[i])?'$'+(REV[i]/1e6).toFixed(2)+'M':'not reported'}</span></div>`;
-    v.lines.forEach(s=>{const val= !has(s.data[i]) ? 'not reported' : mode==='abs' ? '$'+(s.data[i]/1e6).toFixed(2)+'M' : (s.data[i]*100).toFixed(1)+'%';
-      rows+=`<div class="ttr"><span class="sw"><i style="background:${s.color}"></i>${s.name}</span><span>${val}</span></div>`;});
-    tt.innerHTML=`<div class="ttm">${M[i]}</div>${rows}`; tt.style.opacity=1;
-    let lx=(gx/W)*r.width+14; if(lx>r.width-172) lx=(gx/W)*r.width-158;
-    tt.style.left=lx+"px"; tt.style.top=(padT+8)*(r.height/H)+"px";
-  });
-  cap.addEventListener("mouseleave",()=>{tt.style.opacity=0;guide.setAttribute("opacity",0);});
-
-  const leg=document.getElementById("legend"); leg.innerHTML="";
-  const revItem = mode==='abs'? v.bars : v.ctxBars;
-  leg.insertAdjacentHTML("beforeend",`<span><i style="background:${revItem.color}"></i>${revItem.name}</span>`);
-  v.lines.forEach(s=>leg.insertAdjacentHTML("beforeend",
-    `<span style="color:${s.color}"><i class="${s.dash?'dash':'ln'}" style="${s.dash?'':'background:'+s.color}"></i><span style="color:var(--muted)">${s.name}</span></span>`));
-  document.getElementById("axisnote").textContent=v.note;
+  AMD_LV=ends.amd.length; ADV_LV=ends.adv.length;
+  FLAGS.forEach(f=>{if(f.adv) f.lvl+=AMD_LV;});
+  padT=26+Math.max(1,AMD_LV+ADV_LV)*13; H=padT+ih+padB;
+  svg.setAttribute("viewBox","0 0 "+W+" "+H);
 }
 
-document.querySelectorAll("#toggle .tgl").forEach(b=>b.addEventListener("click",()=>{
-  document.querySelectorAll("#toggle .tgl").forEach(x=>x.classList.remove("active"));
-  b.classList.add("active"); mode=b.dataset.m; render();
-}));
+/* THE MONTH BOX. A month's hover shows its figures and names its events; a click pins it,
+   with each event's lines in full. A pinned box stays until its × or Esc closes it; it
+   carries a link to the full terms. */
+const row=(sw,name,val,sum)=>`<div class="ttr${sum?' tt-sum" tabindex="0':''}"><span class="sw">${sw?`<i style="background:${sw}"></i>`:''}${name}</span><span>${val}</span>${tipHtml(sum)}</div>`;
+/* A line's tip: its sum or formula in words, then, for Adjusted EBITDA off add-backs, a
+   Sources link whose click lists each add-back's source in short, one line each. `sum` is the words, or {text, sources}. */
+function tipHtml(sum){
+  if(!sum) return '';
+  const s=typeof sum==='string'?{text:sum}:sum, src=s.sources||[];
+  return `<span class="tt-tip">${escH(s.text)}`+(src.length?'<a class="tt-src" tabindex="0">Sources</a>'
+    +`<span class="tt-srcs" hidden>${src.map(x=>`<span>${escH(x)}</span>`).join('')}</span>`:'')+'</span>';
+}
+const adjTip=(f,name,v)=>f&&{text:formulaSum(f,name,v),sources:f.sources};
+/* A click or Enter on Sources opens or closes its list. */
+function toggleSources(ev){
+  const a=ev.target.closest&&ev.target.closest('.tt-src'); if(!a) return false;
+  const l=a.nextElementSibling; l.hidden=!l.hidden; return true;
+}
+document.addEventListener('keydown',e=>{if(e.key==='Enter') toggleSources(e);});
+/* A box's pro forma total debt shows its sum on hover, off the box's own
+   lines: "$80.00M existing debt + $5.00M advanced = $85.00M". None where a part is missing. */
+function debtSum(lines,l){
+  const v=k=>(lines.find(x=>x.key===k)||{}).value, held=v('existing_debt'), adv=v('advanced');
+  return l.key==='total_pf'&&has(l.value)&&has(held)&&has(adv)
+    ?`${fmtM(held)} existing debt + ${fmtM(adv)} advanced = ${fmtM(l.value)}`:'';
+}
+/* An Adjusted EBITDA line's formula: "LTM EBITDA $12.00M + Stock-based
+   compensation $2.40M = LTM Adjusted EBITDA $14.40M". A figure the package reports as Adjusted
+   EBITDA says so; a line not on file says why. */
+function formulaSum(f,name,v){
+  if(!f) return '';
+  if(f.why) return 'Not on file: '+f.why;
+  if(f.note) return `${name} ${has(v)?fmtM(v):'not on file'}: ${f.note}`;
+  const adds=(f.adds||[]).map(a=>(a.n<0?' − ':' + ')+a.l+' '+fmtM(Math.abs(a.n))).join('');
+  return `${f.base.l} ${fmtM(f.base.n)}${adds} = ${name} ${fmtM(v)}`;
+}
+/* An event's head line; `alone` heads a box of its own, else it follows the month's rows. */
+/* An amendment's or a waiver's head reads "A-1 · First Amendment · Apr 14 2023"; an
+   advance's "Mar 1 2023 · Advance". */
+function evHead(e,alone){
+  const said=undated(e)?`${escH(e.label)} · funding date not on file`
+    :e.kind==='advance'?`${escH(e.date)} · ${escH(e.label)}`
+    :`${escH(e.label)} · ${escH(e.short_name||kindWord(e))} · ${escH(e.date)}`;
+  return `<div class="ttm"${alone?'':' style="color:#EDE9FB;margin-top:6px;border-top:1px solid rgba(255,255,255,.2);padding-top:5px"'}>${said}</div>`;
+}
+function evHtml(e,alone){
+  let h=evHead(e,alone);
+  if(e.date_note) h+=`<div class="ttr tt-other">${escH(e.date_note)}</div>`;
+  if(e.name&&e.kind==='advance') h+=`<div class="ttr"><span>${escH(e.name)}</span></div>`;
+  /* LTM lines the model cannot give, and no document stated, fold into one: "LTM revenue,
+     revenue growth, EBITDA: not in the model (model starts Jan '23)". */
+  const lines=e.lines||[], gone=lines.filter(l=>l.value==null&&!l.stated&&l.short==='not in the model'&&/^LTM /.test(l.label));
+  const fold=gone.length>1;
+  if(fold) h+=row(null,gone.map((l,k)=>escH(k?l.label.replace(/^LTM /,''):l.label)).join(', '),
+    `not in the model${L<n?` (model starts ${escH(M[L])})`:''}`);
+  lines.forEach(l=>{if(!(fold&&gone.includes(l))) h+=row(null,escH(l.label),escH(lineWithStated(l)),
+    debtSum(lines,l)||adjTip(l.formula,l.label,l.value));});
+  const t=e.terms;
+  if(t&&(t.rows||[]).length){
+    /* Every row prints its value before and after; the third column says what changed. An
+       unchanged row is muted. */
+    h+='<table class="tt-terms"><tr><th></th><th>Before</th><th>After</th><th>Change</th></tr>'
+      +t.rows.map(r=>`<tr${r.changed?'':' class="tt-un"'}><th>${escH(r.name)}</th><td>${escH(r.before||'not on file')}</td>`
+        +`<td>${r.changed?'<b>':''}${escH(r.after||'not on file')}${r.changed?'</b>':''}</td>`
+        +`<td>${escH(r.change||(r.changed?'':'Unchanged'))}</td></tr>`).join('')+'</table>';
+    /* The other changes, on one line between dots. */
+    const o=t.other||[];
+    if(o.length) h+=`<div class="ttr tt-other">${o.map(c=>`${escH(c.what)}: ${escH(c.text)}`).join(' · ')}</div>`;
+  }
+  return h+`<div class="ttr"><a class="tt-more" data-k="${e.k}">Full terms</a></div>`;
+}
+/* A month's lines: each line and its figure, then its YoY row: the change,
+   muted, then the same month a year earlier right under the figure, "(-12.3%) $11.40M", or
+   for the margin "(-7.5 pts) 11.2%". */
+function lineRows(key,sw,name,i,val,fmt,none,sum){
+  const y=YOY[key]||{prior:[],change:[],pct:[]}, pr=y.prior[i], ch=y.change[i], pc=y.pct[i];
+  const by=key==='ebitda_margin'?(has(ch)?fmtPt(ch):''):(has(pc)?fmtS(pc):'');
+  const said=!has(pr)?'<span class="yoy">—</span>':(by?`<span class="yoy">(${by})</span> `:'')+fmt(pr);
+  return `<span class="sw"><i style="background:${sw}"></i>${name}</span>`
+    +`<span${sum?' class="tt-sum" tabindex="0"':''}>${has(val)?fmt(val):none}${tipHtml(sum)}</span>`
+    +`<span class="yoy">YoY</span><span>${said}</span>`;
+}
+function monthHtml(i,pinned){
+  let rows="";
+  if(i<L) rows+=row(null,'Before the model\'s first month','');
+  else {
+    rows='<div class="ttg">'+lineRows('net_revenue',C.rev,'Net revenue',i,REV[i],fmtM,'not reported')
+      +lineRows('ebitda',C.eb,EBW,i,EB[i],fmtM,'not reported',has(EB[i])&&formulaSum(TREND.ebitda_formula,EBW,EB[i]))
+      +(HAS_ADJ?lineRows('adj_ebitda',C.adj,'Adjusted EBITDA',i,ADJ[i],fmtM,'not on file',
+        adjTip(ADJF[i],'Adjusted EBITDA',ADJ[i])):'')
+      +lineRows('ebitda_margin',C.ebm,'EBITDA margin',i,EBM[i],fmtP,'not reported')+'</div>';
+  }
+  const evs=EVT.filter(e=>e.index===i).map(e=>pinned?evHtml(e):evHead(e)).join('');
+  return `<div class="ttm"${pinned?' title="Drag to move"':''}>${M[i]}</div>${rows}${evs}`;
+}
+/* A pinned month's box is its own, #tt-pin; the hover's is #tt. */
+let PIN=null, guide=null, WAIT=null, OVER=null;   /* OVER: the month the hover is for */
+function guideAt(i){
+  if(!guide) return;
+  if(i==null){guide.setAttribute("opacity",0); return;}
+  guide.setAttribute("x1",x(i)); guide.setAttribute("x2",x(i)); guide.setAttribute("opacity",.25);
+}
+function showTip(box,html,i){
+  guideAt(i);
+  box.innerHTML=html; box.hidden=false; box.style.opacity=1;
+  /* The box sits right of the month, or left of it where it would run off the chart. */
+  const gx=x(i), r=svg.getBoundingClientRect(), tw=box.offsetWidth||158, th=box.offsetHeight||100;
+  let lx=(gx/W)*r.width+14; if(lx+tw>r.width) lx=Math.max(0,(gx/W)*r.width-tw-14);
+  let ty=padT*(r.height/H); if(ty+th>r.height+40) ty=Math.max(0,r.height+40-th);
+  box.style.left=lx+"px"; box.style.top=ty+"px";
+}
+/* A hover shown by the timer, after the pointer stopped, tells the dashboard's frame to measure
+   the memo again: the frame measures on a pointer event over the chart. */
+const remeasure=()=>tt.dispatchEvent(new MouseEvent('mouseover',{bubbles:true}));
+/* The hover hides, and the guide goes back to the pinned month, or away. */
+function hideHover(){clearTimeout(WAIT); WAIT=OVER=null; tt.style.opacity=0; guideAt(PIN&&PIN.i);}
+const CLOSE_X='<button type="button" class="tt-x" aria-label="Close">&times;</button>';
+function pin(i){PIN={i}; hideHover(); showTip(tp,CLOSE_X+monthHtml(i,true),i);}
+function unpin(){PIN=null; tp.hidden=true; hideHover();}
+document.addEventListener('keydown',e=>{if(e.key==='Escape') unpin();});
+tp.addEventListener('click',ev=>{
+  ev.stopPropagation();
+  if(toggleSources(ev)) return;
+  if(ev.target.closest('.tt-x')){unpin(); return;}
+  const more=ev.target.closest('.tt-more'); if(more) openEvt(+more.dataset.k,ev);
+});
+function openEvt(k,e){
+  if(e) e.stopPropagation();   /* the page's own click handler would close the box it opens */
+  unpin();
+  const pop=document.getElementById('trend-pop'), want=document.getElementById('trend-evt-'+k);
+  if(!pop||!want) return;
+  pop.querySelectorAll('.tev').forEach(d=>d.hidden=(d!==want));
+  pop.hidden=false;
+}
+/* THE EVENT BOXES. A click on a flag opens its event's box right of
+   the boxes already open. Only the box's own × closes it: a hover, a click on a bar or a
+   flag, the slider and another box leave it open where it is. */
+const OPEN=new Map(), boxes=document.getElementById('trend-boxes');
+let TOP=1;   /* the box moved or asked for last draws over the others */
+const raise=b=>{b.style.zIndex=++TOP;};
+const markFlags=()=>svg.querySelectorAll('g.tev-flag').forEach(g=>g.classList.toggle('on',OPEN.has(+g.dataset.k)));
+function closeEvent(k){const b=OPEN.get(k); if(b) b.remove(); OPEN.delete(k); markFlags(); drawLeaders();}
+/* An advance's box opens over the chart's top edge, its bottom on the card's top. The advance boxes not yet moved sit left to right in the order opened, each over its
+   flag where the others leave room; a box the row has no width for starts a row above. A thin
+   line joins each to its flag while the flag is in view; the line takes no mouse. An
+   amendment's or a waiver's box opens on the plot beside its flag, the way the month's hover
+   does, each one opened after it a step lower. */
+const leaders=document.createElementNS(NS,'svg');
+leaders.setAttribute('class','tev-leaders'); boxes.appendChild(leaders);
+function drawLeaders(){
+  while(leaders.firstChild) leaders.removeChild(leaders.firstChild);
+  const rr=boxes.getBoundingClientRect();
+  OPEN.forEach((b,k)=>{
+    const f=b.classList.contains('adv')&&svg.querySelector(`g.tev-flag[data-k="${k}"] rect`); if(!f) return;
+    const fr=f.getBoundingClientRect(), br=b.getBoundingClientRect(),
+          bx=Math.max(br.left+12,Math.min(br.right-12,fr.left+fr.width/2)),
+          by=fr.top>br.bottom?br.bottom:fr.bottom<br.top?br.top:br.top+br.height/2;
+    leaders.appendChild(el("line",{x1:bx-rr.left,y1:by-rr.top,x2:fr.left+fr.width/2-rr.left,
+      y2:(fr.top>by?fr.top:fr.bottom)-rr.top,stroke:b.style.getPropertyValue('--tev-col'),"stroke-width":1.4}));
+  });
+}
+window.addEventListener('resize',drawLeaders);
+function park(b){
+  const card=boxes.closest('.card'), cr=card.getBoundingClientRect(), rr=boxes.getBoundingClientRect(),
+        lo=cr.left+card.clientLeft-rr.left, hi=lo+card.clientWidth,
+        parked=[...OPEN.values(),b].filter(o=>o===b||o.classList.contains('parked')),
+        rows=[], wide=r=>r.reduce((s,o)=>s+o.offsetWidth+10,-10);
+  parked.forEach(o=>{
+    if(o!==b){(rows[+o.dataset.row]||(rows[+o.dataset.row]=[])).push(o); return;}
+    let r=0; while(rows[r]&&wide(rows[r].concat(b))>hi-lo) r++;
+    b.dataset.row=r; (rows[r]||(rows[r]=[])).push(b);
+  });
+  let bottom=cr.top-rr.top-12;
+  rows.forEach(row=>{
+    if(!row) return;
+    const want=row.map(o=>{const f=svg.querySelector(`g.tev-flag[data-k="${o.dataset.k}"] rect`), fr=f&&f.getBoundingClientRect();
+      return fr?fr.left+fr.width/2-rr.left-o.offsetWidth/2:lo;});
+    const xs=[];
+    row.forEach((o,i)=>{xs[i]=Math.max(lo,want[i],i?xs[i-1]+row[i-1].offsetWidth+10:lo);});
+    for(let i=row.length-1;i>=0;i--) xs[i]=Math.max(lo,Math.min(xs[i],(i<row.length-1?xs[i+1]-10:hi)-row[i].offsetWidth));
+    row.forEach((o,i)=>{o.style.left=xs[i]+'px'; o.style.top=Math.max(-(rr.top+window.scrollY),bottom-o.offsetHeight)+'px';});
+    bottom=Math.min(...row.map(o=>bottom-o.offsetHeight))-10;
+  });
+}
+function placeOnPlot(b,k){
+  const rr=boxes.getBoundingClientRect(), sr=svg.getBoundingClientRect(),
+        f=svg.querySelector(`g.tev-flag[data-k="${k}"] rect`), fr=f&&f.getBoundingClientRect(),
+        fx=fr?fr.left+fr.width/2:sr.left+sr.width/2, w=b.offsetWidth,
+        step=[...OPEN.values()].filter(o=>o.classList.contains('onplot')).length*28;
+  const l=fx+14+w<=sr.right?fx+14:Math.max(sr.left,fx-14-w);
+  b.style.left=(l-rr.left)+'px'; b.style.top=((fr?fr.bottom:sr.top)+8+step-rr.top)+'px';
+}
+function openEvent(e,ev){
+  if(ev) ev.stopPropagation();
+  if(OPEN.has(e.k)){raise(OPEN.get(e.k)); return;}
+  const b=document.createElement('div');
+  b.className='tbox tev-box'; b.dataset.k=e.k;
+  b.style.setProperty('--tev-col',e.kind==='advance'?C.adv:C.amd);
+  b.innerHTML=CLOSE_X+evHtml(e,true);
+  b.querySelector('.ttm').title='Drag to move';
+  boxes.appendChild(b);
+  if(e.kind==='advance'){b.classList.add('adv'); park(b); b.classList.add('parked');}
+  else {placeOnPlot(b,e.k); b.classList.add('onplot');}
+  OPEN.set(e.k,b); markFlags(); drawLeaders();
+}
+boxes.addEventListener('click',ev=>{
+  ev.stopPropagation();   /* the page's own click handler would close the pop-out */
+  const b=ev.target.closest('.tev-box'); if(!b) return;
+  if(toggleSources(ev)) return;
+  if(ev.target.closest('.tt-x')){closeEvent(+b.dataset.k); return;}
+  const more=ev.target.closest('.tt-more'); if(more) openEvt(+more.dataset.k,ev);
+});
+/* A box moves by its head, with the mouse or a finger, anywhere on the page: an event box,
+   and the pinned month box. A moved event box leaves the row of boxes not
+   yet moved. */
+function dragByHead(ev,h,b,start,moved){
+  const x0=ev.clientX, y0=ev.clientY, wrap=b.offsetParent;
+  let off=null;
+  ev.preventDefault(); h.setPointerCapture(ev.pointerId);
+  const move=m=>{
+    const rr=wrap.getBoundingClientRect();
+    if(!off){
+      if(Math.abs(m.clientX-x0)+Math.abs(m.clientY-y0)<4) return;
+      const br=b.getBoundingClientRect();
+      off={x:x0-br.left, y:y0-br.top};
+      b.classList.add('dragging'); if(start) start();
+    }
+    const l=m.clientX-off.x-rr.left, t=m.clientY-off.y-rr.top;
+    b.style.left=Math.max(-rr.left,Math.min(document.documentElement.clientWidth-rr.left-b.offsetWidth,l))+'px';
+    b.style.top=Math.max(-(rr.top+window.scrollY),t)+'px';
+    if(moved) moved();
+  };
+  const up=()=>{b.classList.remove('dragging'); h.removeEventListener('pointermove',move);
+    h.removeEventListener('pointerup',up); h.removeEventListener('pointercancel',up);};
+  h.addEventListener('pointermove',move); h.addEventListener('pointerup',up); h.addEventListener('pointercancel',up);
+}
+boxes.addEventListener('pointerdown',ev=>{
+  const h=ev.target.closest('.tev-box .ttm'); if(!h||ev.button>0) return;
+  const b=h.closest('.tev-box');
+  dragByHead(ev,h,b,()=>{b.classList.remove('parked','onplot'); raise(b);},drawLeaders);
+});
+/* Any head of the pinned box moves it: the month's, and an advance's or amendment's in it. */
+tp.addEventListener('pointerdown',ev=>{
+  const h=ev.target.closest('.ttm'); if(!h||ev.button>0) return;
+  dragByHead(ev,h,tp);
+});
+
+function render(){
+  layout();
+  while(svg.firstChild) svg.removeChild(svg.firstChild);
+  for(let g=0;g<=4;g++){
+    const f=g/4, yy=padT+ih-f*ih;
+    svg.appendChild(el("line",{x1:padL,y1:yy,x2:W-padR,y2:yy,stroke:"#F2F1F6"}));
+    if(HAS_MONEY) svg.appendChild(txt(padL-7,yy+4,((mn+f*(mx-mn))/1e6).toFixed(1)+'M',{"text-anchor":"end","font-size":10,fill:"#6E6E72"}));
+  }
+  if(mn<0) svg.appendChild(el("line",{x1:padL,y1:y(0),x2:W-padR,y2:y(0),stroke:"#DBD9E5"}));
+  /* The lead months in view, drawn empty. */
+  const leadEnd=Math.min(L,V0+VIEW);
+  if(leadEnd>V0) svg.appendChild(el("rect",{x:x(V0)-cw/2,y:padT,width:(leadEnd-V0)*cw,height:ih,fill:"#F4F3F8"}));
+  const bw=cw*0.72, ew=cw*0.38, z=y(0);
+  for(let i=V0;i<V0+VIEW;i++){
+    if(has(REV[i])){const yv=y(REV[i]); svg.appendChild(el("rect",{x:x(i)-bw/2,y:Math.min(yv,z),width:bw,height:Math.abs(z-yv),fill:C.rev,rx:1}));}
+    if(has(EB[i])){const yv=y(EB[i]); svg.appendChild(el("rect",{x:x(i)-ew/2,y:Math.min(yv,z),width:ew,height:Math.max(0.5,Math.abs(z-yv)),fill:C.eb,rx:1}));}
+    if(HAS_ADJ&&has(ADJ[i])){const yv=y(ADJ[i]); svg.appendChild(el("rect",{x:x(i)-ew/2,y:Math.min(yv,z),width:ew,height:Math.max(0.5,Math.abs(z-yv)),fill:"none",stroke:C.adj,"stroke-width":1,"stroke-dasharray":"2 1.5"}));}
+  }
+  if(inView(BB)){
+    const bb=x(BB)-cw/2;
+    svg.appendChild(el("line",{x1:bb,y1:padT,x2:bb,y2:padT+ih,stroke:"#b23a2c","stroke-dasharray":"5 4","stroke-width":1.2,opacity:.55}));
+  }
+  let d="",pen=false;
+  for(let i=V0;i<V0+VIEW;i++){if(!has(EBM[i])){pen=false;continue;} d+=(pen?"L":"M")+x(i)+" "+yr(EBM[i]); pen=true;}
+  svg.appendChild(el("path",{d,fill:"none",stroke:C.ebm,"stroke-width":2,"stroke-linejoin":"round"}));
+  /* Each margin point carries its figure: above the point, or under it
+     near the top of the plot, on a white halo over the bars. The hover still shows it. On a
+     long range a label that would touch the one before it is left out. */
+  let last=null;   /* a label that would touch the last one drawn is left out; the hover keeps it */
+  for(let i=V0;i<V0+VIEW;i++) if(has(EBM[i])){
+    const cy=yr(EBM[i]), ly=cy<padT+14?cy+13:cy-6;
+    svg.appendChild(el("circle",{cx:x(i),cy,r:2,fill:C.ebm}));
+    if(last&&x(i)-last.x<30&&Math.abs(ly-last.y)<11) continue;
+    last={x:x(i),y:ly};
+    svg.appendChild(txt(x(i),ly,fmtP(EBM[i]),{"text-anchor":"middle","font-size":9,
+      "font-weight":700,fill:C.ebm,stroke:"#fff","stroke-width":3,"paint-order":"stroke","stroke-linejoin":"round",class:"ebm-v"}));
+  }
+
+  /* Each event's month: a rule through the plot and a flag on it. An amendment flag reads
+     its label; an advance flag reads $. Its hover names it; a click opens its box.
+     Each row of flags is named in the margin. */
+  [[0,AMD_LV,'Amendments'],[AMD_LV,ADV_LV,'Advances']].forEach(([lv,k,name])=>{
+    if(k) svg.appendChild(txt(2,padT-6-lv*13,name,{"font-size":8,fill:"#6E6E72"}));
+  });
+  FLAGS.forEach(f=>{
+    const fy=padT-15-f.lvl*13;
+    svg.appendChild(el("line",Object.assign({x1:f.ax,y1:fy+12,x2:f.ax,y2:padT+ih,stroke:f.col,"stroke-width":1.2,opacity:.7},f.adv?{"stroke-dasharray":"3 2"}:{})));
+    const g=el("g",{style:"cursor:pointer",class:"tev-flag"+(OPEN.has(f.e.k)?" on":""),"data-k":f.e.k});
+    g.appendChild(el("rect",{x:f.ax-f.fw/2,y:fy,width:f.fw,height:12,rx:2,fill:f.col}));
+    g.appendChild(txt(f.ax,fy+9,f.lbl,{"text-anchor":"middle","font-size":9,"font-weight":700,fill:"#fff"}));
+    const ttl=el("title",{}); ttl.textContent=(undated(f.e)?f.e.label+' · funding date not on file · shown at '+f.e.date
+      :f.e.date+' · '+f.e.label)+(f.e.short_name?' · '+f.e.short_name:''); g.appendChild(ttl);
+    g.addEventListener("click",ev=>openEvent(f.e,ev));
+    svg.appendChild(g);
+  });
+
+  /* The lead months' label, over the rules that cross them. */
+  if(leadEnd-V0>=3){
+    const cx=x(V0)-cw/2+(leadEnd-V0)*cw/2, cy=padT+ih/2;
+    svg.appendChild(el("rect",{x:cx-70,y:cy-20,width:140,height:34,rx:4,fill:"#F4F3F8",opacity:.94}));
+    svg.appendChild(txt(cx,cy-6,"Before the model",{"text-anchor":"middle","font-size":11,fill:"#6E6E72","font-weight":700}));
+    svg.appendChild(txt(cx,cy+9,"it starts "+M[L],{"text-anchor":"middle","font-size":10,fill:"#6E6E72"}));
+  }
+  /* A month label on every second column, or fewer on a long range, counted back from the
+     last in view. */
+  const every=Math.max(2,Math.ceil(44/cw));
+  for(let i=V0;i<V0+VIEW;i++){ if((V0+VIEW-1-i)%every===0){
+    svg.appendChild(txt(x(i),H-padB+16,M[i],{"text-anchor":"middle","font-size":9,fill:"#6E6E72"}));}}
+
+  guide=el("line",{x1:0,y1:padT,x2:0,y2:padT+ih,stroke:"#222222","stroke-width":1,opacity:0});
+  svg.appendChild(guide);
+  const cap=el("rect",{x:padL,y:padT,width:iw,height:ih,fill:"transparent"}); svg.appendChild(cap);
+  const colAt=ev=>{const r=svg.getBoundingClientRect(), sx=(ev.clientX-r.left)*(W/r.width);
+    return V0+Math.max(0,Math.min(VIEW-1,Math.floor((sx-padL)/cw)));};
+  /* A pointer shows the month under it; on a touch screen a tap pins it. While a month is
+     pinned, the pointer shows another month after it rests there a second. */
+  OVER=null;
+  cap.addEventListener("pointermove",ev=>{
+    const i=colAt(ev); if(i===OVER) return;
+    hideHover(); OVER=i;
+    if(PIN==null) showTip(tt,monthHtml(i,false),i);
+    else if(i!==PIN.i) WAIT=setTimeout(()=>{WAIT=null; showTip(tt,monthHtml(i,false),i); remeasure();},1000);
+  });
+  /* A pointer or a touch pan that leaves the chart, or is cut off, clears the hover and its wait. */
+  ["pointerleave","pointercancel"].forEach(t=>cap.addEventListener(t,hideHover));
+  cap.addEventListener("click",ev=>{ev.stopPropagation(); pin(colAt(ev));});
+
+  const leg=document.getElementById("legend"); leg.innerHTML="";
+  /* Two rows: the figures, then the events; a muted line under them. */
+  const lines=[`<span><i style="background:${C.rev}"></i>Net revenue</span>`,
+    `<span><i style="background:${C.eb}"></i>${escH(EBW)}</span>`]
+    .concat(HAS_ADJ?[`<span><i style="border:1px dashed ${C.adj};background:none"></i>Adjusted EBITDA</span>`]:[])
+    .concat([`<span><i class="ln" style="background:${C.ebm}"></i>EBITDA margin</span>`]);
+  const events=(AMD.length?[`<span><i style="background:${C.amd}"></i>Amendment or waiver</span>`]:[])
+    .concat(EVT.some(e=>e.kind==='advance')?[`<span><i class="adv" style="background:${C.adv}">$</i>Advance</span>`]:[]);
+  leg.innerHTML=`<div class="lg-row">${lines.join('')}</div>`
+    +(events.length?`<div class="lg-row">${events.join('')}</div>`:'')
+    +(EVT.length?'<span class="lg-hint">Click a flag to open its box; drag a box by its head</span>':'');
+  document.getElementById("axisnote").textContent=(TREND.notes&&TREND.notes.chart)||'';
+  drawLeaders();
+}
 render();
+/* THE RANGE AND THE SLIDER. From and To set the months on view, any
+   length, the latest 18 by default; the slider moves a range of that length back to the
+   first advance. Each follows the other. Printed, the chart shows the latest 18 months. */
+(function(){
+  const wrap=document.getElementById('trend-slider-wrap'), sl=document.getElementById('trend-slider'),
+        range=document.getElementById('trend-range'), from=document.getElementById('trend-from'),
+        to=document.getElementById('trend-to');
+  if(!n) return;
+  /* The heading names the months on view, not the months on file. */
+  const h=document.getElementById('sec-trend'), hv=h&&h.querySelector('.trend-h-view'),
+        hr=document.getElementById('trend-h-range');
+  if(hv&&hr){hv.hidden=false; h.classList.add('trend-live');}
+  /* From and To are typed as MM/YYYY; "2/2025" and "02/25" read too. A
+     month outside the chart's snaps to the nearest it holds; an entry that reads as no month
+     goes back to the last good one, with a hint. */
+  const ST=TREND.stamps||[], hint=document.getElementById('trend-hint'),
+        typed=from&&to&&ST.length===n&&ST.every(Boolean),
+        mmyyyy=i=>ST[i].slice(5)+'/'+ST[i].slice(0,4);
+  const readMonth=v=>{
+    const m=String(v).trim().match(/^(\d{1,2})\s*[\/.\-]\s*(\d{2}|\d{4})$/); if(!m||+m[1]<1||+m[1]>12) return null;
+    const key=(m[2].length===2?'20'+m[2]:m[2])+'-'+m[1].padStart(2,'0'), i=ST.findIndex(s=>s>=key);
+    return i<0?n-1:i;
+  };
+  if(typed){range.hidden=false; hint.textContent=`MM/YYYY, ${mmyyyy(0)} – ${mmyyyy(n-1)}`;}
+  const sync=()=>{
+    if(typed){from.value=mmyyyy(V0); to.value=mmyyyy(V0+VIEW-1);}
+    if(wrap&&sl){wrap.hidden=VIEW>=n; sl.min=0; sl.max=n-VIEW; sl.step=1; sl.value=V0;}
+    if(hr) hr.textContent=`· ${M[V0]} – ${M[V0+VIEW-1]}`
+      +(VIEW>=n?'':V0>0?` · slide back to ${M[0]}`:` · slide forward to ${M[n-1]}`);
+  };
+  const show=(a,b)=>{V0=Math.min(a,b); VIEW=Math.abs(b-a)+1; unpin(); render(); sync();};
+  sync();
+  if(sl) sl.addEventListener('input',()=>{V0=+sl.value; unpin(); render(); sync();});
+  /* Enter or leaving the box applies it; a From after the To swaps them. */
+  if(typed){
+    const apply=()=>{
+      const a=readMonth(from.value), b=readMonth(to.value);
+      hint.hidden=a!=null&&b!=null;
+      if(a==null||b==null){sync(); return;}
+      show(a,b);
+    };
+    [from,to].forEach(i=>{i.addEventListener('change',apply);
+      i.addEventListener('keydown',ev=>{if(ev.key==='Enter') apply();});});
+  }
+  let kept=null;
+  window.addEventListener('beforeprint',()=>{kept=[V0,VIEW]; if(V0!==n-DEF||VIEW!==DEF){V0=n-DEF; VIEW=DEF; unpin(); render();}});
+  window.addEventListener('afterprint',()=>{if(kept&&(kept[0]!==V0||kept[1]!==VIEW)){[V0,VIEW]=kept; render();} kept=null;});
+})();
+/* On paper nothing can be clicked: every event prints in a table under the chart. */
+(function(){
+  const box=document.getElementById('trend-print'); if(!box||!EVT.length) return;
+  box.innerHTML='<h4>Amendments, waivers and advances, oldest first</h4><table class="trend-print-t"><thead><tr>'
+    +'<th>Date</th><th>Event</th><th>Figures</th><th>Terms changed</th></tr></thead><tbody>'
+    +EVT.slice().sort((a,b)=>a.index-b.index).map(e=>'<tr><td>'+escH(e.date)+'</td><td>'+escH(e.label)
+      +(kindWord(e)?' · '+kindWord(e):'')+(e.short_name?'<br>'+escH(e.short_name):'')+'</td><td>'
+      +(e.date_note?[escH(e.date_note)]:[]).concat((e.lines||[]).map(l=>escH(l.label)+': '+escH(lineWithStated(l)))).join('<br>')+'</td><td>'
+      +((e.terms&&e.terms.rows)||[]).filter(r=>r.changed).map(r=>escH(r.name)+': '+escH(r.before||'not on file')
+        +' → '+escH(r.after||'not on file')+' ('+escH(r.change||'')+')').join('<br>')+'</td></tr>').join('')
+    +'</tbody></table>';
+})();
+(function(){
+  const pop=document.getElementById('trend-pop');
+  if(pop){
+    pop.querySelector('.trend-pop-x').addEventListener('click',e=>{e.stopPropagation();pop.hidden=true;});
+    document.addEventListener('keydown',e=>{if(e.key==='Escape') pop.hidden=true;});
+    document.addEventListener('click',e=>{
+      if(pop.hidden||pop.contains(e.target)||e.target.closest('#trcpop')) return;
+      if(!e.target.closest('#chart')) pop.hidden=true;
+    });
+  }
+  const btn=document.getElementById('trend-srcbtn'), src=document.getElementById('trend-src');
+  if(btn&&src) btn.addEventListener('click',()=>{
+    src.hidden=!src.hidden; btn.setAttribute('aria-expanded',String(!src.hidden));
+    btn.textContent=src.hidden?'Show sources':'Hide sources';
+  });
+})();
 </script>
 <script>
 // Figure trace box. ONE interaction: click a traceable CONTAINER, the box opens;
