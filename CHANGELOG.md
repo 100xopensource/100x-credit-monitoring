@@ -4,6 +4,20 @@ Notable changes to Credit Monitoring are recorded here.
 
 ## [Unreleased]
 
+## [1.7.0] - Unreleased
+
+Versions between 1.3.3 and 1.7.0 were internal and were not public releases; this entry covers the memo changes since 1.3.3.
+
+### Added
+
+- The memo's trend chart can cover the deal's whole term, from the first advance, when the borrower's settings ask for it. It opens on the latest 18 months, with From and To boxes and a slider to move back in time.
+- The trend chart marks each amendment, waiver and advance on its month. A click opens its box: LTM revenue, revenue growth and EBITDA to the month end before it, and for an advance the amount, pro forma debt and leverage. Hovering a month adds its change on a year earlier.
+- Each box shows EBITDA, and Adjusted EBITDA under it where the deal record or the model carries it. Hovering Adjusted EBITDA writes out the add-backs with their sources. A month's box can be pinned and moved.
+
+### Known limitations
+
+- An advance's box reads "not on file" for existing and pro forma debt.
+
 ## [1.3.3] - 2026-11-02
 
 Versions between 1.1.0 and 1.3.3 were internal and were not public releases; this entry covers everything since 1.1.0.
