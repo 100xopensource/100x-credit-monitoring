@@ -755,6 +755,87 @@ def check_drawn(memo, payload, errs, warns):
     if not dseries and wseries:
         errs.append("the chart draws nothing although the run produced series for it")
     check_drawn_quarters(drawn, want, errs)
+    check_drawn_amendments(drawn, want, errs)
+    check_drawn_events(drawn, want, errs)
+
+
+def check_drawn_amendments(drawn, want, errs):
+    """Each amendment marker sits on the column the run placed it on, carries its
+    label and lists the changes the covenant record holds."""
+    wa = want.get("amendments") or []
+    marked = {d.get("k") for d in (drawn.get("amendments") or []) if isinstance(d, dict)}
+    for k, w in enumerate(wa):
+        if w.get("index") is not None and k not in marked:
+            errs.append(f"the chart leaves out the marker for {w.get('name')}, which the "
+                        "run placed on the chart")
+    for d in drawn.get("amendments") or []:
+        k = d.get("k") if isinstance(d, dict) else None
+        w = wa[k] if isinstance(k, int) and 0 <= k < len(wa) else None
+        if w is None or w.get("index") is None:
+            errs.append(f"the chart marks an amendment ({(d or {}).get('name')}) the run "
+                        "did not place on the chart")
+            continue
+        if d.get("index") != w.get("index"):
+            errs.append(f"the chart marks {w.get('name')} on another month than the "
+                        "month it was signed")
+        if (d.get("label") or "A") != (w.get("label") or "A"):
+            errs.append(f"the chart labels {w.get('name')} {d.get('label')}, not "
+                        f"{w.get('label')}")
+        if d.get("changes") != w.get("changes"):
+            errs.append(f"the {w.get('name')} marker lists changes that are not the "
+                        "ones the covenant record holds")
+
+
+# A trend box label says each word in full: "Adj." for Adjusted,
+# "PF" for pro forma and "rev." for revenue are refused.
+ABBREVIATED_LABEL = re.compile(r"\bAdj\.|\bPF\b|\brev\.", re.I)
+
+
+def check_drawn_events(drawn, want, errs):
+    """Each event box sits on the run's column and states the run's own figures, line by
+    line, under the run's own full labels; a box the run did not place is refused. On a
+    deal that records no Adjusted EBITDA, no box and no month names one."""
+    wanted = {e.get("k"): e for e in (want.get("events") or [])
+              if isinstance(e, dict) and e.get("index") is not None}
+    adjusted = bool(want.get("adj_formula")) or want.get("event_ebitda") == "Adjusted EBITDA"
+    if drawn.get("adj_formula") and not want.get("adj_formula"):
+        errs.append("the chart's months show an Adjusted EBITDA the run did not produce")
+    for d in drawn.get("events") or []:
+        w = wanted.get((d or {}).get("k")) if isinstance(d, dict) else None
+        if w is None:
+            errs.append(f"the chart boxes an event ({(d or {}).get('label')}) the run did not place")
+            continue
+        if d.get("index") != w.get("index"):
+            errs.append(f"the {w.get('label')} box of {w.get('date_words')} sits on another month "
+                        "than the run placed it on")
+        lines = {ln.get("key"): ln for ln in w.get("lines") or []}
+        for ln in d.get("lines") or []:
+            got = (lines.get(ln.get("key")) or {}).get("figure") or {}
+            dv, wv = _maybe_float(ln.get("value")), _maybe_float(got.get("value"))
+            tol = 0.0005 if ln.get("fmt") in ("pct", "x") else 1.0
+            if (dv is None) != (wv is None) or (dv is not None and not _near(dv, wv, tol)):
+                errs.append(f"the {w.get('label')} box of {w.get('date_words')} states a "
+                            f"{ln.get('label')} that is not the run's own figure")
+            st = (lines.get(ln.get("key")) or {}).get("stated") or {}
+            if not _near(_maybe_float((ln.get("stated") or {}).get("value")), _maybe_float(st.get("value")), 1.0) \
+                    and (ln.get("stated") or st):
+                errs.append(f"the {w.get('label')} box of {w.get('date_words')} states a "
+                            f"{ln.get('label')} a document stated that is not the run's own")
+            said = str(ln.get("label") or "")
+            if said != str((lines.get(ln.get("key")) or {}).get("label") or ""):
+                errs.append(f"the {w.get('label')} box of {w.get('date_words')} names its "
+                            f"{ln.get('key')} line {said!r}, not the run's own label")
+            if ABBREVIATED_LABEL.search(said):
+                errs.append(f"the {w.get('label')} box of {w.get('date_words')} abbreviates "
+                            f"{said!r}: every label says its words in full")
+            if "Adjusted EBITDA" in said and not adjusted:
+                errs.append(f"the {w.get('label')} box of {w.get('date_words')} reads {said!r} "
+                            "on a deal that records no Adjusted EBITDA")
+    boxed = {d.get("k") for d in drawn.get("events") or [] if isinstance(d, dict)}
+    for k, w in wanted.items():
+        if k not in boxed:
+            errs.append(f"the chart leaves out the {w.get('label')} box of {w.get('date_words')}, "
+                        "which the run placed on the chart")
 
 
 def check_drawn_quarters(drawn, want, errs):
