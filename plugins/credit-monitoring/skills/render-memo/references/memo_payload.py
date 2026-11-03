@@ -50,10 +50,12 @@ here, once, against the figure's own declared kind.
 Usage:
   python memo_payload.py --borrower-config <borrower-config.json> \
                          --period YYYY-MM --out <memo-payload.json>
-                         [--archive <dir>] [--model <path>] [--trend-months 18]
+                         [--archive <dir>] [--model <path>] [--trend-months N]
 """
 import argparse
 from contextlib import closing as closing_book
+import calendar
+import datetime
 import json
 import os
 import re
@@ -477,6 +479,45 @@ def _num(x):
 def _read_json(path):
     with open(path, "r", encoding="utf-8") as fh:
         return json.load(fh)
+
+
+def _and_list(words):
+    """"a", "a and b", "a, b and c"."""
+    words = [w for w in words if w]
+    if len(words) < 3:
+        return " and ".join(words)
+    return ", ".join(words[:-1]) + " and " + words[-1]
+
+
+def _day_words(iso):
+    """"31 Jul 2026" for "2026-07-31"; the text as given when it is no date."""
+    try:
+        d = datetime.date.fromisoformat(str(iso or "")[:10])
+    except ValueError:
+        return str(iso or "")
+    return f"{d.day} {calendar.month_abbr[d.month]} {d.year}"
+
+
+def _month_offset(period, months):
+    """An ISO YYYY-MM shifted by whole months, or None."""
+    if not re.fullmatch(r"\d{4}-\d{2}", str(period or "")):
+        return None
+    n = int(period[:4]) * 12 + int(period[5:7]) - 1 + months
+    if n < 0:
+        return None
+    return f"{n // 12:04d}-{n % 12 + 1:02d}"
+
+
+def on_model(refs, cfg, stores):
+    """Workbook refs with the model's own file and link on each: a ref that names no
+    store takes the model's file; one that names a store is left as it is."""
+    path = (cfg.get("paths") or {}).get("model_output_path")
+    if not path:
+        return list(refs or [])
+    store, rel = _store_of(path), _in_store(path)
+    url = _url(store, rel, stores)[0]
+    return [{**r, "store": store, "path_in_store": rel, "url": url}
+            if isinstance(r, dict) and not r.get("store") else r for r in (refs or [])]
 
 
 def _maybe_json(path):
@@ -1205,7 +1246,12 @@ def trend_notes(unit, break_label, quarters=None):
                          "that line together.")
             abs_note += straddles
             pct_note += straddles
-    return {"abs": abs_note, "pct": pct_note}
+    chart = ("Net revenue and EBITDA in US dollars, read from the monthly financial statements"
+             + (f", which are kept in {unit.plain}." if scaled else ".")
+             + (f" The dashed line at {break_label} marks a change in how the borrower "
+                "reports these figures: months either side of it are not directly comparable."
+                if break_label else ""))
+    return {"abs": abs_note, "pct": pct_note, "chart": chart}
 
 
 def trend_series(model, cfg, period, months_back, unit=None):
@@ -1237,7 +1283,8 @@ def trend_series(model, cfg, period, months_back, unit=None):
                 axis = axis[:axis.index(end) + 1]
         except (ValueError, IndexError):
             pass
-    axis = axis[-months_back:]
+    if months_back:
+        axis = axis[-months_back:]
     out = {"months": axis, "series": {}, "absent": []}
     for key, label in sorted(want.items()):
         if not label:
@@ -1366,6 +1413,1383 @@ def quarter_callouts(months, series, basis_break_index=None):
             "spans_basis_break": (basis_break_index is not None
                                   and idx[0] < basis_break_index <= idx[-1]),
         })
+    return out
+
+
+TREND_MONTHS_DEFAULT = 18
+# The most columns the chart draws a box per quarter over; past it the boxes do not
+# fit, and each quarter's totals show in the tooltip on its quarter-end month.
+QUARTER_BAND_MAX_COLUMNS = 40
+
+
+def trend_months_setting(value):
+    """The format record's `trend_months` as the chart reads it: a whole number of 1
+    or more, or `"term"`; None for anything else."""
+    if isinstance(value, str):
+        value = value.strip().lower()
+        if value == "term":
+            return value
+        value = int(value) if value.isdigit() else None
+    if isinstance(value, int) and not isinstance(value, bool) and value >= 1:
+        return value
+    return None
+
+
+def _stamp(when):
+    """`when` as 'YYYY-MM', or None for a blank or unreadable date."""
+    try:
+        return ml.period_stamp(when) if when else None
+    except ValueError:
+        return None
+
+
+def _months_after(stamp, start):
+    """How many months 'YYYY-MM' `stamp` falls after 'YYYY-MM' `start`."""
+    return (int(stamp[:4]) - int(start[:4])) * 12 + int(stamp[5:7]) - int(start[5:7])
+
+
+def trend_window(setting, spec, period, absent, first_advance=None):
+    """The months the trend chart draws: the format record's `trend_months`, a whole
+    number, or `"term"` for every month from the deal's first advance (`first_advance`,
+    an ISO date), else the agreement's date, to `period`. None draws every month the
+    model holds: a term with neither date on file, recorded in `absent`. A setting
+    `read_pack_format` refused reads as unset."""
+    if setting is None:
+        return TREND_MONTHS_DEFAULT
+    if setting != "term":
+        return setting
+    close = _stamp(first_advance) or _stamp((spec or {}).get("as_of_agreement_date"))
+    end = _stamp(period)
+    if not close or not end:
+        absent.append({"kind": "trend_term_unknown", "section": "data_quality",
+                       "what": "The start of the deal's term on the trend chart",
+                       "reason": "this borrower's settings ask for the whole term on the "
+                                 "trend chart, and neither the loans' fundings nor the "
+                                 "covenant record date it, so the chart draws every month "
+                                 "the model holds."})
+        return None
+    return max(1, _months_after(end, close) + 1)
+
+
+def amendment_callouts(months, amendments, quarterly=False):
+    """Every amendment as the chart marks it, oldest first: its label, the column it
+    was signed in, and what it changed as `trend_amendments` read it.
+
+    A column holds an amendment signed in its month, or, on a quarter chart, in
+    its quarter. An amendment outside the window or with no date keeps
+    `index` None: the list under the chart still names it and links it.
+    """
+    stamps = [_stamp(mo) for mo in months]
+    span = 2 if quarterly else 0
+    out = []
+    waivers = 0
+    for a in sorted(amendments, key=lambda a: str(a.get("dated") or "9999")):
+        # The flag's label: A-5 for the Fifth Amendment, by the number the document
+        # gives itself; W-1, W-2 for waivers and consents in date order; a bare A
+        # for an amendment that carries no number.
+        if a.get("number"):
+            label = f"A-{a['number']}"
+        elif a.get("role") == "waiver_consent" or _WAIVER_RE.search(str(a.get("name") or "")):
+            waivers += 1
+            label = f"W-{waivers}"
+        else:
+            label = "A"
+        signed = _stamp(a.get("dated"))
+        idx = next((i for i, st in enumerate(stamps) if signed and st
+                    and 0 <= _months_after(st, signed) <= span), None)
+        out.append({"name": a.get("name"), "dated": a.get("dated"), "page": a.get("page"),
+                    "label": label, "index": idx, "changes": a.get("changes"),
+                    "terms": a.get("terms"),
+                    "administrative_only": bool(a.get("administrative_only")),
+                    "source_ref": a.get("source_ref")})
+    return out
+
+
+# ------------------------------------------------------------------ the chart's events
+# Each amendment, waiver and advance the trend chart boxes, with the LTM
+# figures at its date, each advance and the debt after it. Every figure is worked out
+# here, with its steps and its cells; the chart formats and positions them.
+
+# An advance this many days after an amendment is that amendment's funding: the Fifth
+# Amendment of 30 Jun 2025 funded on 1 Jul 2025.
+FUNDED_WITH_DAYS = 5
+# A funding the debt-service spec dates by estimate says so in its note.
+_ESTIMATED_RE = re.compile(r"\b(not evidenced|estimated)\b", re.IGNORECASE)
+NOT_IN_MODEL = "not in the model"
+
+
+def event_date_words(iso):
+    """'Mar 5 2025' for '2025-03-05': the day an event and its advances print on the
+    trend chart; the text as given when it is no date."""
+    try:
+        d = datetime.date.fromisoformat(str(iso or "")[:10])
+    except ValueError:
+        return str(iso or "")
+    return f"{calendar.month_abbr[d.month]} {d.day} {d.year}"
+
+
+def _stamp_label(stamp):
+    """'2025-06' as the model's month label, 'Jun 2025'."""
+    return ml._label_from(int(stamp[:4]), int(stamp[5:7]))
+
+
+def _days_after(start, end):
+    """Days from ISO date `start` to ISO date `end`."""
+    return (datetime.date.fromisoformat(end[:10]) - datetime.date.fromisoformat(start[:10])).days
+
+
+def lead_months(months, start):
+    """The window's months before the model's first month, oldest first, as month
+    labels: the chart draws them empty. `start` is the window's first month ('YYYY-MM');
+    [] when the model already reaches it."""
+    first = _stamp(months[0]) if months else None
+    if not first or not start or start >= first:
+        return []
+    out, at = [], start
+    while at < first:
+        out.append(_stamp_label(at))
+        at = _month_offset(at, 1)
+    return out
+
+
+def loan_schedules(paths):
+    """The facility as `deal_fundings` and the event boxes read it: its debt-service
+    spec, its schedule file and the schedule's rows. {"loans": []} when no
+    debt-service spec is on file."""
+    spec_path = paths.get("debt_service_spec_path")
+    if not spec_path:
+        return {"loans": []}
+    sched_path = paths.get("debt_service_schedule_path")
+    sched = _maybe_json(sched_path) if sched_path else None
+    rows = [r for r in (sched or {}).get("results") or [] if isinstance(r, dict)]
+    return {"loans": [{"loan": "facility", "name": "Our loan", "spec": spec_path,
+                       "schedule": sched_path, "rows": rows}]}
+
+
+def deal_fundings(schedules):
+    """Every advance under the deal's loans, oldest first, off each loan's debt-service
+    spec (`tranches[].fundings`): {date, amount, loan, name, note, estimated, figure,
+    rows}. `rows` is the loan's schedule as the debt-service schedules section holds it."""
+    out = []
+    for loan in (schedules or {}).get("loans") or []:
+        spec = _maybe_json(loan.get("spec"))
+        if not isinstance(spec, dict):
+            continue
+        store, rel = ml.parse_store_path(loan.get("spec")) or (None, loan.get("spec"))
+        name = str(loan.get("name") or "Our loan")
+        for tranche in spec.get("tranches") or []:
+            for f in (tranche or {}).get("fundings") or [] if isinstance(tranche, dict) else []:
+                when = str((f or {}).get("date") or "")[:10]
+                amount = _num((f or {}).get("amount"))
+                if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", when) or amount is None:
+                    continue
+                aref = f.get("agreement_ref")
+                where = (flatten_value(aref.get("section")) if isinstance(aref, dict)
+                         else flatten_value(aref)) or "the spec's funding entry"
+                note = flatten_value(f.get("note"))
+                estimated = bool(_ESTIMATED_RE.search(note or ""))
+                day = event_date_words(when)
+                out.append({
+                    "date": when, "amount": amount, "loan": str(loan.get("loan") or ""),
+                    "name": name, "note": note, "estimated": estimated,
+                    "rows": loan.get("rows") or [],
+                    "figure": {
+                        "id": f"trend-chart.advance.{_slug(str(loan.get('loan') or 'loan'))}.{when}",
+                        "label": f"Advance — {day}", "value": amount, "unit": "usd",
+                        "calc": (f"The advance of {day} under {name}, as the loan's debt-service "
+                                 f"spec records it ({where})."
+                                 + (" The spec says this date is estimated: no disbursement "
+                                    "letter for it is on file." if estimated else "")),
+                        "steps": [{"l": f"Advance, {day}", "n": amount, "u": "usd", "res": True}],
+                        "source_ref": [{"store": store, "path_in_store": rel,
+                                        "section": f"fundings, {when}"}]}})
+    return sorted(out, key=lambda a: (a["date"], a["loan"]))
+
+
+def _model_sum(model, row, end, to_usd, cfg, stores, word):
+    """({value, steps, refs}, None) for `row` added over the twelve months to `end`
+    ('YYYY-MM'), or (None, why) when the model does not hold all twelve."""
+    stamps = [_month_offset(end, -k) for k in range(11, -1, -1)]
+    labels = [_stamp_label(s) for s in stamps]
+    held = set(getattr(model, "months", None) or [])
+    if not row or any(lab not in held for lab in labels):
+        first = (getattr(model, "months", None) or ["—"])[0]
+        return None, f"{NOT_IN_MODEL}: the twelve months to {labels[-1]} need {labels[0]}, and the model starts {first}"
+    vals = [to_usd(_num(model.get_line(row, month=lab))) for lab in labels]
+    gap = next((lab for lab, v in zip(labels, vals) if v is None), None)
+    if gap:
+        return None, f"the model's {row} row carries no figure for {gap}"
+    total = round(sum(vals), 2)
+    steps = [{"l": lab, "n": v, "u": "usd", **({"op": "+"} if i else {})}
+             for i, (lab, v) in enumerate(zip(labels, vals))]
+    steps.append({"l": f"LTM {word}, the twelve months to {labels[-1]}", "n": total, "u": "usd",
+                  "op": "=", "res": True})
+    refs = on_model([model.provenance(row, month=lab) for lab in labels], cfg, stores)
+    return {"value": total, "steps": steps, "refs": [r for r in refs if r]}, None
+
+
+def _line(key, label, fig=None, missing=None, fmt="usd"):
+    """One line of an event box: its figure, or the words for why it is missing."""
+    return {"key": key, "label": label, "fmt": fmt, "figure": fig,
+            "missing": None if fig is not None else missing,
+            "short": None if fig is not None else
+            (NOT_IN_MODEL if str(missing or "").startswith(NOT_IN_MODEL) else
+             "n.m." if str(missing or "").startswith("n.m.") else "not on file")}
+
+
+def _copy_of(fig, fid, label):
+    """A box's own figure that restates another the payload already carries."""
+    return {"id": fid, "label": label, "value": fig["value"], "unit": fig.get("unit") or "usd",
+            "calc": fig.get("calc"), "steps": fig.get("steps") or
+            [{"l": label, "n": fig["value"], "u": fig.get("unit") or "usd", "res": True}],
+            "source_ref": fig.get("source_ref") or []}
+
+
+# The LTM a document stated at the time: the deal setting
+# `config/stated-ltm.json`, a list of {period_end, ebitda, revenue, kind, source_ref
+# {file, page}, note}. A box shows the entry whose period_end is its LTM-to month.
+STATED_LTM_FILE = "stated-ltm.json"
+
+
+def stated_ltm(cfg):
+    """{period_end: entry} off the deal's `config/stated-ltm.json`, beside the covenant
+    spec; {} where the file is absent or unreadable. An entry with no period end or
+    no EBITDA is left out."""
+    paths = (cfg or {}).get("paths") or {}
+    ref = paths.get("covenant_spec_path") or paths.get("collateral_map_path")
+    if not ref or "/" not in str(ref):
+        return {}
+    got = _maybe_json(str(ref).rsplit("/", 1)[0] + "/" + STATED_LTM_FILE)
+    out = {}
+    for e in got if isinstance(got, list) else []:
+        if isinstance(e, dict) and re.fullmatch(r"\d{4}-\d{2}", str(e.get("period_end") or "")) \
+                and _num(e.get("ebitda")) is not None:
+            out[e["period_end"]] = e
+    return out
+
+
+def stated_figure(entry, key, fid, when, stores):
+    """One figure a document stated, `key` "ebitda" or "revenue", with its file and
+    page, or None where the entry states none."""
+    v = _num((entry or {}).get(key))
+    if v is None:
+        return None
+    src = entry.get("source_ref") if isinstance(entry.get("source_ref"), dict) else {}
+    page = src.get("page") if isinstance(src.get("page"), int) and not isinstance(src.get("page"), bool) else None
+    kind = str(entry.get("kind") or "document")
+    word = "EBITDA" if key == "ebitda" else "revenue"
+    ref = doc_ref(f"deal_docs:{src['file']}", stores) if src.get("file") else None
+    if ref is not None and page:
+        ref["page"] = page
+    return {"id": fid, "label": f"LTM {word} stated by the {kind} — {when}", "value": v, "unit": "usd",
+            "calc": (f"LTM {word} for the twelve months to {when}, as the {kind} stated it at the time"
+                     + (f", page {page}" if page else "") + "; the deal setting stated-ltm.json records it."
+                     + (f" {entry['note']}" if entry.get("note") else "")),
+            "steps": [{"l": f"LTM {word} stated by the {kind}, {when}", "n": v, "u": "usd", "res": True}],
+            "source_ref": [ref] if ref else [],
+            "kind": kind, "page": page}
+
+
+def with_stated(line, ctx, key, end, pre):
+    """`line` with the figure a document stated for the same twelve months beside it."""
+    entry = (ctx.get("stated") or {}).get(end)
+    fig = stated_figure(entry, key, f"{pre}.ltm-{'ebitda' if key == 'ebitda' else 'revenue'}-stated",
+                        _stamp_label(end), ctx["stores"]) if entry else None
+    if fig:
+        line["stated"] = fig
+    return line
+
+
+# Adjusted EBITDA prints only where the deal's files or its record carry it:
+# add-backs on the deal record, else the fund's own template's add-back rows, else a model row
+# the package labels Adjusted EBITDA. Nothing else makes one. A row that is a margin, a growth
+# rate, a ratio or a pro forma figure is not one.
+ADJUSTED_ROW = re.compile(r"^adj(?:usted|\.)?\s*ebitda\b(?!.*(?:margin|growth|%|/|pro\s*forma|\bpf\b))", re.I)
+NOT_ITEMISED = "the model's {row} row, as the package reports it. The files do not itemise its add-backs."
+
+
+def ebitda_word(ctx):
+    """The name of every box's EBITDA line: "Adjusted EBITDA" where the package reports its only
+    EBITDA under that name (`ebitda_adjusted`), else "EBITDA"."""
+    return "Adjusted EBITDA" if ctx.get("ebitda_adjusted") else "EBITDA"
+
+
+def has_adjusted(ctx):
+    """True where the deal records Adjusted EBITDA beside its EBITDA: add-backs, or a model
+    row the package labels Adjusted EBITDA."""
+    return bool(ctx.get("adjustments") or ctx.get("adj_row") or ctx.get("adj_why"))
+
+
+def _entry_source_words(src):
+    """A cited entry's source in words: "Package Q2.xlsx, IS, row 62"."""
+    src = src if isinstance(src, dict) else {}
+    doc = os.path.basename(str(src.get("document") or "").split(":", 1)[-1]) or None
+    bits = [doc, src.get("sheet"), f"row {src['row']}" if src.get("row") else None,
+            f"p. {src['page']}" if src.get("page") else None, src.get("section")]
+    return ", ".join(str(b) for b in bits if b) or "the source the settings name"
+
+
+def addback_source(entries):
+    """Where each add-back is on file, in one line: "From the deal record: Stock-based
+    compensation, Package.xlsx, IS, row 41"."""
+    by = {}
+    for a in entries or []:
+        by.setdefault(a.get("origin") or "the deal record", []).append(
+            f"{a.get('name')}, {a.get('source_words') or _entry_source_words(a.get('source'))}")
+    return " · ".join(f"From {who}: " + "; ".join(said) for who, said in by.items())
+
+
+def addback_sources(entries):
+    """Each add-back's source in short, one line each, as its hover's Sources list prints it
+   : "Stock-based compensation · Package Jun 2025, IS row 41"."""
+    out = []
+    for a in entries or []:
+        words = a.get("source_words") or _entry_source_words(a.get("source"))
+        words = re.sub(r"\.(?:xlsx|xlsm|xls|pdf|csv)\b", "", words, flags=re.I)
+        out.append(f"{a.get('name')} · " + re.sub(r",\s*(row|p\.)", r" \1", words))
+    return out
+
+
+def addback_formula(base_label, base, entries, amounts):
+    """What an Adjusted EBITDA hover prints: the EBITDA it starts from, each add-back by its
+    recorded name with its amount, and its Sources list (`addback_sources`)."""
+    return {"base": {"l": base_label, "n": base},
+            "adds": [{"l": a.get("name"), "n": n} for a, n in zip(entries, amounts)],
+            "sources": addback_sources(entries)}
+
+
+def adjusted_ebitda(ctx, fid, label, ebitda, end):
+    """({figure}, formula) for `ebitda` plus the deal record's add-backs over the twelve
+    months to `end`, or (None, {"why"}). The formula is what the box's hover prints."""
+    parts, why = adjustments_over(ctx["adjustments"], end)
+    if parts is None:
+        return None, {"why": why}
+    total = round(ebitda["value"] + sum(p["n"] for p in parts), 2)
+    fig = {"id": fid, "label": label, "value": total, "unit": "usd",
+           "calc": f"{ebitda['label']} plus the add-backs over the twelve months to "
+                   f"{_stamp_label(end)}. {addback_source(ctx['adjustments'])}.",
+           "steps": [{"l": ebitda["label"], "n": ebitda["value"], "u": "usd", "fid": ebitda.get("id")}]
+           + [dict(p, op="+") for p in parts]
+           + [{"l": label, "n": total, "u": "usd", "op": "=", "res": True}],
+           "source_ref": ebitda.get("source_ref") or []}
+    return fig, addback_formula(ebitda["label"].split(" — ")[0], ebitda["value"], ctx["adjustments"],
+                                [p["n"] for p in parts])
+
+
+def event_ltm(ctx, k, date, at_close=None):
+    """The LTM lines of the event dated `date`: revenue, its growth on the LTM a year
+    earlier, EBITDA and, where the deal records it, Adjusted EBITDA below it, each over
+    the twelve months to the month end before `date`. The deal's first
+    advance reads the deal record's figures at close (`at_close`) where they are on file.
+    Returns (lines, (the figure the leverage divides by or None, its name))."""
+    end = _month_offset(date[:7], -1)
+    when = _stamp_label(end)
+    pre = f"trend-chart.event.{k}"
+    word = ebitda_word(ctx)
+    if at_close and at_close.get("revenue") is not None:
+        eb = at_close.get("ebitda")
+        fig = eb and _copy_of(eb, f"{pre}.ltm-ebitda", "EBITDA at close")
+        lines = [_line("ltm_revenue", "Revenue at close",
+                       _copy_of(at_close["revenue"], f"{pre}.ltm-revenue", "Revenue at close")),
+                 with_stated(_line("ltm_ebitda", "EBITDA at close", fig,
+                                   "the deal record states no EBITDA at close"), ctx, "ebitda", end, pre)]
+        adj = None
+        if has_adjusted(ctx):
+            label = "Adjusted EBITDA at close"
+            if not fig:
+                adj, said = None, {"why": "the deal record states no EBITDA at close"}
+            elif ctx.get("adjustments"):
+                adj, said = adjusted_ebitda(ctx, f"{pre}.ltm-adjusted-ebitda", label, fig,
+                                            str(eb.get("period") or end)[:7])
+            else:
+                adj, said = None, {"why": "the deal record states no Adjusted EBITDA at close"}
+            lines.append(dict(_line("ltm_adj_ebitda", label, adj, said.get("why")), formula=said))
+        return lines, ((adj, "Adjusted EBITDA") if adj else (fig, "EBITDA"))
+    model, to_usd = ctx["model"], ctx["to_usd"]
+    rev, why_rev = _model_sum(model, ctx["revenue_row"], end, to_usd, ctx["cfg"], ctx["stores"], "revenue")
+    lines = [_line("ltm_revenue", "LTM revenue", rev and {
+        "id": f"{pre}.ltm-revenue", "label": f"LTM revenue — {when}", "value": rev["value"],
+        "unit": "usd", "calc": f"Net revenue added over the twelve months to {when}, off the "
+                               f"model's {ctx['revenue_row']} row.",
+        "steps": rev["steps"], "source_ref": rev["refs"]}, why_rev)]
+    with_stated(lines[0], ctx, "revenue", end, pre)
+    prior, why_prior = (_model_sum(model, ctx["revenue_row"], _month_offset(end, -12), to_usd,
+                                   ctx["cfg"], ctx["stores"], "revenue") if rev else (None, why_rev))
+    growth, why_growth = None, why_prior
+    if rev and prior:
+        if prior["value"] > 0:
+            g = rev["value"] / prior["value"] - 1
+            growth = {"id": f"{pre}.ltm-revenue-growth",
+                      "label": f"LTM revenue growth — {when}", "value": g, "unit": "%",
+                      "calc": f"LTM revenue to {when} over the LTM revenue a year earlier, less one.",
+                      "steps": [{"l": f"LTM revenue to {when}", "n": rev["value"], "u": "usd"},
+                                {"l": f"LTM revenue to {_stamp_label(_month_offset(end, -12))}",
+                                 "n": prior["value"], "u": "usd", "op": "÷"},
+                                {"l": "Growth", "n": g, "u": "%", "op": "=", "res": True}],
+                      "source_ref": rev["refs"] + prior["refs"]}
+        else:
+            why_growth = "n.m.: the LTM revenue a year earlier is not above zero"
+    lines.append(_line("ltm_growth", "LTM revenue growth", growth, why_growth, fmt="pct"))
+    eb, why = _model_sum(model, ctx["ebitda_row"], end, to_usd, ctx["cfg"], ctx["stores"], word)
+    fig = eb and {"id": f"{pre}.ltm-ebitda", "label": f"LTM {word} — {when}",
+                  "value": eb["value"], "unit": "usd",
+                  "calc": f"{word} added over the twelve months to {when}, off the model's "
+                          f"{ctx['ebitda_row']} row, with no add-back.",
+                  "steps": eb["steps"], "source_ref": eb["refs"]}
+    line = with_stated(_line("ltm_ebitda", f"LTM {word}", fig, why), ctx, "ebitda", end, pre)
+    if fig and ctx.get("ebitda_adjusted"):
+        line["formula"] = {"note": NOT_ITEMISED.format(row=ctx["ebitda_row"])}
+    lines.append(line)
+    if not has_adjusted(ctx):
+        return lines, (fig, word)
+    label = "LTM Adjusted EBITDA"
+    if ctx.get("adjustments"):
+        adj, said = (adjusted_ebitda(ctx, f"{pre}.ltm-adjusted-ebitda", f"{label} — {when}", fig, end)
+                     if fig else (None, {"why": why}))
+    else:
+        got, why_adj = (_model_sum(model, ctx["adj_row"], end, to_usd, ctx["cfg"], ctx["stores"],
+                                   "Adjusted EBITDA") if ctx.get("adj_row") else (None, ctx["adj_why"]))
+        adj = got and {"id": f"{pre}.ltm-adjusted-ebitda", "label": f"{label} — {when}",
+                       "value": got["value"], "unit": "usd",
+                       "calc": f"Adjusted EBITDA added over the twelve months to {when}, off "
+                               + NOT_ITEMISED.format(row=ctx["adj_row"]),
+                       "steps": got["steps"], "source_ref": got["refs"]}
+        said = {"note": NOT_ITEMISED.format(row=ctx["adj_row"])} if got else {"why": why_adj}
+    lines.append(dict(_line("ltm_adj_ebitda", label, adj, said.get("why")), formula=said))
+    return lines, ((adj, "Adjusted EBITDA") if adj else (fig, word))
+
+
+def existing_debt_label(month):
+    """The existing-debt line's label at `month` ('Jun 2025')."""
+    return f"Existing debt (balance sheet, net of OID) at {month}"
+
+
+def existing_debt(ctx, before, pre):
+    """({figure}, None) for the debt on the model's balance sheet at the month end
+    `before` ('YYYY-MM'): the funded-debt rows the capital structure's check line
+    adds up, net of OID, leases left out. (None, why) where the model holds no
+    balance sheet for that month or the settings name no debt rows."""
+    model, rows = ctx["model"], ctx["debt_rows"]
+    lab = _stamp_label(before)
+    if not rows:
+        return None, "the settings name no balance-sheet debt rows"
+    if lab not in set(getattr(model, "months", None) or []):
+        first = (getattr(model, "months", None) or ["—"])[0]
+        return None, f"{NOT_IN_MODEL}: the model has no balance sheet for {lab}; it starts {first}"
+    vals = [(row, ctx["to_usd"](_num(model.get_line(row, month=lab, sheet="Balance Sheet"))))
+            for row in rows]
+    held = [(row, v) for row, v in vals if v is not None]
+    if not held:
+        return None, f"the model's balance sheet carries no debt row for {lab}"
+    total = round(sum(v for _r, v in held), 2)
+    label = existing_debt_label(lab)
+    provs = [model.provenance(row, sheet="Balance Sheet", month=lab) for row, _v in held]
+    return {"id": f"{pre}.existing-debt", "label": label, "value": total, "unit": "usd",
+            "calc": (f"The debt on the model's balance sheet at {lab}: the funded-debt rows the "
+                     "capital structure's check line adds up, leases left out. The balance sheet "
+                     "carries the loans net of OID, so this sits below the principal outstanding."
+                     + ("" if len(held) == len(vals) else
+                        " " + _and_list([r for r, v in vals if v is None]) + " carries no figure "
+                        f"for {lab} and is left out.")),
+            # each row under the model's own label for it
+            "steps": [{"l": f"{(pv or {}).get('label') or r}, {lab}", "n": v, "u": "usd",
+                       **({"op": "+"} if i else {})} for i, ((r, v), pv) in enumerate(zip(held, provs))]
+            + [{"l": label, "n": total, "u": "usd", "op": "=", "res": True}],
+            "source_ref": [r for r in on_model(provs, ctx["cfg"], ctx["stores"]) if r]}, None
+
+
+def event_debt(ctx, k, advances, basis, at_close=None):
+    """The advance lines of one event: the debt on the balance sheet at the month end
+    before it, the amount advanced, the pro forma total debt (the two added up), that
+    debt over the event's LTM EBITDA (`basis`: the figure and its name, Adjusted EBITDA
+    where the box has one, else EBITDA), and our loan's principal after it."""
+    pre = f"trend-chart.event.{k}"
+    first = advances[0]["date"]
+    day = event_date_words(first)
+    before = _month_offset(first[:7], -1)
+    basis, word = basis
+    total_adv = round(sum(a["amount"] for a in advances), 2)
+    adv_fig = advances[0]["figure"] if len(advances) == 1 else {
+        "id": f"{pre}.advanced", "label": f"Advanced — {day}", "value": total_adv, "unit": "usd",
+        "calc": "The advances of this date added up.",
+        "steps": [{"l": f"Advance, {event_date_words(a['date'])}", "n": a["amount"], "u": "usd",
+                   **({"op": "+"} if i else {})} for i, a in enumerate(advances)]
+        + [{"l": "Advanced", "n": total_adv, "u": "usd", "op": "=", "res": True}],
+        "source_ref": [r for a in advances for r in a["figure"]["source_ref"]]}
+    lines = []
+    if at_close and at_close.get("total_debt") is not None:
+        total = _copy_of(at_close["total_debt"], f"{pre}.total-debt", "Total debt at close")
+        lines += [_line("advanced", "Advanced", adv_fig), _line("total_pf", "Total debt at close", total)]
+        lev, why = at_close.get("leverage"), "the deal record states no EBITDA at close"
+        if word == "EBITDA":
+            lev = lev and _copy_of(lev, f"{pre}.leverage", "Debt / EBITDA at close")
+        else:
+            lev, why = _leverage(pre, total, basis, why, "Debt / Adjusted EBITDA at close",
+                                 "Total debt at close", "Adjusted EBITDA at close")
+        lines.append(_line("leverage", f"Debt / {word} at close", lev, why, fmt="x"))
+    else:
+        held, why_held = existing_debt(ctx, before, pre)
+        lines += [_line("existing_debt", existing_debt_label(_stamp_label(before)), held, why_held),
+                  _line("advanced", "Advanced", adv_fig)]
+        total = held and {
+            "id": f"{pre}.total-debt-pf", "label": f"Pro forma total debt — {day}",
+            "value": round(held["value"] + total_adv, 2), "unit": "usd",
+            "calc": f"The debt on the balance sheet at {_stamp_label(before)} plus the advance of {day}.",
+            "steps": [{"l": held["label"], "n": held["value"], "u": "usd", "fid": held["id"]},
+                      {"l": f"Advanced, {day}", "n": total_adv, "u": "usd", "op": "+"},
+                      {"l": "Pro forma total debt", "n": round(held["value"] + total_adv, 2),
+                       "u": "usd", "op": "=", "res": True}],
+            "source_ref": list(held["source_ref"]) + list(adv_fig["source_ref"])}
+        lines.append(_line("total_pf", "Pro forma total debt", total,
+                           f"no existing debt: {why_held}" if why_held else None))
+        lev, why = _leverage(pre, total, basis, "no pro forma total debt",
+                             f"Pro forma debt / {word} — {day}", "Pro forma total debt",
+                             f"LTM {word}")
+        lines.append(_line("leverage", f"Pro forma debt / {word}", lev, why, fmt="x"))
+    lines.append(loan_after_line(ctx, pre, advances, first, before, day))
+    return lines
+
+
+def _leverage(pre, total, basis, why_total, label, debt_words, basis_words):
+    """({figure}, None) for `total` over the EBITDA figure `basis`, or (None, why)."""
+    if total is None:
+        return None, why_total
+    if basis is None:
+        return None, f"no {basis_words} for this date"
+    if basis["value"] <= 0:
+        return None, f"n.m.: the {basis_words} is not above zero"
+    x = total["value"] / basis["value"]
+    return {"id": f"{pre}.leverage-pf", "label": label, "value": x, "unit": "x",
+            "calc": f"{debt_words} over the {basis_words}.",
+            "steps": [{"l": debt_words, "n": total["value"], "u": "usd", "fid": total.get("id")},
+                      {"l": basis_words, "n": basis["value"], "u": "usd", "op": "÷",
+                       "fid": basis.get("id")},
+                      {"l": label.split(" — ")[0], "n": x, "u": "x", "op": "=", "res": True}],
+            "source_ref": list(total.get("source_ref") or []) + list(basis.get("source_ref") or [])}, None
+
+
+def loan_after_line(ctx, pre, advances, first, before, day):
+    """Our loan's principal after the advance: its principal at the month end before,
+    off its schedule, plus every advance of the loan from that month end to this one."""
+    loans = {}
+    for a in advances:
+        loans.setdefault(a["loan"], a)
+    loan_steps, loan_total, loan_refs = [], 0.0, []
+    for lid, a in loans.items():
+        row = next((r for r in a["rows"] if r.get("month") == before), None)
+        opened = bool(a["rows"]) and str(a["rows"][0].get("month") or "") >= first[:7]
+        if row is None and not opened:
+            loan_total = None
+            break
+        was = _num(loan_principal(row)) if row else 0.0
+        if was is None:
+            loan_total = None
+            break
+        added = [b for b in ctx["fundings"] if b["loan"] == lid
+                 and before < b["date"][:7] <= first[:7] and b["date"] <= first]
+        loan_steps.append({"l": f"{a['name']} at {_us_date(ml.month_end_iso(_stamp_label(before)))}",
+                           "n": was, "u": "usd", **({"op": "+"} if loan_steps else {})})
+        loan_steps += [{"l": f"Advance, {event_date_words(b['date'])}", "n": b["amount"], "u": "usd",
+                        "op": "+"} for b in added]
+        loan_total += was + sum(b["amount"] for b in added)
+        loan_refs += [dict(r, section=f"principal_month_end, {before}")
+                      for r in ctx["schedule_refs"].get(lid) or []]
+    names = sorted({a["name"] for a in advances})
+    who = names[0] if len(names) == 1 else "Our loans"
+    loan_fig = None if loan_total is None else {
+        "id": f"{pre}.loan-after", "label": f"{who} after the advance — {day}",
+        "value": round(loan_total, 2), "unit": "usd",
+        "calc": f"{who}: the principal at the month end before {day}, off the loan's "
+                "debt-service schedule, plus the advances since.",
+        "steps": loan_steps + [{"l": f"{who} after the advance", "n": round(loan_total, 2),
+                                "u": "usd", "op": "=", "res": True}],
+        "source_ref": loan_refs}
+    return _line("loan_after", f"{who} after", loan_fig,
+                 "the loan's schedule holds no month end before this advance")
+
+
+def adjustments_over(entries, end):
+    """The add-backs over the twelve months to `end`, one step each: an add-back stated month
+    by month adds those twelve months, one stated as an LTM amount counts only where that LTM
+    ends at `end`. (None, why) when one does not cover the twelve months."""
+    window = [_month_offset(end, -k) for k in range(11, -1, -1)]
+    parts = []
+    for a in entries or []:
+        a = a if isinstance(a, dict) else {}
+        name = a.get("name") or "EBITDA"
+        monthly = a.get("monthly")
+        if not isinstance(monthly, dict):
+            ltm = _num(a.get("ltm_amount"))
+            if ltm is None or str(a.get("as_of") or "")[:7] != end:
+                return None, (f"the {name} add-back is on file only as an LTM amount "
+                              f"{_ltm_to(a)}, not for the twelve months to {_stamp_label(end)}")
+            parts.append({"l": f"Add: {name}", "n": round(ltm, 2), "u": "usd"})
+            continue
+        got = [_num(monthly.get(m)) for m in window]
+        if any(v is None for v in got):
+            return None, (f"the {name} add-back states no amount for "
+                          f"{_stamp_label(window[got.index(None)])}")
+        parts.append({"l": f"Add: {name}", "n": round(sum(got), 2), "u": "usd"})
+    return parts, None
+
+
+def _ltm_to(entry):
+    """ "to Jun 2025": the month an LTM add-back runs to."""
+    as_of = str(entry.get("as_of") or "")
+    return f"to {_stamp_label(as_of[:7])}" if re.fullmatch(r"\d{4}-\d{2}.*", as_of) else "at another date"
+
+
+def loan_principal(row):
+    """A schedule row's principal at its month end, every PIK added: its
+    `principal_month_end`, else the month-end balance less the month's PIK, which
+    the debt-service schedule adds on the next 1st. None when the row carries neither."""
+    if not isinstance(row, dict):
+        return None
+    if _num(row.get("principal_month_end")) is not None:
+        return _num(row["principal_month_end"])
+    meb, pik = _num(row.get("month_end_balance")), _num(row.get("pik_accrued"))
+    return None if meb is None or pik is None else round(meb - pik, 2)
+
+
+# The four rows each amendment's terms table opens with, and the words that find a
+# change for each in the covenant record's `changed[].target`.
+AMENDMENT_TERM_ROWS = (("maturity", "Maturity date", re.compile(r"maturity", re.I)),
+             ("cash", "Cash interest", re.compile(r"cash interest", re.I)),
+             ("pik", "PIK", re.compile(r"\bpik\b", re.I)),
+             ("liquidity", "Minimum liquidity", re.compile(r"liquidity", re.I)))
+# A term's rates, multiples and amounts as the record words them, and its dates.
+_TERM_TOKEN = re.compile(
+    r"(?:Prime(?: Rate)?\s*\+\s*)?\d+(?:\.\d+)?%"
+    r"|[≥≤<>]=?\s*\d+(?:\.\d+)?x|\b\d+(?:\.\d+)?x\b"
+    r"|\$\d[\d,]*\d(?:\.\d+)?(?:\s*(?:mm|million))?")
+_TERM_DATE = re.compile(
+    r"\b(?:January|February|March|April|May|June|July|August|September|October|November|"
+    r"December) \d{1,2}, \d{4}|\b\d{1,2}/\d{1,2}/\d{4}\b")
+_ACRONYMS = re.compile(r"\b(fccr|ebitda|dscr|ltv|pik|ecf)\b", re.I)
+_MON = tuple(calendar.month_abbr[1:])
+_MON_RX = "(?:" + "|".join(_MON) + ")"
+_LONG_DATE = re.compile(r"\b(January|February|March|April|May|June|July|August|September|October|"
+                        r"November|December) (\d{1,2}), (\d{4})\b")
+_MONTH_WORD = re.compile(r"\b(?:January|February|March|April|June|July|August|September|Sept|"
+                         r"October|November|December)\b")
+_NUM_RANGE = re.compile(r"\b(\d{1,2})/(\d{1,2})(?:/(\d{4}))?\s*-\s*(\d{1,2})/(\d{1,2})/(\d{4})\b")
+_NUM_DATE = re.compile(r"\b(from\s+|through\s+|resumes\s+|after\s+|ending\s+)?(\d{1,2})/(\d{1,2})/(\d{4})\b", re.I)
+# Words the cell shortens. Each keeps the term's meaning: no rate, date, window or
+# condition goes, and `_keeps` checks that it did not.
+_SHORTER = (
+    (r"\bConsolidated Total Senior Debt Leverage Ratio\b", "senior leverage"),
+    (r"\b(?:Consolidated )?Fixed Charge Coverage Ratio\b", "FCCR"),
+    (r"\ba Compliance Certificate evidences\s+", ""),
+    (r"\bleverage[- ]toggled to (\d+(?:\.\d+)?%)", r"\1 on leverage"),
+    (r"\bleverage toggle retained for the (\d+(?:\.\d+)?%) step", r"\1 on leverage kept"),
+    (r"\bnew '[^']+' defined term,?\s*", ""),
+    (r"\bPrime Rate\b", "Prime"),
+    (r"\s*\bof (?:the )?outstanding (?:Loan )?principal\b", ""),
+    (r"\s*\bat all times\b", ""),
+    (r"\bfor any period\s+", ""),
+    (r"\bthe fiscal month ending\s+", ""),
+    (r"^\s*PIK\s+(?=\d)", ""),
+    (r"(?<=%)\s+cash\b", ""),
+    (r"\bplus\s+(?=\d)", "+"),
+    (r"\bare not repaid by\b", "unpaid by"),
+    (r"\bALL\b", "all"),
+    (r"\s*→\s*", " → "),
+)
+# What a shortened cell must still say: each rate, multiple and amount, each year,
+# and each word that bounds or conditions the term.
+_KEPT_WORDS = re.compile(r"\b(?:if|unless|until|no test|floor|through|from|resumes|by|then)\b", re.I)
+
+
+def _month_day(m, d, y, bound=False):
+    """A record's date in the table's words: "Aug 31 2024"; a window's
+    bound (`bound`) on the first or last days of its month reads "Mar 2024"."""
+    m, d, y = int(m), int(d), int(y)
+    if not 1 <= m <= 12:
+        return None
+    last = calendar.monthrange(y, m)[1]
+    if bound and (d == 1 or d >= last - 1):
+        return f"{_MON[m - 1]} {y}"
+    return f"{_MON[m - 1]} {d} {y}"
+
+
+def _range_words(m):
+    """A date window "3/1/2024-9/29/2024" as "Mar–Sep 2024"; a bound that is not at the
+    start or end of its month keeps its day."""
+    m1, d1, y1, m2, d2, y2 = m.groups()
+    y1 = y1 or y2
+    a, b = (int(m1), int(d1), int(y1)), (int(m2), int(d2), int(y2))
+    if not (1 <= a[0] <= 12 and 1 <= b[0] <= 12):
+        return m.group(0)
+    whole = a[1] <= 3 and b[1] >= calendar.monthrange(b[2], b[0])[1] - 2
+    if not whole:
+        return f"{_MON[a[0] - 1]} {a[1]} {a[2]}–{_MON[b[0] - 1]} {b[1]} {b[2]}"
+    if a[2] == b[2]:
+        return f"{_MON[a[0] - 1]} {a[2]}" if a[0] == b[0] else f"{_MON[a[0] - 1]}–{_MON[b[0] - 1]} {b[2]}"
+    return f"{_MON[a[0] - 1]} {a[2]}–{_MON[b[0] - 1]} {b[2]}"
+
+
+def _long_day(m):
+    """A `_LONG_DATE` match, "August 31, 2024", as "Aug 31 2024"."""
+    return f"{m.group(1)[:3]} {int(m.group(2))} {m.group(3)}"
+
+
+def _short_dates(text):
+    """Every date and date window in a term's words, in the table's short form."""
+    text = _LONG_DATE.sub(_long_day, text)
+    text = _MONTH_WORD.sub(lambda m: m.group(0)[:3], text)
+    text = _NUM_RANGE.sub(_range_words, text)
+    text = _NUM_DATE.sub(lambda m: (m.group(1) or "") + (_month_day(m.group(2), m.group(3), m.group(4),
+                                                                   bool(m.group(1)))
+                                                         or m.group(0)), text)
+    return re.sub(rf"(?<=[A-Za-z0-9])\s*-\s*(?={_MON_RX}\b)", "–", text)
+
+
+_DAY_MON_YEAR = re.compile(rf"\b(\d{{1,2}}) ({_MON_RX}) (\d{{4}})\b")
+
+
+def day_dates(text):
+    """Every day a record's words state, as the trend chart prints a day: "8/31/2022", "August 31, 2022" and "31 Aug 2022" read "Aug 31 2022"; a window
+    "7/1-9/30/2022" reads "Jul 1 2022–Sep 30 2022". A month and the rest stay as written."""
+    if not text:
+        return text
+
+    def window(m):
+        m1, d1, y1, m2, d2, y2 = m.groups()
+        a, b = _month_day(m1, d1, y1 or y2), _month_day(m2, d2, y2)
+        return f"{a}–{b}" if a and b else m.group(0)
+    text = _NUM_RANGE.sub(window, str(text))
+    text = re.sub(r"\b(\d{1,2})/(\d{1,2})/(\d{4})\b", lambda m: _month_day(*m.groups()) or m.group(0), text)
+    text = _LONG_DATE.sub(_long_day, text)
+    return _DAY_MON_YEAR.sub(lambda m: f"{m.group(2)} {int(m.group(1))} {m.group(3)}", text)
+
+
+def _keeps(full, short):
+    """True when `short` still states every rate, multiple, amount, year and bounding
+    word of `full`."""
+    def said(t):
+        # a year is read with its spaces kept: "Aug 31 2024" would read "Aug312024"
+        return (re.findall(r"\d+(?:\.\d+)?[%x]|\$\d[\d,]*", re.sub(r"\s+", "", t)),
+                set(re.findall(r"(?<!\d)(?:19|20)\d{2}(?!\d)", t)))
+    def words(t):
+        return [w.lower() for w in _KEPT_WORDS.findall(t)]
+    (tok0, yr0), (tok1, yr1) = said(full), said(short)
+    return all(tok1.count(x) >= tok0.count(x) for x in tok0) and yr0 <= yr1 and all(
+        words(short).count(w) >= words(full).count(w) for w in set(words(full)))
+
+
+def term_short(text):
+    """A term as the terms table prints it: the record's own words, shortened and never
+    cut. Dates read "Mar 2024", a window "Mar–Sep 2024", and wordy phrases their short
+    form; every rate, multiple, amount, date window and condition stays. A shortening
+    that would lose one of them prints the record's words instead."""
+    text = re.sub(r"\s+", " ", flatten_value(text) or "").strip()
+    if not text:
+        return None
+    if re.match(r"\s*deleted\b", text, re.I):
+        return "Deleted"
+    short = text
+    for rx, to in _SHORTER:
+        short = re.sub(rx, to, short)
+    short = _short_dates(re.sub(r"\s+", " ", short).strip(" ,;"))
+    return short if _keeps(text, short) else text
+
+
+_SHORT_DATE = re.compile(rf"({_MON_RX})(?: (\d{{1,2}}))? (\d{{4}})|({_MON_RX})(?=–{_MON_RX}(?: \d{{1,2}})? (\d{{4}}))")
+# A clause that is open at its end: a level from a date on, a deadline, a condition.
+_OPEN = re.compile(r"\b(?:from|resumes|after|if|unless|until|by)\b", re.I)
+
+
+def term_in_force(short, dated):
+    """`short` with each clause dropped whose dated window closed before `dated` (an
+    amendment's own date): "1.00x through Apr 2023" on a document of March 2024. A
+    clause open at its end, or that states no date, stays; so does the last clause.
+    The full words print in the pop-out."""
+    if not short or not dated:
+        return short
+    cut = str(dated)[:7]
+    parts = re.split(r"(;\s*|,\s+)(?![^(]*\))", short)
+    kept = []
+    for k in range(0, len(parts), 2):
+        clause = parts[k]
+        months = [f"{m.group(3) or m.group(5)}-{_MON.index(m.group(1) or m.group(4)) + 1:02d}"
+                  for m in _SHORT_DATE.finditer(clause)]
+        past = months and max(months) < cut and not _OPEN.search(clause)
+        if not past or (k == len(parts) - 1 and not kept):
+            kept.append((parts[k - 1] if k and kept else "") + clause)
+    return "".join(kept).strip(" ;,") or short
+
+
+def term_gist(text):
+    """A change outside the terms table as one line under it: the rates, multiples or
+    amounts its words state outside brackets, up to three, else those inside them, else
+    its dates, else the words cut short. The full words print in the pop-out."""
+    text = flatten_value(text) or ""
+    if not text:
+        return None
+    if re.match(r"\s*deleted\b", text, re.I):
+        return "Deleted"
+    bare = re.sub(r"\([^)]*\)", " ", text)
+    for rx, within in ((_TERM_TOKEN, bare), (_TERM_TOKEN, text), (_TERM_DATE, text)):
+        found = list(dict.fromkeys(m.group(0).strip() for m in rx.finditer(within)))
+        if found:
+            return " / ".join(found[:3]) + (" …" if len(found) > 3 else "")
+    cut = re.split(r"[;(]", text)[0].strip()
+    return cut if len(cut) <= 32 else cut[:30].rstrip() + "…"
+
+
+def _term_name(target, names):
+    """A change's row name: the covenant's own name, else its target in plain words. A
+    target that replaces one covenant with others ("a → b / c") is named by the new."""
+    if target in names:
+        return str(names[target]).split(" (")[0].split(" --")[0].strip()
+    replaced = "→" in target
+    said = re.split(r"\s\(", target.split("→")[-1].strip())[0].replace("_", " ").strip()
+    said = said.title() if replaced else said[:1].upper() + said[1:]
+    return _ACRONYMS.sub(lambda m: m.group(0).upper(), said)
+
+
+def _changed_rows(entry, spec):
+    """The rows one amendment changed, by row key: {key: {name, before, after, change,
+    section, page}}, and its other changes as lines of text. A change naming both cash
+    interest and PIK splits at its ';'. A financial covenant's key is its id; a change
+    that replaces one covenant with others ("a → b / c") keeps the old id's key. The
+    Change column reads the record's full words; the cells read them shortened."""
+    names = {c.get("id"): c.get("name") for c in (spec or {}).get("covenants") or []
+             if isinstance(c, dict) and c.get("id")}
+    rows, other = {}, []
+    for ch in (entry or {}).get("changed") or []:
+        if not isinstance(ch, dict):
+            continue
+        target = flatten_value(ch.get("target")) or ""
+        before, after = flatten_value(ch.get("from")), flatten_value(ch.get("to"))
+        after = _same_as(before, after)
+        ref = ch.get("agreement_ref") if isinstance(ch.get("agreement_ref"), dict) else {}
+        cite = {"section": flatten_value(ref.get("section")),
+                "page": ref.get("page") if isinstance(ref.get("page"), int) else None}
+        hits = [key for key, _n, rx in AMENDMENT_TERM_ROWS if rx.search(target)]
+
+        def row(b, a, **more):
+            dated = (entry or {}).get("date")
+            return dict(cite, before=term_in_force(term_short(b), dated),
+                        after=term_in_force(term_short(a), dated),
+                        change=change_words(b, a, len(more.get("new_ids") or [])), **more)
+        if len(hits) > 1 and "cash" in hits and "pik" in hits:
+            for key, part in (("cash", 0), ("pik", 1)):
+                b, a = ((before or "").split(";"), (after or "").split(";"))
+                rows[key] = row(b[part] if part < len(b) else before, a[part] if part < len(a) else after)
+            continue
+        if len(hits) == 1:
+            rows[hits[0]] = row(before, after)
+        elif str(ch.get("what") or "") == "covenant" and not hits:
+            key = re.split(r"[\s(]", target.split("→")[0].strip())[0].lower()
+            rows[key] = row(before, after, name=_term_name(target, names), new_ids=_new_ids(target))
+        else:
+            other.append({"what": _term_name(target, {}), "text": day_dates(term_gist(after)) or "changed"})
+    return rows, other
+
+
+def _new_ids(target):
+    """The covenant ids a replacing change starts ("a → b / c" gives b and c)."""
+    _old, arrow, new = target.partition("→")
+    return [re.split(r"[\s(]", p.strip())[0].lower() for p in new.split("/") if p.strip()] if arrow else []
+
+
+# A value that says a term is not in force: no row prints for a covenant then. A "no
+# test" window is a holiday in a covenant still in force.
+_NOT_IN_FORCE = re.compile(r"^\s*(?:n/?a|none|no\b(?!\s+test\b)|—|-|deleted\b)", re.I)
+_LEVEL = re.compile(r"(\d+(?:\.\d+)?)(%|x\b)")
+# A clause that sets a term only on a condition: "if", "unless", or "until" something
+# other than a date.
+_CONDITION = re.compile(rf"\b(?:if|unless)\b|\buntil\s+(?!\d|{_MON_RX}|the\s+(?:\w+\s+){{1,3}}Date\b)", re.I)
+
+
+def _same_as(before, after):
+    """`after` with a leading "same," spelled out as `before`'s words."""
+    m = re.match(r"\s*same\s*[,;]\s*", after or "", re.I)
+    return f"{before}; {after[m.end():]}" if m and before else after
+
+
+def _clauses(text):
+    """A term's words outside brackets, split at each ';' and ', ' (never inside an amount)."""
+    return [c.strip() for c in re.split(r";|,\s", re.sub(r"\([^)]*\)", " ", text or "")) if c.strip()]
+
+
+def _levels(text):
+    """The rates or multiples a term sets, in order, each once in a row: those outside
+    brackets, a "no test" window and a condition, else those inside brackets."""
+    out, held = [], False
+    for c in _clauses(text):
+        held = held and bool(re.match(r"then\b", c, re.I))
+        if re.search(r"\bno test\b", c, re.I) or held:
+            continue
+        cond = _CONDITION.search(c)
+        if cond:
+            # "8.00% if …" sets nothing until it happens; "2.50% until …, then 1.00%"
+            # sets 2.50% now and 1.00% on the condition
+            held = True
+            c = c[:cond.start()] if cond.group(0).lower().startswith("until") else ""
+        out += [(float(v), u) for v, u in _LEVEL.findall(c)]
+    if not out and text:
+        out = [(float(v), u) for inner in re.findall(r"\(([^)]*)\)", text) for v, u in _LEVEL.findall(inner)]
+    units = {u for _v, u in out}
+    if len(units) > 1:
+        out = [x for x in out if x[1] == "%"]
+    return [x for k, x in enumerate(out) if k == 0 or x != out[k - 1]]
+
+
+def _holidays(text):
+    """The "no test" windows a term's words state, each in the table's short form."""
+    found = re.findall(r"\bno test\s+([^;,]+)", text or "", re.I)
+    return {w.strip() for f in found for w in re.split(r"\s*(?:&|\band\b)\s*", _short_dates(f)) if w.strip()}
+
+
+def _conditions(text):
+    """The clauses of a term that set it only on a condition, in the table's short form."""
+    return {term_short(c) for c in _clauses(text) if _CONDITION.search(c)}
+
+
+def _level(v):
+    return f"{v[0]:.2f}{v[1]}"
+
+
+def _level_words(l0, l1):
+    """How the levels a term sets moved."""
+    if len(l0) == 1 and len(l1) == 1:
+        gap = l1[0][0] - l0[0][0]
+        sign = "+" if gap > 0 else "−"
+        if l1[0][1] == "x":
+            return f"{sign}{abs(gap):.2f}x"
+        # a move of a point or more reads in points, one under a point in basis points
+        return f"{sign}{abs(gap) * 100:.0f} bp" if abs(gap) < 1 else f"{sign}{abs(gap):g} points"
+    if l1[0] == l0[-1]:
+        vals = [v for v, _u in l1]
+        way = "down" if vals == sorted(vals, reverse=True) else "up" if vals == sorted(vals) else None
+        return f"Steps {way} to {_level(l1[-1])}" if way else f"Steps to {_level(l1[-1])}"
+    return f"{_level(l0[-1])} → {_level(l1[0])}" + (f", steps to {_level(l1[-1])}" if l1[-1] != l1[0] else "")
+
+
+def _as_date(text):
+    """The first date a term's words state, or None."""
+    for m in _TERM_DATE.finditer(text or ""):
+        for fmt in ("%B %d, %Y", "%m/%d/%Y"):
+            try:
+                return datetime.datetime.strptime(m.group(0), fmt).date()
+            except ValueError:
+                continue
+    return None
+
+
+def change_words(before, after, split=0):
+    """The Change column: a few words for what the amendment did to a term, read off the
+    record's full words. Each part it changed is named: the level, a new "no test"
+    window ("test holiday"), a new condition ("contingent step-up" where it adds a
+    rate). "Unchanged" only when both say the same. `split` counts the covenants a
+    replacing change starts. A side the record leaves blank states nothing: no `to`
+    reads "Amended", never a direction."""
+    before = before if before and before.strip() else None
+    if not (after and after.strip()):
+        return "Amended" if before is not None else "Not on file"
+    if re.sub(r"\s+", " ", str(before or "")).strip().lower() == \
+            re.sub(r"\s+", " ", after).strip().lower():
+        return "Unchanged"
+    if re.match(r"\s*deleted\b", after, re.I):
+        return "Removed"
+    if before is None or _NOT_IN_FORCE.match(before):
+        return "New"
+    if split > 1:
+        return f"Split into {split} covenants"
+    l0, l1 = _levels(before), _levels(after)
+    if not l0 and not l1:
+        d0, d1 = _as_date(before), _as_date(after)
+        if d0 and d1 and d0 != d1:
+            months = (d1.year - d0.year) * 12 + d1.month - d0.month
+            word = "Extended" if months > 0 else "Shortened"
+            n = abs(months)
+            return f"{word} {n // 12} year{'s' if n // 12 > 1 else ''}" if n % 12 == 0 else \
+                f"{word} {n} month{'s' if n > 1 else ''}"
+        return "Amended"
+    parts = []
+    if ("prime" in before.lower()) != ("prime" in after.lower()):
+        parts.append("Now floating" if "prime" in after.lower() else "Now fixed")
+    elif l0 and l1 and l0 != l1:
+        parts.append(_level_words(l0, l1))
+    if _holidays(after) - _holidays(before):
+        parts.append("test holiday")
+    new = _conditions(after) - _conditions(before)
+    if new:
+        parts.append("contingent step-up" if any(re.search(r"\+\s*\d", c) for c in new)
+                     else "new condition")
+    if not parts and term_short(before) == term_short(after):
+        return "Unchanged"   # the same term, reworded ("10.00%" and "10.00% of outstanding principal")
+    words = ", ".join(parts) or "Amended"
+    return words[:1].upper() + words[1:]
+
+
+def _spec_value(key, spec, dated):
+    """A term's value in force at `dated` off the covenant record itself, for a row no
+    amendment changed: the liquidity covenant's threshold schedule, or a financial
+    covenant's threshold. None where the record states none."""
+    for c in (spec or {}).get("covenants") or []:
+        if not isinstance(c, dict):
+            continue
+        if (key == "liquidity" and re.search(r"liquidity", str(c.get("id") or ""), re.I)) or c.get("id") == key:
+            sched = [s for s in c.get("threshold_schedule") or [] if isinstance(s, dict)
+                     and str(s.get("effective") or "") <= str(dated or "")]
+            v = _num(sched[-1].get("value")) if sched else _num(c.get("threshold"))
+            if v is None:
+                return None
+            if key == "liquidity" and v < 1:
+                return f"{v * 100:.2f}%"
+            op = "≥" if str(c.get("primitive") or "").startswith("min") else "≤"
+            return f"{op} {v:.2f}x"
+    return None
+
+
+def amendment_terms_chain(entries, spec, names=None):
+    """Each amendment's terms table, the chain read as one: {rows: [{name, before,
+    after, changed, change, source}], other: [{what, text}]} per entry, None for an
+    entry not read into the covenant record. `entries` run oldest first. Every row
+    prints its value before and after the document. A row the document did not change
+    reads the value in force: the last earlier change's new value, else the next later
+    change's old one, else the covenant record's own threshold at the date. `source`
+    names where the value was read, or what was searched for a value not on file.
+    The four fixed rows print on every amendment; a financial covenant prints where it
+    is in force."""
+    names = names or [None] * len(entries)
+    per = [_changed_rows(e, spec) if isinstance(e, dict) else None for e in entries]
+    started = {i for p in per if p for r in p[0].values() for i in r.get("new_ids") or []}
+    keys = [key for key, _n, _rx in AMENDMENT_TERM_ROWS]
+    for p in per:
+        for key in (p[0] if p else {}):
+            if key not in keys:
+                keys.append(key)
+    for c in (spec or {}).get("covenants") or []:
+        cid = c.get("id") if isinstance(c, dict) else None
+        if cid and c.get("primitive") and cid not in keys and cid not in started \
+                and not re.search(r"liquidity", cid, re.I):
+            keys.append(cid)
+    fixed = {key: name for key, name, _rx in AMENDMENT_TERM_ROWS}
+    spec_names = {c.get("id"): c.get("name") for c in (spec or {}).get("covenants") or []
+                  if isinstance(c, dict) and c.get("id")}
+    searched = ("searched the covenant record's amendments_reflected changes, its covenant "
+                "thresholds and the documents they cite: none states it at this date")
+    out = []
+    for k, entry in enumerate(entries):
+        if per[k] is None:
+            out.append(None)
+            continue
+        rows = []
+        for key in keys:
+            got = per[k][0].get(key)
+            name = fixed.get(key) or (got or {}).get("name")
+            if got:
+                src = {"document": names[k], "section": got.get("section"), "page": got.get("page")}
+                rows.append({"name": name, "before": got["before"], "after": got["after"],
+                             "changed": got["change"] != "Unchanged", "change": got["change"],
+                             "source": src})
+                continue
+            prev = next((j for j in range(k - 1, -1, -1) if per[j] and key in per[j][0]), None)
+            nxt = next((j for j in range(k + 1, len(entries)) if per[j] and key in per[j][0]), None)
+            if prev is not None:
+                was, j, side = per[prev][0][key]["after"], prev, "as amended by"
+            elif nxt is not None:
+                was, j, side = per[nxt][0][key]["before"], nxt, "in force until"
+            else:
+                was, j, side = _spec_value(key, spec, (entry or {}).get("date")), None, None
+            name = name or (per[j][0][key].get("name") if j is not None else None) \
+                or str(spec_names.get(key) or key).split(" (")[0].split(" --")[0].strip()
+            if key not in fixed and (was is None or _NOT_IN_FORCE.match(was)):
+                continue
+            src = ({"document": names[j], "section": per[j][0][key].get("section"),
+                    "page": per[j][0][key].get("page"), "as": side} if j is not None else
+                   {"document": "the covenant record's thresholds"} if was is not None else
+                   {"searched": searched})
+            rows.append({"name": name, "before": was, "after": was, "changed": False,
+                         "change": "Unchanged" if was is not None else "Not on file", "source": src})
+        out.append({"rows": rows, "other": per[k][1]})
+    return out
+
+
+
+def trend_events(axis, amendments, fundings, ctx):
+    """Every amendment, waiver and advance the chart boxes, oldest first, each with
+    the column it falls in (`index`, None outside the window) and its lines. An
+    advance up to FUNDED_WITH_DAYS after an amendment is that amendment's funding and
+    shares its box. `amendments` are `amendment_callouts`' records, each kept by its
+    position `amendment`."""
+    stamps = [_stamp(mo) for mo in axis]
+    events = []
+    for k, a in enumerate(amendments):
+        if not a.get("dated"):
+            continue
+        events.append({"kind": "waiver" if str(a.get("label") or "").startswith("W") else "amendment",
+                       "label": a.get("label") or "A", "date": str(a["dated"])[:10],
+                       "name": a.get("name"), "amendment": k, "advances": [],
+                       "terms": a.get("terms")})
+    for f in fundings:
+        host = next((e for e in events if e["kind"] != "advance"
+                     and 0 <= _days_after(e["date"], f["date"]) <= FUNDED_WITH_DAYS), None)
+        if host is None:
+            host = next((e for e in events if e["kind"] == "advance" and e["date"] == f["date"]), None)
+        if host is None:
+            first = f is fundings[0]
+            host = {"kind": "advance", "label": "Initial advance" if first else "Advance",
+                    "date": f["date"], "name": None, "amendment": None, "advances": [],
+                    "terms": None}
+            events.append(host)
+        host["advances"].append(f)
+    events.sort(key=lambda e: (e["date"], e["kind"] == "advance"))
+    for k, e in enumerate(events):
+        st = e["date"][:7]
+        e["k"] = k
+        e["index"] = next((i for i, s in enumerate(stamps) if s == st), None)
+        e["date_words"] = event_date_words(e["date"])
+        close = ctx["at_close"] if fundings and e["advances"] and e["advances"][0] is fundings[0] else None
+        lines, basis = event_ltm(ctx, k, e["date"], close)
+        if e["advances"]:
+            lines += event_debt(ctx, k, e["advances"], basis, close)
+        if e["advances"] and e["kind"] != "advance":
+            # an amendment's box prints the day its advance funded beside the amount
+            days = dict.fromkeys(event_date_words(a["date"]) for a in e["advances"])
+            for ln in lines:
+                if ln["key"] == "advanced":
+                    ln["date"] = ", ".join(days)
+        e["lines"] = lines
+        guess = next((a for a in e["advances"] if a["estimated"]), None)
+        e["date_note"] = guess and (f"Shown at {event_date_words(guess['date'])}, the date the "
+                                    "record holds in its place")
+        e["advances"] = [{"date": a["date"], "date_words": event_date_words(a["date"]),
+                          "amount": a["amount"], "name": a["name"],
+                          "note": day_dates(a["note"]), "estimated": a["estimated"], "figure": a["figure"]}
+                         for a in e["advances"]]
+    return events
+
+
+def adjusted_basis(model, cfg, sections, ebitda_row):
+    """Where the deal records Adjusted EBITDA, the first of:
+    `adjustments`, the add-backs on the deal record (`capital_structure.ebitda_adjustments`),
+    else the fund's own template's add-back rows the capital structure read; `adj_row`, a
+    model Income Statement row the package labels Adjusted EBITDA; `ebitda_adjusted`, the
+    chart's own EBITDA row so labelled. Two such model rows name no row: `adj_why` says
+    which, and every Adjusted EBITDA line prints as not on file. All empty: the deal has no
+    Adjusted EBITDA, and no box prints one."""
+    said = [dict(a, origin="the deal record")
+            for a in (cfg.get("capital_structure") or {}).get("ebitda_adjustments") or []
+            if isinstance(a, dict)]
+    seated = (sections.get("capital_structure") or {}).get("tranches") or {}
+    seated = seated.get("ebitda_adjustments") if isinstance(seated, dict) else None
+    # the template's own EBITDA (`base`) starts its build and is no add-back
+    pm = [{"name": p.get("name"), "ltm_amount": p.get("value"), "as_of": p.get("as_of"),
+           "source_words": p.get("source_words"), "origin": "the fund's own template"}
+          for p in seated or [] if isinstance(p, dict) and not p.get("base") and p.get("value") is not None]
+    if said or pm:
+        return {"adjustments": said or pm, "adj_row": None, "adj_why": None, "ebitda_adjusted": False}
+    own = ml.norm_label(ebitda_row)
+    rows = [(model.provenance(k) or {}).get("label") or k
+            for k in (getattr(model, "sheets", None) or {}).get("Income Statement") or {}
+            if ADJUSTED_ROW.search(k) and k != own]
+    return {"adjustments": None, "adj_row": rows[0] if len(rows) == 1 else None,
+            "adj_why": (f"the model holds {len(rows)} rows labelled Adjusted EBITDA ({_and_list(rows)}), "
+                        "so none is read") if len(rows) > 1 else None,
+            "ebitda_adjusted": bool(ADJUSTED_ROW.search(own))}
+
+
+def trend_event_context(model, chart, cfg, stores, unit, sections, fundings, schedules=None):
+    """What `trend_events` reads: the model and its rows, the deal's Adjusted EBITDA
+    (`adjusted_basis`), the balance-sheet debt rows the capital structure's check line adds
+    up, each loan's schedule file and the deal record's figures at close."""
+    figs = {f.get("id"): f for sec in ("income_review", "snapshot_leverage")
+            for f in (sections.get(sec) or {}).get("figures") or [] if isinstance(f, dict)}
+    debt_rows = ((sections.get("snapshot_leverage") or {}).get("debt_rows") or {}).get("total") or []
+    ebitda_row = (chart["series"].get("ebitda") or {}).get("row")
+    close = {key: figs.get(f"leverage.{key}.at_close") for key in ("revenue", "ebitda", "total_debt")}
+    close["leverage"] = figs.get("leverage.total_to_ebitda.at_close")
+    schedule_refs = {}
+    for loan in (schedules or {}).get("loans") or []:
+        got = ml.parse_store_path(loan.get("schedule"))
+        if got:
+            schedule_refs[str(loan.get("loan") or "")] = [{"store": got[0], "path_in_store": got[1]}]
+    return {"model": model, "cfg": cfg, "stores": stores,
+            "to_usd": (lambda v: v) if unit is None else unit.to_dollars,
+            "revenue_row": (chart["series"].get("net_revenue") or {}).get("row"),
+            "ebitda_row": ebitda_row, **adjusted_basis(model, cfg, sections, ebitda_row),
+            "debt_rows": [str(r) for r in debt_rows], "fundings": fundings,
+            "stated": stated_ltm(cfg),
+            "schedule_refs": schedule_refs,
+            "at_close": close if close.get("revenue") or close.get("total_debt") else None}
+
+
+# The lines a month's hover prints with their change on a year earlier.
+YOY_LINES = (("net_revenue", "Net revenue"), ("ebitda", "EBITDA"),
+             ("adj_ebitda", "Adjusted EBITDA"), ("ebitda_margin", "EBITDA margin"))
+
+
+def trend_yoy(axis, ctx, published):
+    """Each month's change on the same month a year earlier, for each line the hover
+    prints: net revenue, EBITDA, Adjusted EBITDA where the deal records it, and
+    the EBITDA margin. A money line's month is {"prior": the same month a year earlier,
+    "change": dollars, "pct": percent, or None where the earlier month is not above zero};
+    the margin's is {"prior", "change": points}. A month is None where either month has
+    no figure."""
+    model, to_usd, cfg, stores = ctx["model"], ctx["to_usd"], ctx["cfg"], ctx["stores"]
+    held = set(getattr(model, "months", None) or [])
+
+    def from_row(row):
+        def at(mo):
+            v = to_usd(_num(model.get_line(row, month=mo))) if row and mo in held else None
+            return None if v is None else (v, [model.provenance(row, month=mo)])
+        return at
+
+    ebitda_at = from_row(ctx["ebitda_row"])
+
+    def adjusted_at(mo):
+        if not ctx.get("adjustments"):
+            return from_row(ctx["adj_row"])(mo) if ctx.get("adj_row") else None
+        got, adds = ebitda_at(mo), month_adjustments(ctx["adjustments"], _stamp(mo))
+        return None if got is None or adds is None else (round(got[0] + sum(adds), 2), got[1])
+
+    def margin_at(mo):
+        f = (published or {}).get(f"trend.{_slug('ebitda_margin')}.{_stamp(mo)}")
+        return None if not f or f.get("value") is None else (f["value"], [])
+
+    lines = {"net_revenue": from_row(ctx["revenue_row"]), "ebitda": ebitda_at,
+             "adj_ebitda": adjusted_at if has_adjusted(ctx) else None, "ebitda_margin": margin_at}
+    out = {}
+    for key, word in YOY_LINES:
+        at = lines[key]
+        if at is None:
+            continue
+        slug = "revenue" if key == "net_revenue" else _slug(key)
+        months = []
+        for mo in axis:
+            st = _stamp(mo)
+            was = _stamp_label(_month_offset(st, -12)) if st else None
+            now, then = (at(mo), at(was)) if was else (None, None)
+            if now is None or then is None:
+                months.append(None)
+                continue
+            (now_v, now_r), (was_v, was_r) = now, then
+            refs = on_model(now_r + was_r, cfg, stores) if now_r or was_r else []
+            # the same month a year earlier, as the hover prints it
+            prior = {"id": f"trend-chart.{slug}-prior.{st}", "label": f"{word} a year earlier — {mo}",
+                     "value": was_v, "unit": "%" if key == "ebitda_margin" else "usd",
+                     "calc": f"{word} for {was}, the same month a year earlier."
+                             + (f" The three-statement figure trend.{slug}.{_stamp(was)}." if key == "ebitda_margin" else ""),
+                     "source_ref": on_model(was_r, cfg, stores) if was_r else []}
+            if key == "ebitda_margin":
+                pts = (now_v - was_v) * 100
+                months.append({"change": {
+                    "id": f"trend-chart.{slug}-yoy.{st}", "label": f"{word} change on a year earlier — {mo}",
+                    "value": pts, "unit": "pts",
+                    "calc": f"{word} for {mo} less {word} for {was}, in percentage points: "
+                            f"the three-statement figures trend.{slug}.{st} and "
+                            f"trend.{slug}.{_stamp(was)}.",
+                    "steps": [{"l": f"{word}, {mo}", "n": now_v, "u": "%"},
+                              {"l": f"{word}, {was}", "n": was_v, "u": "%", "op": "−"},
+                              {"l": "Change in points", "n": pts, "u": "pts", "op": "=", "res": True}],
+                    "source_ref": refs}, "pct": None, "prior": prior})
+                continue
+            d = round(now_v - was_v, 2)
+            change = {"id": f"trend-chart.{slug}-yoy-change.{st}",
+                      "label": f"{word} change on a year earlier — {mo}", "value": d, "unit": "usd",
+                      "calc": f"{word} for {mo} less {word} for {was}.",
+                      "steps": [{"l": f"{word}, {mo}", "n": now_v, "u": "usd"},
+                                {"l": f"{word}, {was}", "n": was_v, "u": "usd", "op": "−"},
+                                {"l": "Change on a year earlier", "n": d, "u": "usd", "op": "=", "res": True}],
+                      "source_ref": refs}
+            pct = None
+            if was_v > 0:
+                g = now_v / was_v - 1
+                pct = {"id": f"trend-chart.{slug}-yoy.{st}", "label": f"{word} vs a year earlier — {mo}",
+                       "value": g, "unit": "%",
+                       "calc": f"{word} for {mo} over {word} for {was}, less one.",
+                       "steps": [{"l": f"{word}, {mo}", "n": now_v, "u": "usd"},
+                                 {"l": f"{word}, {was}", "n": was_v, "u": "usd", "op": "÷"},
+                                 {"l": "Change on a year earlier", "n": g, "u": "%", "op": "=", "res": True}],
+                       "source_ref": refs}
+            months.append({"prior": prior, "change": change, "pct": pct})
+        out[key] = months
+    return out
+
+
+def month_adjustments(entries, st):
+    """Each add-back the deal states for month `st`, in order, or None where any of them
+    states none for it."""
+    adds = [_num(a["monthly"].get(st)) if isinstance(a, dict) and isinstance(a.get("monthly"), dict)
+            else None for a in entries or []]
+    return None if any(v is None for v in adds) else adds
+
+
+def adjusted_months(axis, ebitda, ctx):
+    """Each month's Adjusted EBITDA and what its hover prints: ([figure or None], [formula]).
+    Off add-backs, the month's EBITDA plus each one stated for the month; off a model row the
+    package labels Adjusted EBITDA, that row. A month neither covers is None, its formula
+    {"why"}."""
+    entries, row, model = ctx.get("adjustments"), ctx.get("adj_row"), ctx.get("model")
+    held = set(getattr(model, "months", None) or [])
+    source = addback_source(entries)
+    figs, formulas = [], []
+    for mo, eb in zip(axis, ebitda or []):
+        st = _stamp(mo)
+        if not entries and not row:
+            figs.append(None)
+            formulas.append({"why": ctx["adj_why"]})
+            continue
+        if row:
+            v = ctx["to_usd"](_num(model.get_line(row, month=mo))) if mo in held else None
+            if v is None:
+                figs.append(None)
+                formulas.append({"why": f"the model's {row} row carries no figure for {mo}"})
+                continue
+            figs.append({"id": f"trend-chart.adj-ebitda.{st}", "label": f"Adjusted EBITDA — {mo}",
+                         "value": v, "unit": "usd", "calc": f"Adjusted EBITDA for {mo}: "
+                         + NOT_ITEMISED.format(row=row),
+                         "steps": [{"l": f"Adjusted EBITDA, {mo}", "n": v, "u": "usd", "res": True}],
+                         "source_ref": on_model([model.provenance(row, month=mo)], ctx["cfg"], ctx["stores"])})
+            formulas.append({"note": NOT_ITEMISED.format(row=row)})
+            continue
+        adds = month_adjustments(entries, st)
+        if eb is None or adds is None:
+            figs.append(None)
+            formulas.append({"why": f"the model carries no EBITDA for {mo}" if eb is None
+                             else month_gap(entries, st)})
+            continue
+        total = round(eb + sum(adds), 2)
+        figs.append({"id": f"trend-chart.adj-ebitda.{st}", "label": f"Adjusted EBITDA — {mo}",
+                     "value": total, "unit": "usd",
+                     "calc": f"EBITDA for {mo} plus that month's add-backs. {source}.",
+                     "steps": [{"l": f"EBITDA, {mo}", "n": eb, "u": "usd"}]
+                     + [{"l": f"Add: {a.get('name')}", "n": v, "u": "usd", "op": "+"}
+                        for a, v in zip(entries, adds)]
+                     + [{"l": f"Adjusted EBITDA, {mo}", "n": total, "u": "usd", "op": "=", "res": True}],
+                     "source_ref": []})
+        formulas.append(addback_formula("EBITDA", eb, entries, adds))
+    return figs, formulas
+
+
+def month_gap(entries, st):
+    """Why the add-backs give month `st` no Adjusted EBITDA: the first one that states no
+    amount for it."""
+    for a in entries or []:
+        if not isinstance(a.get("monthly"), dict):
+            return (f"the {a.get('name')} add-back is on file only as an LTM amount {_ltm_to(a)}, "
+                    "not month by month")
+        if _num(a["monthly"].get(st)) is None:
+            return f"the {a.get('name')} add-back states no amount for {_stamp_label(st)}"
+    return "no add-back states this month"
+
+
+def trend_boxes(axis, chart, amendments, fundings, ctx, published):
+    """The chart's boxes off the context: each event's box, the name of its EBITDA line, each
+    month's change on a year earlier and, where the deal records it, each month's Adjusted
+    EBITDA with its hover."""
+    out = {"events": trend_events(axis, amendments, fundings, ctx), "event_ebitda": ebitda_word(ctx),
+           "yoy": trend_yoy(chart["months"], ctx, published)}
+    if ctx.get("ebitda_adjusted"):
+        out["ebitda_formula"] = {"note": NOT_ITEMISED.format(row=ctx["ebitda_row"])}
+    if has_adjusted(ctx):
+        out["adj_ebitda"], out["adj_formula"] = adjusted_months(
+            chart["months"], (chart["series"].get("ebitda") or {}).get("values"), ctx)
     return out
 
 
@@ -3189,6 +4613,204 @@ def _metric_words(cov):
     return side(cov.get("metric")) or num or den
 
 
+def amendment_name(entry, index):
+    """One amendment the way the memo names it: "<title>, <date>". An entry with
+    no title takes its file name, then "Amendment N"; a plain string stands as
+    written. The summary and the changes stay out of a name."""
+    if not isinstance(entry, dict):
+        return flatten_value(entry) or f"Amendment {index + 1}"
+    title = flatten_value(first_value(entry, "title", "name", "instrument")) \
+        or flatten_value(entry.get("file_name")) \
+        or f"Amendment {entry.get('amendment_number') or index + 1}"
+    when = amendment_date(entry)
+    return f"{title}, {_day_words(when)}" if when else title
+
+
+# The roles of a document-set chain row that change the agreement; the base and the
+# restated agreement are `credit_agreement_path`.
+AMENDMENT_ROLES = ("amendment", "waiver_consent")
+
+
+def _leaf_name(path):
+    return os.path.basename(str(path or "").replace("\\", "/")).lower()
+
+
+def amendment_date(entry):
+    """The day an amendment took effect, as the covenant spec records it: `date`, else
+    `effective`, else `issued`; None for an entry that states none."""
+    if not isinstance(entry, dict):
+        return None
+    return flatten_value(first_value(entry, "date", "effective", "issued"))
+
+
+def amendment_documents(cfg, spec):
+    """Every amendment the memo names, in the spec's order, each with the document
+    it is on file as: {"name", "dated", "path"}, `path` None where no file is on file.
+
+    The files come off the document set's `loan_document_chain` (the rows that
+    amend the agreement), and off `credit_agreement_amendment_paths` where a config
+    carries it. An `amendments_reflected` entry joins its file by file name. A chain
+    file the spec has no entry for is listed after them, named by its own row.
+    """
+    paths = cfg.get("paths") or {}
+    chain = (_maybe_json(paths.get("document_set_path")) or {}) if isinstance(
+        paths.get("document_set_path"), str) else {}
+    folder = str(chain.get("deal_folder") or "").rstrip("/")
+    files = []
+    for row in chain.get("loan_document_chain") or []:
+        if isinstance(row, dict) and row.get("role") in AMENDMENT_ROLES \
+                and row.get("file_name"):
+            rel = str(row.get("path_in_deal_folder") or row["file_name"])
+            files.append({"src": row, "leaf": _leaf_name(row["file_name"]),
+                          "path": rel if ml.parse_store_path(rel)
+                          else (f"{folder}/{rel}" if folder else None)})
+    for p in paths.get("credit_agreement_amendment_paths") or []:
+        known = next((f for f in files if f["leaf"] == _leaf_name(p)), None)
+        if known:
+            known["path"] = p
+        else:
+            files.append({"src": None, "leaf": _leaf_name(p), "path": p})
+    out = []
+    for i, entry in enumerate(e for e in ((spec or {}).get("amendments_reflected") or [])
+                              if e):
+        leaf = _leaf_name(entry.get("file_name")) if isinstance(entry, dict) else ""
+        hit = next((f for f in files if leaf and f["leaf"] == leaf and not f.get("used")),
+                   None)
+        if hit:
+            hit["used"] = True
+        row = hit["src"] if hit else None
+        out.append({"name": amendment_name(entry, i),
+                    "dated": amendment_date(entry),
+                    "path": hit["path"] if hit else None,
+                    "page": amendment_page(entry),
+                    "number": amendment_number(entry, row),
+                    "role": (row or {}).get("role"),
+                    "entry": entry if isinstance(entry, dict) else None})
+    for f in files:
+        if not f.get("used"):
+            row = f["src"]
+            out.append({"name": amendment_name(row, len(out)) if row else None,
+                        "dated": (row or {}).get("date"), "path": f["path"], "page": None,
+                        "number": amendment_number(row),
+                        "role": (row or {}).get("role"), "entry": None})
+    return out
+
+
+ORDINAL_WORDS = ("first", "second", "third", "fourth", "fifth", "sixth", "seventh",
+                 "eighth", "ninth", "tenth", "eleventh", "twelfth", "thirteenth",
+                 "fourteenth", "fifteenth", "sixteenth", "seventeenth", "eighteenth",
+                 "nineteenth", "twentieth")
+_AMENDMENT_NUMBER_RE = re.compile(
+    r"\b(" + "|".join(ORDINAL_WORDS) + r")\s+amendment\b"
+    r"|\bamendment\s+(?:no\.?\s*|number\s+|#\s*)?(\d{1,2})\b", re.IGNORECASE)
+_WAIVER_RE = re.compile(r"\b(waiver|consent)\b", re.IGNORECASE)
+
+
+def amendment_number(*entries):
+    """The number an amendment gives itself: the record's `amendment_number`, else
+    "Fifth Amendment" or "Amendment No. 5" in its title or file name; None for a
+    document that carries none, such as a waiver. A record's `amendment_number:
+    null` says it carries none: the title is read only when no record holds the key.
+    A title that names a waiver before the amendment ("Consent to Fifth Amendment")
+    carries none."""
+    entries = [e for e in entries if isinstance(e, dict)]
+    for e in entries:
+        n = e.get("amendment_number")
+        if isinstance(n, int) and not isinstance(n, bool) and n > 0:
+            return n
+    if any("amendment_number" in e and e["amendment_number"] is None for e in entries):
+        return None
+    for e in entries:
+        for text in (e.get("title"), e.get("name"), e.get("instrument"), e.get("file_name")):
+            text = flatten_value(text) or ""
+            m = _AMENDMENT_NUMBER_RE.search(text)
+            w = _WAIVER_RE.search(text)
+            if m and w and w.start() < m.start():
+                return None
+            if m:
+                return (ORDINAL_WORDS.index(m.group(1).lower()) + 1) if m.group(1) \
+                    else int(m.group(2))
+    return None
+
+
+def trend_amendments(cfg, spec, stores):
+    """Every amendment as the trend chart cites it: its name, date, page, number,
+    role, file, and what it changed."""
+    out = []
+    docs = amendment_documents(cfg, spec)
+    # each name's date as the chart prints a day: "Fifth Amendment ..., Jun 30 2025"
+    names = [day_dates(doc["name"]) or f"Amendment {i + 1}" for i, doc in enumerate(docs)]
+    # the terms tables read the chain oldest first: a term no document changed carries
+    # the value in force from the one before or after it
+    order = sorted(range(len(docs)), key=lambda i: str(docs[i]["dated"] or ""))
+    chain = amendment_terms_chain([docs[i]["entry"] for i in order], spec, [names[i] for i in order])
+    terms = {i: chain[n] for n, i in enumerate(order)}
+    for i, doc in enumerate(docs):
+        ref = doc_ref(doc["path"], stores, name=doc["name"])
+        if ref is not None and doc["page"]:
+            ref["page"] = doc["page"]
+        entry = doc["entry"]
+        out.append({"name": names[i], "dated": doc["dated"],
+                    "page": doc["page"], "number": doc["number"], "role": doc["role"],
+                    "changes": amendment_changes(entry, spec) if entry else None,
+                    # A spec entry that records its effect only in words gives no term
+                    # its before and after, so its box prints the words and no table.
+                    "terms": terms[i] if (entry or {}).get("changed") else None,
+                    "administrative_only": bool((entry or {}).get("administrative_only")),
+                    "source_ref": ref})
+    return out
+
+
+def amendment_changes(entry, spec):
+    """What one amendment changed, as the chart's tooltip lists it: each change's
+    covenant or definition by name, the term before and after, and the section and
+    page it was read from. [] for an amendment that changed nothing we test."""
+    names = {c.get("id"): c.get("name") for c in (spec or {}).get("covenants") or []
+             if isinstance(c, dict) and c.get("id")}
+    out = []
+    said = flatten_value(first_value(entry, "summary", "effect"))
+    if not entry.get("changed") and said:
+        # An entry that records its effect in words, with no change list: one line, in
+        # the spec's own words, with the section and page it cites.
+        ref = entry.get("agreement_ref") if isinstance(entry.get("agreement_ref"), dict) else {}
+        page = ref.get("page")
+        return [{"what": "What it changed", "from": None, "to": day_dates(said),
+                 "section": flatten_value(ref.get("section")),
+                 "page": page if isinstance(page, int) and not isinstance(page, bool)
+                 and page > 0 else None}]
+    for ch in entry.get("changed") or []:
+        if not isinstance(ch, dict):
+            continue
+        target = flatten_value(ch.get("target")) or ""
+        what = names.get(target) or ("All covenants" if target == "all" else
+                                     target.replace("_", " ").strip().capitalize())
+        ref = ch.get("agreement_ref") if isinstance(ch.get("agreement_ref"), dict) else {}
+        page = ref.get("page")
+        out.append({"what": what or str(ch.get("what") or "Term").replace("_", " ").capitalize(),
+                    "from": day_dates(flatten_value(ch.get("from"))),
+                    "to": day_dates(flatten_value(ch.get("to"))),
+                    "section": flatten_value(ref.get("section")),
+                    "page": page if isinstance(page, int) and not isinstance(page, bool)
+                    and page > 0 else None})
+    return out
+
+
+def amendment_page(entry):
+    """The page of the amendment's first recorded change, else of its own
+    `agreement_ref`, or None."""
+    if not isinstance(entry, dict):
+        return None
+    own = entry.get("agreement_ref") if isinstance(entry.get("agreement_ref"), dict) else {}
+    if not entry.get("changed") and isinstance(own.get("page"), int) and own["page"] > 0:
+        return own["page"]
+    for change in entry.get("changed") or []:
+        page = ((change or {}).get("agreement_ref") or {}).get("page") \
+            if isinstance(change, dict) else None
+        if isinstance(page, int) and not isinstance(page, bool) and page > 0:
+            return page
+    return None
+
+
 def covenant_preamble(env, spec, cfg, certified, stores, absent):
     """What governs the covenants: the agreement, its amendments, the rule that
     combines the tests, and who signed this month's certificate.
@@ -4299,7 +5921,7 @@ def build_performance(cfg_path, period, absent, budget=None, model_path=None,
 
 # ------------------------------------------------------------------ build
 def build(cfg_path, period, out_path, archive_dir=None, model_path=None,
-          trend_months=18):
+          trend_months=None):
     cfg = ml.load_config(cfg_path)
     borrower = (cfg.get("borrower") or {}).get("name") or cfg.get("borrower_name") \
         or (cfg.get("borrower") if isinstance(cfg.get("borrower"), str) else None)
@@ -4587,6 +6209,16 @@ def build(cfg_path, period, out_path, archive_dir=None, model_path=None,
     if growth is not None:
         sections["snapshot_performance"]["figures"].append(growth)
 
+    # The chart's window: the caller's, else the borrower's `analysis.trend_months`,
+    # else 18 months. Every advance under the facility: a term window opens at the
+    # first, and the chart boxes each one.
+    setting = (cfg.get("analysis") or {}).get("trend_months")
+    schedules = loan_schedules(cfg.get("paths") or {})
+    fundings = deal_fundings(schedules)
+    term = trend_months_setting(setting) == "term" and trend_months is None
+    if trend_months is None:
+        trend_months = trend_window(trend_months_setting(setting), spec, period, absent,
+                                    first_advance=fundings[0]["date"] if fundings else None)
     if model is not None:
         perf = sections["snapshot_performance"].get("performance_views")
         if perf:
@@ -4609,6 +6241,20 @@ def build(cfg_path, period, out_path, archive_dir=None, model_path=None,
         sections["trend_chart"]["basis_break_index"] = idx
         quarters = quarter_callouts(chart["months"], chart["series"], idx)
         sections["trend_chart"]["quarters"] = quarters
+        # A term window that opens before the model's first month draws those
+        # months empty, so the chart starts at the first advance.
+        lead = (lead_months(chart["months"], _month_offset(str(period)[:7], 1 - trend_months))
+                if term and trend_months else [])
+        sections["trend_chart"]["lead_months"] = lead
+        sections["trend_chart"]["first_advance"] = (
+            {"date": fundings[0]["date"], "date_words": event_date_words(fundings[0]["date"]),
+             "figure": fundings[0]["figure"]} if fundings else None)
+        axis = lead + chart["months"]
+        amendments = amendment_callouts(axis, trend_amendments(cfg, spec, stores), False)
+        sections["trend_chart"]["amendments"] = amendments
+        ctx = trend_event_context(model, chart, cfg, stores, unit, sections, fundings,
+                                  schedules=schedules)
+        sections["trend_chart"].update(trend_boxes(axis, chart, amendments, fundings, ctx, {}))
         sections["trend_chart"]["notes"] = trend_notes(unit, break_label, quarters)
         if break_label:
             absent.append({
@@ -4933,7 +6579,7 @@ def main():
     ap.add_argument("--archive", help="the run's _archive folder (defaults to the "
                                       "monitor output folder's _archive)")
     ap.add_argument("--model", help="the model workbook (defaults to the configured path)")
-    ap.add_argument("--trend-months", type=int, default=18)
+    ap.add_argument("--trend-months", type=int, default=None)
     a = ap.parse_args()
     ml.prerequisites.require_workbook()
     if not re.fullmatch(r"\d{4}-\d{2}", a.period):

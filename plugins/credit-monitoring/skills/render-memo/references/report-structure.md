@@ -61,7 +61,7 @@ header banner. Tabs, order and ids are fixed so `#tab=` hashes are stable across
 
 | Tab | id | Holds |
 |---|---|---|
-| Overview | `tab-overview` | covenant strip · performance + collateral boxes · short executive summary · 18-month trend |
+| Overview | `tab-overview` | covenant strip · performance + collateral boxes · short executive summary · trend chart |
 | Deal summary | `tab-deal` | company · key terms · transaction summary · security summary · capital structure |
 | Covenants | `tab-covenants` | covenant strip (repeated) · covenant detail & stress |
 | Financial performance | `tab-financials` | income statement, cash flow and balance sheet reviews |
@@ -313,23 +313,153 @@ never fires a trigger; what matters is whether the surviving leg is projected to
 model-proposed from these rules; the name-level watchlist and trajectory stay analyst-owned in
 `our_view` and render as the header pills. No RAG grid renders anywhere.
 
-#### 1.4 18-month trend chart
-ONE chart, TWO toggled views — **Absolute ($)** and **Margins (%)** — never both line families on one axis.
-Absolute: net-revenue bars + gross-profit / EBITDA / operating-expense lines. Margins: gross-margin /
-EBITDA-margin / opex-%-of-revenue lines, with faint net-revenue bars for scale context. Mark any basis
-break with a dashed vertical rule.
+#### 1.4 Trend chart
+The window is 18 months, or the borrower config's `analysis.trend_months`. That is a whole number, or `"term"`.
+A term opens at the deal's first advance, the earliest funding on the debt-service spec, else
+at the agreement's date. Months of the window before the model's first month draw empty
+(`trend_chart.lead_months`). One line under the chart then says where the model starts against the
+first advance. The heading names the count, lead months included.
 
-**Quarter callouts.** Every COMPLETE calendar quarter in the window gets one box, in a band above the
-plot, over the month that closes the quarter, carrying that quarter's figures for the four series the
-current view draws — same order as the legend. A quarter the window does not hold all three months of
-gets NO box: a clipped quarter totalled anyway reads as a weak quarter, and that is an error the reader
-cannot see. Same rule per series — a series missing a month inside the quarter shows a dash in the box,
-never a two-month total. **A quarter level is the three months added up; a quarter margin is the
-quarter's numerator over the quarter's revenue, NEVER the average of three monthly margins.** All of it
-is computed in `memo_payload.py` and gated by `validate_memo.py` before it reaches the page — the chart
-positions and formats, and adds nothing up. A quarter whose months straddle a basis break is still
-shown, marked `†`, and the axis caption says what the mark means. The band is reserved above the plot
-rather than drawn over it, so the boxes never cover the months they summarise.
+**The view**. The chart opens on the latest 18 months of the window, ending at the
+run's month. From and To over the chart take any range of the window's months, typed as MM/YYYY;
+"2/2022" and "02/22" read too. A month outside the window snaps to the nearest it holds. An entry that
+reads as no month goes back to the last good one, with a hint under the boxes. A From after the To
+swaps them. The legend sits on the same row, on the right, with a muted line under it on how the
+boxes open. A slider under the chart moves a range of the same
+length back to the window's first month; the arrow keys move it too. Each follows the other, and the
+heading names the months on view. The columns narrow as the range grows. The flags and the axis follow
+the view. No count of the events off the view prints over the chart. Printed,
+the chart shows the latest 18 months.
+
+ONE chart. Net revenue draws as bars. EBITDA, the model's own line, draws as narrower bars
+in front of them, on the same axis. They are one darker green, a profit or a loss. The EBITDA margin is
+a line on its own scale, which shares the money axis's zero and prints no labels. Adjusted EBITDA draws as an outlined bar
+in each month that has one. The chart draws no gross profit and no operating expense. Both stay in the payload, as do the quarter totals. Mark any basis break with a dashed vertical
+rule. A series the chart cannot draw gets one data-quality note that names it by its legend name: "The
+trend chart's EBITDA line is not drawn: …".
+
+Hovering a month shows net revenue, EBITDA, Adjusted EBITDA where the deal has it, and EBITDA
+margin, each with its figure. Under each line a YoY row prints the change, muted,
+then the same month a year earlier right under the figure: "(-12.3%) $11.40M". The margin's row
+prints the change in points: "(-7.5 pts) 11.2%". A month with no month a year earlier reads "YoY —"; a line up from a loss
+prints no percent. `memo_payload.trend_yoy` works out each one with its trace (`trend_chart.yoy`).
+
+**EBITDA, then Adjusted EBITDA under it**. Every box, the month's hover, the
+pinned month and each event's box, shows EBITDA. Where the deal has Adjusted EBITDA, the line under it
+shows Adjusted EBITDA: "LTM EBITDA", then "LTM Adjusted EBITDA". The deal has it only from its files or
+its record (`memo_payload.adjusted_basis`), the first of:
+- the add-backs on the deal record, `capital_structure.ebitda_adjustments`. Adjusted EBITDA is the
+  model's EBITDA plus each add-back over the same months;
+- the fund's own template's add-back rows, which the capital structure read where the record holds
+  none, the same way;
+- a model Income Statement row the package labels Adjusted EBITDA. Adjusted EBITDA is that row.
+
+A margin, a growth rate, a ratio or a pro forma row is no Adjusted EBITDA row. The chart's own EBITDA
+row may carry that label. Then the package reports only Adjusted EBITDA: the EBITDA line takes that
+name, and no second line prints. With none of these, no box prints Adjusted EBITDA. Nothing else
+makes one, not a covenant definition's words.
+
+Hovering or tapping an Adjusted EBITDA figure shows how it was reached, in numbers:
+"LTM EBITDA $12.00M + Stock-based compensation $2.40M = LTM Adjusted EBITDA $14.40M". Each add-back
+takes its recorded name. Under it, a Sources link opens a short list, one line per add-back: "Stock-based
+compensation · Package Jun 2025, IS row 41". The tip stays open while the pointer is
+on it. A figure the package labels Adjusted EBITDA says so, and that the files do not itemise its
+add-backs. An add-back stated as an LTM amount counts only in the box whose twelve months
+end on its month. A month or a window the add-backs do not cover prints EBITDA, and Adjusted EBITDA
+as not on file. Its hover says why.
+
+The multiple divides by Adjusted EBITDA where the box has it, else by EBITDA. Its label says which:
+"Pro forma debt / Adjusted EBITDA" or "Pro forma debt / EBITDA". `trend_chart.event_ebitda`
+names the EBITDA line; `adj_ebitda` and `adj_formula` hold each month's Adjusted EBITDA and its hover.
+Every label says its words in full: "LTM Adjusted EBITDA", "Pro forma total debt", "Debt / EBITDA" at
+close, "LTM revenue". No "Adj.", no "PF", no "rev.".
+
+**Event boxes.** Each amendment, waiver and advance in the window has one box. It shows only on a
+click; the chart draws no box above the plot. An advance up to five days after an
+amendment is that amendment's funding and shares its box.
+A box holds the LTM revenue with its growth on the LTM a year earlier. Then LTM EBITDA, and LTM
+Adjusted EBITDA under it where the deal has it. Each is the twelve months to the
+month end before the event, off the model. Where the model does not hold those months the box says
+"not in the model".
+Beside the LTM EBITDA, a box shows the figure a document stated at the time. The
+LTM revenue shows one only where the document states revenue. It reads "LTM EBITDA $12.00M · certificate then $11.50M (p. 6)".
+The deal setting `config/stated-ltm.json` lists each one: `period_end`, `ebitda`, `revenue`, `kind`,
+`source_ref` (`file` in the deal documents, `page`) and `note`. A box takes the entry whose
+`period_end` is its LTM-to month. With no file, no stated figure prints. The pop-out traces it to its
+file and page.
+An advance adds five lines:
+- the existing debt: the model's balance-sheet debt at the month end before, net of OID. The rows
+  are the ones the capital structure's check line adds up (`snapshot_leverage.debt_rows`);
+- the amount advanced, the debt-service spec's funding;
+- the pro forma total debt: the existing debt plus the amount advanced. Hovering it shows the sum in
+  the box's own figures, "$80.00M existing debt + $5.00M advanced = $85.00M". A
+  box missing either figure shows no sum;
+- that debt over LTM Adjusted EBITDA where the box has it, else over LTM EBITDA;
+- our loan's principal after it: its schedule's month end before, plus the advance.
+
+A figure with no source prints "not on file"; a month before the model's first prints "not in the
+model". The deal's first advance reads the deal record's revenue, EBITDA, total debt and multiple at
+close. Where the deal records add-backs, Adjusted EBITDA at close adds those of the twelve months
+to the figure's month. The multiple is then total debt over it. Otherwise the multiple is the deal
+record's own.
+
+**Flags.** Each amendment in the covenant spec's `amendments_reflected` gets a purple rule and a flag on the month it
+was signed. The flag reads `A-5` for the Fifth Amendment, by the number the document gives itself.
+Waivers and consents read `W-1`, `W-2` in date order, and an amendment with no number reads a bare `A`.
+An advance flag reads `$`, in teal. The advances take the top row of flags, the amendments and
+waivers the row under it, each row named in the margin. In its row, a flag that would touch the one
+before it sits a step higher. Hovering a flag names its date and label.
+
+**Event boxes**. A click on an advance's flag opens its box over the chart's top edge.
+It sits over its flag where there is room, else right of the advance boxes already open. A thin line
+joins it to its flag. An amendment's or a waiver's box opens on the plot beside its flag, like the
+month's hover. Each one opened after it sits a step lower.
+Any mix of boxes stays open together. Only a box's own × closes it. A hover, a click on a bar or a
+flag, the slider and another box leave it open where it is. A box moves by its head, anywhere on the
+page, and keeps its place; an advance's line follows. Only its head, × and "Full terms"
+take the mouse, so the bars under it still show their month. The month's hover draws above every box.
+
+**EBITDA margin**. Each point of the margin line prints its figure, one decimal,
+above the point, or under it near the top of the plot. The month's hover still shows it.
+
+**The terms table**. An amendment's or a waiver's box ends with its terms table.
+Its rows are Maturity date, Cash interest, PIK and Minimum liquidity, then each financial covenant in
+force. Every row prints its value Before and After the document, in short values. A Change column
+says "Unchanged", or a few words: "Extended 3 years", "−25 bp", "−10 points", "Removed", "New". A
+change the record gives no After words reads "Amended", and its After cell "not on file". A
+row the document did not change reads the value in force off the chain (`amendment_terms_chain`).
+That is the last earlier change's new value, else the next later change's old one. Else it is the
+covenant record's own threshold at the date. A value none of those states prints "not on file", and
+the pop-out names what was searched. The other changes print on one line between dots.
+
+**The box, condensed**. An amendment's box heads "A-1 · First Amendment · Apr 14 2023".
+Every event's day prints as "Mar 5 2025", in the box, the flag's hover, the pop-out, the printed table
+and the line under the chart. So does every day in the terms, the changes and the documents' names
+It reads "Jun 30 2025", never "30 Jun '25" or "6/30/2025" (`memo_payload.day_dates`). An amendment's Advanced line names the day its advance funded. An
+advance whose funding the debt-service spec marks estimated heads "Advance · funding date not on file".
+Under it: "Shown at Mar 1 2023, the date the record holds in its place".
+LTM lines the model cannot give fold into one line. A legacy covenant's row reads "Senior leverage
+(legacy)". A step schedule prints between arrows, each step with its dates ("5.50x to Jun '24 → 5.00x
+Jul–Sep '24"). A month's year prints as 'YY, a day whole. An unchanged row is muted. The pop-out keeps the full words.
+
+**Hover and pin.** Hovering a month shows its net revenue, EBITDA and margin, and names each event of
+the month. A click on the month pins its box, with each event's lines in full. It stays while the mouse moves
+away, until its × or Esc closes it. A click on another month moves the pin. A pinned box moves by
+its month's head or an event's head in it, as an event box does. While a box is
+pinned, a pointer that rests a second on another month shows its hover over every open box. Moving
+off hides it. A pinned box's "Full terms" opens the pop-out. It holds every figure of
+the box, traced, and each advance with its spec note. Then the terms table, each row naming the
+document, section and page of its value. Then every change of the covenant record's
+`amendments_reflected[].changed` in full, with its section and page. It links the document.
+
+**On paper.** Nothing can be clicked. So every event of the window prints in a table under the
+chart, oldest first: its date, label, figures and the terms it changed.
+
+The source caption sits behind a "Show sources" toggle, closed by default. It names the model, and says
+what the margin and the boxes are. It lists every amendment oldest first, each linked, and those
+outside the window. The payload works out and places every figure (`trend_chart.events`,
+`trend_chart.amendments`); the chart formats and positions them. `validate_memo.py` holds each flag,
+each box's figures and each box's labels to the payload.
 
 ### Tab 2 — Deal summary: the static deal record
 
@@ -567,14 +697,14 @@ relational stories point-in-time rules miss, each still bounded by the Evidence 
 
 ## Style
 - **Palette & look (fixed for every borrower):** the teal family carried in the example's `:root`
-  — ink `#0a2a3f`, muted `#5c6f79`, hairline `#e4eaec`, page/wash `#f3f6f7`, navy `#0a2a3f`,
-  accent `#137488`, accent-soft `#e9f2f4`, spot highlight `#eef4f5`, header wave gradient
-  `#2a8ea1`→`#0c4763`; status greens/ambers/reds in the muted tones (`#1f7a4d` / `#a8720f` / `#b23a2c`).
+  — ink `#222222`, muted `#5c6f79`, hairline `#e4eaec`, page/wash `#F4F3F8`, navy `#222222`,
+  accent `#170B41`, accent-soft `#e9f2f4`, spot highlight `#eef4f5`, header wave gradient
+  `#155C39`→`#1f7a4d`; status greens/ambers/reds in the muted tones (`#1f7a4d` / `#8a5d09` / `#b23a2c`).
   Type is Helvetica Neue; section headings are small uppercase letter-spaced eyebrow labels with a short
   accent dash rule (not large bordered headings); cards use tight 5–6px radii with a subtle shadow;
   tables have transparent headers with thin rules; stat chips carry a top accent border; covenant chips
-  lift on hover. Trend-chart series follow the same palette (net-revenue bars `#b9dde3`, gross-profit
-  `#0a2a3f`, EBITDA `#1f7a4d`, opex `#a8720f`, margin lines in accent/green/grey). Copy the example's
+  lift on hover. Trend-chart series follow the same palette (net-revenue bars `#E0DEE9`, gross-profit
+  `#222222`, EBITDA `#1f7a4d`, opex `#8a5d09`, margin lines in accent/green/grey). Copy the example's
   CSS/JS verbatim; never restyle per deal.
 - **Collapse mechanics:** the two Overview metric boxes are collapsible cards (persistent header bar + teaser figure,
   chevron, body hidden until click) per the example's pattern. The chevron is a VISIBLE affordance —
