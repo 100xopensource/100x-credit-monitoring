@@ -17,10 +17,14 @@ jobs:
       - name: Keep maintainer-only files out of the public repository
         if: github.repository == '100xopensource/100x-credit-monitoring'
         run: |
-          if [ -e STAGING_SYNC.md ]; then
-            echo "::error file=STAGING_SYNC.md::STAGING_SYNC.md is a maintainer-only file and must not be published here."
-            exit 1
-          fi
+          found=0
+          for p in STAGING_SYNC.md .staging .github/workflows/port-to-production.yml .github/workflows/sync-from-production.yml; do
+            if [ -e "$p" ]; then
+              echo "::error file=$p::$p is a maintainer-only file and must not be published here."
+              found=1
+            fi
+          done
+          exit $found
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
