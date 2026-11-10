@@ -8,7 +8,7 @@ will not resolve for another reader or after a temporary session ends.
 A configured path names the SHARED FOLDER and the path inside it:
 
     store:Example Borrower/.record/current/_model/covenant-spec.json
-    source:Example Borrower/6_Loan Monitoring/1_Reporting
+    source:Example Borrower/1_Borrower Information/2_Financials/Management Accounts
 
 which is the same string for everybody, and resolves against whatever the
 reader has connected — including when they connected a folder ABOVE it.

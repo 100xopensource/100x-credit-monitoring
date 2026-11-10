@@ -1034,9 +1034,9 @@ def liquidity_block(liq, figs):
 
     Each row's value is READ OFF ITS FIGURE rather than off the module again, so a
     money row is in dollars like every other money figure in the payload. Reading
-    the module a second time published this block in the model's own units -- cash
-    of 6,662.43 on a borrower whose statements are kept in thousands, which prints
-    as $6,662 against a $750,000 covenant floor.
+    the module a second time would publish this block in the model's own units: on
+    a borrower whose statements are kept in thousands, a cash balance of $5.0M
+    would print as $5,000.
     """
     have = {f.get("field"): f for f in figs}
     rows = [{"id": _slug(key), "field": key, "label": label, "unit": unit,

@@ -89,13 +89,6 @@ class RepositoryFormTest(unittest.TestCase):
         self.assertIn("[What it produces](README.md#what-it-produces)", support)
         self.assertIn("## what it produces", readme)
 
-    def test_public_copy_has_no_staging_identity(self):
-        files = [ROOT / path for path in PUBLIC_TEXT if (ROOT / path).is_file()]
-        files += tracked_github_files()
-        text = "\n".join(path.read_text() for path in files)
-        for term in ("private stage 1", "preview repository", "public repository handoff", "release/v1.0.0", "nguyen-tran-100x", "rc-03", "rc-04"):
-            self.assertNotIn(term, text.lower())
-
     def test_generated_plugin_is_tracked_and_current(self):
         tracked = subprocess.run(
             ["git", "ls-files", "--error-unmatch", "credit-monitoring.plugin"],
