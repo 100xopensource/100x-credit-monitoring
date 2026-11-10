@@ -4,6 +4,13 @@ Notable changes to Credit Monitoring are recorded here.
 
 ## [Unreleased]
 
+## [1.7.1] - 2026-11-10
+
+### Changed
+
+- Reworded code comments and examples to use the fictional sample's figures and folder layout.
+- Removed an unused folder-connection reference; `references/runtime/cowork/files.md` covers it.
+
 ## [1.7.0] - 2026-11-03
 
 Versions between 1.3.3 and 1.7.0 were internal and were not public releases; this entry covers the memo changes since 1.3.3.
@@ -71,7 +78,8 @@ Initial public release.
 - Updating a hosted dashboard at the same link is not supported in v1.
 - See [Limitations](docs/LIMITATIONS.md) for the complete current scope.
 
-[Unreleased]: https://github.com/100xopensource/100x-credit-monitoring/compare/v1.7.0...HEAD
+[Unreleased]: https://github.com/100xopensource/100x-credit-monitoring/compare/v1.7.1...HEAD
+[1.7.1]: https://github.com/100xopensource/100x-credit-monitoring/releases/tag/v1.7.1
 [1.7.0]: https://github.com/100xopensource/100x-credit-monitoring/releases/tag/v1.7.0
 [1.3.3]: https://github.com/100xopensource/100x-credit-monitoring/releases/tag/v1.3.3
 [1.1.0]: https://github.com/100xopensource/100x-credit-monitoring/releases/tag/v1.1.0

@@ -17,8 +17,8 @@ Numbers we hardcode are dollars and are converted (the $10,000 minimum under the
 Numbers a person writes are on the model's unit: `analysis.cash_floor`, a pinned
 `line_read.materiality_floor`, and a min-cash covenant threshold, which follows its spec's own
 `threshold_unit`. The floor's disclosed basis states dollars either way, so the bar can be read
-without knowing the scale. Unconverted, that floor sat 177x too high on a real thousands-scale deal —
-$10,000,000 instead of $56,585 — and twenty material line moves were invisible.
+without knowing the scale. Unconverted, the floor on a thousands-scale model is 1,000 times too
+high, and material line moves are not flagged.
 
 The unit comes from `model.scale` + `model.currency` in borrower-config (required) and rides on the
 output's envelope.

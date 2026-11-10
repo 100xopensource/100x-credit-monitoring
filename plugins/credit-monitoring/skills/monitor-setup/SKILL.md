@@ -115,7 +115,7 @@ Each input path is analyst-SELECTED, never auto-detected or reused from another 
 setup hunting through the wrong folders.
 
 0. **Write every path as its shared folder plus the path inside it** —
-   `source:Example Borrower/6_Loan Monitoring/1_Reporting`, or
+   `source:Example Borrower/1_Borrower Information/2_Financials/Management Accounts`, or
    `store:borrowers/example/.record/current/config/covenant-spec.json`. There are two shared folders:
    `source` is the deal
    documents folder (3_Current Portfolio) and `store` is the monitoring folder. That string works

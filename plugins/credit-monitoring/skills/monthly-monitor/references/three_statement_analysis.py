@@ -1681,8 +1681,8 @@ def scale_floor(rev_series, seg_idxs, li, unit):
     Returns the floor in the MODEL's unit, because that is what the flag rules
     compare line values against. Only the $10,000 minimum is a dollar figure —
     5bps of revenue is computed off model figures and is already on the model's
-    unit. Unconverted, the minimum became 10,000 model units ($10m on a
-    thousands model), 405x too high, and every flag list came back empty while
+    unit. Unconverted, the minimum would become 10,000 model units ($10m on a
+    thousands model), and the flag lists would come back empty while
     disclosing a basis that read like dollars.
     """
     floor_min = unit.from_dollars(10000.0)

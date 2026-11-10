@@ -1463,10 +1463,10 @@ def compute(model, spec, unit, borrower_name=None, certified=None,
                 months=model.months, deemed=num_deemed_map)
             if num_val is None:
                 # Two different causes, and the reader acts on them differently.
-                # insufficient_history resolves itself as the model grows: Round 2's
-                # two covenants carrying the Event-of-Default teeth were invisible
-                # for the deal's whole first year behind a bare skip here, and the
-                # output read "3 passes, 0 exceptions". input_blank does NOT resolve
+                # insufficient_history resolves itself as the model grows, but a
+                # bare skip here would hide a covenant until it did, and the output
+                # would report only the covenants it could compute, as if none were
+                # missing. input_blank does NOT resolve
                 # itself -- the bound row is empty and someone has to repoint it.
                 msg, detail = _uncomputable_texts(
                     num_reason, name, window, model, num_src,
