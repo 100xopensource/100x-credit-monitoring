@@ -1,0 +1,71 @@
+name: Release
+
+# When main carries a plugin version that has no release yet, tag it and
+# publish the GitHub Release with the bundle and its checksum. Runs only in
+# this repository; anywhere else (forks, mirrors) the job is skipped.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    if: github.repository == '100xopensource/100x-credit-monitoring'
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPO_URL: https://github.com/${{ github.repository }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Is this version released yet?
+        id: version
+        run: |
+          version=$(python3 -c "import json; print(json.load(open('plugins/credit-monitoring/.claude-plugin/plugin.json'))['version'])")
+          tag="v$version"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo "$tag is already released; nothing to do."
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+          elif git rev-parse -q --verify "refs/tags/$tag" >/dev/null; then
+            echo "::warning::Tag $tag exists without a release. Publish it by hand or delete the tag."
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Check the release files
+        if: steps.version.outputs.publish == 'true'
+        run: |
+          version='${{ steps.version.outputs.version }}'
+          grep -qE "^## \[${version//./\\.}\] - [0-9]{4}-[0-9]{2}-[0-9]{2}$" CHANGELOG.md \
+            || { echo "::error file=CHANGELOG.md::No dated [$version] entry"; exit 1; }
+          grep -qE "^\[${version//./\\.}\]: ${REPO_URL}/releases/tag/v${version//./\\.}$" CHANGELOG.md \
+            || { echo "::error file=CHANGELOG.md::No [$version] release link"; exit 1; }
+          sha256sum -c SHA256SUMS.txt
+
+      - name: Publish
+        if: steps.version.outputs.publish == 'true'
+        run: |
+          version='${{ steps.version.outputs.version }}'
+          tag='${{ steps.version.outputs.tag }}'
+          prev=$(gh release list --limit 1 --exclude-drafts --exclude-pre-releases --json tagName --jq '.[0].tagName')
+          {
+            echo "Credit Monitoring Plugin ${version}. See the [CHANGELOG](${REPO_URL}/blob/main/CHANGELOG.md) for what changed since ${prev#v} and [Limitations](${REPO_URL}/blob/main/docs/LIMITATIONS.md) for current scope."
+            echo
+            echo "Verify the download against \`SHA256SUMS.txt\`. The completed sample ZIP stays on the [v1.1.0 release](${REPO_URL}/releases/tag/v1.1.0)."
+          } > "$RUNNER_TEMP/notes.md"
+          gh release create "$tag" credit-monitoring.plugin SHA256SUMS.txt \
+            --target "$GITHUB_SHA" --title "Credit Monitoring Plugin $tag" \
+            --notes-file "$RUNNER_TEMP/notes.md" --latest
+          echo "### Published $tag from \`${GITHUB_SHA::7}\`" >> "$GITHUB_STEP_SUMMARY"
