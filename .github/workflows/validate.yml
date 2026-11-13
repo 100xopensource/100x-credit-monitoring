@@ -18,7 +18,7 @@ jobs:
         if: github.repository == '100xopensource/100x-credit-monitoring'
         run: |
           found=0
-          for p in STAGING_SYNC.md .staging .github/workflows/port-to-production.yml .github/workflows/sync-from-production.yml; do
+          for p in STAGING_SYNC.md .staging .github/workflows/port-to-production.yml .github/workflows/sync-from-production.yml .github/workflows/port-from-shared-dev.yml .github/workflows/test-run.yml .github/workflows/demo-refresh.yml; do
             if [ -e "$p" ]; then
               echo "::error file=$p::$p is a maintainer-only file and must not be published here."
               found=1
