@@ -1,1 +1,1 @@
-fea38aa79053ba657adb85accb879e3ddd6e400dfed7a11481e02557b0f94d57  credit-monitoring.plugin
+605cc56be189c6090c0970644240e4905d9a7a7a86d6d9e7a1fc1a9cb0b632a1  credit-monitoring.plugin

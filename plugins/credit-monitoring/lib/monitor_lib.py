@@ -2316,6 +2316,25 @@ def conclusion(module, period, results, exceptions=None, source_files=None,
     return out
 
 
+def reader_message(exc):
+    """`str(exc)`, with the file an OS error names said as its logical address.
+
+    An OS error carries the path the engine opened, which on a reader's run is
+    one session's mount or one person's folder. Reasons built from it reach the
+    memo, so the file is said the way a config says it ("store:..."), or by its
+    name alone when it sits under no connected folder.
+    """
+    if not (isinstance(exc, OSError) and exc.filename is not None):
+        return str(exc)
+
+    def said(p):
+        logical = unresolve_path(p)
+        return logical if parse_store_path(logical) else os.path.basename(str(p))
+
+    return str(OSError(exc.errno, exc.strerror, said(exc.filename), None,
+                       None if exc.filename2 is None else said(exc.filename2)))
+
+
 def skip_record(module, exc, period=None, borrower=None, run_id=None):
     """The one bad-input skip record every module CLI writes when a KNOWN,
     non-bug input failure (missing config surface, unreadable file, unmapped
@@ -2333,7 +2352,8 @@ def skip_record(module, exc, period=None, borrower=None, run_id=None):
         stamp = period_stamp(period) if period else None
     except ValueError:
         stamp = None
-    reason = str(exc) if isinstance(exc, ConfigError) else f"{type(exc).__name__}: {exc}"
+    reason = (str(exc) if isinstance(exc, ConfigError)
+              else f"{type(exc).__name__}: {reader_message(exc)}")
     return conclusion(module=module, period=stamp, results=[], exceptions=[],
                       run_id=run_id, skipped=True, reason=reason,
                       borrower=borrower)

@@ -35,8 +35,8 @@ the runtime in every worker brief, so the worker reads the same files.
 If one of the runtime's files says it is not written yet, tell the analyst in plain words that
 credit monitoring cannot run here yet, change nothing, and stop.
 
-**store-setup**, **monitor-setup**, **covenant-setup**, **build-monitoring-model** and
-**open-folder-guide** run only in Cowork. In any other runtime, a step that needs one of them tells
+**store-setup**, **covenant-setup** and **open-folder-guide** run only in Cowork, and so does
+**monitor-setup** for a borrower not yet set up. In any other runtime, a step that needs one of them tells
 the analyst that it has to be done in Cowork for now, changes nothing, and stops.
 
 ## 1. Understand the request

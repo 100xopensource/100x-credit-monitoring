@@ -53,7 +53,8 @@ class SampleOutputTest(unittest.TestCase):
         borrowers = json.loads((pages / 'index.json').read_text())['borrowers']
         self.assertEqual(6, len(borrowers))
         for row in borrowers:
-            borrower = store / 'borrowers' / row['slug']
+            # The plugin names the borrower's folder at setup; the dashboard records it.
+            borrower = store / 'borrowers' / row.get('folder', row['slug'])
             runs = list((borrower / '.record/runs').glob('*/*/manifest.json'))
             self.assertEqual(1, len(runs))
             run = runs[0].parent

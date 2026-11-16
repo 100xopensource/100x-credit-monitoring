@@ -73,13 +73,13 @@ worker instead of per dispatch:
 
 | Agent | Model | Effort | Why |
 |---|---|---|---|
-| `module-analyst` | sonnet | xhigh | The engine is deterministic; getting to it is not — finding the period's files in a folder shaped differently every deal, reading a title row to tell A/R from A/P, recognizing unavailable inputs without changing the engine. |
+| `module-analyst` | sonnet | xhigh | The engine is deterministic; getting to it is not — finding the period's files in a folder shaped differently every deal, reading a title row to tell A/R from A/P, recognizing unavailable inputs and noticing when an engine's figure reads wrong, without changing the engine. |
 | `model-builder` | sonnet | xhigh | Long, fiddly, and correctness-critical: merge-by-period, the restatement scan, recalc order, then a gate that either passes or costs a rebuild. |
 | `covenant-extractor` | sonnet | xhigh | Hundreds of pages of definitions, a `basis` call that silently false-passes a covenant when wrong, and a discrepancy rule that means sweeping the whole executed set. |
 
 Every worker runs at `xhigh`: each of these is a hard problem wearing a contract, and lower effort buys
 fewer tool calls exactly where the work is finding the right file and noticing the thing that doesn't
-reconcile. Sonnet is the model floor — live-file interpretation and failure diagnosis need it. The memo's
+reconcile. Sonnet is the model floor — live-file interpretation, failure diagnosis and spotting a figure that reads wrong need it. The memo's
 synthesis is what stays on the orchestrator's strong model.
 
 **Synthesis stays on the orchestrator's own model.** Choosing "the issue," rating the RAG grid
@@ -145,11 +145,12 @@ orchestrator's context. Run monthly-monitor in a session on the strongest model 
   EVERY module output BEFORE archiving; it fails loudly and names the offending figure. A validation
   failure must not trigger a code change during the review. Follow **Engine execution boundary** in
   the plugin rules; include it in every worker brief and reject modified-engine results. Never
-  hand-edit output JSON to pass. The module writes the skip record above with
+  patch the engine or hand-edit output JSON to pass. The module writes the skip record above with
   `reason` naming the failure and quoting what the gate said ("engine failure — validate_output: …"),
   archives it under the `.skipped.json` name, and returns that record as its conclusion — the invalid
   output stays unarchived. Failure isolation then applies: the memo states the module unavailable with
-  that reason, and the rest of the run ships.
+  that reason, and the rest of the run ships. A figure that passes the gate but reads wrong comes back
+  as one line in `exceptions`, a suspected engine defect; its fix ships in a later build.
 - **Writing meant for a person is written as a note, and what a module flagged reaches the memo.**
   Every output gets a markdown note beside it holding its prose — commentary, what was read off a
   document, anything flagged — written by `write_output`, so nothing readable stays buried in the

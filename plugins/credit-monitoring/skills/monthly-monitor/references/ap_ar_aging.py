@@ -25,6 +25,9 @@ is supplied by config (borrower-config.json):
                            NetSuite exports) or "xlsx" (e.g. QuickBooks exports).
   * aging.dpo_basis        which model line to use as the DPO denominator:
                            "operating_cogs" (default) or "revenue" / any model_lines key.
+                           A package with no cost line leaves that key blank: DPO
+                           is then not computed and an exception says so, and
+                           everything else still reports.
   * aging.tie_tolerance    tolerance for the aging-vs-BS tie-out, in the MODEL's
                            unit (default 1.0 -- $1,000 on a model in thousands).
   * aging.top_n            counterparty concentration depth (default 5).
@@ -145,7 +148,9 @@ def load_aging_config(cfg):
         "accounts_receivable": ml.require_line(model_lines, "accounts_receivable", "ap-ar-aging"),
         "accounts_payable": ml.require_line(model_lines, "accounts_payable", "ap-ar-aging"),
         "revenue": ml.require_line(model_lines, "revenue", "ap-ar-aging"),
-        "dpo_basis": ml.require_line(model_lines, dpo_key, "ap-ar-aging"),
+        # Only DPO divides by this line. A package that reports no cost line
+        # leaves it blank, and the rest of the module still reports.
+        "dpo_basis": model_lines.get(dpo_key) or None,
         "dpo_basis_key": dpo_key,
     }
     return {
@@ -932,7 +937,8 @@ def _snapshot_block(side, parsed, month, flow_value, days_value,
     recon = rows_vs_total(parsed, tie_tol)
 
     refs = _aging_refs(idx, parsed)
-    flow_prov = model.provenance(flow_label, sheet="Income Statement", month=month)
+    flow_prov = (model.provenance(flow_label, sheet="Income Statement", month=month)
+                 if flow_label else None)
     if flow_prov:
         refs.append(idx.ref(model.given_path, **flow_prov))
 
@@ -969,6 +975,9 @@ def _snapshot_block(side, parsed, month, flow_value, days_value,
         bits.append(f"{days_metric_name} {days_value:,.2f} = total / {flow_name} "
                     f"('{flow_label}' = {flow_value:,.2f} for {month}, {where}) "
                     f"* {days} (calendar days in {month})")
+    elif not flow_label:
+        bits.append(f"{days_metric_name} not computed (no model line is mapped "
+                    f"for {flow_name})")
     else:
         bits.append(f"{days_metric_name} unavailable ({flow_name} "
                     f"'{flow_label}' missing or non-positive for {month})")
@@ -1109,8 +1118,11 @@ def compute(ar_latest, ap_latest, ar_prior, ap_prior, model, lines,
     bs_ap = model.get_line(lines["accounts_payable"], month=latest_month, sheet="Balance Sheet")
     rev_latest = model.get_line(lines["revenue"], month=latest_month, sheet="Income Statement")
     rev_prior = model.get_line(lines["revenue"], month=prior_month, sheet="Income Statement") if prior_month else None
-    dpo_latest = model.get_line(lines["dpo_basis"], month=latest_month, sheet="Income Statement")
-    dpo_prior = model.get_line(lines["dpo_basis"], month=prior_month, sheet="Income Statement") if prior_month else None
+    dpo_line = lines["dpo_basis"]
+    dpo_latest = (model.get_line(dpo_line, month=latest_month, sheet="Income Statement")
+                  if dpo_line else None)
+    dpo_prior = (model.get_line(dpo_line, month=prior_month, sheet="Income Statement")
+                 if dpo_line and prior_month else None)
     bs_ar_prov = model.provenance(lines["accounts_receivable"], sheet="Balance Sheet", month=latest_month)
     bs_ap_prov = model.provenance(lines["accounts_payable"], sheet="Balance Sheet", month=latest_month)
 
@@ -1133,9 +1145,11 @@ def compute(ar_latest, ap_latest, ar_prior, ap_prior, model, lines,
         dpo_latest, dpo_prior, "dpo_days", top_n,
         src_idx, model, lines["dpo_basis"], tie_tol)
     ap_block["latest"]["dpo_basis"] = (
-        f"DPO denominator = configured model line '{lines['dpo_basis']}' "
+        f"DPO denominator = configured model line '{dpo_line}' "
         f"({lines['dpo_basis_key']}) = "
-        f"{round(dpo_latest, 2) if dpo_latest is not None else None}.")
+        f"{round(dpo_latest, 2) if dpo_latest is not None else None}." if dpo_line else
+        f"DPO not computed: model_lines.{lines['dpo_basis_key']} is blank in "
+        f"borrower-config, so no cost line divides A/P.")
     ap_tie = tie_out(ap_latest["total"], bs_ap,
                      f"A/P aging total vs BS '{lines['accounts_payable']}'", tie_tol)
     ap_tie["source_ref"], ap_tie["calc"] = _tie_refs_calc(
@@ -1241,8 +1255,22 @@ def compute(ar_latest, ap_latest, ar_prior, ap_prior, model, lines,
                           "The DPO denominator is zero. DPO is undefined and is not published.",
             })
 
-    note = ("DSO/DPO are single-month and volatile. DPO uses configured basis "
-            f"'{lines['dpo_basis_key']}' (model line '{lines['dpo_basis']}').")
+    if not dpo_line:
+        exceptions.append({
+            "type": "dpo_basis_unmapped",
+            "what": "DPO (days payable outstanding) not computed this run",
+            "detail": (f"aging.dpo_basis names model_lines.{lines['dpo_basis_key']}, "
+                       f"which is blank in borrower-config, so there is no cost line "
+                       f"to divide A/P by. A/R days, the aging buckets, concentration "
+                       f"and both balance-sheet tie-outs are computed; only DPO is "
+                       f"left out. Map a cost line in borrower-config to publish DPO."),
+        })
+
+    note = ("DSO/DPO are single-month and volatile. " + (
+        f"DPO uses configured basis '{lines['dpo_basis_key']}' (model line "
+        f"'{dpo_line}')." if dpo_line else
+        f"DPO is not computed: model_lines.{lines['dpo_basis_key']} is blank, "
+        f"so no cost line is mapped to divide A/P by."))
     if unit.scale != 1:
         # Every figure here is on the model's unit, and so is the tie-out
         # tolerance -- so on a model in thousands a tolerance of 1.0 is a $1,000

@@ -67,7 +67,9 @@ carries on. Report which file was absent so the memo can say so.
 
 ## Config it reads (borrower-config.json)
 - model_output_path (for AR/AP tie-out and DSO/DPO via revenue / operating COGS) — read via monitor_lib.
-- `model_lines` — accounts_receivable, accounts_payable, revenue, operating_cogs (all required).
+- `model_lines` — accounts_receivable, accounts_payable, revenue (required) and the `aging.dpo_basis` line
+  (operating_cogs by default). A package with no cost line leaves that line blank: DPO is not computed,
+  the `dpo_basis_unmapped` exception says so, and the rest of the module reports.
 - `aging` block — OPTIONAL parse settings (defaults in the template): `file_format`, `dpo_basis`,
   `tie_tolerance`, `top_n`. Leave `file_format` at `auto` and the format is read off the file's own
   bytes, so a NetSuite export shipping SpreadsheetML XML as `.xls` still reads.

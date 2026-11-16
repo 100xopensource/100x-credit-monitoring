@@ -30,9 +30,9 @@ standing substitution: wherever it hands something to the analyst, see "Wherever
 ask" below.
 
 Your brief supplies: the plugin folder, the `borrower-config.json` path, the reporting-packages folder and the model
-output path in all three forms (the connected-folder path to read yourself, the `/sessions/…/mnt/…`
-sandbox path for bash — recalc, the gate, any listing — and the borrower-config string for engine
-arguments), the covenant-spec path when one exists, and the prior model and profile when this is a
+output path in every form `../references/runtime/<runtime>/files.md` § Paths a worker uses gives
+(in Cowork, the connected-folder path to read yourself, the `/sessions/…/mnt/…` sandbox path for
+bash — recalc, the gate, any listing — and the borrower-config string for engine arguments), the covenant-spec path when one exists, and the prior model and profile when this is a
 refresh.
 
 ## The traps that cost a rebuild
@@ -59,8 +59,10 @@ is a full rebuild, so read those sections before you start writing cells.
   the canonical file at its final path and read a value out of it — a reported-successful write is
   not yet a durable write.
 
-**Three path forms.** Read / Grep / Glob / Edit / Write take the connected-folder path; bash takes
-the `/sessions/…/mnt/…` form; engine arguments take the borrower-config string (`store:...`).
+**Path forms.** Engine arguments take the borrower-config string (`store:...`). In Cowork, Read /
+Grep / Glob / Edit / Write take the connected-folder path and bash takes the `/sessions/…/mnt/…`
+form. In a Claude Tag channel, all of them take the work-area path, `$W/store/...` or
+`$W/source/...`.
 Engines bootstrap
 their own import path, so `python <engine>.py …` needs no environment setup.
 
