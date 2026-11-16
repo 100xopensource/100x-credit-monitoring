@@ -41,9 +41,10 @@ type `credit-monitoring:model-builder`; where the runtime doesn't offer plugin a
 general-purpose subagent, prepend the text of `../../agents/model-builder.md`, and set
 that dispatch to sonnet at xhigh as the agent file declares — prepended text carries no frontmatter). Its
 brief carries the plugin folder (two levels above this skill's base directory, as an absolute path),
-the borrower-config path, the reporting folder and model output path in all three forms
-(the connected-folder path to read, the `/sessions/…/mnt/…` sandbox path bash needs for the recalc and
-the gate, and the borrower-config string for engine arguments), the covenant-spec path and the
+the borrower-config path, the reporting folder and model output path in every form
+`../../references/runtime/<runtime>/files.md` § Paths a worker uses gives (in Cowork, the
+connected-folder path to read, the `/sessions/…/mnt/…` sandbox path bash needs for the recalc and the
+gate, and the borrower-config string for engine arguments), the covenant-spec path and the
 debt-service schedule path when they exist,
 and the prior model and profile on a refresh. It returns a short conclusion — workbook
 path, months covered, gate result, restatements, skipped files — and the heavy statement reads never
@@ -57,9 +58,10 @@ works (`../../references/asking.md`).
 **Answer the diagnosis it hands back, then send the build again.** The worker returns what it saw when
 a file was not locally readable, a whole folder read back empty, a package was encrypted, or a path
 was too long for Excel. For a locally unreadable file, do not infer a provider or explain sync settings.
-Attach the folder guide and offer **[Try again]** / **[Skip this file]** / **[Stop for now]**. For a
-genuinely empty folder, say that no files were found and offer the matching choices from
-`../../references/runtime/cowork/files.md`. Once the analyst acts, dispatch the build
+In Cowork, attach the folder guide and offer **[Try again]** / **[Skip this file]** / **[Stop for
+now]**; in a channel, follow **When a file can't be reached or saved** in the channel's files rules.
+For a genuinely empty folder, say that no files were found and offer the matching choices from
+`../../references/runtime/<runtime>/files.md`. Once the analyst acts, dispatch the build
 again with what changed and say in one plain line that you are picking it back up. A run whose reporting
 folder never came back readable ends on that menu, not on an empty workbook.
 
@@ -80,8 +82,8 @@ folder never came back readable ends on that menu, not on an empty workbook.
    columns. When the whole reporting folder has no usable files, tell the two cases apart from the
    listing right there — file names present but unreadable versus no file names anywhere — and report
    which one you saw rather than silently rereading it. The analyst's session handles unreadable files
-   with the folder guide and handles a genuinely empty folder with
-   `../../references/runtime/cowork/files.md`.
+   by its runtime's files rules and handles a genuinely empty folder with
+   `../../references/runtime/<runtime>/files.md`.
 2. Merge-by-period with the restatement scan; latest/consolidated wins; log old→new in Sources & Notes
    AND `restatements.json`. Record the per-column winner in `source-map.json` (assembling-rules →
    "Source map").

@@ -72,13 +72,15 @@ record. Four of its rules are the ones a run trips on, so hold them as you work:
 
 1. **Gate before archiving.** `python ${CLAUDE_PLUGIN_ROOT}/skills/monthly-monitor/references/validate_output.py
    --period <current_period> <output.json>` exits non-zero and names the offending figure.
-2. **Preserve the shipped engine boundary.** Never modify an engine or its copy during this review.
-   Preserve a valid skip. If execution or validation fails after checking the invocation and verified
-   input mappings, return the skip record from orchestration.md's contract, with `period` the
+2. **Preserve the shipped engine boundary.** Never modify, patch or swap in a rewritten copy of an
+   engine during this review, and leave the JSON as the engine wrote it. Preserve a valid skip. If
+   execution or validation fails after checking the invocation and verified input mappings, return
+   the skip record from orchestration.md's contract, with `period` the
    run's current_period and `reason` naming the failure and quoting what the gate said ("engine
    failure — validate_output: results[2].dso has no source_ref"). Archive that record under the
    `.skipped.json` name, leave the invalid output unarchived, and return the record. The orchestrator
-   flags the module and ships the rest.
+   flags the module and ships the rest; the fix lands in the plugin and reaches a later run in a new
+   build.
 3. **Keep any answer already at that name.** When the `_archive` path already holds a file — this
    month has been run before — COPY it to `_archive/_history/<same name>--<its own run_id>.json`,
    then write the new answer over the original. Copy rather than move: everything downstream finds
@@ -104,5 +106,9 @@ record. Four of its rules are the ones a run trips on, so hold them as you work:
 - **Hand the call up.** When an input is genuinely ambiguous, take the reading your spec
   supports, carry on, and record the call in `exceptions` as one line: what you saw, the reading
   you took, and what the alternative reading would change. The orchestrator puts it to the analyst.
+- **Report a figure that reads wrong; never fix the engine.** When the output passes the gate but a
+  figure looks wrong (a ratio's sign, a zero where the input is missing), keep the output as written
+  and add one line to `exceptions`: the figure, what looks wrong, and what you expected. A patched
+  engine archives an answer that no shipped build reproduces, under a version stamp that says it does.
 - **Do the module, not more.** No extra analysis, no tidying of files you passed through, no
   second opinion on another module's output.

@@ -109,6 +109,26 @@ The channel never deletes or renames a file in SharePoint. A file a command remo
 area, such as the reviewed-edit record or an older result in `.record/current/`, stays in
 SharePoint, and the store check accepts it there.
 
+## Change a borrower's setup
+
+A request to change what **monitor-setup** recorded for a borrower runs here, such as "update the
+monitor for Talvorn: new approved H2 budget". A borrower with no folder under `borrowers` is set up
+in Cowork for now: say so, change nothing, and stop.
+
+- **The folders are this channel's.** The documents folder is `source` and the monitoring folder is
+  `store`. A0's output folder is the borrower's folder under `borrowers`, so A0 asks nothing.
+- **A worker reads and writes, and the thread session asks.** The thread session runs no command, so
+  every step **monitor-setup** does itself goes to a worker. The first worker brings the borrower's
+  files down by **Bring the borrower's files down**. It lists the folders a question needs, such as
+  the borrower's `Planning` folder for a new budget, and brings down each file it offers. It returns
+  each question **monitor-setup** asks, with the choices it found. The thread session asks them as
+  `asking.md` says, and only the ones the request leaves open. A later worker writes the control files
+  from the answers, reads each one back, and checks them as **monitor-setup** says.
+- **Save once, at the end.** The worker that writes saves the borrower's folder with the command in
+  **Save the results back**, then lists it for the links. Nothing is saved before every answer is in.
+- **The next run asks about the change.** Its `check` reports each changed setting, and the run asks
+  whether to use it, as **monthly-monitor** says.
+
 ## When a file can't be reached or saved
 
 `sharepoint.py` exits 1 and names what failed. Give the analyst the plain words below, never the

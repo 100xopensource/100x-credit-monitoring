@@ -25,8 +25,9 @@ permission menu. Preserve explicit setup intent. When `run-monitor` already supp
 continue here without repeating the welcome or permission menu.
 
 Before the first question, find what this session can reach through
-`../../references/runtime/cowork/files.md`. If either source or store root is unavailable,
-follow **store-setup** to obtain both folders.
+`../../references/runtime/<runtime>/files.md`. In Cowork, if either source or store root is
+unavailable, follow **store-setup** to obtain both folders. In a Claude Tag channel, follow its
+**Change a borrower's setup** section, which says who reads, asks and writes there.
 Keep both connected roots in context and bind them on every plugin subprocess and worker brief; one
 subprocess cannot export them to the next. Every later choice runs the same loop — look first, propose
 what you found as options with the one you recommend leading, then act on the option the analyst picks
@@ -39,10 +40,11 @@ cannot ask, so a delegated setup writes control files with those answers blank a
 the memo is missing the analyst's view. Setup itself runs here start to finish — the plugin's three
 workers (`agents/`) belong to covenant-setup, build-monitoring-model and monthly-monitor, and setup
 adds none of its own. Reading a budget tab or a deal document to fill a field is a few tool calls in
-this session, not a dispatch.
+this session, not a dispatch. In a Claude Tag channel the thread session is the one that asks, and
+workers do its reading and writing, as the channel's files rules say.
 
-**When a folder is missing**, name it in one line and ask with a menu, offering **[Open the folder
-guide]** by following **open-folder-guide**. It is a help document for the analyst and never starts
+**When a folder is missing**, name it in one line and ask with a menu. In Cowork, offer **[Open the
+folder guide]** by following **open-folder-guide**. It is a help document for the analyst and never starts
 setup or waits on the output folder. When every folder is there, say nothing about folders and get on
 with setup.
 

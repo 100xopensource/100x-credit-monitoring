@@ -4,6 +4,26 @@ Notable changes to Credit Monitoring are recorded here.
 
 ## [Unreleased]
 
+### Added
+
+- In a Claude Tag channel, a review of a new month first adds that month to the borrower's financial workbook, as in Cowork. The channel used to stop and ask for the month to be added in Cowork.
+- In a Claude Tag channel, an existing borrower's setup can be changed in the thread, for example to point it at a new approved budget. Claude asks its questions in the thread and saves the updated settings to the borrower's folder in SharePoint. Setting up a new borrower, a new store or covenants still runs only in Cowork.
+
+### Changed
+
+- Monitoring memos are about a third smaller. Printed statements no longer carry each figure's trace, which paper never shows, so a six-borrower portfolio dashboard fits the hosted page limit again.
+- A review no longer patches an engine while it runs. When a figure looks wrong, the review keeps the shipped engine's answer and names the suspected defect in its exceptions.
+
+### Fixed
+
+- A Performance box change that rounds to zero is grey and reads "+0". It used to print a red "-0 bps" or a green "+0.0%".
+- Interest coverage stays positive when a package records interest only as a cash outflow on the cash flow statement.
+- Total operating expenses and opex to revenue show as unavailable, with the reason, for a borrower with no operating expense rows. They used to show 0.
+- When the model has no net income for both months, the memo says the net income bridge was not built, as a watch item. It used to say the bridge failed to tie.
+- The receivables and payables check runs for a borrower whose package has no cost line. Payable days are left out with a note naming the missing line; everything else still reports.
+- When a file a review needs cannot be opened, the memo and the module's results name it by its place in the connected folder (`store:...`), not by its full path on the computer that ran the review.
+- A setting changed after a review was accepted, such as a corrected budget map, is used by the borrower's next review. Finishing that review no longer stops on it. A setting changed while a review runs still stops it.
+
 ## [1.7.1] - 2026-11-10
 
 ### Changed

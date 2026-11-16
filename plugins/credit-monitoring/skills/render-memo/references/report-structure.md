@@ -209,7 +209,8 @@ Performance → YTD revenue vs prior year %; Collateral → the senior hard-asse
   it is June against May that fell. The engine writes each change's colour (`tone`). Opex against an
   earlier period is neutral (it grows with revenue); opex and its share of revenue against the plan
   are red above plan and green below, judged on the size of the spend, since some workbooks store
-  costs as negative numbers. Budget cells are "—" and the column is omitted when no budget is on file.
+  costs as negative numbers. A change the page prints as zero is grey and reads "+0", never "-0".
+  Budget cells are "—" and the column is omitted when no budget is on file.
   A line the plan does not have (gross profit, operating expense) leaves the cells it feeds empty,
   never $0 and never another line's figure; each empty cell's trace says why, and the box states
   each reason once under the table. Operating expense with no group named in the borrower's settings

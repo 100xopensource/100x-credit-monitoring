@@ -67,6 +67,11 @@ Permission to continue does not bypass an edit, stale-run or recovery error. Pre
 resolve that error first. Close editors during delivery, acceptance or discard; the local process lock
 cannot coordinate writes from Excel or another computer.
 
+A `changed` entry under `.record/current/config/` is a setting, such as a budget map that
+**monitor-setup** updated. Name it and ask whether this run should use it. On yes, go on: Step 3's
+`snapshot` takes the setting as it is now, and finish writes back the same bytes. It needs no
+edit-intake. A setting changed again after `snapshot` blocks finish.
+
 A `changed` entry is not automatically an accident: it may be an intentional hand edit to the financial
 workbook the analyst wants this borrower's next run to build on (the memo is rendered fresh every run and
 is never carried forward this way — if the memo shows changed, that edit can only be preserved by reverting

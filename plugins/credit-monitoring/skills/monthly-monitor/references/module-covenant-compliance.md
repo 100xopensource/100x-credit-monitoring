@@ -194,7 +194,9 @@ The ENGINE computes everything in this spec. The driving agent transcribes the c
 runs the engine, reports failures, and may add NOTHING to the output JSON — no custom keys, no
 hand-recomputed values, no covenant math of its own. If the engine cannot produce a section,
 report the gap using the documented skip/failure contract. Follow **Engine execution boundary**
-in the plugin rules: code repairs belong to a separate engineering change, never this review.
+in the plugin rules: code repairs belong to a separate engineering change, never this review. An
+engine bug found mid-run is reported, not fixed: run the shipped engine unchanged and record the
+suspected defect in `exceptions`.
 
 **Copy the engine file BYTE-FOR-BYTE to the working directory (filesystem copy, or chunked reads with
 offset continuation until EOF), verify the copy (byte count or checksum against the source), and run

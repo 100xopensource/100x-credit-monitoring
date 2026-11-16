@@ -191,7 +191,8 @@ The ENGINE computes everything in this spec. The driving agent runs it, reports 
 may add NOTHING to the output JSON — no custom keys, no hand-recomputed values. If the engine
 cannot produce a section, the agent reports the gap using the documented skip/failure contract.
 Follow **Engine execution boundary** in the plugin rules: code repairs belong to a separate
-engineering change, never this review.
+engineering change, never this review. An engine bug found mid-run is reported, not fixed: the
+agent runs the shipped engine unchanged and records the suspected defect in `exceptions`.
 
 **The engine file is long and exceeds a single file-read window. Copy it BYTE-FOR-BYTE to the
 working directory (filesystem copy, or chunked reads with offset continuation until EOF), verify the

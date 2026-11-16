@@ -1728,8 +1728,10 @@ render();
   function usd(v){ if(v==null) return '—';
     var n=Math.round(v), s=Math.abs(n).toLocaleString('en-US');
     return n<0 ? '('+s+')' : s; }
-  function pct(v,d){ return v==null ? '—' : (v>=0?'+':'')+(v*100).toFixed(d==null?1:d)+'%'; }
-  function bps(v){ return v==null ? '—' : (v>=0?'+':'')+Math.round(v).toLocaleString('en-US'); } function share(v,d){ return v==null ? '—' : (v*100).toFixed(d==null?1:d)+'%'; }
+  /* a change that rounds to zero prints "+0", never "-0" */
+  function pct(v,d){ if(v==null) return '—'; var s=(v*100).toFixed(d==null?1:d); if(+s===0) s=s.replace('-','');
+    return (s.charAt(0)==='-'?'':'+')+s+'%'; }
+  function bps(v){ if(v==null) return '—'; var n=Math.round(v)||0; return (n<0?'':'+')+n.toLocaleString('en-US'); } function share(v,d){ return v==null ? '—' : (v*100).toFixed(d==null?1:d)+'%'; }
   function esc(x){ return String(x==null?'':x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
 
   /* favourable/unfavourable: opex growth is neutral (it grows with revenue) */

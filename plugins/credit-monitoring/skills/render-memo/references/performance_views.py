@@ -333,9 +333,11 @@ def compare(cell, a, b, unit, scale):
         cell["cmp"] = bps_change(a, b)
 
 
-def set_tone(cell, rid, a, b, plan):
+def set_tone(cell, rid, a, b, unit, plan):
     """The change line's colour: "up" better, "down" worse, "neu" neither.
 
+    A change the page prints as zero (under half a basis point, or under 0.05%) is
+    neutral: a flat margin a hair below its base is no move, and a red "-0" says one.
     Opex against an earlier period is neutral, because it grows with revenue.
     Against the plan, spend above plan is worse and below is better, judged on the
     SIZE of the spend: some workbooks store costs as negative numbers, and the
@@ -343,7 +345,9 @@ def set_tone(cell, rid, a, b, plan):
     """
     if cell.get("cmp") is None:
         return
-    if rid in ("opex", "opex_pct"):
+    if abs(cell["cmp"]) < (0.0005 if unit == "usd" else 0.5):
+        cell["tone"] = "neu"
+    elif rid in ("opex", "opex_pct"):
         if not plan or abs(a) == abs(b):
             cell["tone"] = "neu"
         else:
@@ -404,7 +408,7 @@ def level_view(vid, vlabel, cols, reader, note, plans=None):
                 if a is not None:
                     cell["cur"] = a
                     compare(cell, a, v, unit, (M or {}).get("revenue"))
-                    set_tone(cell, rid, a, v, c.get("plan"))
+                    set_tone(cell, rid, a, v, unit, c.get("plan"))
             elif c.get("base_months"):
                 Bs = reader.metrics(c["base_months"])
                 b = None if Bs is None else Bs.get(rid)
@@ -413,7 +417,7 @@ def level_view(vid, vlabel, cols, reader, note, plans=None):
                         b *= fac
                     cell["b"] = b
                     compare(cell, v, b, unit, (Bs or {}).get("revenue"))
-                    set_tone(cell, rid, v, b, False)
+                    set_tone(cell, rid, v, b, unit, False)
             cells.append(cell)
         rows.append({"id": rid, "label": label, "unit": unit,
                      "method": method_for(rid, reader.unit), "cells": cells})

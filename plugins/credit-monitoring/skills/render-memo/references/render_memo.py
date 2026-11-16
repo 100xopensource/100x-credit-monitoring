@@ -2142,7 +2142,10 @@ def render_table(payload, section, title):
         return hops
 
     def table_html(cols, printing=False):
-        heading = ''.join('<th class="n"><span class="trc" data-hops=\'' + esc(json.dumps(col_hops(key))) +
+        # Paper never opens a trace, so the print panels carry figures and row
+        # methods only; the per-cell traces live once, in the screen table.
+        heading = ''.join('<th class="n">' + esc(label) + '</th>' if printing else
+                          '<th class="n"><span class="trc" data-hops=\'' + esc(json.dumps(col_hops(key))) +
                           '\' data-calc="' + esc('Reported month '+label if key in months else 'The declared '+label+' statement window.') +
                           '">' + esc(label) + '</span></th>' for key, label in cols)
         body = []
@@ -2168,6 +2171,9 @@ def render_table(payload, section, title):
                 covered, requested = row.get(key+'_months_covered'), row.get(key+'_months_requested')
                 if covered is not None and covered < (requested or 0):
                     shown += f' <span class="cmp">({covered} of {requested} months carried data)</span>'
+                if printing:
+                    cells.append('<td class="n' + (' spot' if key not in months else '') + '">' + shown + '</td>')
+                    continue
                 refs = (row.get('trace_refs') or {}).get(trace_key)
                 hops = hop_list(refs_to_hops(refs, payload.get('stores') or {})) if refs is not None else col_hops(key)
                 calc = row.get('method') or 'As reported.'

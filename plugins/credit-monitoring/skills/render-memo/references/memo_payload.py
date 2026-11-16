@@ -3564,7 +3564,7 @@ def read_budget_plan(cfg, absent):
         # take the memo down: a file that is not really an .xlsx raises openpyxl's
         # own InvalidFileException, and a truncated one raises BadZipFile, neither
         # of which is an OSError. The column is the thing that gates.
-        return gate(f"the pinned budget could not be read this month ({e}), so "
+        return gate(f"the pinned budget could not be read this month ({ml.reader_message(e)}), so "
                     "the pledged assets are not compared against a plan.")
 
 
@@ -5908,7 +5908,7 @@ def build_performance(cfg_path, period, absent, budget=None, model_path=None,
         absent.append({"kind": "section_unavailable",
                        "section": "snapshot_performance",
                        "what": "Performance",
-                       "reason": f"the comparison views could not be built: {e}"})
+                       "reason": f"the comparison views could not be built: {ml.reader_message(e)}"})
         return None
     finally:
         try:

@@ -1596,10 +1596,23 @@ def _finish_guard(deal_root, run_folder, ledger):
     from this run's own ledger and this run's own staged file, not from any
     borrower-wide state.
 
+    A changed setting under `config/` that this run took does not block
+    either: the run's own `config/` copy holds the bytes now in the working
+    folder, so its modules read that setting and finishing writes back what
+    is already there. A setting changed after the run took its copy still
+    blocks.
+
     Returns the consumed-edit provenance to carry into this run's manifest.
     """
     found = _deliverable_check(deal_root)
     blocking = list(found["changed"]) + found["missing"] + found["unreadable"]
+    working = f"{RECORD_DIR}/{CURRENT_DIR}/"
+    for comparison in found["comparisons"]:
+        shown = comparison["path"]
+        if shown in blocking and shown.startswith(f"{working}{CONFIG_DIR}/"):
+            taken = os.path.join(run_folder, *shown[len(working):].split("/"))
+            if os.path.isfile(taken) and file_id(taken) == comparison["digest"]:
+                blocking.remove(shown)
     pin = ledger.get("consume_edit")
     consumed = []
     if pin and pin.get("path") in blocking:

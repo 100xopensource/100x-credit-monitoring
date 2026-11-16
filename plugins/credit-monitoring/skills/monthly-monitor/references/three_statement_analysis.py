@@ -1284,7 +1284,14 @@ def mom_bridge(model, cfg, months, li, comp_items, orig, gross_profit_series, op
             f"delta_ni_ex = latest_ni_ex - prior_ni_ex")
 
     exception = None
-    if status == "unresolved":
+    if status == "unresolved" and d_ni is None:
+        # With no net income figure for both months there is nothing to tie to: the bridge
+        # cannot be built, which is not the same as components failing to tie.
+        exception = {"flag": "bridge_unresolved", "severity": "watch",
+                     "detail": ("MoM Net Income bridge not built: the model has no net income "
+                                "figure for both months, so there is no delta to tie the "
+                                "components to. Bridge withheld.")}
+    elif status == "unresolved":
         exception = {"flag": "bridge_unresolved", "severity": "elevated",
                      "detail": (f"MoM Net Income bridge components did not tie to the NI delta "
                                 f"within $1 (gap={tie_gap}); pre-financing subtotal source="
@@ -1404,6 +1411,8 @@ def build_headlines(tr_rev, tr_eb, gm_ytd, gm_ytd_ex, flagged_is, flagged_bs, dr
                 mv = bridge["line_movers"][0] if bridge["line_movers"] else None
                 msg += (f" — driven mainly by {mv['line']} ({fmt_usd(mv['delta'], unit)})." if mv else ".")
             H.append(msg)
+    elif bridge and bridge.get("status") == "unresolved" and bridge["net_income"]["delta"] is None:
+        H.append("No month-over-month Net Income bridge: the model has no net income figure for both months (see exceptions).")
     elif bridge and bridge.get("status") == "unresolved":
         H.append("The month-over-month Net Income bridge did not tie within tolerance and is withheld pending reconciliation (see exceptions).")
 
@@ -2029,13 +2038,22 @@ def compute(model, cfg, unit, borrower_name=None, config_file=None):
             calc=(f"EBITDA bridge row with one-time items (config.comparability_items, applies_to "
                   f"ebitda) excluded; latest at {latest}, ytd {ytd_span}"))
     opex_l, opex_ytd = _at(opex_series, li), _sum_idx(opex_series, ytd)
+    opex_prior = _at(opex_series, li - 1)
+    if not opex_labels:
+        # With no opex group resolved, operating expense is unknown, not zero.
+        opex_l = opex_ytd = opex_prior = None
+        ratios_suppressed += [
+            {"ratio": "total_opex", "reason": "n/m — no opex group rows resolved, so opex is unknown, not zero"},
+            {"ratio": "opex_to_revenue", "reason": "n/m — depends on total_opex, which no opex group row supplies"}]
     opex_row_refs = [mref(l, "Income Statement", latest, n_flow) for l in opex_labels.values()]
-    add("income", "total_opex", opex_l, _at(opex_series, li - 1), opex_ytd,
+    add("income", "total_opex", opex_l, opex_prior, opex_ytd,
+        note=None if opex_labels else "n/m (no opex group rows resolved)",
         source_ref=refs(*opex_row_refs, src.ref(config_file, section="opex_groups")),
         calc=((f"sum of the {len(opex_labels)} configured opex group rows "
                f"[{', '.join(sorted(opex_labels))}] at {latest}; ytd = sum {ytd_span}")
-              if opex_labels else "no opex group rows resolved; sum is 0 by construction"))
+              if opex_labels else "no opex group rows resolved; opex is unknown, not zero"))
     add("income", "opex_to_revenue", _pct(opex_l, rev_l), kind="ratio", ytd_v=_pct(opex_ytd, rev_ytd),
+        note=None if opex_labels else "n/m (no opex group rows resolved)",
         source_ref=refs(*opex_row_refs, key_ref("revenue", latest, n_flow),
                         src.ref(config_file, section="opex_groups")),
         calc=f"opex_to_revenue = total_opex / revenue at {latest}; ytd over {ytd_span}")
@@ -2130,6 +2148,7 @@ def compute(model, cfg, unit, borrower_name=None, config_file=None):
     ttm_ok = seg_len >= 12
     ttm_eb = ttm_int = None
     int_matched = None
+    int_outflow = False
     if ttm_ok:
         eb_window = [S["ebitda_bridge"][i] for i in cur_seg_idxs[-12:] if S["ebitda_bridge"] and i < len(S["ebitda_bridge"])]
         if len(eb_window) == 12:
@@ -2143,7 +2162,12 @@ def compute(model, cfg, unit, borrower_name=None, config_file=None):
                 int_window = [int_vals[i] for i in cur_seg_idxs[-12:] if i < len(int_vals)]
                 if len(int_window) == 12:
                     ttm_int = sum(v for v in int_window if v is not None)
-    debt_l = _at(S["total_debt"], li) if S.get("total_debt") is not None else None
+                    # A cash-flow interest line records each payment as an outflow, negative
+                    # every month; coverage divides by the interest paid, not by its sign.
+                    int_outflow = ttm_int < 0 and all(v is None or v <= 0 for v in int_window)
+                    if int_outflow:
+                        ttm_int = -ttm_int
+    debt_l =_at(S["total_debt"], li) if S.get("total_debt") is not None else None
     lev = _round(_safe_div(debt_l, ttm_eb), 2) if (ttm_eb and ttm_eb > 0 and debt_l is not None) else None
     cov = _round(_safe_div(ttm_eb, ttm_int), 2) if (ttm_eb and ttm_int and ttm_eb > 0) else None
     ttm_span_txt = f"{months[cur_seg_idxs[-12]]}..{latest}" if ttm_ok else None
@@ -2179,6 +2203,8 @@ def compute(model, cfg, unit, borrower_name=None, config_file=None):
         source_ref=(refs(key_ref("ebitda_bridge", latest, 12),
                          mref(int_matched, "Income Statement", latest, 12)) if cov is not None else None),
         calc=(f"TTM EBITDA / TTM interest expense (both summed {ttm_span_txt})"
+              + ("; the interest row records payments as outflows, so their size is used"
+                 if int_outflow else "")
               if cov is not None else None))
     if cov is None:
         ratios_suppressed.append({"ratio": "ttm_ebitda_interest_coverage",
